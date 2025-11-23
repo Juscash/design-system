@@ -1,0 +1,59 @@
+
+> docs@0.0.0 build
+> next build
+
+ ⚠ Warning: Next.js inferred your workspace root, but it may not be correct.
+ We detected multiple lockfiles and selected the directory of C:\projetos\package-lock.json as the root directory.
+ To silence this warning, set `outputFileTracingRoot` in your Next.js config, or consider removing one of the lockfiles if it's not needed.
+   See https://nextjs.org/docs/app/api-reference/config/next-config-js/output#caveats for more information.
+ Detected additional lockfiles: 
+   * C:\projetos\design-system\package-lock.json
+
+   ▲ Next.js 15.5.6
+
+   Creating an optimized production build ...
+Failed to compile.
+
+./app/AntdStyleRegistry.tsx
+Error:   [31mx[0m You're importing a component that needs `useServerInsertedHTML`. This React Hook only works in a Client Component. To fix, mark the file (or its parent) with the `"use client"` directive.
+  [31m|[0m
+  [31m|[0m  Learn more: https://nextjs.org/docs/app/api-reference/directives/use-client
+  [31m|[0m
+
+   ,-[[36;1;4mC:\projetos\design-system\apps\docs\app\AntdStyleRegistry.tsx[0m:2:1]
+ [2m1[0m | import React from 'react';
+ [2m2[0m | import { useServerInsertedHTML } from 'next/navigation';
+   : [35;1m         ^^^^^^^^^^^^^^^^^^^^^[0m
+ [2m3[0m | import { StyleProvider, createCache, extractStyle } from '@ant-design/cssinjs';
+ [2m4[0m | 
+ [2m4[0m | export default function AntdStyleRegistry({ children }: { children: React.ReactNode }) {
+   `----
+
+Import trace for requested module:
+./app/AntdStyleRegistry.tsx
+./app/layout.tsx
+
+./app/components/page.tsx
+Module not found: Can't resolve '@juscash/design-system'
+
+https://nextjs.org/docs/messages/module-not-found
+
+./app/design-tokens/page.tsx
+Module not found: Can't resolve '@juscash/design-system'
+
+https://nextjs.org/docs/messages/module-not-found
+
+./app/layout.tsx
+Module not found: Can't resolve '@juscash/design-system'
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+> Build failed because of webpack errors
+npm error Lifecycle script `build` failed with error:
+npm error code 1
+npm error path C:\projetos\design-system\apps\docs
+npm error workspace docs@0.0.0
+npm error location C:\projetos\design-system\apps\docs
+npm error command failed
+npm error command C:\Windows\system32\cmd.exe /d /s /c next build
