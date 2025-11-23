@@ -125,11 +125,37 @@ export default function ButtonPage() {
       <Card title="Tipos básicos" style={{ marginBottom: 24 }}>
         <Space wrap size="middle">
           <Button type="primary">Primary</Button>
+          <Button type="neutral">Neutral</Button>
           <Button type="default">Default</Button>
           <Button>Default (implícito)</Button>
           <Button type="dashed">Dashed</Button>
           <Button type="link">Link</Button>
           <Button type="text">Text</Button>
+        </Space>
+      </Card>
+
+      <Card title="Neutral" style={{ marginBottom: 24 }}>
+        <Space direction="vertical" size="large" style={{ width: '100%' }}>
+          <div>
+            <Caption>Normal</Caption>
+            <div style={{ marginTop: 8 }}>
+              <Space>
+                <Button type="neutral" dsSize="m">Neutral</Button>
+                <Button type="neutral" dsSize="m" disabled>Neutral disabled</Button>
+              </Space>
+            </div>
+          </div>
+          <Divider />
+          <div>
+            <Caption>Tamanhos</Caption>
+            <div style={{ marginTop: 8 }}>
+              <Space>
+                <Button type="neutral" dsSize="xs">XS</Button>
+                <Button type="neutral" dsSize="s">S</Button>
+                <Button type="neutral" dsSize="m">M</Button>
+              </Space>
+            </div>
+          </div>
         </Space>
       </Card>
 

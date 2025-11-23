@@ -3,7 +3,7 @@ import { ConfigProvider, type ButtonProps as AntdButtonProps, Button as AntdButt
 import { designSystemColors } from '../../theme/colors';
 
 type AntdButtonType = NonNullable<AntdButtonProps['type']>;
-type ExtendedButtonType = AntdButtonType | 'secondary' | 'destructive' | 'ghost';
+type ExtendedButtonType = AntdButtonType | 'secondary' | 'destructive' | 'ghost' | 'neutral';
 // Design System sizes:
 // xs < s < m  (referência Figma)
 // Mantemos aliases antigos por compat para docs antigas: 'p' => 's', 'g' => 'm'
@@ -45,6 +45,20 @@ function getDestructiveTokens() {
     colorError: designSystemColors.feedback.red[500], // #D2190B
     colorErrorHover: designSystemColors.feedback.red[500],
     colorErrorActive: designSystemColors.feedback.red[500], // hover/active via danger
+  };
+}
+
+function getNeutralTokens() {
+  return {
+    borderRadius: 8,
+    defaultBg: designSystemColors.neutral[200], // #E5E5E5
+    defaultColor: designSystemColors.neutral[800], // #262626
+    defaultBorderColor: designSystemColors.neutral[300], // #D4D4D4
+    defaultHoverBorderColor: designSystemColors.neutral[300],
+    defaultHoverBg: designSystemColors.neutral[400], // #A3A3A3
+    defaultActiveBg: designSystemColors.neutral[400],
+    colorTextDisabled: designSystemColors.neutral[400], // #A3A3A3
+    colorBgContainerDisabled: designSystemColors.neutral[300] // #D4D4D4
   };
 }
 
@@ -111,6 +125,14 @@ export function Button(props: ButtonProps): React.ReactElement {
         theme={{ components: { Button: { ...getDestructiveTokens(), ...sizeTokens } } }}
       >
         <AntdButton danger type="primary" size={resolvedSize} {...rest} />
+      </ConfigProvider>
+    );
+  }
+
+  if (type === 'neutral') {
+    return (
+      <ConfigProvider theme={{ components: { Button: { ...getNeutralTokens(), ...sizeTokens } } }}>
+        <AntdButton type="default" size={resolvedSize} {...rest} />
       </ConfigProvider>
     );
   }
