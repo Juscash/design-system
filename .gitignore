@@ -1,52 +1,50 @@
 # Dependencies
 node_modules/
-.pnp
-.pnp.js
-
-# Build outputs
-dist/
-build/
-*.tsbuildinfo
-
-# Environment
-.env
-.env.local
-.env.*.local
-
-# IDE
-.vscode/
-.idea/
-*.swp
-*.swo
-*~
-
-# OS
-.DS_Store
-Thumbs.db
-
-# Logs
-logs
-*.log
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
-lerna-debug.log*
+.pnpm-debug.log*
+
+# Build outputs
+dist/
+build/
+.next/
+out/
+.turbo/
+
+# Cache
+.cache/
+*.tsbuildinfo
+.turbo/cache/
+.turbo/daemon/
+
+# Logs
+*.log
+logs/
+
+# OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+
+# IDE
+.vscode/
+.idea/
+*.sublime-project
+*.sublime-workspace
+
+# Environment
+.env
+.env.local
+.env*.local
 
 # Testing
 coverage/
-.nyc_output
+.nyc_output/
 
-# Storybook
-storybook-static/
-
-# Changesets
-.changeset/
-!/.changeset/config.json
-
-# Temporary files
-*.tmp
-*.temp
-
-# NPM package files (temporários)
-*.tgz
+# Misc
+*.pem
+.cache
