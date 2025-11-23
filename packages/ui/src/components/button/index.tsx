@@ -39,18 +39,25 @@ function getSecondaryTokens() {
 function getGhostTokens() {
   return {
     borderRadius: 8,
-    defaultGhostColor: designSystemColors.primary[600], // #008633
-    defaultGhostBorderColor: designSystemColors.primary[600],
+    // Ghost (Figma): texto cinza escuro, SEM borda visível, hover com bg neutro
+    defaultGhostColor: designSystemColors.neutral[800], // #262626
+    defaultGhostBorderColor: 'transparent',
+    defaultHoverColor: designSystemColors.neutral[800],
     defaultHoverBg: designSystemColors.neutral[100], // #F5F5F5
+    defaultActiveBg: designSystemColors.neutral[100],
+    colorTextDisabled: designSystemColors.neutral[400], // #A3A3A3
   };
 }
 
 function getDestructiveTokens() {
   return {
     borderRadius: 8,
+    // Figma: default #D2190B, hover/active #9D231C, disabled #D4D4D4 (texto #A3A3A3)
     colorError: designSystemColors.feedback.red[500], // #D2190B
-    colorErrorHover: designSystemColors.feedback.red[500],
-    colorErrorActive: designSystemColors.feedback.red[500], // hover/active via danger
+    colorErrorHover: designSystemColors.feedback.red[900], // #9D231C
+    colorErrorActive: designSystemColors.feedback.red[900],
+    colorTextDisabled: designSystemColors.neutral[400], // #A3A3A3
+    colorBgContainerDisabled: designSystemColors.neutral[300], // #D4D4D4
   };
 }
 
@@ -129,15 +136,10 @@ export function Button(props: ButtonProps): React.ReactElement {
   }
 
   if (type === 'ghost') {
-    // Ghost no Figma: sem borda, texto na cor da brand e hover com bg neutro
+    // Ghost sem borda aparente (border transparente) e texto neutro
     return (
       <ConfigProvider theme={{ components: { Button: { ...getGhostTokens(), ...sizeTokens } } }}>
-        <AntdButton
-          type="text"
-          size={resolvedSize}
-          style={{ color: designSystemColors.primary[600] }}
-          {...rest}
-        />
+        <AntdButton type="default" ghost size={resolvedSize} {...rest} />
       </ConfigProvider>
     );
   }
