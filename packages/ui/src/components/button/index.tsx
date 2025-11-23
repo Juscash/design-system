@@ -58,7 +58,7 @@ function getNeutralTokens() {
     defaultHoverBg: designSystemColors.neutral[400], // #A3A3A3
     defaultActiveBg: designSystemColors.neutral[400],
     colorTextDisabled: designSystemColors.neutral[400], // #A3A3A3
-    colorBgContainerDisabled: designSystemColors.neutral[300] // #D4D4D4
+    colorBgContainerDisabled: designSystemColors.neutral[300], // #D4D4D4
   };
 }
 

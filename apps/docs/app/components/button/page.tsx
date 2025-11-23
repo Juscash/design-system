@@ -140,8 +140,12 @@ export default function ButtonPage() {
             <Caption>Normal</Caption>
             <div style={{ marginTop: 8 }}>
               <Space>
-                <Button type="neutral" dsSize="m">Neutral</Button>
-                <Button type="neutral" dsSize="m" disabled>Neutral disabled</Button>
+                <Button type="neutral" dsSize="m">
+                  Neutral
+                </Button>
+                <Button type="neutral" dsSize="m" disabled>
+                  Neutral disabled
+                </Button>
               </Space>
             </div>
           </div>
@@ -150,9 +154,15 @@ export default function ButtonPage() {
             <Caption>Tamanhos</Caption>
             <div style={{ marginTop: 8 }}>
               <Space>
-                <Button type="neutral" dsSize="xs">XS</Button>
-                <Button type="neutral" dsSize="s">S</Button>
-                <Button type="neutral" dsSize="m">M</Button>
+                <Button type="neutral" dsSize="xs">
+                  XS
+                </Button>
+                <Button type="neutral" dsSize="s">
+                  S
+                </Button>
+                <Button type="neutral" dsSize="m">
+                  M
+                </Button>
               </Space>
             </div>
           </div>
