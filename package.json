@@ -1,0 +1,39 @@
+{
+  "name": "@design-system/root",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Design System baseado em Ant Design",
+  "scripts": {
+    "dev": "cd apps/docs && npm run dev",
+    "dev:pnpm": "pnpm --filter docs dev",
+    "build": "npm run build --workspaces",
+    "build:components": "npm run build --workspace=packages/components",
+    "build:docs": "npm run build --workspace=apps/docs",
+    "test": "npm run test --workspaces",
+    "lint": "npm run lint --workspaces",
+    "format": "prettier --write \"**/*.{ts,tsx,js,jsx,json,md}\"",
+    "changeset": "changeset",
+    "version": "changeset version",
+    "release": "node scripts/publish.js",
+    "release:dry-run": "node scripts/publish.js --dry-run",
+    "add-component": "node scripts/add-component.js",
+    "version:patch": "node scripts/version.js patch",
+    "version:minor": "node scripts/version.js minor",
+    "version:major": "node scripts/version.js major",
+    "publish:components": "cd packages/components && npm publish --access public",
+    "prepublish:components": "npm run build:components"
+  },
+  "devDependencies": {
+    "@changesets/cli": "^2.27.1",
+    "@types/react": "^19.2.6",
+    "prettier": "^3.2.5",
+    "typescript": "^5.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "pnpm": ">=8.0.0"
+  },
+  "dependencies": {
+    "antd": "^6.0.0"
+  }
+}
