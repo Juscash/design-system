@@ -3,7 +3,13 @@ import { ConfigProvider, type ButtonProps as AntdButtonProps, Button as AntdButt
 import { designSystemColors } from '../../theme/colors';
 
 type AntdButtonType = NonNullable<AntdButtonProps['type']>;
-type ExtendedButtonType = AntdButtonType | 'secondary' | 'destructive' | 'ghost' | 'neutral';
+type ExtendedButtonType =
+  | AntdButtonType
+  | 'secondary'
+  | 'destructive'
+  | 'ghost'
+  | 'neutral'
+  | 'outlined';
 // Design System sizes:
 // xs < s < m  (referência Figma)
 // Mantemos aliases antigos por compat para docs antigas: 'p' => 's', 'g' => 'm'
@@ -57,6 +63,23 @@ function getNeutralTokens() {
     defaultHoverBorderColor: designSystemColors.neutral[300],
     defaultHoverBg: designSystemColors.neutral[400], // #A3A3A3
     defaultActiveBg: designSystemColors.neutral[400],
+    defaultHoverColor: designSystemColors.neutral[800],
+    defaultActiveColor: designSystemColors.neutral[800],
+    colorTextDisabled: designSystemColors.neutral[400], // #A3A3A3
+    colorBgContainerDisabled: designSystemColors.neutral[300], // #D4D4D4
+  };
+}
+
+function getOutlinedTokens() {
+  return {
+    borderRadius: 8,
+    // Outlined neutral: texto e borda cinzas (sem brand)
+    defaultColor: designSystemColors.neutral[800], // #262626
+    defaultBorderColor: designSystemColors.neutral[300], // #D4D4D4
+    defaultHoverBorderColor: designSystemColors.neutral[400], // #A3A3A3
+    defaultHoverColor: designSystemColors.neutral[800],
+    defaultHoverBg: designSystemColors.neutral[100], // #F5F5F5
+    defaultActiveBg: designSystemColors.neutral[100],
     colorTextDisabled: designSystemColors.neutral[400], // #A3A3A3
     colorBgContainerDisabled: designSystemColors.neutral[300], // #D4D4D4
   };
@@ -132,6 +155,14 @@ export function Button(props: ButtonProps): React.ReactElement {
   if (type === 'neutral') {
     return (
       <ConfigProvider theme={{ components: { Button: { ...getNeutralTokens(), ...sizeTokens } } }}>
+        <AntdButton type="default" size={resolvedSize} {...rest} />
+      </ConfigProvider>
+    );
+  }
+
+  if (type === 'outlined') {
+    return (
+      <ConfigProvider theme={{ components: { Button: { ...getOutlinedTokens(), ...sizeTokens } } }}>
         <AntdButton type="default" size={resolvedSize} {...rest} />
       </ConfigProvider>
     );

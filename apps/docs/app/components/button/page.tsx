@@ -19,6 +19,7 @@ export default function ButtonPage() {
 <Button type="secondary">Secondary</Button>
 <Button type="ghost">Ghost</Button>
 <Button type="destructive">Destructive</Button>
+<Button type="outlined">Outlined</Button>
 
 // Tamanhos do Design System (xs, s, m)
 <Button type="primary" dsSize="xs">XS</Button>
@@ -126,11 +127,47 @@ export default function ButtonPage() {
         <Space wrap size="middle">
           <Button type="primary">Primary</Button>
           <Button type="neutral">Neutral</Button>
+          <Button type="outlined">Outlined</Button>
           <Button type="default">Default</Button>
           <Button>Default (implícito)</Button>
           <Button type="dashed">Dashed</Button>
           <Button type="link">Link</Button>
           <Button type="text">Text</Button>
+        </Space>
+      </Card>
+
+      <Card title="Outlined" style={{ marginBottom: 24 }}>
+        <Space direction="vertical" size="large" style={{ width: '100%' }}>
+          <div>
+            <Caption>Normal</Caption>
+            <div style={{ marginTop: 8 }}>
+              <Space>
+                <Button type="outlined" dsSize="m">
+                  Outlined
+                </Button>
+                <Button type="outlined" dsSize="m" disabled>
+                  Outlined disabled
+                </Button>
+              </Space>
+            </div>
+          </div>
+          <Divider />
+          <div>
+            <Caption>Tamanhos</Caption>
+            <div style={{ marginTop: 8 }}>
+              <Space>
+                <Button type="outlined" dsSize="xs">
+                  XS
+                </Button>
+                <Button type="outlined" dsSize="s">
+                  S
+                </Button>
+                <Button type="outlined" dsSize="m">
+                  M
+                </Button>
+              </Space>
+            </div>
+          </div>
         </Space>
       </Card>
 
