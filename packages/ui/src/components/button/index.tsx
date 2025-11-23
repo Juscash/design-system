@@ -42,6 +42,9 @@ function getGhostTokens() {
     // Ghost (Figma): texto cinza escuro, SEM borda visível, hover com bg neutro
     defaultGhostColor: designSystemColors.neutral[800], // #262626
     defaultGhostBorderColor: 'transparent',
+    // mantém sem borda também em hover/active
+    defaultGhostHoverBorderColor: 'transparent',
+    defaultGhostActiveBorderColor: 'transparent',
     defaultHoverColor: designSystemColors.neutral[800],
     defaultHoverBg: designSystemColors.neutral[100], // #F5F5F5
     defaultActiveBg: designSystemColors.neutral[100],

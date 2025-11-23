@@ -38,18 +38,89 @@ export default function ButtonPage() {
         Botões baseados no Ant Design, incluindo a variante secundária do Design System.
       </Body1>
 
-      <Card title="Exemplo de Uso" style={{ marginBottom: 24 }}>
-        <pre
-          style={{
-            background: '#f5f5f5',
-            padding: 16,
-            borderRadius: 8,
-            overflow: 'auto',
-            fontSize: 13,
-          }}
-        >
-          {usage}
-        </pre>
+      <Card title="Todos os tipos" style={{ marginBottom: 24 }}>
+        <Space wrap size="middle">
+          <Button type="primary">Primary</Button>
+          <Button type="secondary">Secondary</Button>
+          <Button type="neutral">Neutral</Button>
+          <Button type="outlined">Outlined</Button>
+          <Button type="ghost">Ghost</Button>
+          <Button type="destructive">Destructive</Button>
+          <Button type="default">Default</Button>
+          <Button type="dashed">Dashed</Button>
+          <Button type="link">Link</Button>
+          <Button type="text">Text</Button>
+        </Space>
+      </Card>
+
+      <Card title="Destructive" style={{ marginBottom: 24 }}>
+        <Space direction="vertical" size="large" style={{ width: '100%' }}>
+          <div>
+            <Caption>Normal</Caption>
+            <div style={{ marginTop: 8 }}>
+              <Space>
+                <Button type="destructive" dsSize="m">
+                  Destructive
+                </Button>
+                <Button type="destructive" dsSize="m" disabled>
+                  Destructive disabled
+                </Button>
+              </Space>
+            </div>
+          </div>
+          <Divider />
+          <div>
+            <Caption>Tamanhos</Caption>
+            <div style={{ marginTop: 8 }}>
+              <Space>
+                <Button type="destructive" dsSize="xs">
+                  XS
+                </Button>
+                <Button type="destructive" dsSize="s">
+                  S
+                </Button>
+                <Button type="destructive" dsSize="m">
+                  M
+                </Button>
+              </Space>
+            </div>
+          </div>
+        </Space>
+      </Card>
+
+      <Card title="Primary" style={{ marginBottom: 24 }}>
+        <Space direction="vertical" size="large" style={{ width: '100%' }}>
+          <div>
+            <Caption>Normal</Caption>
+            <div style={{ marginTop: 8 }}>
+              <Space>
+                <Button type="primary" dsSize="m">
+                  Primary
+                </Button>
+                <Button type="primary" dsSize="m" disabled>
+                  Primary disabled
+                </Button>
+              </Space>
+            </div>
+          </div>
+          <Divider />
+          <div>
+            <Caption>Tamanhos</Caption>
+            <div style={{ marginTop: 8 }}>
+              <Space>
+                <Button type="primary" dsSize="xs">
+                  XS
+                </Button>
+                <Button type="primary" dsSize="s">
+                  S
+                </Button>
+                <Button type="primary" dsSize="m">
+                  M
+                </Button>
+              </Space>
+            </div>
+          </div>
+        </Space>
       </Card>
 
       <Card title="Ghost" style={{ marginBottom: 24 }}>
@@ -252,6 +323,20 @@ export default function ButtonPage() {
           </Button>
           <Button type="ghost">Ghost</Button>
         </Space>
+      </Card>
+
+      <Card title="Exemplo de Uso" style={{ marginBottom: 24 }}>
+        <pre
+          style={{
+            background: '#f5f5f5',
+            padding: 16,
+            borderRadius: 8,
+            overflow: 'auto',
+            fontSize: 13,
+          }}
+        >
+          {usage}
+        </pre>
       </Card>
     </div>
   );
