@@ -18,7 +18,8 @@
     "@changesets/cli": "^2.27.7",
     "turbo": "^2.0.6",
     "typescript": "^5.6.3"
+  },
+  "dependencies": {
+    "lucide-react": "^0.554.0"
   }
 }
-
-

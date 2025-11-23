@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@juscash/design-system": "file:../../packages/ui",
+    "lucide-react": "^0.453.0",
     "antd": "^5.19.0",
     "dayjs": "^1.11.13",
     "next": "^15.5.6",

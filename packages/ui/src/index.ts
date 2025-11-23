@@ -27,3 +27,5 @@ export {
   Body2Props,
   CaptionProps,
 } from './components/typography';
+export { Button } from './components/button';
+export type { ButtonProps } from './components/button';
