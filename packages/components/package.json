@@ -78,6 +78,6 @@
     "test": "vitest",
     "prepublishOnly": "pnpm build",
     "prepack": "pnpm build"
-  },
+  }
 }
 
