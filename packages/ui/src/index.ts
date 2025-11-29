@@ -30,3 +30,5 @@ export {
 } from './components/typography';
 export { Button } from './components/button';
 export type { ButtonProps } from './components/button';
+export { Segmented } from './components/segmented';
+export type { SegmentedProps } from './components/segmented';
