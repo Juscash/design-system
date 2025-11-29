@@ -6,6 +6,7 @@ import {
   type ThemeConfig,
 } from 'antd';
 import { designSystemColors } from '../../theme/colors';
+import { radius, spacing } from '../../theme/fundamentos';
 
 type AntdButtonType = NonNullable<AntdButtonProps['type']>;
 type ExtendedButtonType =
@@ -29,7 +30,7 @@ export interface ButtonProps extends Omit<AntdButtonProps, 'type' | 'size'> {
 
 function getGlobalButtonTokens(): Partial<ButtonComponentToken> {
   return {
-    borderRadius: 8,
+    borderRadius: parseInt(radius.xl),
   };
 }
 
@@ -134,28 +135,28 @@ function getSizeTokens(dsSize?: DsSize, iconOnly?: boolean): Partial<ButtonCompo
     if (size === 'xs') {
       return {
         controlHeight: 24,
-        paddingContentHorizontal: 4,
-        paddingContentVertical: 4,
+        paddingContentHorizontal: spacing[1],
+        paddingContentVertical: spacing[1],
         fontSize: 10,
-        borderRadius: 4,
+        borderRadius: parseInt(radius.md),
       };
     }
     if (size === 's') {
       return {
         controlHeight: 32,
-        paddingContentHorizontal: 4,
-        paddingContentVertical: 4,
+        paddingContentHorizontal: spacing[1],
+        paddingContentVertical: spacing[1],
         fontSize: 13,
-        borderRadius: 8,
+        borderRadius: parseInt(radius.xl),
       };
     }
     // M (default)
     return {
       controlHeight: 36,
-      paddingContentHorizontal: 4,
-      paddingContentVertical: 4,
+      paddingContentHorizontal: spacing[1],
+      paddingContentVertical: spacing[1],
       fontSize: 13,
-      borderRadius: 8,
+      borderRadius: parseInt(radius.xl),
     };
   }
 
@@ -163,28 +164,28 @@ function getSizeTokens(dsSize?: DsSize, iconOnly?: boolean): Partial<ButtonCompo
   if (size === 'xs') {
     return {
       controlHeight: 24,
-      paddingContentHorizontal: 8,
-      paddingContentVertical: 4,
+      paddingContentHorizontal: spacing[2],
+      paddingContentVertical: spacing[1],
       fontSize: 10,
-      borderRadius: 4, // XS usa 4px conforme Figma
+      borderRadius: parseInt(radius.md), // XS usa 4px conforme Figma
     };
   }
   if (size === 's') {
     return {
       controlHeight: 32,
-      paddingContentHorizontal: 12,
-      paddingContentVertical: 4,
+      paddingContentHorizontal: spacing[3],
+      paddingContentVertical: spacing[1],
       fontSize: 13,
-      borderRadius: 8,
+      borderRadius: parseInt(radius.xl),
     };
   }
   // M (default)
   return {
     controlHeight: 36,
-    paddingContentHorizontal: 16,
-    paddingContentVertical: 8,
+    paddingContentHorizontal: spacing[4],
+    paddingContentVertical: spacing[2],
     fontSize: 13,
-    borderRadius: 8,
+    borderRadius: parseInt(radius.xl),
   };
 }
 
