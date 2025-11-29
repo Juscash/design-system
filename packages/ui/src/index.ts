@@ -1,6 +1,7 @@
 export { AntdProvider } from './providers/AntdProvider';
 export { antdTheme } from './theme/antdTheme';
 export { designSystemColors } from './theme/colors';
+export { shadow, radius, breakingpoints, grid, spacing } from './theme/fundamentos';
 export { componentRegistry } from './registry';
 
 // Components
