@@ -5,13 +5,6 @@ import { designSystemColors } from './colors';
 export const antdTheme: ThemeConfig = {
   token: {
     borderRadius: 8,
-    colorPrimary: designSystemColors.primary[600]
+    colorPrimary: designSystemColors.primary[600],
   },
-  components: {
-    Button: {
-      colorPrimary: designSystemColors.primary[600],
-      colorPrimaryHover: designSystemColors.primary[700],
-      colorPrimaryActive: designSystemColors.primary[800]
-    }
-  }
 };

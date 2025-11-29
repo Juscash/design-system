@@ -1,5 +1,10 @@
 import React from 'react';
-import { ConfigProvider, type ButtonProps as AntdButtonProps, Button as AntdButton } from 'antd';
+import {
+  ConfigProvider,
+  type ButtonProps as AntdButtonProps,
+  Button as AntdButton,
+  type ThemeConfig,
+} from 'antd';
 import { designSystemColors } from '../../theme/colors';
 
 type AntdButtonType = NonNullable<AntdButtonProps['type']>;
@@ -10,66 +15,86 @@ type ExtendedButtonType =
   | 'ghost'
   | 'neutral'
   | 'outlined';
-// Design System sizes:
-// xs < s < m  (referência Figma)
-// Mantemos aliases antigos por compat para docs antigas: 'p' => 's', 'g' => 'm'
+
 type DsSize = 'xs' | 's' | 'm' | 'p' | 'g';
+
+type ButtonComponentToken = NonNullable<NonNullable<ThemeConfig['components']>['Button']>;
 
 export interface ButtonProps extends Omit<AntdButtonProps, 'type' | 'size'> {
   type?: ExtendedButtonType;
   dsSize?: DsSize;
   size?: AntdButtonProps['size'];
+  iconOnly?: boolean;
 }
 
-function getSecondaryTokens() {
+function getGlobalButtonTokens(): Partial<ButtonComponentToken> {
   return {
     borderRadius: 8,
-    defaultBg: designSystemColors.secondary[700], // #0D4897
-    defaultColor: designSystemColors.neutral[50], // #FAFAFA
-    defaultHoverColor: designSystemColors.neutral[50],
-    defaultHoverBg: designSystemColors.secondary[800], // #093671
-    defaultActiveBg: designSystemColors.secondary[800],
-    defaultBorderColor: 'transparent',
-    defaultHoverBorderColor: 'transparent',
-    colorTextDisabled: designSystemColors.neutral[400], // #A3A3A3
-    colorBgContainerDisabled: designSystemColors.neutral[300], // #D4D4D4 (Figma)
   };
 }
 
-function getGhostTokens() {
+function getPrimaryTokens(): Partial<ButtonComponentToken> {
   return {
-    borderRadius: 8,
-    // Ghost (Figma): texto cinza escuro, SEM borda visível, hover com bg neutro
-    defaultGhostColor: designSystemColors.neutral[800], // #262626
-    defaultGhostBorderColor: 'transparent',
-    // mantém sem borda também em hover/active
-    defaultGhostHoverBorderColor: 'transparent',
-    defaultGhostActiveBorderColor: 'transparent',
+    ...getGlobalButtonTokens(),
+    colorPrimary: designSystemColors.primary[600],
+    colorPrimaryHover: designSystemColors.primary[800],
+    colorPrimaryActive: designSystemColors.primary[800],
+    defaultColor: designSystemColors.neutral[50],
+    colorTextDisabled: designSystemColors.neutral[400],
+    colorBgContainerDisabled: designSystemColors.neutral[300],
+  };
+}
+
+function getSecondaryTokens(): Partial<ButtonComponentToken> {
+  return {
+    ...getGlobalButtonTokens(),
+    defaultBg: designSystemColors.secondary[700],
+    defaultColor: designSystemColors.neutral[50],
+    defaultHoverColor: designSystemColors.neutral[50],
+    defaultActiveColor: designSystemColors.neutral[50],
+    defaultHoverBg: designSystemColors.secondary[800],
+    defaultActiveBg: designSystemColors.secondary[800],
+    defaultBorderColor: 'transparent',
+    defaultHoverBorderColor: 'transparent',
+
+    colorTextDisabled: designSystemColors.neutral[400],
+    colorBgContainerDisabled: designSystemColors.neutral[300],
+  };
+}
+
+function getGhostTokens(): Partial<ButtonComponentToken> {
+  return {
+    ...getGlobalButtonTokens(),
+    defaultBg: 'transparent',
+    defaultColor: designSystemColors.neutral[800],
     defaultHoverColor: designSystemColors.neutral[800],
+    defaultActiveColor: designSystemColors.neutral[800],
+    defaultBorderColor: 'transparent',
+    defaultHoverBorderColor: 'transparent',
     defaultHoverBg: designSystemColors.neutral[100], // #F5F5F5
     defaultActiveBg: designSystemColors.neutral[100],
     colorTextDisabled: designSystemColors.neutral[400], // #A3A3A3
   };
 }
 
-function getDestructiveTokens() {
+function getDestructiveTokens(): Partial<ButtonComponentToken> {
   return {
-    borderRadius: 8,
-    // Figma: default #D2190B, hover/active #9D231C, disabled #D4D4D4 (texto #A3A3A3)
-    colorError: designSystemColors.feedback.red[500], // #D2190B
-    colorErrorHover: designSystemColors.feedback.red[900], // #9D231C
-    colorErrorActive: designSystemColors.feedback.red[900],
+    ...getGlobalButtonTokens(),
+    colorPrimary: designSystemColors.feedback.red[500], // #D2190B
+    colorPrimaryHover: designSystemColors.feedback.red[900], // #9D231C
+    colorPrimaryActive: designSystemColors.feedback.red[900],
+    defaultColor: designSystemColors.neutral[50],
     colorTextDisabled: designSystemColors.neutral[400], // #A3A3A3
     colorBgContainerDisabled: designSystemColors.neutral[300], // #D4D4D4
   };
 }
 
-function getNeutralTokens() {
+function getNeutralTokens(): Partial<ButtonComponentToken> {
   return {
-    borderRadius: 8,
+    ...getGlobalButtonTokens(),
     defaultBg: designSystemColors.neutral[200], // #E5E5E5
     defaultColor: designSystemColors.neutral[800], // #262626
-    defaultBorderColor: designSystemColors.neutral[300], // #D4D4D4
+    defaultBorderColor: 'transparent', // #D4D4D4
     defaultHoverBorderColor: designSystemColors.neutral[300],
     defaultHoverBg: designSystemColors.neutral[400], // #A3A3A3
     defaultActiveBg: designSystemColors.neutral[400],
@@ -80,9 +105,9 @@ function getNeutralTokens() {
   };
 }
 
-function getOutlinedTokens() {
+function getOutlinedTokens(): Partial<ButtonComponentToken> {
   return {
-    borderRadius: 8,
+    ...getGlobalButtonTokens(),
     // Outlined neutral: texto e borda cinzas (sem brand)
     defaultColor: designSystemColors.neutral[800], // #262626
     defaultBorderColor: designSystemColors.neutral[300], // #D4D4D4
@@ -101,32 +126,86 @@ function normalizeSize(dsSize?: DsSize): Exclude<DsSize, 'p' | 'g'> | undefined 
   return dsSize as Exclude<DsSize, 'p' | 'g'> | undefined;
 }
 
-function getSizeTokens(dsSize?: DsSize) {
+function getSizeTokens(dsSize?: DsSize, iconOnly?: boolean): Partial<ButtonComponentToken> {
   const size = normalizeSize(dsSize);
 
-  // Apenas fonte/tipografia conforme Figma; mantemos alturas/paddings padrão
+  if (iconOnly) {
+    // Tamanhos específicos para botões apenas com ícone (quadrados)
+    if (size === 'xs') {
+      return {
+        controlHeight: 24,
+        paddingContentHorizontal: 4,
+        paddingContentVertical: 4,
+        fontSize: 10,
+        borderRadius: 4,
+      };
+    }
+    if (size === 's') {
+      return {
+        controlHeight: 32,
+        paddingContentHorizontal: 4,
+        paddingContentVertical: 4,
+        fontSize: 13,
+        borderRadius: 8,
+      };
+    }
+    // M (default)
+    return {
+      controlHeight: 36,
+      paddingContentHorizontal: 4,
+      paddingContentVertical: 4,
+      fontSize: 13,
+      borderRadius: 8,
+    };
+  }
+
+  // Tamanhos normais com texto
   if (size === 'xs') {
-    // XS: 10px
-    return { fontSize: 10 };
+    return {
+      controlHeight: 24,
+      paddingContentHorizontal: 8,
+      paddingContentVertical: 4,
+      fontSize: 10,
+      borderRadius: 4, // XS usa 4px conforme Figma
+    };
   }
   if (size === 's') {
-    // S: 13px
-    return { fontSize: 13 };
+    return {
+      controlHeight: 32,
+      paddingContentHorizontal: 12,
+      paddingContentVertical: 4,
+      fontSize: 13,
+      borderRadius: 8,
+    };
   }
-  // M (default): 13px
-  return { fontSize: 13 };
+  // M (default)
+  return {
+    controlHeight: 36,
+    paddingContentHorizontal: 16,
+    paddingContentVertical: 8,
+    fontSize: 13,
+    borderRadius: 8,
+  };
 }
 
 function mapToAntSize(dsSize?: DsSize): AntdButtonProps['size'] {
   const size = normalizeSize(dsSize);
   if (size === 'xs' || size === 's') return 'small';
-  return 'middle'; // m (default)
+  return 'middle';
 }
 
 export function Button(props: ButtonProps): React.ReactElement {
-  const { type, dsSize, size, ...rest } = props;
+  const { type, dsSize, size, iconOnly, ...rest } = props;
   const resolvedSize = size ?? mapToAntSize(dsSize);
-  const sizeTokens = getSizeTokens(dsSize);
+  const sizeTokens = getSizeTokens(dsSize, iconOnly);
+
+  if (type === 'primary') {
+    return (
+      <ConfigProvider theme={{ components: { Button: { ...getPrimaryTokens(), ...sizeTokens } } }}>
+        <AntdButton type="primary" size={resolvedSize} {...rest} />
+      </ConfigProvider>
+    );
+  }
 
   if (type === 'secondary') {
     return (
@@ -142,7 +221,7 @@ export function Button(props: ButtonProps): React.ReactElement {
     // Ghost sem borda aparente (border transparente) e texto neutro
     return (
       <ConfigProvider theme={{ components: { Button: { ...getGhostTokens(), ...sizeTokens } } }}>
-        <AntdButton type="default" ghost size={resolvedSize} {...rest} />
+        <AntdButton type="default" size={resolvedSize} {...rest} />
       </ConfigProvider>
     );
   }
@@ -152,7 +231,7 @@ export function Button(props: ButtonProps): React.ReactElement {
       <ConfigProvider
         theme={{ components: { Button: { ...getDestructiveTokens(), ...sizeTokens } } }}
       >
-        <AntdButton danger type="primary" size={resolvedSize} {...rest} />
+        <AntdButton type="primary" size={resolvedSize} {...rest} />
       </ConfigProvider>
     );
   }

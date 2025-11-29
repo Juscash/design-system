@@ -26,6 +26,10 @@ export default function ButtonPage() {
 <Button type="primary" dsSize="s">S</Button>
 <Button type="primary" dsSize="m">M</Button>
 
+// Botões apenas com ícone (usa tamanhos específicos)
+<Button type="primary" iconOnly icon={<Plus />} />
+<Button type="secondary" iconOnly icon={<Pencil />} />
+
 // Estados
 <Button loading type="primary">Carregando</Button>
 <Button type="secondary" disabled>Secondary disabled</Button>
@@ -173,7 +177,7 @@ export default function ButtonPage() {
           </div>
           <Divider />
           <div>
-            <Caption>Ícone somente</Caption>
+            <Caption>Ícone somente (shape circle)</Caption>
             <div style={{ marginTop: 8 }}>
               <Space wrap>
                 <Button type="primary" shape="circle" icon={<Plus size={16} />} />
@@ -189,6 +193,67 @@ export default function ButtonPage() {
               <Button type="primary" block>
                 Continuar
               </Button>
+            </div>
+          </div>
+        </Space>
+      </Card>
+
+      <Card title="Botões apenas com ícone (prop iconOnly)" style={{ marginBottom: 24 }}>
+        <Space direction="vertical" size="large" style={{ width: '100%' }}>
+          <div>
+            <Caption>Normal</Caption>
+            <div style={{ marginTop: 8 }}>
+              <Space wrap>
+                <Button type="primary" iconOnly icon={<Plus size={16} />} />
+                <Button type="secondary" iconOnly icon={<Pencil size={16} />} />
+                <Button type="ghost" iconOnly icon={<Plus size={16} />} />
+                <Button type="destructive" iconOnly icon={<Plus size={16} />} />
+                <Button type="neutral" iconOnly icon={<Pencil size={16} />} />
+                <Button type="outlined" iconOnly icon={<Plus size={16} />} />
+              </Space>
+            </div>
+          </div>
+          <Divider />
+          <div>
+            <Caption>Tamanhos</Caption>
+            <div style={{ marginTop: 8 }}>
+              <Space direction="vertical" size="middle">
+                <div>
+                  <Caption style={{ fontSize: 11, marginBottom: 4 }}>XS</Caption>
+                  <Space>
+                    <Button type="primary" iconOnly dsSize="xs" icon={<Plus size={12} />} />
+                    <Button type="secondary" iconOnly dsSize="xs" icon={<Pencil size={12} />} />
+                    <Button type="ghost" iconOnly dsSize="xs" icon={<Plus size={12} />} />
+                  </Space>
+                </div>
+                <div>
+                  <Caption style={{ fontSize: 11, marginBottom: 4 }}>S</Caption>
+                  <Space>
+                    <Button type="primary" iconOnly dsSize="s" icon={<Plus size={14} />} />
+                    <Button type="secondary" iconOnly dsSize="s" icon={<Pencil size={14} />} />
+                    <Button type="ghost" iconOnly dsSize="s" icon={<Plus size={14} />} />
+                  </Space>
+                </div>
+                <div>
+                  <Caption style={{ fontSize: 11, marginBottom: 4 }}>M</Caption>
+                  <Space>
+                    <Button type="primary" iconOnly dsSize="m" icon={<Plus size={16} />} />
+                    <Button type="secondary" iconOnly dsSize="m" icon={<Pencil size={16} />} />
+                    <Button type="ghost" iconOnly dsSize="m" icon={<Plus size={16} />} />
+                  </Space>
+                </div>
+              </Space>
+            </div>
+          </div>
+          <Divider />
+          <div>
+            <Caption>Estados</Caption>
+            <div style={{ marginTop: 8 }}>
+              <Space wrap>
+                <Button type="primary" iconOnly icon={<Plus size={16} />} disabled />
+                <Button type="secondary" iconOnly icon={<Pencil size={16} />} disabled />
+                <Button type="primary" iconOnly icon={<Plus size={16} />} loading />
+              </Space>
             </div>
           </div>
         </Space>
