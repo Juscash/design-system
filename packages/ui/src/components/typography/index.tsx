@@ -1,5 +1,5 @@
 import React from 'react';
-import { Typography as AntdTypography, ConfigProvider } from 'antd';
+import { Typography as AntdTypography, ConfigProvider, type ThemeConfig } from 'antd';
 import type { TitleProps } from 'antd/es/typography/Title';
 import type { TextProps } from 'antd/es/typography/Text';
 import type { ParagraphProps } from 'antd/es/typography/Paragraph';
@@ -29,6 +29,8 @@ const colorMap = {
 
 type DSColor = keyof typeof colorMap;
 
+type TypographyComponentToken = NonNullable<NonNullable<ThemeConfig['components']>['Typography']>;
+
 type AntdTypographyAllProps = Partial<Omit<TitleProps, 'level'> & TextProps & ParagraphProps>;
 
 export type TypographyProps = AntdTypographyAllProps & {
@@ -36,73 +38,124 @@ export type TypographyProps = AntdTypographyAllProps & {
   color?: DSColor;
 };
 
+function getGlobalTypographyTokens(): Partial<TypographyComponentToken> {
+  return {
+    fontFamily: 'Inter, sans-serif',
+  };
+}
+
+function getHeading1Tokens(): Partial<TypographyComponentToken> {
+  return {
+    ...getGlobalTypographyTokens(),
+    fontSizeHeading1: 61, // 3.813rem
+    lineHeightHeading1: 1.2,
+    fontWeightStrong: 700,
+    colorTextHeading: designSystemColors.neutral[800],
+  };
+}
+
+function getHeading2Tokens(): Partial<TypographyComponentToken> {
+  return {
+    ...getGlobalTypographyTokens(),
+    fontSizeHeading2: 49, // 3.063rem
+    lineHeightHeading2: 1.2,
+    fontWeightStrong: 700,
+    colorTextHeading: designSystemColors.neutral[800],
+  };
+}
+
+function getHeading3Tokens(): Partial<TypographyComponentToken> {
+  return {
+    ...getGlobalTypographyTokens(),
+    fontSizeHeading3: 39, // 2.438rem
+    lineHeightHeading3: 1.2,
+    fontWeightStrong: 700,
+    colorTextHeading: designSystemColors.neutral[800],
+  };
+}
+
+function getHeading4Tokens(): Partial<TypographyComponentToken> {
+  return {
+    ...getGlobalTypographyTokens(),
+    fontSizeHeading4: 31, // 1.938rem
+    lineHeightHeading4: 1.2,
+    fontWeightStrong: 700,
+    colorTextHeading: designSystemColors.neutral[800],
+  };
+}
+
+function getHeading5Tokens(): Partial<TypographyComponentToken> {
+  return {
+    ...getGlobalTypographyTokens(),
+    fontSizeHeading5: 25, // 1.563rem
+    lineHeightHeading5: 1.2,
+    fontWeightStrong: 700,
+    colorTextHeading: designSystemColors.neutral[800],
+  };
+}
+
+function getHeading6Tokens(): Partial<TypographyComponentToken> {
+  return {
+    ...getGlobalTypographyTokens(),
+    fontWeightStrong: 700,
+    colorTextHeading: designSystemColors.neutral[800],
+  };
+}
+
+function getBody1Tokens(): Partial<TypographyComponentToken> {
+  return {
+    ...getGlobalTypographyTokens(),
+    fontSize: 16, // 1rem
+    lineHeight: 1.5,
+    colorText: designSystemColors.neutral[800],
+  };
+}
+
+function getBody2Tokens(): Partial<TypographyComponentToken> {
+  return {
+    ...getGlobalTypographyTokens(),
+    fontSize: 13, // 0.813rem
+    lineHeight: 1.4,
+    colorText: designSystemColors.neutral[800],
+  };
+}
+
+function getCaptionTokens(): Partial<TypographyComponentToken> {
+  return {
+    ...getGlobalTypographyTokens(),
+    fontSize: 10, // 0.625rem
+    lineHeight: 1.3,
+    colorText: designSystemColors.neutral[600],
+  };
+}
+
 const typographyVariants = {
   heading1: {
-    Typography: {
-      fontSizeHeading1: 61,
-      lineHeightHeading1: 1.2,
-      fontWeightStrong: 700,
-      colorTextHeading: designSystemColors.neutral[800],
-    },
+    Typography: getHeading1Tokens(),
   },
   heading2: {
-    Typography: {
-      fontSizeHeading2: 49,
-      lineHeightHeading2: 1.2,
-      fontWeightStrong: 700,
-      colorTextHeading: designSystemColors.neutral[800],
-    },
+    Typography: getHeading2Tokens(),
   },
   heading3: {
-    Typography: {
-      fontSizeHeading3: 39,
-      lineHeightHeading3: 1.2,
-      fontWeightStrong: 700,
-      colorTextHeading: designSystemColors.neutral[800],
-    },
+    Typography: getHeading3Tokens(),
   },
   heading4: {
-    Typography: {
-      fontSizeHeading4: 31,
-      lineHeightHeading4: 1.2,
-      fontWeightStrong: 700,
-      colorTextHeading: designSystemColors.neutral[800],
-    },
+    Typography: getHeading4Tokens(),
   },
   heading5: {
-    Typography: {
-      fontSizeHeading5: 25,
-      lineHeightHeading5: 1.2,
-      fontWeightStrong: 700,
-      colorTextHeading: designSystemColors.neutral[800],
-    },
+    Typography: getHeading5Tokens(),
   },
   heading6: {
-    Typography: {
-      fontWeightStrong: 700,
-      colorTextHeading: designSystemColors.neutral[800],
-    },
+    Typography: getHeading6Tokens(),
   },
   body1: {
-    Typography: {
-      fontSize: 16,
-      lineHeight: 1.5,
-      colorText: designSystemColors.neutral[800],
-    },
+    Typography: getBody1Tokens(),
   },
   body2: {
-    Typography: {
-      fontSize: 13,
-      lineHeight: 1.4,
-      colorText: designSystemColors.neutral[800],
-    },
+    Typography: getBody2Tokens(),
   },
   caption: {
-    Typography: {
-      fontSize: 10,
-      lineHeight: 1.3,
-      colorText: designSystemColors.neutral[600],
-    },
+    Typography: getCaptionTokens(),
   },
 } as const;
 
@@ -113,9 +166,9 @@ export function Typography(props: TypographyProps): React.ReactElement {
 
   const textColor = color ? colorMap[color as DSColor] : undefined;
 
-  const baseStyle: React.CSSProperties = {
+  const customStyle: React.CSSProperties = {
     margin: 0,
-    color: textColor,
+    ...(textColor ? { color: textColor } : {}),
     ...style,
   };
 
@@ -123,52 +176,45 @@ export function Typography(props: TypographyProps): React.ReactElement {
 
   switch (variant) {
     case 'heading1':
-      node = <Title level={1} style={baseStyle} {...(rest as TitleProps)} />;
+      node = <Title level={1} style={customStyle} {...(rest as TitleProps)} />;
       break;
     case 'heading2':
-      node = <Title level={2} style={baseStyle} {...(rest as TitleProps)} />;
+      node = <Title level={2} style={customStyle} {...(rest as TitleProps)} />;
       break;
     case 'heading3':
-      node = <Title level={3} style={baseStyle} {...(rest as TitleProps)} />;
+      node = <Title level={3} style={customStyle} {...(rest as TitleProps)} />;
       break;
     case 'heading4':
-      node = <Title level={4} style={baseStyle} {...(rest as TitleProps)} />;
+      node = <Title level={4} style={customStyle} {...(rest as TitleProps)} />;
       break;
     case 'heading5':
-      node = <Title level={5} style={baseStyle} {...(rest as TitleProps)} />;
+      node = <Title level={5} style={customStyle} {...(rest as TitleProps)} />;
       break;
     case 'heading6':
       node = (
         <Title
           level={5}
-          style={{ ...baseStyle, fontSize: 20, lineHeight: 1.2, fontWeight: 700 }}
+          style={{
+            ...customStyle,
+            fontSize: '1.25rem',
+            lineHeight: 1.2,
+            fontWeight: 700,
+          }}
           {...(rest as TitleProps)}
         />
       );
       break;
     case 'body1':
-      node = (
-        <Paragraph
-          style={{ ...baseStyle, fontSize: 16, lineHeight: 1.5 }}
-          {...(rest as ParagraphProps)}
-        />
-      );
+      node = <Paragraph style={customStyle} {...(rest as ParagraphProps)} />;
       break;
     case 'body2':
-      node = (
-        <Paragraph
-          style={{ ...baseStyle, fontSize: 13, lineHeight: 1.4 }}
-          {...(rest as ParagraphProps)}
-        />
-      );
+      node = <Paragraph style={customStyle} {...(rest as ParagraphProps)} />;
       break;
     case 'caption':
-      node = (
-        <Text style={{ ...baseStyle, fontSize: 10, lineHeight: 1.3 }} {...(rest as TextProps)} />
-      );
+      node = <Text style={customStyle} {...(rest as TextProps)} />;
       break;
     default:
-      node = <Paragraph style={baseStyle} {...(rest as ParagraphProps)} />;
+      node = <Paragraph style={customStyle} {...(rest as ParagraphProps)} />;
   }
 
   return <ConfigProvider theme={{ components: variantTheme }}>{node}</ConfigProvider>;
