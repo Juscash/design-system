@@ -2,6 +2,10 @@
   "name": "@Juscash/design-system",
   "version": "0.1.0",
   "description": "Design system Juscash baseado em Ant Design 6",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Juscash/design_juscash.git"
+  },
   "main": "dist/index.js",
   "module": "dist/index.mjs",
   "types": "dist/index.d.ts",
@@ -17,7 +21,8 @@
   ],
   "scripts": {
     "build": "tsup",
-    "clean": "rimraf dist"
+    "clean": "rimraf dist",
+    "prepublishOnly": "npm run build"
   },
   "sideEffects": [
     "*.css",
