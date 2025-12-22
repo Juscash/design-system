@@ -26,12 +26,14 @@ jobs:
           scope: "@Juscash"
 
       - name: Install dependencies
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          if [ -f package-lock.json ]; then
-            npm ci
-          else
-            npm install
-          fi
+          # Instalar apenas dependências do design-system, não do workspace inteiro
+          # Isso evita tentar instalar @Juscash/design-system do registry
+          cd packages/design-system
+          npm install --ignore-scripts
+          cd ../..
 
       - name: Build design system
         run: npm run build:design-system

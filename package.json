@@ -12,7 +12,11 @@
     "build:docs": "npm run build -w docs",
     "dev:docs": "npm run dev -w docs",
     "lint": "echo \"no lint configured\"",
-    "test": "echo \"no tests configured\""
+    "test": "echo \"no tests configured\"",
+    "version:patch": "node scripts/version.js patch",
+    "version:minor": "node scripts/version.js minor",
+    "version:major": "node scripts/version.js major",
+    "version:publish": "node scripts/version-publish.js"
   },
   "engines": {
     "node": ">=20.0.0"
