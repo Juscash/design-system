@@ -1,0 +1,10 @@
+# Regras do projeto
+
+- Ícones: usar apenas componentes do pacote `lucide-react` em toda a biblioteca.
+- Evitar adicionar outras bibliotecas de ícones; centralizar ícones no `lucide-react`.
+
+## Regras para exemplos no app de docs
+
+- Regra do apps: exemplos de componentes devem ficar na pasta de docs (ex.: `apps/docs/src/sections/...`) usando componentes do nosso design system (Layout/Menu/Card/Button etc.).
+- Mostre sempre um card com: título, descrição, demonstração, footer “Utilização” e botão para expandir o código de uso.
+- Use os componentes exportados do `@Juscash/design-system` (inclusive ícones via `LucideIcons`) para todos os exemplos; nada de importar direto de libs externas.

@@ -1,7 +1,0 @@
-<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 25 1431" fill="none" xmlns="http://www.w3.org/2000/svg">
-<g id="Brackets">
-<path id="Bracket" d="M24.5 12H5.5C2.73858 12 0.5 14.2386 0.5 17V460C0.5 462.761 2.73858 465 5.5 465H24.5" stroke="var(--stroke-0, #9747FF)"/>
-<path id="Bracket_2" d="M24.5 489H5.5C2.73858 489 0.5 491.239 0.5 494V937C0.5 939.761 2.73858 942 5.5 942H24.5" stroke="var(--stroke-0, #9747FF)"/>
-<path id="Bracket_3" d="M24.5 966H5.5C2.73858 966 0.5 968.239 0.5 971V1414C0.5 1416.76 2.73858 1419 5.5 1419H24.5" stroke="var(--stroke-0, #9747FF)"/>
-</g>
-</svg>

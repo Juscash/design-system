@@ -1,0 +1,8 @@
+:root {
+  /* Fallback caso o consumidor não defina a fonte */
+  --font-primary: 'Inter', sans-serif;
+}
+
+.ant-segmented-item-selected {
+  font-weight: 700 !important;
+}
