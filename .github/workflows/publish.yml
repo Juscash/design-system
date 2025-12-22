@@ -15,30 +15,22 @@ jobs:
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
-        with:
-          fetch-depth: 0
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
           registry-url: "https://npm.pkg.github.com"
-          scope: "@Juscash"
 
       - name: Install dependencies
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          # Instalar apenas dependências do design-system, não do workspace inteiro
-          # Isso evita tentar instalar @Juscash/design-system do registry
-          cd packages/design-system
-          npm install --ignore-scripts
-          cd ../..
+        working-directory: packages/design-system
+        run: npm ci
 
-      - name: Build design system
-        run: npm run build:design-system
+      - name: Build package
+        working-directory: packages/design-system
+        run: npm run build
 
-      - name: Publish @Juscash/design-system to GitHub Packages
+      - name: Publish to GitHub Packages
         working-directory: packages/design-system
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
