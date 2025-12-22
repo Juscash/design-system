@@ -7,7 +7,7 @@
     "declaration": true,
     "declarationMap": true,
     "noEmit": false,
-    "types": ["node"]
+    "types": ["node", "react", "react-dom"]
   },
   "include": [
     "src"
