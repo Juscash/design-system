@@ -21,18 +21,15 @@ jobs:
         with:
           node-version: "20"
           registry-url: "https://npm.pkg.github.com"
+          scope: "@Juscash"
 
-      - name: Configure npm registry
+      - name: Install dependencies
         working-directory: packages/design-system
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          echo "@Juscash:registry=https://npm.pkg.github.com" > .npmrc
-          echo "//npm.pkg.github.com/:_authToken=$NODE_AUTH_TOKEN" >> .npmrc
-
-      - name: Install dependencies
-        working-directory: packages/design-system
-        run: npm install
+          # Instalar dependências ignorando scripts e sem verificar registry para workspaces
+          npm install --ignore-scripts --no-audit --no-fund
 
       - name: Build package
         working-directory: packages/design-system
