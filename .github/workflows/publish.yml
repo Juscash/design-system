@@ -22,22 +22,9 @@ jobs:
           node-version: "20"
           registry-url: "https://npm.pkg.github.com"
 
-      - name: Configure npm registry
-        working-directory: packages/design-system
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        run: |
-          echo "@Juscash:registry=https://npm.pkg.github.com" >> .npmrc
-          echo "//npm.pkg.github.com/:_authToken=$NODE_AUTH_TOKEN" >> .npmrc
-
       - name: Install dependencies
         working-directory: packages/design-system
-        run: |
-          if [ -f package-lock.json ]; then
-            npm ci --legacy-peer-deps
-          else
-            npm install --legacy-peer-deps
-          fi
+        run: npm install
 
       - name: Build package
         working-directory: packages/design-system
