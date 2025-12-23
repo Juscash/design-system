@@ -17,6 +17,7 @@ import { RadioShowcase } from "./components/radio";
 import { SwitchShowcase } from "./components/switch";
 import { TagShowcase } from "./components/tag";
 import { InputShowcase } from "./components/input";
+import { CardShowcase } from "./components/card";
 
 export interface ComponentsSectionProps {
   selectedComponent: ComponentKey | null;
@@ -115,6 +116,17 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
     );
   }
 
+  if (selectedComponent === "card") {
+    return (
+      <Space direction="vertical" size={16} style={{ width: "100%" }}>
+        <Button type="secondary" onClick={() => onSelect(null)}>
+          ← Voltar
+        </Button>
+        <CardShowcase />
+      </Space>
+    );
+  }
+
   return (
     <Space direction="vertical" size={24} style={{ width: "100%" }}>
       <div>
@@ -199,6 +211,16 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
           <Heading4>Input</Heading4>
           <Body2 style={{ color: "rgba(0,0,0,0.6)" }}>
             Campo de entrada com tamanhos xs, s, m, l e estados variados.
+          </Body2>
+        </Card>
+        <Card
+          hoverable
+          style={{ width: 280 }}
+          onClick={() => onSelect("card")}
+        >
+          <Heading4>Card</Heading4>
+          <Body2 style={{ color: "rgba(0,0,0,0.6)" }}>
+            Componente de card para exibir conteúdo agrupado com título e extra.
           </Body2>
         </Card>
       </Space>

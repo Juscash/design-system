@@ -16,6 +16,7 @@ export {
   Col,
   Space,
   Divider,
+  Flex,
 
   // Navigation
   Menu,
@@ -73,8 +74,6 @@ export {
   type CollapseProps,
   Carousel,
   type CarouselProps,
-  Card,
-  type CardProps,
   Avatar,
   type AvatarProps,
   Badge,

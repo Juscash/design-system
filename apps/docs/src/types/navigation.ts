@@ -7,4 +7,5 @@ export type ComponentKey =
   | "radio"
   | "switch"
   | "tag"
-  | "input";
+  | "input"
+  | "card";
