@@ -1,6 +1,6 @@
 {
   "name": "@Juscash/design-system",
-  "version": "0.1.15",
+  "version": "0.1.16",
   "description": "Design system Juscash baseado em Ant Design 6",
   "repository": {
     "type": "git",
@@ -14,7 +14,8 @@
       "types": "./dist/index.d.ts",
       "import": "./dist/index.mjs",
       "require": "./dist/index.js"
-    }
+    },
+    "./dist/index.css": "./dist/index.css"
   },
   "files": [
     "dist"
