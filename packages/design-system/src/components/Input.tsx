@@ -7,6 +7,7 @@ import type { TextAreaProps as AntdTextAreaProps } from "antd/es/input";
 import type { ComponentToken } from "antd/es/input/style/token";
 import { designSystemColors, radius, spacing } from "../theme";
 import { AliasToken } from "antd/es/theme/interface";
+import { shadow } from "../theme";
 
 const { TextArea: AntdTextArea } = AntdInput;
 
@@ -102,10 +103,10 @@ function getSizeTokens(dsSize?: InputSize): {
 }
 
 const baseTokens: Partial<ComponentToken> = {
-  activeBorderColor: designSystemColors.neutral[300],
-  hoverBorderColor: designSystemColors.neutral[300],
-  activeShadow: `0 0 0 3px ${designSystemColors.neutral[300]}`,
-  errorActiveShadow: `0 0 0 3px ${designSystemColors.feedback.red[500]}`,
+  activeBorderColor: "transparent",
+  hoverBorderColor: "transparent",
+  activeShadow: shadow.focus,
+  errorActiveShadow: shadow.focusError,
   warningActiveShadow: `0 0 0 3px rgba(134, 116, 0, 0.1)`,
   activeBg: "white",
 };
@@ -113,7 +114,7 @@ const baseTokens: Partial<ComponentToken> = {
 const InputComponent = (
   props: InputProps
 ): ReturnType<React.FC<InputProps>> => {
-  const { dsSize = "m", size, style, ...rest } = props;
+  const { dsSize = "m", size, style, status, ...rest } = props;
 
   const resolvedSize = size ? mapToDsSize(size) : dsSize;
   const sizeTokens = getSizeTokens(resolvedSize);
@@ -129,7 +130,7 @@ const InputComponent = (
         },
         token: {
           ...sizeTokens.globalToken,
-          colorBorder: designSystemColors.neutral[300],
+          colorBorder: "transparent",
           colorError: designSystemColors.feedback.red[500],
           colorTextDisabled: designSystemColors.neutral[400],
           colorTextPlaceholder: designSystemColors.neutral[500],
@@ -137,11 +138,24 @@ const InputComponent = (
       }}
     >
       <AntdInput
+        styles={{
+          prefix: {
+            marginRight: spacing[2],
+          },
+          suffix: {
+            marginLeft: spacing[2],
+          },
+        }}
         style={{
           height: `${sizeTokens.height}px`,
+          outline:
+            status === "error"
+              ? `1px solid ${designSystemColors.feedback.red[500]}`
+              : `1px solid ${designSystemColors.neutral[300]}`,
           ...style,
         }}
         {...rest}
+        status={status}
       />
     </ConfigProvider>
   );
