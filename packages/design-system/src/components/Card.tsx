@@ -10,6 +10,7 @@ export type CardProps = AntdCardProps;
 
 const baseTokens: Partial<ComponentToken> = {
   bodyPadding: spacing[6],
+  headerBg: designSystemColors.neutral[50],
 };
 
 export function Card(props: CardProps): React.ReactElement {
@@ -22,6 +23,8 @@ export function Card(props: CardProps): React.ReactElement {
         token: {
           borderRadius: radius.xl,
           colorBorder: designSystemColors.neutral[300],
+          colorBorderSecondary: designSystemColors.neutral[300],
+          colorBgContainer: designSystemColors.neutral[50],
         },
       }}
     >

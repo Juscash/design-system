@@ -31,7 +31,7 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
 }) => {
   if (selectedComponent === "button") {
     return (
-      <Space direction="vertical" size={16} style={{ width: "100%" }}>
+      <Space vertical size={16} style={{ width: "100%" }}>
         <Button type="secondary" onClick={() => onSelect(null)}>
           ← Voltar
         </Button>
@@ -42,7 +42,7 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
 
   if (selectedComponent === "typography") {
     return (
-      <Space direction="vertical" size={16} style={{ width: "100%" }}>
+      <Space vertical size={16} style={{ width: "100%" }}>
         <Button type="secondary" onClick={() => onSelect(null)}>
           ← Voltar
         </Button>
@@ -53,7 +53,7 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
 
   if (selectedComponent === "segmented") {
     return (
-      <Space direction="vertical" size={16} style={{ width: "100%" }}>
+      <Space vertical size={16} style={{ width: "100%" }}>
         <Button type="secondary" onClick={() => onSelect(null)}>
           ← Voltar
         </Button>
@@ -64,7 +64,7 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
 
   if (selectedComponent === "checkbox") {
     return (
-      <Space direction="vertical" size={16} style={{ width: "100%" }}>
+      <Space vertical size={16} style={{ width: "100%" }}>
         <Button type="secondary" onClick={() => onSelect(null)}>
           ← Voltar
         </Button>
@@ -75,7 +75,7 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
 
   if (selectedComponent === "radio") {
     return (
-      <Space direction="vertical" size={16} style={{ width: "100%" }}>
+      <Space vertical size={16} style={{ width: "100%" }}>
         <Button type="secondary" onClick={() => onSelect(null)}>
           ← Voltar
         </Button>
@@ -86,7 +86,7 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
 
   if (selectedComponent === "switch") {
     return (
-      <Space direction="vertical" size={16} style={{ width: "100%" }}>
+      <Space vertical size={16} style={{ width: "100%" }}>
         <Button type="secondary" onClick={() => onSelect(null)}>
           ← Voltar
         </Button>
@@ -97,7 +97,7 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
 
   if (selectedComponent === "tag") {
     return (
-      <Space direction="vertical" size={16} style={{ width: "100%" }}>
+      <Space vertical size={16} style={{ width: "100%" }}>
         <Button type="secondary" onClick={() => onSelect(null)}>
           ← Voltar
         </Button>
@@ -108,7 +108,7 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
 
   if (selectedComponent === "input") {
     return (
-      <Space direction="vertical" size={16} style={{ width: "100%" }}>
+      <Space vertical size={16} style={{ width: "100%" }}>
         <Button type="secondary" onClick={() => onSelect(null)}>
           ← Voltar
         </Button>
@@ -119,7 +119,7 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
 
   if (selectedComponent === "card") {
     return (
-      <Space direction="vertical" size={16} style={{ width: "100%" }}>
+      <Space vertical size={16} style={{ width: "100%" }}>
         <Button type="secondary" onClick={() => onSelect(null)}>
           ← Voltar
         </Button>
@@ -130,7 +130,7 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
 
   if (selectedComponent === "pageheader") {
     return (
-      <Space direction="vertical" size={16} style={{ width: "100%" }}>
+      <Space vertical size={16} style={{ width: "100%" }}>
         <Button type="secondary" onClick={() => onSelect(null)}>
           ← Voltar
         </Button>
@@ -140,7 +140,7 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
   }
 
   return (
-    <Space direction="vertical" size={24} style={{ width: "100%" }}>
+    <Space vertical size={24} style={{ width: "100%" }}>
       <div>
         <Heading2>Componentes</Heading2>
         <Body1>
@@ -225,11 +225,7 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
             Campo de entrada com tamanhos xs, s, m, l e estados variados.
           </Body2>
         </Card>
-        <Card
-          hoverable
-          style={{ width: 280 }}
-          onClick={() => onSelect("card")}
-        >
+        <Card hoverable style={{ width: 280 }} onClick={() => onSelect("card")}>
           <Heading4>Card</Heading4>
           <Body2 style={{ color: "rgba(0,0,0,0.6)" }}>
             Componente de card para exibir conteúdo agrupado com título e extra.
