@@ -14,6 +14,9 @@ const baseTokens: Partial<ComponentToken> = {
 };
 
 export function Card(props: CardProps): React.ReactElement {
+  const AntdCardComponent =
+    AntdCard as unknown as React.ComponentType<CardProps>;
+
   return (
     <ConfigProvider
       theme={{
@@ -28,7 +31,7 @@ export function Card(props: CardProps): React.ReactElement {
         },
       }}
     >
-      <AntdCard {...props} />
+      <AntdCardComponent {...props} />
     </ConfigProvider>
   );
 }

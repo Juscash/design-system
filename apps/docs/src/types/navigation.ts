@@ -9,4 +9,5 @@ export type ComponentKey =
   | "tag"
   | "input"
   | "card"
-  | "pageheader";
+  | "pageheader"
+  | "form";
