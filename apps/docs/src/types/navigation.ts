@@ -8,4 +8,5 @@ export type ComponentKey =
   | "switch"
   | "tag"
   | "input"
-  | "card";
+  | "card"
+  | "pageheader";

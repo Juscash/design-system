@@ -19,7 +19,7 @@ export function PageHeader({
 }: PageHeaderProps): React.ReactElement {
   return (
     <Card>
-      <Flex justify="space-between" align="center">
+      <Flex justify="space-between" align="center" gap={spacing[1]}>
         <Space vertical size={spacing[2]}>
           <Heading6 strong>{title}</Heading6>
           <Body1>{description}</Body1>

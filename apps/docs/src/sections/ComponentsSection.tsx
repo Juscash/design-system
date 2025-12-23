@@ -18,6 +18,7 @@ import { SwitchShowcase } from "./components/switch";
 import { TagShowcase } from "./components/tag";
 import { InputShowcase } from "./components/input";
 import { CardShowcase } from "./components/card";
+import { PageHeaderShowcase } from "./components/pageheader";
 
 export interface ComponentsSectionProps {
   selectedComponent: ComponentKey | null;
@@ -127,6 +128,17 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
     );
   }
 
+  if (selectedComponent === "pageheader") {
+    return (
+      <Space direction="vertical" size={16} style={{ width: "100%" }}>
+        <Button type="secondary" onClick={() => onSelect(null)}>
+          ← Voltar
+        </Button>
+        <PageHeaderShowcase />
+      </Space>
+    );
+  }
+
   return (
     <Space direction="vertical" size={24} style={{ width: "100%" }}>
       <div>
@@ -221,6 +233,16 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
           <Heading4>Card</Heading4>
           <Body2 style={{ color: "rgba(0,0,0,0.6)" }}>
             Componente de card para exibir conteúdo agrupado com título e extra.
+          </Body2>
+        </Card>
+        <Card
+          hoverable
+          style={{ width: 280 }}
+          onClick={() => onSelect("pageheader")}
+        >
+          <Heading4>PageHeader</Heading4>
+          <Body2 style={{ color: "rgba(0,0,0,0.6)" }}>
+            Cabeçalho de página com título, descrição e ação opcional.
           </Body2>
         </Card>
       </Space>
