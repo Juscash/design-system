@@ -92,9 +92,8 @@ export const TypographySection: React.FC = () => (
   <Space direction="vertical" size={24} style={{ width: "100%" }}>
     <Heading2>Typography</Heading2>
     <Body1>
-      Componentes tipográficos com tokens e tamanhos padronizados (Heading,
-      Body e Caption). Use estes estilos para garantir consistência entre
-      páginas.
+      Componentes tipográficos com tokens e tamanhos padronizados (Heading, Body
+      e Caption). Use estes estilos para garantir consistência entre páginas.
     </Body1>
 
     <DemoCard
@@ -137,4 +136,3 @@ export const TypographySection: React.FC = () => (
     />
   </Space>
 );
-

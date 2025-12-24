@@ -10,6 +10,7 @@ import {
   Heading2,
   Body1,
   Body2,
+  FormItem,
 } from "@Juscash/design-system";
 
 import { ButtonPlayground } from "../buttons/ButtonPlayground";
@@ -58,31 +59,127 @@ const DemoCard: React.FC<DemoCardProps> = ({
   );
 };
 
-const simpleFormCode = `import { Form, Input, Button } from '@Juscash/design-system';
+const verticalRequiredCode = `import { Form, Input, Button, FormItem } from '@Juscash/design-system';
 
-function SimpleForm() {
+function VerticalRequiredForm() {
+  const [form] = Form.useForm();
+  
   const onFinish = (values: any) => {
     console.log('Valores:', values);
   };
 
   return (
-    <Form onFinish={onFinish} layout="vertical">
-      <Form.Item label="Nome" name="name" rules={[{ required: true, message: 'Por favor, insira seu nome!' }]}>
+    <Form form={form} onFinish={onFinish} layout="vertical">
+      <FormItem 
+        label="Nome" 
+        name="name" 
+        required
+        rules={[{ required: true, message: 'Por favor, insira seu nome!' }]}
+      >
         <Input placeholder="Digite seu nome" />
-      </Form.Item>
-      <Form.Item>
+      </FormItem>
+      <FormItem>
         <Button type="primary" htmlType="submit">
           Enviar
         </Button>
-      </Form.Item>
+      </FormItem>
     </Form>
   );
 }
 
-render(<SimpleForm />);`;
+render(<VerticalRequiredForm />);`;
+
+const horizontalRequiredCode = `import { Form, Input, Button, FormItem } from '@Juscash/design-system';
+
+function HorizontalRequiredForm() {
+  const [form] = Form.useForm();
+  
+  const onFinish = (values: any) => {
+    console.log('Valores:', values);
+  };
+
+  return (
+    <Form form={form} onFinish={onFinish} layout="horizontal">
+      <FormItem 
+        label="Nome" 
+        name="name" 
+        required
+        rules={[{ required: true, message: 'Por favor, insira seu nome!' }]}
+      >
+        <Input placeholder="Digite seu nome" />
+      </FormItem>
+      <FormItem>
+        <Button type="primary" htmlType="submit">
+          Enviar
+        </Button>
+      </FormItem>
+    </Form>
+  );
+}
+
+render(<HorizontalRequiredForm />);`;
+
+const verticalNoRequiredCode = `import { Form, Input, Button, FormItem } from '@Juscash/design-system';
+
+function VerticalNoRequiredForm() {
+  const [form] = Form.useForm();
+  
+  const onFinish = (values: any) => {
+    console.log('Valores:', values);
+  };
+
+  return (
+    <Form form={form} onFinish={onFinish} layout="vertical">
+      <FormItem 
+        label="Nome" 
+        name="name"
+      >
+        <Input placeholder="Digite seu nome" />
+      </FormItem>
+      <FormItem>
+        <Button type="primary" htmlType="submit">
+          Enviar
+        </Button>
+      </FormItem>
+    </Form>
+  );
+}
+
+render(<VerticalNoRequiredForm />);`;
+
+const horizontalNoRequiredCode = `import { Form, Input, Button, FormItem } from '@Juscash/design-system';
+
+function HorizontalNoRequiredForm() {
+  const [form] = Form.useForm();
+  
+  const onFinish = (values: any) => {
+    console.log('Valores:', values);
+  };
+
+  return (
+    <Form form={form} onFinish={onFinish} layout="horizontal">
+      <FormItem 
+        label="Nome" 
+        name="name"
+      >
+        <Input placeholder="Digite seu nome" />
+      </FormItem>
+      <FormItem>
+        <Button type="primary" htmlType="submit">
+          Enviar
+        </Button>
+      </FormItem>
+    </Form>
+  );
+}
+
+render(<HorizontalNoRequiredForm />);`;
 
 export const FormShowcase: React.FC = () => {
-  const [form] = Form.useForm();
+  const [form1] = Form.useForm();
+  const [form2] = Form.useForm();
+  const [form3] = Form.useForm();
+  const [form4] = Form.useForm();
 
   const onFinish = (values: any) => {
     console.log("Valores:", values);
@@ -92,31 +189,116 @@ export const FormShowcase: React.FC = () => {
     <Space direction="vertical" size={24} style={{ width: "100%" }}>
       <Heading2>Form</Heading2>
       <Body1>
-        Formulário simples com validação usando o componente Form do Ant Design.
+        Formulário com validação usando o componente Form customizado do design
+        system. Suporta layouts vertical e horizontal, com ou sem campos
+        obrigatórios.
       </Body1>
 
       <DemoCard
-        title="Formulário Simples"
-        description="Exemplo básico de formulário com um campo de input e validação."
-        code={simpleFormCode}
+        title="Formulário Vertical com Required"
+        description="Formulário com layout vertical e campo obrigatório (com asterisco vermelho)."
+        code={verticalRequiredCode}
         preview={
-          <Form form={form} onFinish={onFinish} layout="vertical" style={{ maxWidth: 400 }}>
-            <Form.Item
-              label="Nome"
+          <Form
+            form={form1}
+            onFinish={onFinish}
+            layout="vertical"
+            style={{ maxWidth: 400 }}
+          >
+            <FormItem
+              label={<Body1 strong>Nome</Body1>}
               name="name"
-              rules={[{ required: true, message: "Por favor, insira seu nome!" }]}
+              required
+              rules={[
+                { required: true, message: "Por favor, insira seu nome!" },
+              ]}
             >
               <Input placeholder="Digite seu nome" />
-            </Form.Item>
-            <Form.Item>
+            </FormItem>
+            <FormItem>
               <Button type="primary" htmlType="submit">
                 Enviar
               </Button>
-            </Form.Item>
+            </FormItem>
+          </Form>
+        }
+      />
+
+      <DemoCard
+        title="Formulário Horizontal com Required"
+        description="Formulário com layout horizontal e campo obrigatório (com asterisco vermelho)."
+        code={horizontalRequiredCode}
+        preview={
+          <Form
+            form={form2}
+            onFinish={onFinish}
+            layout="horizontal"
+            style={{ maxWidth: 500 }}
+          >
+            <FormItem
+              label="Nome"
+              name="name"
+              required
+              rules={[
+                { required: true, message: "Por favor, insira seu nome!" },
+              ]}
+            >
+              <Input placeholder="Digite seu nome" style={{ width: 200 }} />
+            </FormItem>
+            <FormItem>
+              <Button type="primary" htmlType="submit">
+                Enviar
+              </Button>
+            </FormItem>
+          </Form>
+        }
+      />
+
+      <DemoCard
+        title="Formulário Vertical sem Required"
+        description="Formulário com layout vertical sem campo obrigatório."
+        code={verticalNoRequiredCode}
+        preview={
+          <Form
+            form={form3}
+            onFinish={onFinish}
+            layout="vertical"
+            style={{ maxWidth: 400 }}
+          >
+            <FormItem label="Nome" name="name">
+              <Input placeholder="Digite seu nome" />
+            </FormItem>
+            <FormItem>
+              <Button type="primary" htmlType="submit">
+                Enviar
+              </Button>
+            </FormItem>
+          </Form>
+        }
+      />
+
+      <DemoCard
+        title="Formulário Horizontal sem Required"
+        description="Formulário com layout horizontal sem campo obrigatório."
+        code={horizontalNoRequiredCode}
+        preview={
+          <Form
+            form={form4}
+            onFinish={onFinish}
+            layout="horizontal"
+            style={{ maxWidth: 500 }}
+          >
+            <FormItem label="Nome" name="name">
+              <Input placeholder="Digite seu nome" style={{ width: 200 }} />
+            </FormItem>
+            <FormItem>
+              <Button type="primary" htmlType="submit">
+                Enviar
+              </Button>
+            </FormItem>
           </Form>
         }
       />
     </Space>
   );
 };
-

@@ -8,3 +8,5 @@ export * from "./Tag";
 export * from "./Input";
 export * from "./Card";
 export * from "./PageHeader";
+
+export * from "./FormItem";

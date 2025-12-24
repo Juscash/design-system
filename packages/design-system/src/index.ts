@@ -17,7 +17,8 @@ export {
   Space,
   Divider,
   Flex,
-
+  Form,
+  type FormProps,
   // Navigation
   Menu,
   type MenuProps,
@@ -31,8 +32,6 @@ export {
   type AnchorProps,
 
   // Data Entry
-  Form,
-  type FormProps,
   InputNumber,
   type InputNumberProps,
   Select,

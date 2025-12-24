@@ -188,33 +188,62 @@ export function Typography(props: CustomTypographyProps): React.ReactElement {
   );
 }
 
-export function Heading1(props: Omit<CustomTypographyProps, "variant">) {
+type HeadingProps = Omit<TitleProps, "level"> & {
+  color?: DSColor;
+};
+
+type BodyProps = ParagraphProps & {
+  color?: DSColor;
+};
+
+type CaptionProps = TextProps & {
+  color?: DSColor;
+};
+
+export const Heading1: React.FC<HeadingProps> = (props) => {
   return <Typography variant="heading1" {...props} />;
-}
-export function Heading2(props: Omit<CustomTypographyProps, "variant">) {
+};
+Heading1.displayName = "Heading1";
+
+export const Heading2: React.FC<HeadingProps> = (props) => {
   return <Typography variant="heading2" {...props} />;
-}
-export function Heading3(props: Omit<CustomTypographyProps, "variant">) {
+};
+Heading2.displayName = "Heading2";
+
+export const Heading3: React.FC<HeadingProps> = (props) => {
   return <Typography variant="heading3" {...props} />;
-}
-export function Heading4(props: Omit<CustomTypographyProps, "variant">) {
+};
+Heading3.displayName = "Heading3";
+
+export const Heading4: React.FC<HeadingProps> = (props) => {
   return <Typography variant="heading4" {...props} />;
-}
-export function Heading5(props: Omit<CustomTypographyProps, "variant">) {
+};
+Heading4.displayName = "Heading4";
+
+export const Heading5: React.FC<HeadingProps> = (props) => {
   return <Typography variant="heading5" {...props} />;
-}
-export function Heading6(props: Omit<CustomTypographyProps, "variant">) {
+};
+Heading5.displayName = "Heading5";
+
+export const Heading6: React.FC<HeadingProps> = (props) => {
   return <Typography variant="heading6" {...props} />;
-}
-export function Body1(props: Omit<CustomTypographyProps, "variant">) {
+};
+Heading6.displayName = "Heading6";
+
+export const Body1: React.FC<BodyProps> = (props) => {
   return <Typography variant="body1" {...props} />;
-}
-export function Body2(props: Omit<CustomTypographyProps, "variant">) {
+};
+Body1.displayName = "Body1";
+
+export const Body2: React.FC<BodyProps> = (props) => {
   return <Typography variant="body2" {...props} />;
-}
-export function Caption(props: Omit<CustomTypographyProps, "variant">) {
+};
+Body2.displayName = "Body2";
+
+export const Caption: React.FC<CaptionProps> = (props) => {
   return <Typography variant="caption" {...props} />;
-}
+};
+Caption.displayName = "Caption";
 
 export const TypographyComponents = {
   Heading1,

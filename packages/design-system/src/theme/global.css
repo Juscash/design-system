@@ -6,3 +6,14 @@
 .ant-segmented-item-selected {
   font-weight: 700 !important;
 }
+
+/* Mover asterisco obrigatório para a direita do label */
+.ant-form-item-label>label.ant-form-item-required::before {
+  display: none !important;
+}
+
+.ant-form-item-label>label.ant-form-item-required::after {
+  content: '*';
+  color: #D2190B !important;
+  visibility: visible !important;
+}
