@@ -46,8 +46,6 @@ export {
   type TimePickerProps,
   Calendar,
   type CalendarProps,
-  Upload,
-  type UploadProps,
   Transfer,
   type TransferProps,
   Slider,

@@ -20,6 +20,7 @@ import { InputShowcase } from "./components/input";
 import { CardShowcase } from "./components/card";
 import { PageHeaderShowcase } from "./components/pageheader";
 import { FormShowcase } from "./components/form";
+import { UploadShowcase } from "./components/upload";
 
 export interface ComponentsSectionProps {
   selectedComponent: ComponentKey | null;
@@ -151,6 +152,17 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
     );
   }
 
+  if (selectedComponent === "upload") {
+    return (
+      <Space vertical size={16} style={{ width: "100%" }}>
+        <Button type="secondary" onClick={() => onSelect(null)}>
+          ← Voltar
+        </Button>
+        <UploadShowcase />
+      </Space>
+    );
+  }
+
   return (
     <Space vertical size={24} style={{ width: "100%" }}>
       <div>
@@ -257,6 +269,16 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
           <Heading4>Form</Heading4>
           <Body2 style={{ color: "rgba(0,0,0,0.6)" }}>
             Formulário simples com validação e campos de entrada.
+          </Body2>
+        </Card>
+        <Card
+          hoverable
+          style={{ width: 280 }}
+          onClick={() => onSelect("upload")}
+        >
+          <Heading4>Upload</Heading4>
+          <Body2 style={{ color: "rgba(0,0,0,0.6)" }}>
+            Upload de arquivos com layouts vertical e horizontal e 4 tamanhos.
           </Body2>
         </Card>
       </Space>

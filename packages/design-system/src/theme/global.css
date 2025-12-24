@@ -17,3 +17,29 @@
   color: #D2190B !important;
   visibility: visible !important;
 }
+
+/* Upload layout horizontal - arquivos aparecem ao lado do input */
+.juscash-upload-horizontal {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.juscash-upload-horizontal .ant-upload {
+  flex-shrink: 0;
+}
+
+.juscash-upload-horizontal .ant-upload-list {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 0;
+  flex: 1;
+}
+
+.juscash-upload-horizontal .ant-upload-list-item {
+  margin-top: 0;
+}
