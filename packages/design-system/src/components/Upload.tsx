@@ -71,14 +71,17 @@ export function Upload(props: UploadProps): React.ReactElement {
       return {
         width: "100%",
         borderRadius: radius.xl,
+        justifyContent: "flex-start",
+        padding: "8px 12px",
       };
     }
 
     // Para vertical ou horizontal sem arquivos, usar fit-content
     return {
-      width: "fit-content",
-      minWidth: "fit-content",
+      width: "100%",
       borderRadius: radius.xl,
+      justifyContent: "flex-start",
+      padding: "8px 12px",
     };
   };
 
@@ -90,6 +93,7 @@ export function Upload(props: UploadProps): React.ReactElement {
       icon={<LucideIcons.Upload size={16} />}
       disabled={hasFiles}
       style={getButtonStyle()}
+      block
     >
       <Body2 color="dark" strong>
         Solte aqui ou clique para escolher

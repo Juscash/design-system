@@ -159,8 +159,10 @@ export function Typography(props: CustomTypographyProps): React.ReactElement {
     </ConfigProvider>
   );
 }
-
-type HeadingProps = Omit<TitleProps, "level"> & {
+type CleanHeadingProps = {
+  [K in keyof TitleProps as K extends "level" ? never : K]: TitleProps[K];
+};
+type HeadingProps = CleanHeadingProps & {
   color?: DSColor;
 };
 

@@ -21,14 +21,16 @@ type ExtendedButtonType =
   | "outlined";
 
 type DsSize = "xs" | "s" | "m";
-
-export interface ButtonProps
-  extends Omit<AntdButtonProps, "type" | "size" | "danger"> {
+type CleanAntdProps = {
+  [K in keyof AntdButtonProps as K extends "type" | "size" | "danger"
+    ? never
+    : K]: AntdButtonProps[K];
+};
+export type ButtonProps = CleanAntdProps & {
   type?: ExtendedButtonType;
   dsSize?: DsSize;
   size?: AntdButtonProps["size"];
-}
-
+};
 function getPrimaryTokens(): Partial<ButtonToken> {
   return {
     colorPrimary: designSystemColors.brand.primary[600],
@@ -239,3 +241,5 @@ export function Button(props: ButtonProps): React.ReactElement {
 
   return <AntdButton type="default" style={style} {...rest} />;
 }
+
+Button.displayName = "Button";
