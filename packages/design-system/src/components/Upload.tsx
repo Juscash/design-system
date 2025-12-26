@@ -1,21 +1,24 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { Upload as AntdUpload, ConfigProvider } from "antd";
-import type { UploadProps as AntdUploadProps } from "antd";
+import type { UploadProps as AntdUploadProps, UploadFile } from "antd";
 import { designSystemColors } from "../theme";
-import { Input } from "./Input";
+import { Button } from "./Button";
+import { Body2 } from "./Typography";
 import * as LucideIcons from "lucide-react";
+import { radius } from "../theme";
 
 type UploadSize = "xs" | "s" | "m" | "l";
 type UploadLayout = "horizontal" | "vertical";
 
-type BaseUploadProps = Partial<Omit<AntdUploadProps, "children">>;
+type BaseUploadProps = Partial<Omit<AntdUploadProps, "children" | "onChange">>;
 
 export type UploadProps = BaseUploadProps & {
   dsSize?: UploadSize;
   layout?: UploadLayout;
   children?: React.ReactNode;
+  onChange?: (info: { fileList: UploadFile[] }) => void;
 };
 
 const baseTokens: Record<string, any> = {
@@ -33,41 +36,74 @@ export function Upload(props: UploadProps): React.ReactElement {
     listType = "text",
     className,
     children,
+    fileList: controlledFileList,
+    onChange,
     ...rest
   } = props;
 
-  // Sempre usar listType="text" para ambos os layouts
-  // A diferença será apenas no CSS para posicionar os arquivos
+  // Estado interno para rastrear arquivos se não for controlado
+  const [internalFileList, setInternalFileList] = useState<UploadFile[]>([]);
 
-  // Criar children padrão com Input se não fornecido
+  // Usar fileList controlado ou interno
+  const fileList = controlledFileList ?? internalFileList;
+  const hasFiles = fileList.length > 0;
+
+  // Handler para mudanças no upload
+  const handleChange = (info: { fileList: UploadFile[] }) => {
+    if (onChange) {
+      onChange(info);
+    } else {
+      setInternalFileList(info.fileList);
+    }
+  };
+
+  // Mapear tamanhos do Upload para tamanhos do Button
+  const mapToButtonSize = (size: UploadSize): "xs" | "s" | "m" => {
+    if (size === "xs") return "xs";
+    if (size === "s") return "s";
+    return "m"; // m e l do Upload mapeiam para m do Button
+  };
+
+  // Calcular estilo do Button baseado no layout e se há arquivos
+  const getButtonStyle = (): React.CSSProperties => {
+    // Se for horizontal e tiver arquivos, o CSS já cuida do 50%
+    if (layout === "horizontal" && hasFiles) {
+      return {
+        width: "100%",
+        borderRadius: radius.xl,
+      };
+    }
+
+    // Para vertical ou horizontal sem arquivos, usar fit-content
+    return {
+      width: "fit-content",
+      minWidth: "fit-content",
+      borderRadius: radius.xl,
+    };
+  };
+
+  // Criar children padrão com Button se não fornecido
   const defaultChildren = (
-    <Input
-      dsSize={dsSize}
-      value="Solte aqui ou clique para escolher"
-      prefix={<LucideIcons.Upload size={16} />}
-      readOnly
-      style={{
-        cursor: "pointer",
-        fontWeight: "bold",
-        fontSize: "13px",
-        paddingTop: 0,
-        paddingBottom: 0,
-        borderRadius: 8,
-      }}
-      styles={{
-        input: {
-          fontWeight: "bold",
-          padding: 0,
-        },
-      }}
-    />
+    <Button
+      type="outlined"
+      dsSize={mapToButtonSize(dsSize)}
+      icon={<LucideIcons.Upload size={16} />}
+      disabled={hasFiles}
+      style={getButtonStyle()}
+    >
+      <Body2 color="dark" strong>
+        Solte aqui ou clique para escolher
+      </Body2>
+    </Button>
   );
 
   const uploadChildren = children || defaultChildren;
 
   const uploadClassName =
     layout === "horizontal"
-      ? `juscash-upload-horizontal ${className || ""}`.trim()
+      ? `juscash-upload-horizontal ${
+          hasFiles ? "juscash-upload-has-files" : ""
+        } ${className || ""}`.trim()
       : className;
 
   return (
@@ -90,6 +126,8 @@ export function Upload(props: UploadProps): React.ReactElement {
         listType={listType}
         style={style}
         className={uploadClassName}
+        fileList={fileList}
+        onChange={handleChange}
         {...rest}
       >
         {uploadChildren}

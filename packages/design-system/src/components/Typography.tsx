@@ -23,7 +23,8 @@ type TypographyVariant =
 const colorMap = {
   primary: designSystemColors.brand.primary[600],
   secondary: designSystemColors.brand.secondary[600],
-  neutral: designSystemColors.neutral[800],
+  neutral: designSystemColors.neutral[500],
+  dark: designSystemColors.neutral[800],
   error: designSystemColors.feedback.red[500],
   warning: designSystemColors.feedback.yellow[500],
   success: designSystemColors.feedback.green[500],
@@ -42,76 +43,59 @@ export type CustomTypographyProps = AntdTypographyAllProps & {
 
 const typographyVariants = {
   heading1: {
-    Typography: {
-      fontSizeHeading1: 61,
-      lineHeightHeading1: 1.2,
-      fontWeightStrong: 700,
-      colorTextHeading: designSystemColors.neutral[800],
-    },
+    fontSizeHeading1: 61,
+    lineHeightHeading1: 1.2,
+    fontWeightStrong: 700,
+    colorTextHeading: designSystemColors.neutral[800],
   },
   heading2: {
-    Typography: {
-      fontSizeHeading2: 49,
-      lineHeightHeading2: 1.2,
-      fontWeightStrong: 700,
-      colorTextHeading: designSystemColors.neutral[800],
-    },
+    fontSizeHeading2: 49,
+    lineHeightHeading2: 1.2,
+    fontWeightStrong: 700,
+    colorTextHeading: designSystemColors.neutral[800],
   },
   heading3: {
-    Typography: {
-      fontSizeHeading3: 39,
-      lineHeightHeading3: 1.2,
-      fontWeightStrong: 700,
-      colorTextHeading: designSystemColors.neutral[800],
-    },
+    fontSizeHeading3: 39,
+    lineHeightHeading3: 1.2,
+    fontWeightStrong: 700,
+    colorTextHeading: designSystemColors.neutral[800],
   },
   heading4: {
-    Typography: {
-      fontSizeHeading4: 31,
-      lineHeightHeading4: 1.2,
-      fontWeightStrong: 700,
-      colorTextHeading: designSystemColors.neutral[800],
-    },
+    fontSizeHeading4: 31,
+    lineHeightHeading4: 1.2,
+    fontWeightStrong: 700,
+    colorTextHeading: designSystemColors.neutral[800],
   },
   heading5: {
-    Typography: {
-      fontSizeHeading5: 25,
-      lineHeightHeading5: 1.2,
-      fontWeightStrong: 700,
-      colorTextHeading: designSystemColors.neutral[800],
-    },
+    fontSizeHeading5: 25,
+    lineHeightHeading5: 1.2,
+    fontWeightStrong: 700,
+    colorTextHeading: designSystemColors.neutral[800],
   },
   heading6: {
-    Typography: {
-      fontWeightStrong: 700,
-      colorTextHeading: designSystemColors.neutral[800],
-    },
+    fontSizeHeading5: 20,
+    colorTextHeading: designSystemColors.neutral[800],
+    lineHeightHeading5: 1.2,
   },
   body1: {
-    Typography: {
-      fontSize: 16,
-      lineHeight: 1.5,
-      colorText: designSystemColors.neutral[800],
-    },
+    fontSize: 16,
+    lineHeight: 1.5,
+    colorText: designSystemColors.neutral[800],
   },
   body2: {
-    Typography: {
-      fontSize: 13,
-      lineHeight: 1.4,
-      colorText: designSystemColors.neutral[800],
-    },
+    fontSize: 13,
+    lineHeight: 1.4,
+    colorText: designSystemColors.neutral[800],
   },
   caption: {
-    Typography: {
-      fontSize: 10,
-      lineHeight: 1.3,
-      colorText: designSystemColors.neutral[600],
-    },
+    fontSize: 10,
+    lineHeight: 1.3,
+    colorText: designSystemColors.neutral[600],
   },
 } as const;
 
 export function Typography(props: CustomTypographyProps): React.ReactElement {
-  const { variant = "body1", color, style, ...rest } = props;
+  const { variant = "body1", color = "dark", style, ...rest } = props;
 
   const variantTheme =
     typographyVariants[variant as keyof typeof typographyVariants];
@@ -142,18 +126,7 @@ export function Typography(props: CustomTypographyProps): React.ReactElement {
       node = <Title level={5} style={baseStyle} {...(rest as TitleProps)} />;
       break;
     case "heading6":
-      node = (
-        <Title
-          level={5}
-          style={{
-            ...baseStyle,
-            fontSize: 20,
-            lineHeight: 1.2,
-            fontWeight: 700,
-          }}
-          {...(rest as TitleProps)}
-        />
-      );
+      node = <Title level={5} style={baseStyle} {...(rest as TitleProps)} />;
       break;
     case "body1":
       node = (
@@ -172,19 +145,18 @@ export function Typography(props: CustomTypographyProps): React.ReactElement {
       );
       break;
     case "caption":
-      node = (
-        <Text
-          style={{ ...baseStyle, fontSize: 10, lineHeight: 1.3 }}
-          {...(rest as TextProps)}
-        />
-      );
+      node = <Text style={baseStyle} {...(rest as TextProps)} />;
       break;
     default:
       node = <Paragraph style={baseStyle} {...(rest as ParagraphProps)} />;
   }
 
   return (
-    <ConfigProvider theme={{ components: variantTheme }}>{node}</ConfigProvider>
+    <ConfigProvider
+      theme={{ token: { fontWeightStrong: 700, ...variantTheme } }}
+    >
+      {node}
+    </ConfigProvider>
   );
 }
 
