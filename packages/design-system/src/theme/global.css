@@ -18,33 +18,26 @@
   visibility: visible !important;
 }
 
-/* Upload layout horizontal - arquivos aparecem ao lado do input */
 .juscash-upload-horizontal {
   display: flex;
   flex-direction: row;
   align-items: flex-start;
   gap: 8px;
-  flex-wrap: wrap;
+
 }
 
-.juscash-upload-horizontal .ant-upload {
-  flex-shrink: 0;
-  width: fit-content;
-  min-width: fit-content;
-  display: inline-block;
+.juscash-upload-horizontal .ant-upload-list-item {
+  margin-top: 0 !important;
 }
 
-/* Button dentro do upload sem arquivos deve ter fit-content */
-.juscash-upload-horizontal:not(.juscash-upload-has-files) .ant-upload>* {
-  width: fit-content;
+.ant-upload-list {
+  width: 100% !important;
 }
 
-.juscash-upload-horizontal:not(.juscash-upload-has-files) .ant-upload button,
-.juscash-upload-horizontal:not(.juscash-upload-has-files) .ant-upload .ant-btn {
-  width: fit-content !important;
+.ant-upload-icon {
+  display: flex !important;
 }
 
-/* Quando há arquivos no layout horizontal, button e lista dividem o espaço 50/50 */
 .juscash-upload-horizontal.juscash-upload-has-files .ant-upload {
   width: 50%;
   min-width: fit-content;
@@ -52,34 +45,21 @@
   flex: 0 0 50%;
 }
 
-/* Quando há arquivos, o Button dentro também deve ocupar 100% do container */
-.juscash-upload-horizontal.juscash-upload-has-files .ant-upload>*,
-.juscash-upload-horizontal.juscash-upload-has-files .ant-upload button,
-.juscash-upload-horizontal.juscash-upload-has-files .ant-upload .ant-btn {
-  width: 100% !important;
+.juscash-upload-button {
+  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
 }
 
-.juscash-upload-horizontal .ant-upload-list {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 0;
-  flex: 1;
-  min-width: 0;
+.juscash-upload-button:hover {
+  background-color: #f0f0f0 !important;
+  background-color: transparent !important;
+
+  color: inherit !important;
+  border-color: #d4d4d4 !important;
+
+
+  box-shadow: 0px 0px 0px 3px #d4d4d4 !important;
 }
 
-/* Quando há arquivos, a lista também ocupa 50% */
-.juscash-upload-horizontal.juscash-upload-has-files .ant-upload-list {
-  width: 50%;
-  flex: 0 0 50%;
-  max-width: 50%;
-  min-width: 0;
-}
-
-.juscash-upload-horizontal .ant-upload-list-item {
-  margin-top: 0;
-}
 
 .ant-btn-icon {
   display: flex !important;

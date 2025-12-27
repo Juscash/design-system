@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { Upload as AntdUpload, ConfigProvider } from "antd";
 import type { UploadProps as AntdUploadProps, UploadFile } from "antd";
 import { designSystemColors } from "../theme";
@@ -8,17 +8,17 @@ import { Button } from "./Button";
 import { Body2 } from "./Typography";
 import * as LucideIcons from "lucide-react";
 import { radius } from "../theme";
+import { Trash2, Link } from "lucide-react";
 
 type UploadSize = "xs" | "s" | "m" | "l";
 type UploadLayout = "horizontal" | "vertical";
 
-type BaseUploadProps = Partial<Omit<AntdUploadProps, "children" | "onChange">>;
+type BaseUploadProps = Partial<Omit<AntdUploadProps, "children">>;
 
 export type UploadProps = BaseUploadProps & {
   dsSize?: UploadSize;
   layout?: UploadLayout;
   children?: React.ReactNode;
-  onChange?: (info: { fileList: UploadFile[] }) => void;
 };
 
 const baseTokens: Record<string, any> = {
@@ -30,32 +30,15 @@ const baseTokens: Record<string, any> = {
 
 export function Upload(props: UploadProps): React.ReactElement {
   const {
+    disabled = false,
     dsSize = "m",
     layout = "vertical",
-    style,
     listType = "text",
     className,
     children,
-    fileList: controlledFileList,
-    onChange,
+
     ...rest
   } = props;
-
-  // Estado interno para rastrear arquivos se não for controlado
-  const [internalFileList, setInternalFileList] = useState<UploadFile[]>([]);
-
-  // Usar fileList controlado ou interno
-  const fileList = controlledFileList ?? internalFileList;
-  const hasFiles = fileList.length > 0;
-
-  // Handler para mudanças no upload
-  const handleChange = (info: { fileList: UploadFile[] }) => {
-    if (onChange) {
-      onChange(info);
-    } else {
-      setInternalFileList(info.fileList);
-    }
-  };
 
   // Mapear tamanhos do Upload para tamanhos do Button
   const mapToButtonSize = (size: UploadSize): "xs" | "s" | "m" => {
@@ -66,8 +49,7 @@ export function Upload(props: UploadProps): React.ReactElement {
 
   // Calcular estilo do Button baseado no layout e se há arquivos
   const getButtonStyle = (): React.CSSProperties => {
-    // Se for horizontal e tiver arquivos, o CSS já cuida do 50%
-    if (layout === "horizontal" && hasFiles) {
+    if (layout === "horizontal") {
       return {
         width: "100%",
         borderRadius: radius.xl,
@@ -76,7 +58,6 @@ export function Upload(props: UploadProps): React.ReactElement {
       };
     }
 
-    // Para vertical ou horizontal sem arquivos, usar fit-content
     return {
       width: "100%",
       borderRadius: radius.xl,
@@ -89,13 +70,14 @@ export function Upload(props: UploadProps): React.ReactElement {
   const defaultChildren = (
     <Button
       type="outlined"
+      className="juscash-upload-button"
       dsSize={mapToButtonSize(dsSize)}
       icon={<LucideIcons.Upload size={16} />}
-      disabled={hasFiles}
+      disabled={disabled}
       style={getButtonStyle()}
       block
     >
-      <Body2 color="dark" strong>
+      <Body2 ellipsis color={disabled ? "disabled" : "dark"} strong>
         Solte aqui ou clique para escolher
       </Body2>
     </Button>
@@ -105,9 +87,7 @@ export function Upload(props: UploadProps): React.ReactElement {
 
   const uploadClassName =
     layout === "horizontal"
-      ? `juscash-upload-horizontal ${
-          hasFiles ? "juscash-upload-has-files" : ""
-        } ${className || ""}`.trim()
+      ? `juscash-upload-horizontal ${className || ""}`.trim()
       : className;
 
   return (
@@ -123,16 +103,21 @@ export function Upload(props: UploadProps): React.ReactElement {
           colorError: designSystemColors.feedback.red[500],
           colorTextDisabled: designSystemColors.neutral[400],
           colorTextPlaceholder: designSystemColors.neutral[500],
+          fontSize: 13,
         },
       }}
     >
       <AntdUpload
+        disabled={disabled}
         listType={listType}
-        style={style}
         className={uploadClassName}
-        fileList={fileList}
-        onChange={handleChange}
         {...rest}
+        iconRender={() => <Link size={14} />}
+        showUploadList={{
+          removeIcon: (
+            <Trash2 size={14} color={designSystemColors.neutral[800]} />
+          ),
+        }}
       >
         {uploadChildren}
       </AntdUpload>
