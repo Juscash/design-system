@@ -34,9 +34,18 @@ export const JuscashProvider: React.FC<JuscashProviderProps> = ({
       ...(themeOverride?.token ?? {}),
     },
   };
+  const customLocale = {
+    ...ptBR,
+    Table: {
+      ...ptBR.Table,
 
+      triggerAsc: "Clique para organizar em ordem crescente",
+      triggerDesc: "Clique para organizar em ordem decrescente",
+      cancelSort: "Clique para remover ordenação",
+    },
+  };
   return (
-    <ConfigProvider theme={mergedTheme} locale={ptBR}>
+    <ConfigProvider theme={mergedTheme} locale={customLocale}>
       {children}
     </ConfigProvider>
   );
