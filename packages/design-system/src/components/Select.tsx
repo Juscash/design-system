@@ -6,7 +6,7 @@ import type { SelectProps as AntdSelectProps } from "antd";
 import type { ComponentToken } from "antd/es/select/style/token";
 import { designSystemColors, radius } from "../theme";
 import { AliasToken } from "antd/es/theme/interface";
-import { ChevronsUpDown, Search } from "lucide-react";
+import { ChevronsUpDown, Search, Check } from "lucide-react";
 
 type SelectSize = "xs" | "s" | "m" | "l";
 
@@ -124,6 +124,9 @@ export function Select(props: SelectProps): React.ReactElement {
         {...rest}
         className={combinedClassName}
         suffixIcon={suffixIcon ?? <ChevronsUpDown size={16} />}
+        menuItemSelectedIcon={
+          <Check size={16} color={designSystemColors.neutral[800]} />
+        }
         showSearch={false}
         searchValue={searchValue}
         style={{

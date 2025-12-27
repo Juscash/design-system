@@ -126,3 +126,11 @@
 .ant-select-dropdown {
   padding: 0 !important;
 }
+
+.ant-select-single .ant-select-item-option-selected .ant-select-item-option-state {
+  display: flex !important;
+}
+
+.ant-select-item-option-content {
+  flex: auto;
+}

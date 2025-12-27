@@ -8,6 +8,8 @@ import {
   Heading2,
   Body1,
   Body2,
+  Row,
+  Col,
 } from "@Juscash/design-system";
 
 import { ButtonPlayground } from "../buttons/ButtonPlayground";
@@ -56,7 +58,7 @@ const DemoCard: React.FC<DemoCardProps> = ({
   );
 };
 
-const selectSizesCode = `import { Select, Space } from '@Juscash/design-system';
+const selectSizesCode = `import { Select, Space, Row, Col } from '@Juscash/design-system';
 
 const options = [
   { value: '1', label: 'Opção 1' },
@@ -67,17 +69,45 @@ const options = [
 function SelectSizes() {
   return (
     <Space direction="vertical" size="middle">
-      <Select placeholder="Extra small" dsSize="xs" options={options} style={{ width: 200 }} />
-      <Select placeholder="Small" dsSize="s" options={options} style={{ width: 200 }} />
-      <Select placeholder="Medium" dsSize="m" options={options} style={{ width: 200 }} />
-      <Select placeholder="Large" dsSize="l" options={options} style={{ width: 200 }} />
+      <Row gutter={16}>
+        <Col span={12}>
+          <Select placeholder="Extra small" dsSize="xs" options={options} style={{ width: '100%' }} />
+        </Col>
+        <Col span={12}>
+          <Select placeholder="Extra small múltiplo" dsSize="xs" mode="multiple" options={options} style={{ width: '100%' }} />
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={12}>
+          <Select placeholder="Small" dsSize="s" options={options} style={{ width: '100%' }} />
+        </Col>
+        <Col span={12}>
+          <Select placeholder="Small múltiplo" dsSize="s" mode="multiple" options={options} style={{ width: '100%' }} />
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={12}>
+          <Select placeholder="Medium" dsSize="m" options={options} style={{ width: '100%' }} />
+        </Col>
+        <Col span={12}>
+          <Select placeholder="Medium múltiplo" dsSize="m" mode="multiple" options={options} style={{ width: '100%' }} />
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={12}>
+          <Select placeholder="Large" dsSize="l" options={options} style={{ width: '100%' }} />
+        </Col>
+        <Col span={12}>
+          <Select placeholder="Large múltiplo" dsSize="l" mode="multiple" options={options} style={{ width: '100%' }} />
+        </Col>
+      </Row>
     </Space>
   );
 }
 
 render(<SelectSizes />);`;
 
-const selectStatesCode = `import { Select, Space } from '@Juscash/design-system';
+const selectStatesCode = `import { Select, Space, Row, Col } from '@Juscash/design-system';
 
 const options = [
   { value: '1', label: 'Opção 1' },
@@ -88,16 +118,37 @@ const options = [
 function SelectStates() {
   return (
     <Space direction="vertical" size="middle">
-      <Select placeholder="Select normal" options={options} style={{ width: 200 }} />
-      <Select placeholder="Select desabilitado" disabled options={options} style={{ width: 200 }} />
-      <Select placeholder="Select com erro" status="error" options={options} style={{ width: 200 }} />
+      <Row gutter={16}>
+        <Col span={12}>
+          <Select placeholder="Select normal" options={options} style={{ width: '100%' }} />
+        </Col>
+        <Col span={12}>
+          <Select placeholder="Select normal múltiplo" mode="multiple" options={options} style={{ width: '100%' }} />
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={12}>
+          <Select placeholder="Select desabilitado" disabled options={options} style={{ width: '100%' }} />
+        </Col>
+        <Col span={12}>
+          <Select placeholder="Select desabilitado múltiplo" disabled mode="multiple" options={options} style={{ width: '100%' }} />
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={12}>
+          <Select placeholder="Select com erro" status="error" options={options} style={{ width: '100%' }} />
+        </Col>
+        <Col span={12}>
+          <Select placeholder="Select com erro múltiplo" status="error" mode="multiple" options={options} style={{ width: '100%' }} />
+        </Col>
+      </Row>
     </Space>
   );
 }
 
 render(<SelectStates />);`;
 
-const selectFeaturesCode = `import { Select, Space } from '@Juscash/design-system';
+const selectFeaturesCode = `import { Select, Space, Row, Col } from '@Juscash/design-system';
 
 const optionsWithSearch = [
   { value: '1', label: 'Opção 1' },
@@ -115,20 +166,48 @@ const optionsWithDisabled = [
 function SelectFeatures() {
   return (
     <Space direction="vertical" size="middle">
-      <Select 
-        placeholder="Select com busca" 
-        showSearch 
-        options={optionsWithSearch}
-        style={{ width: 200 }}
-        filterOption={(input, option) =>
-          (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
-        }
-      />
-      <Select 
-        placeholder="Select com opção desabilitada" 
-        options={optionsWithDisabled}
-        style={{ width: 200 }} 
-      />
+      <Row gutter={16}>
+        <Col span={12}>
+          <Select 
+            placeholder="Select com busca" 
+            showSearch 
+            options={optionsWithSearch}
+            style={{ width: '100%' }}
+            filterOption={(input, option) =>
+              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+            }
+          />
+        </Col>
+        <Col span={12}>
+          <Select 
+            placeholder="Select com busca múltiplo" 
+            showSearch 
+            mode="multiple"
+            options={optionsWithSearch}
+            style={{ width: '100%' }}
+            filterOption={(input, option) =>
+              (option?.label ?? '').toLowerCase().includes(input.toLowerCase())
+            }
+          />
+        </Col>
+      </Row>
+      <Row gutter={16}>
+        <Col span={12}>
+          <Select 
+            placeholder="Select com opção desabilitada" 
+            options={optionsWithDisabled}
+            style={{ width: '100%' }} 
+          />
+        </Col>
+        <Col span={12}>
+          <Select 
+            placeholder="Select com opção desabilitada múltiplo" 
+            mode="multiple"
+            options={optionsWithDisabled}
+            style={{ width: '100%' }} 
+          />
+        </Col>
+      </Row>
     </Space>
   );
 }
@@ -162,31 +241,83 @@ export const SelectShowcase: React.FC = () => (
       description="Demonstração dos tamanhos xs, s, m e l."
       code={selectSizesCode}
       preview={
-        <Space direction="vertical" size="middle">
-          <Select
-            placeholder="Extra small"
-            dsSize="xs"
-            options={options}
-            style={{ width: 200 }}
-          />
-          <Select
-            placeholder="Small"
-            dsSize="s"
-            options={options}
-            style={{ width: 200 }}
-          />
-          <Select
-            placeholder="Medium"
-            dsSize="m"
-            options={options}
-            style={{ width: 200 }}
-          />
-          <Select
-            placeholder="Large"
-            dsSize="l"
-            options={options}
-            style={{ width: 200 }}
-          />
+        <Space direction="vertical" size="middle" style={{ width: "100%" }}>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Select
+                placeholder="Extra small"
+                dsSize="xs"
+                options={options}
+                style={{ width: "100%" }}
+              />
+            </Col>
+            <Col span={12}>
+              <Select
+                placeholder="Extra small múltiplo"
+                dsSize="xs"
+                mode="multiple"
+                options={options}
+                style={{ width: "100%" }}
+              />
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Select
+                placeholder="Small"
+                dsSize="s"
+                options={options}
+                style={{ width: "100%" }}
+              />
+            </Col>
+            <Col span={12}>
+              <Select
+                placeholder="Small múltiplo"
+                dsSize="s"
+                mode="multiple"
+                options={options}
+                style={{ width: "100%" }}
+              />
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Select
+                placeholder="Medium"
+                dsSize="m"
+                options={options}
+                style={{ width: "100%" }}
+              />
+            </Col>
+            <Col span={12}>
+              <Select
+                placeholder="Medium múltiplo"
+                dsSize="m"
+                mode="multiple"
+                options={options}
+                style={{ width: "100%" }}
+              />
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Select
+                placeholder="Large"
+                dsSize="l"
+                options={options}
+                style={{ width: "100%" }}
+              />
+            </Col>
+            <Col span={12}>
+              <Select
+                placeholder="Large múltiplo"
+                dsSize="l"
+                mode="multiple"
+                options={options}
+                style={{ width: "100%" }}
+              />
+            </Col>
+          </Row>
         </Space>
       }
     />
@@ -197,23 +328,61 @@ export const SelectShowcase: React.FC = () => (
       code={selectStatesCode}
       preview={
         <Space direction="vertical" size="middle">
-          <Select
-            placeholder="Select normal"
-            options={options}
-            style={{ width: 200 }}
-          />
-          <Select
-            placeholder="Select desabilitado"
-            disabled
-            options={options}
-            style={{ width: 200 }}
-          />
-          <Select
-            placeholder="Select com erro"
-            status="error"
-            options={options}
-            style={{ width: 200 }}
-          />
+          <Row gutter={16}>
+            <Col span={12}>
+              <Select
+                placeholder="Select normal"
+                options={options}
+                style={{ width: "100%" }}
+              />
+            </Col>
+            <Col span={12}>
+              <Select
+                placeholder="Select normal múltiplo"
+                mode="multiple"
+                options={options}
+                style={{ width: "100%" }}
+              />
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Select
+                placeholder="Select desabilitado"
+                disabled
+                options={options}
+                style={{ width: "100%" }}
+              />
+            </Col>
+            <Col span={12}>
+              <Select
+                placeholder="Select desabilitado múltiplo"
+                disabled
+                mode="multiple"
+                options={options}
+                style={{ width: "100%" }}
+              />
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Select
+                placeholder="Select com erro"
+                status="error"
+                options={options}
+                style={{ width: "100%" }}
+              />
+            </Col>
+            <Col span={12}>
+              <Select
+                placeholder="Select com erro múltiplo"
+                status="error"
+                mode="multiple"
+                options={options}
+                style={{ width: "100%" }}
+              />
+            </Col>
+          </Row>
         </Space>
       }
     />
@@ -224,20 +393,42 @@ export const SelectShowcase: React.FC = () => (
       code={selectFeaturesCode}
       preview={
         <Space direction="vertical" size="middle">
-          <Select
-            placeholder="Select com busca"
-            showSearch
-            options={options}
-            style={{ width: 200 }}
-            filterOption={(input: string, option: any) =>
-              (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
-            }
-          />
-          <Select
-            placeholder="Select com opção desabilitada"
-            options={optionsWithDisabled}
-            style={{ width: 200 }}
-          />
+          <Row gutter={16}>
+            <Col span={12}>
+              <Select
+                placeholder="Select com busca"
+                showSearch
+                options={options}
+                style={{ width: "100%" }}
+              />
+            </Col>
+            <Col span={12}>
+              <Select
+                placeholder="Select com busca múltiplo"
+                showSearch
+                mode="multiple"
+                options={options}
+                style={{ width: "100%" }}
+              />
+            </Col>
+          </Row>
+          <Row gutter={16}>
+            <Col span={12}>
+              <Select
+                placeholder="Select com opção desabilitada"
+                options={optionsWithDisabled}
+                style={{ width: "100%" }}
+              />
+            </Col>
+            <Col span={12}>
+              <Select
+                placeholder="Select com opção desabilitada múltiplo"
+                mode="multiple"
+                options={optionsWithDisabled}
+                style={{ width: "100%" }}
+              />
+            </Col>
+          </Row>
         </Space>
       }
     />
