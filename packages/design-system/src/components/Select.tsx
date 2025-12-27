@@ -1,12 +1,12 @@
 "use client";
 
-import React from "react";
-import { Select as AntdSelect, ConfigProvider } from "antd";
+import React, { useState } from "react";
+import { Select as AntdSelect, ConfigProvider, Input as AntdInput } from "antd";
 import type { SelectProps as AntdSelectProps } from "antd";
 import type { ComponentToken } from "antd/es/select/style/token";
 import { designSystemColors, radius } from "../theme";
 import { AliasToken } from "antd/es/theme/interface";
-import { ChevronsUpDown } from "lucide-react";
+import { ChevronsUpDown, Search } from "lucide-react";
 
 type SelectSize = "xs" | "s" | "m" | "l";
 
@@ -84,9 +84,13 @@ export function Select(props: SelectProps): React.ReactElement {
     style,
     className,
     suffixIcon,
-    dropdownStyle,
+
+    showSearch,
+    onSearch,
     ...rest
   } = props;
+
+  const [searchValue, setSearchValue] = useState("");
 
   const resolvedSize = size ? mapToDsSize(size) : dsSize;
   const sizeTokens = getSizeTokens(resolvedSize);
@@ -114,24 +118,55 @@ export function Select(props: SelectProps): React.ReactElement {
           colorTextDisabled: designSystemColors.neutral[400],
           colorBgContainerDisabled: designSystemColors.neutral[50],
           colorTextPlaceholder: designSystemColors.neutral[500],
-          borderRadiusLG: 8, // Borda do menu dropdown
+          borderRadiusLG: 8,
         },
       }}
     >
       <AntdSelect
+        {...rest}
         className={combinedClassName}
         suffixIcon={suffixIcon ?? <ChevronsUpDown size={16} />}
-        {...rest}
+        showSearch={false}
+        searchValue={searchValue}
         style={{
           height: `${sizeTokens.height}px`,
           ...style,
         }}
-        dropdownStyle={{
-          border: "1px solid rgba(212, 212, 212, 1)",
-          boxShadow: "0px 4px 6px -1px rgba(0, 0, 0, 0.1)",
-          padding: "4px 0",
-          ...dropdownStyle,
-        }}
+        dropdownRender={(menu: React.ReactNode) => (
+          <>
+            {showSearch && (
+              <div
+                style={{
+                  padding: "4px 8px",
+                  borderBottom: "1px solid #D4D4D4",
+                  marginBottom: "0px",
+                }}
+              >
+                <AntdInput
+                  placeholder="Procurar"
+                  prefix={
+                    <Search size={15} color={designSystemColors.neutral[500]} />
+                  }
+                  value={searchValue}
+                  // Tipagem explícita para o evento (React.ChangeEvent)
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    const { value } = e.target;
+                    setSearchValue(value);
+                    if (onSearch) onSearch(value);
+                  }}
+                  variant="borderless"
+                  style={{
+                    fontSize: "13px",
+                    color: designSystemColors.neutral[800],
+                    padding: 0,
+                    gap: 4,
+                  }}
+                />
+              </div>
+            )}
+            <div style={{ padding: "4px 0" }}>{menu}</div>
+          </>
+        )}
       />
     </ConfigProvider>
   );

@@ -106,3 +106,23 @@
   align-items: center !important;
 
 }
+
+.ds-select-search-container {
+  padding: 8px;
+  border-bottom: 1px solid rgba(212, 212, 212, 1);
+  margin-bottom: 4px;
+}
+
+.ds-select-search-input {
+  border: none !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+.ds-select-search-input:focus {
+  outline: none !important;
+}
+
+.ant-select-dropdown {
+  padding: 0 !important;
+}
