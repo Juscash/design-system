@@ -10,5 +10,6 @@ export * from "./Select";
 export * from "./Card";
 export * from "./PageHeader";
 export * from "./Upload";
+export * from "./Table";
 
 export * from "./FormItem";

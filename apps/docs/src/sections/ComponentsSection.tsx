@@ -22,6 +22,7 @@ import { CardShowcase } from "./components/card";
 import { PageHeaderShowcase } from "./components/pageheader";
 import { FormShowcase } from "./components/form";
 import { UploadShowcase } from "./components/upload";
+import { TableShowcase } from "./components/table";
 
 export interface ComponentsSectionProps {
   selectedComponent: ComponentKey | null;
@@ -167,6 +168,17 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
     );
   }
 
+  if (selectedComponent === "table") {
+    return (
+      <Space vertical size={16} style={{ width: "100%" }}>
+        <Button type="secondary" onClick={() => onSelect(null)}>
+          ← Voltar
+        </Button>
+        <TableShowcase />
+      </Space>
+    );
+  }
+
   return (
     <Space vertical size={24} style={{ width: "100%" }}>
       <div>
@@ -293,6 +305,16 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
           <Heading4>Upload</Heading4>
           <Body2 style={{ color: "rgba(0,0,0,0.6)" }}>
             Upload de arquivos com layouts vertical e horizontal e 4 tamanhos.
+          </Body2>
+        </Card>
+        <Card
+          hoverable
+          style={{ width: 280 }}
+          onClick={() => onSelect("table")}
+        >
+          <Heading4>Table</Heading4>
+          <Body2 style={{ color: "rgba(0,0,0,0.6)" }}>
+            Tabela para exibir dados com paginação, ordenação, seleção e ellipsis.
           </Body2>
         </Card>
       </Space>

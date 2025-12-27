@@ -12,4 +12,5 @@ export type ComponentKey =
   | "card"
   | "pageheader"
   | "form"
-  | "upload";
+  | "upload"
+  | "table";

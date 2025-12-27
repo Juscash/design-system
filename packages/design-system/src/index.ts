@@ -57,8 +57,6 @@ export {
   type ColorPickerProps,
 
   // Data Display
-  Table,
-  type TableProps,
   Progress,
   type ProgressProps,
   Tree,
