@@ -84,9 +84,7 @@ export function Select(props: SelectProps): React.ReactElement {
     style,
     className,
     suffixIcon,
-
     showSearch,
-    onSearch,
     ...rest
   } = props;
 
@@ -148,11 +146,9 @@ export function Select(props: SelectProps): React.ReactElement {
                     <Search size={15} color={designSystemColors.neutral[500]} />
                   }
                   value={searchValue}
-                  // Tipagem explícita para o evento (React.ChangeEvent)
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const { value } = e.target;
                     setSearchValue(value);
-                    if (onSearch) onSearch(value);
                   }}
                   variant="borderless"
                   style={{
