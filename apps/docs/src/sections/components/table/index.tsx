@@ -9,7 +9,7 @@ import {
   Body1,
   Body2,
 } from "@Juscash/design-system";
-import { Tag } from "antd";
+
 import type { ColumnsType } from "antd/es/table";
 import { ButtonPlayground } from "../buttons/ButtonPlayground";
 
@@ -84,7 +84,7 @@ const generateTableData = (): DataType[] => {
   ];
 
   const statuses = ["Ativo", "Inativo", "Pendente", "Bloqueado"];
-  const tagOptions = ["VIP", "Premium", "Básico", "Enterprise", "Trial"];
+  const tagOptions = ["VIP"];
 
   const data: DataType[] = [];
   for (let i = 1; i <= 100; i++) {

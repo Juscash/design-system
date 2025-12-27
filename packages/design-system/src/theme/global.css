@@ -155,3 +155,20 @@
 .ds-input-outline {
   transition: all 0.2s ease-in-out !important;
 }
+
+
+.ant-table-cell {
+  border: none !important;
+}
+
+.ant-table-container {
+  border: 1px solid #D4D4D4 !important;
+}
+
+.ant-table-container {
+  border-radius: 8px !important;
+}
+
+.ant-table-tbody>.ant-table-row>td {
+  border-top: 1px solid #D4D4D4 !important;
+}
