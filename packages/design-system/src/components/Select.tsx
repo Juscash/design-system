@@ -85,6 +85,7 @@ export function Select(props: SelectProps): React.ReactElement {
     className,
     suffixIcon,
     showSearch,
+    maxTagCount = "responsive",
     ...rest
   } = props;
 
@@ -145,6 +146,7 @@ export function Select(props: SelectProps): React.ReactElement {
               >
                 <AntdInput
                   placeholder="Procurar"
+                  maxTagCount={maxTagCount}
                   prefix={
                     <Search size={15} color={designSystemColors.neutral[500]} />
                   }
