@@ -2,11 +2,13 @@
 
 import React, { useState } from "react";
 import { Select as AntdSelect, ConfigProvider, Input as AntdInput } from "antd";
+import { Checkbox } from "./Checkbox";
 import type { SelectProps as AntdSelectProps } from "antd";
 import type { ComponentToken } from "antd/es/select/style/token";
 import { designSystemColors, radius } from "../theme";
 import { AliasToken } from "antd/es/theme/interface";
 import { ChevronsUpDown, Search, Check } from "lucide-react";
+import type { DefaultOptionType } from "antd/es/select";
 
 type SelectSize = "xs" | "s" | "m" | "l";
 
@@ -86,15 +88,40 @@ export function Select(props: SelectProps): React.ReactElement {
     suffixIcon,
     showSearch,
     maxTagCount = "responsive",
+    value,
+    defaultValue,
     ...rest
   } = props;
 
   const [searchValue, setSearchValue] = useState("");
-
+  const [currentValue, setCurrentValue] = useState<
+    SelectProps["value"] | undefined
+  >(value ?? defaultValue);
   const resolvedSize = size ? mapToDsSize(size) : dsSize;
   const sizeTokens = getSizeTokens(resolvedSize);
   const combinedClassName = `ds-input-outline ${className || ""}`.trim();
 
+  // Verifica se o modo é múltiplo para aplicar a lógica de design
+  const isMultiple = rest.mode === "multiple" || rest.mode === "tags";
+  const isOptionSelected = (optionValue: string | number | undefined) => {
+    if (currentValue === undefined || currentValue === null) return false;
+
+    if (Array.isArray(currentValue)) {
+      return currentValue.some((v) => {
+        // Lida com labelInValue (objetos) ou valores simples
+        const val =
+          typeof v === "object" && v !== null
+            ? (v as { value: unknown }).value
+            : v;
+        return val === optionValue;
+      });
+    }
+    const singleVal =
+      typeof currentValue === "object" && currentValue !== null
+        ? (currentValue as { value: unknown }).value
+        : currentValue;
+    return singleVal === optionValue;
+  };
   return (
     <ConfigProvider
       theme={{
@@ -108,6 +135,11 @@ export function Select(props: SelectProps): React.ReactElement {
             colorBgElevated: "rgba(250, 250, 250, 1)",
             optionSelectedFontWeight: 400,
             optionSelectedBg: designSystemColors.neutral[200],
+            // Customização das cores do Checkbox através do token se necessário
+          },
+          Checkbox: {
+            colorPrimary: "#22C55E", // Verde conforme solicitado na imagem anterior
+            colorPrimaryHover: "#16a34a",
           },
         },
         token: {
@@ -123,16 +155,44 @@ export function Select(props: SelectProps): React.ReactElement {
     >
       <AntdSelect
         {...rest}
+        maxTagCount={maxTagCount}
         className={combinedClassName}
         suffixIcon={suffixIcon ?? <ChevronsUpDown size={16} />}
+        // No modo múltiplo, removemos o ícone da direita (usaremos o checkbox na esquerda)
+        // No modo single, mantemos o Check na direita
         menuItemSelectedIcon={
-          <Check size={16} color={designSystemColors.neutral[800]} />
+          isMultiple ? null : (
+            <Check size={16} color={designSystemColors.neutral[800]} />
+          )
         }
         showSearch={false}
         searchValue={searchValue}
         style={{
           height: `${sizeTokens.height}px`,
           ...style,
+        }}
+        onChange={(val: SelectProps["value"], opt: DefaultOptionType) => {
+          setCurrentValue(val);
+          rest.onChange?.(val, opt);
+        }}
+        // Customização da renderização da opção
+        optionRender={(option: DefaultOptionType) => {
+          // Calculamos se está selecionado comparando o valor da opção com o estado atual
+          const isSelected = isOptionSelected(
+            option.value as string | number | undefined
+          );
+
+          return (
+            <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+              {isMultiple && (
+                <Checkbox
+                  checked={isSelected}
+                  style={{ pointerEvents: "none" }}
+                />
+              )}
+              <span style={{ flex: 1 }}>{option.label}</span>
+            </div>
+          );
         }}
         dropdownRender={(menu: React.ReactNode) => (
           <>
@@ -146,7 +206,6 @@ export function Select(props: SelectProps): React.ReactElement {
               >
                 <AntdInput
                   placeholder="Procurar"
-                  maxTagCount={maxTagCount}
                   prefix={
                     <Search size={15} color={designSystemColors.neutral[500]} />
                   }

@@ -16,7 +16,7 @@ const checkboxTokens: Partial<ComponentToken> = {
   colorBgContainer: designSystemColors.neutral[50] ?? "#ffffff",
   colorText: designSystemColors.neutral[800],
   colorTextDisabled: designSystemColors.neutral[400],
-  colorBorder: designSystemColors.neutral[400],
+  colorBorder: designSystemColors.neutral[300],
   colorBorderDisabled: designSystemColors.neutral[300],
   controlInteractiveSize: 16,
   borderRadiusSM: radius.md,
