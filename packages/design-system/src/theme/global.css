@@ -172,3 +172,19 @@
 .ant-table-tbody>.ant-table-row>td {
   border-top: 1px solid #D4D4D4 !important;
 }
+
+.ant-pagination-total-text {
+  margin-right: auto !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.ant-pagination-prev,
+.ant-pagination-next {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.ant-pagination {
+  align-items: center !important;
+}

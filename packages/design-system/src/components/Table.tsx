@@ -6,7 +6,8 @@ import type { TableProps as AntdTableProps } from "antd";
 import { Body2 } from "./Typography";
 import { designSystemColors, spacing } from "../theme";
 import { radius } from "../theme";
-import { ArrowUp, ArrowDown, ChevronsUpDown } from "lucide-react";
+import { ArrowUp, ArrowDown, ChevronLeft, ChevronRight } from "lucide-react";
+
 export type TableProps<T> = AntdTableProps<T>;
 
 export function Table<T>(props: TableProps<T>): React.ReactElement {
@@ -15,8 +16,51 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
     bordered = true,
     tableLayout = "fixed",
     scroll = undefined,
+    pagination,
     ...rest
   } = props;
+
+  const mergedPagination = useMemo(() => {
+    if (pagination === false) return false;
+
+    return {
+      ...pagination,
+      ...(!pagination?.showTotal && {
+        showTotal: (total: number) => (
+          <Body2 color="dark">{total} registros</Body2>
+        ),
+      }),
+      ...(!pagination?.itemRender && {
+        itemRender: (
+          _current: number,
+          type: string,
+          originalElement: React.ReactNode
+        ) => {
+          if (type === "prev") {
+            return (
+              <Body2
+                style={{ display: "flex", alignItems: "center", gap: 0 }}
+                color="dark"
+              >
+                <ChevronLeft size={12} style={{ marginRight: 4 }} /> Anterior
+              </Body2>
+            );
+          }
+          if (type === "next") {
+            return (
+              <Body2
+                style={{ display: "flex", alignItems: "center", gap: 0 }}
+                color="dark"
+              >
+                Próximo <ChevronRight size={12} style={{ marginLeft: 4 }} />
+              </Body2>
+            );
+          }
+          return originalElement;
+        },
+      }),
+    };
+  }, [pagination]);
 
   const customColumns = useMemo(() => {
     return columns?.map((col) => ({
@@ -89,7 +133,22 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
   return (
     <ConfigProvider
       theme={{
+        token: {
+          fontSize: 13,
+          colorText: designSystemColors.neutral[800],
+          fontWeightStrong: 400,
+          colorPrimary: designSystemColors.neutral[300],
+        },
         components: {
+          Pagination: {
+            itemActiveBg: "rgba(255, 255, 255, 0)",
+            itemActiveColor: designSystemColors.neutral[800],
+            itemActiveColorHover: designSystemColors.neutral[800],
+            itemBg: "rgba(255, 255, 255, 0)",
+            itemInputBg: "red",
+            itemLinkBg: "red",
+            itemSize: 32,
+          },
           Checkbox: {
             colorPrimary: designSystemColors.brand.primary[600],
             colorPrimaryHover: designSystemColors.brand.primary[700],
@@ -121,6 +180,7 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
     >
       <AntdTable
         {...rest}
+        pagination={mergedPagination}
         tableLayout={tableLayout}
         scroll={scroll}
         bordered={bordered}
