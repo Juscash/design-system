@@ -155,9 +155,9 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
         },
         components: {
           Select: {
-            activeBorderColor: "transparent",
-            hoverBorderColor: "transparent",
-            activeOutlineColor: "transparent",
+            activeBorderColor: designSystemColors.neutral[300],
+            hoverBorderColor: designSystemColors.neutral[300],
+            activeOutlineColor: designSystemColors.neutral[300],
             optionFontSize: 13,
             baseControlHeight: 32,
             itemHeights: 28,
