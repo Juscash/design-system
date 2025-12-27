@@ -13,7 +13,13 @@ const { TextArea: AntdTextArea } = AntdInput;
 
 type InputSize = "xs" | "s" | "m" | "l";
 
-export interface InputProps extends Omit<AntdInputProps, "size"> {
+type CleanAntdProps = {
+  [K in keyof AntdInputProps as K extends "size"
+    ? never
+    : K]: AntdInputProps[K];
+};
+
+export interface InputProps extends CleanAntdProps {
   dsSize?: InputSize;
   size?: AntdInputProps["size"];
 }
