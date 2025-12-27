@@ -135,11 +135,6 @@ export function Select(props: SelectProps): React.ReactElement {
             colorBgElevated: "rgba(250, 250, 250, 1)",
             optionSelectedFontWeight: 400,
             optionSelectedBg: designSystemColors.neutral[200],
-            // Customização das cores do Checkbox através do token se necessário
-          },
-          Checkbox: {
-            colorPrimary: "#22C55E", // Verde conforme solicitado na imagem anterior
-            colorPrimaryHover: "#16a34a",
           },
         },
         token: {
@@ -158,8 +153,6 @@ export function Select(props: SelectProps): React.ReactElement {
         maxTagCount={maxTagCount}
         className={combinedClassName}
         suffixIcon={suffixIcon ?? <ChevronsUpDown size={16} />}
-        // No modo múltiplo, removemos o ícone da direita (usaremos o checkbox na esquerda)
-        // No modo single, mantemos o Check na direita
         menuItemSelectedIcon={
           isMultiple ? null : (
             <Check size={16} color={designSystemColors.neutral[800]} />
@@ -175,9 +168,7 @@ export function Select(props: SelectProps): React.ReactElement {
           setCurrentValue(val);
           rest.onChange?.(val, opt);
         }}
-        // Customização da renderização da opção
         optionRender={(option: DefaultOptionType) => {
-          // Calculamos se está selecionado comparando o valor da opção com o estado atual
           const isSelected = isOptionSelected(
             option.value as string | number | undefined
           );
