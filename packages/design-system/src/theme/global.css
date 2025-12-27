@@ -70,3 +70,32 @@
 .ant-upload {
   width: 100% !important;
 }
+
+.ds-input-outline {
+  outline: 1px solid #D4D4D4 !important;
+  transition: outline 0.2s ease;
+}
+
+
+.ds-input-outline.ant-input-status-error,
+.ds-input-outline.ant-input-textarea-status-error {
+  outline: 1px solid #D2190B !important;
+}
+
+.upload-error-state {
+  border-color: #D2190B !important;
+  outline: 1px solid #D2190B !important;
+}
+
+
+.upload-error-state:focus {
+  border-color: #D2190B !important;
+  outline: 1px solid #D2190B !important;
+  box-shadow: 0 0 0 3px rgba(210, 25, 11, 0.4) !important;
+}
+
+.upload-error-state:hover {
+  border-color: #D2190B !important;
+  outline: 1px solid #D2190B !important;
+  box-shadow: 0 0 0 3px rgba(210, 25, 11, 0.4) !important;
+}

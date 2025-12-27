@@ -1,8 +1,8 @@
 "use client";
 
 import React from "react";
-import { Upload as AntdUpload, ConfigProvider } from "antd";
-import type { UploadProps as AntdUploadProps, UploadFile } from "antd";
+import { Upload as AntdUpload, ConfigProvider, Form } from "antd";
+import type { UploadProps as AntdUploadProps } from "antd";
 import { designSystemColors } from "../theme";
 import { Button } from "./Button";
 import { Body2 } from "./Typography";
@@ -29,6 +29,8 @@ const baseTokens: Record<string, any> = {
 };
 
 export function Upload(props: UploadProps): React.ReactElement {
+  const { status } = Form.Item.useStatus();
+  const isError = status === "error";
   const {
     disabled = false,
     dsSize = "m",
@@ -70,7 +72,7 @@ export function Upload(props: UploadProps): React.ReactElement {
   const defaultChildren = (
     <Button
       type="outlined"
-      className="juscash-upload-button"
+      className={`juscash-upload-button ${isError ? "upload-error-state" : ""}`}
       dsSize={mapToButtonSize(dsSize)}
       icon={<LucideIcons.Upload size={16} />}
       disabled={disabled}

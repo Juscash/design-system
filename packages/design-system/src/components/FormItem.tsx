@@ -19,7 +19,7 @@ export const FormItem: React.FC<CustomFormItemProps> = ({
     if (!label) return undefined;
 
     if (typeof label === "string") {
-      return <Body1>{label}</Body1>;
+      return <Body1 color="dark">{label}</Body1>;
     }
 
     return label;

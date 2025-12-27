@@ -19,10 +19,10 @@ type CleanAntdProps = {
     : K]: AntdInputProps[K];
 };
 
-export interface InputProps extends CleanAntdProps {
+export type InputProps = CleanAntdProps & {
   dsSize?: InputSize;
   size?: AntdInputProps["size"];
-}
+};
 
 function mapToDsSize(size?: AntdInputProps["size"]): InputSize {
   if (size === "small") return "xs";
@@ -120,11 +120,11 @@ const baseTokens: Partial<ComponentToken> = {
 const InputComponent = (
   props: InputProps
 ): ReturnType<React.FC<InputProps>> => {
-  const { dsSize = "m", size, style, status, ...rest } = props;
+  const { dsSize = "m", size, style, status, className, ...rest } = props;
 
   const resolvedSize = size ? mapToDsSize(size) : dsSize;
   const sizeTokens = getSizeTokens(resolvedSize);
-
+  const combinedClassName = `ds-input-outline ${className || ""}`.trim();
   return (
     <ConfigProvider
       theme={{
@@ -152,6 +152,7 @@ const InputComponent = (
             marginLeft: spacing[2],
           },
         }}
+        className={combinedClassName}
         style={{
           height: `${sizeTokens.height}px`,
           outline:
@@ -172,6 +173,8 @@ export type TextAreaProps = AntdTextAreaProps;
 export function TextArea(
   props: TextAreaProps
 ): ReturnType<React.FC<TextAreaProps>> {
+  const { className, ...rest } = props;
+  const combinedClassName = `ds-input-outline ${className || ""}`.trim();
   return (
     <ConfigProvider
       theme={{
@@ -187,12 +190,11 @@ export function TextArea(
         },
       }}
     >
-      <AntdTextArea {...props} />
+      <AntdTextArea className={combinedClassName} {...rest} />
     </ConfigProvider>
   );
 }
 
-// Tipo composto para incluir TextArea como propriedade estática
 type InputComponentWithTextArea = typeof InputComponent & {
   TextArea: typeof TextArea;
 };
