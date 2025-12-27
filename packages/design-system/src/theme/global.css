@@ -188,3 +188,22 @@
 .ant-pagination {
   align-items: center !important;
 }
+
+.ant-pagination-options-size-select .ant-select-selection-item {
+  display: flex !important;
+  align-items: center;
+}
+
+
+
+.ant-pagination-options-size-select-dropdown .ant-select-item-option-content {
+  display: flex !important;
+  align-items: center;
+}
+
+
+
+.ant-pagination-options .ant-select-content-value::before {
+  content: "Itens por página: " !important;
+  font-weight: 400;
+}

@@ -3,6 +3,7 @@
 import React, { useMemo } from "react";
 import { ConfigProvider, Table as AntdTable, Tooltip } from "antd";
 import type { TableProps as AntdTableProps } from "antd";
+import { Select, SelectProps } from "./Select";
 import { Body2 } from "./Typography";
 import { designSystemColors, spacing } from "../theme";
 import { radius } from "../theme";
@@ -25,11 +26,24 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
 
     return {
       ...pagination,
+      locale: {
+        ...pagination?.locale,
+
+        items_per_page: "",
+      },
+      ...(!pagination?.defaultPageSize && {
+        defaultPageSize: 5,
+      }),
+      ...(!pagination?.pageSizeOptions && {
+        pageSizeOptions: ["5", "10", "25", "50", "100"],
+      }),
+
       ...(!pagination?.showTotal && {
         showTotal: (total: number) => (
           <Body2 color="dark">{total} registros</Body2>
         ),
       }),
+
       ...(!pagination?.itemRender && {
         itemRender: (
           _current: number,
@@ -140,6 +154,25 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
           colorPrimary: designSystemColors.neutral[300],
         },
         components: {
+          Select: {
+            activeBorderColor: "transparent",
+            hoverBorderColor: "transparent",
+            activeOutlineColor: "transparent",
+            optionFontSize: 13,
+            baseControlHeight: 32,
+            itemHeights: 28,
+            multipleItemBorderColor: "#D4D4D4",
+            optionHeight: 28,
+            optionPadding: "4px 8px",
+            colorText: "rgba(38, 38, 38, 1)",
+            colorBgElevated: "rgba(250, 250, 250, 1)",
+            optionSelectedFontWeight: 400,
+            optionSelectedBg: designSystemColors.neutral[200],
+            multipleItemBg: "rgba(255, 255, 255, 0.01)",
+            multipleItemColor: "#262626",
+            tagFontSize: 13,
+            borderRadiusSM: 8,
+          },
           Pagination: {
             itemActiveBg: "rgba(255, 255, 255, 0)",
             itemActiveColor: designSystemColors.neutral[800],
