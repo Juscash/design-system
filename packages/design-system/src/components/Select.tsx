@@ -66,6 +66,7 @@ function getSizeTokens(dsSize?: SelectSize): {
     globalToken: {
       borderRadius: radius.xl,
       controlHeight: baseControlHeight,
+      colorError: designSystemColors.feedback.red[500],
     },
     height: baseControlHeight,
     menuItemHeight,
@@ -76,6 +77,7 @@ const baseTokens: Partial<ComponentToken> = {
   activeBorderColor: "transparent",
   hoverBorderColor: "transparent",
   activeOutlineColor: "transparent",
+
   optionFontSize: 13,
 };
 
@@ -89,6 +91,7 @@ export function Select(props: SelectProps): React.ReactElement {
     showSearch,
     maxTagCount = "responsive",
     value,
+    status,
     defaultValue,
     ...rest
   } = props;
@@ -101,14 +104,13 @@ export function Select(props: SelectProps): React.ReactElement {
   const sizeTokens = getSizeTokens(resolvedSize);
   const combinedClassName = `ds-input-outline ${className || ""}`.trim();
 
-  // Verifica se o modo é múltiplo para aplicar a lógica de design
   const isMultiple = rest.mode === "multiple" || rest.mode === "tags";
+
   const isOptionSelected = (optionValue: string | number | undefined) => {
     if (currentValue === undefined || currentValue === null) return false;
 
     if (Array.isArray(currentValue)) {
       return currentValue.some((v) => {
-        // Lida com labelInValue (objetos) ou valores simples
         const val =
           typeof v === "object" && v !== null
             ? (v as { value: unknown }).value
@@ -122,6 +124,7 @@ export function Select(props: SelectProps): React.ReactElement {
         : currentValue;
     return singleVal === optionValue;
   };
+
   return (
     <ConfigProvider
       theme={{
@@ -129,12 +132,19 @@ export function Select(props: SelectProps): React.ReactElement {
           Select: {
             ...baseTokens,
             ...sizeTokens.componentToken,
+            multipleItemBorderColor: "#D4D4D4",
             optionHeight: sizeTokens.menuItemHeight,
             optionPadding: "4px 8px",
             colorText: "rgba(38, 38, 38, 1)",
             colorBgElevated: "rgba(250, 250, 250, 1)",
             optionSelectedFontWeight: 400,
             optionSelectedBg: designSystemColors.neutral[200],
+            multipleItemBg: "rgba(255, 255, 255, 0.01)",
+
+            multipleItemColor: "#262626",
+
+            tagFontSize: 13,
+            borderRadiusSM: 8,
           },
         },
         token: {
@@ -150,6 +160,7 @@ export function Select(props: SelectProps): React.ReactElement {
     >
       <AntdSelect
         {...rest}
+        status={status}
         maxTagCount={maxTagCount}
         className={combinedClassName}
         suffixIcon={suffixIcon ?? <ChevronsUpDown size={16} />}
@@ -162,9 +173,14 @@ export function Select(props: SelectProps): React.ReactElement {
         searchValue={searchValue}
         style={{
           height: `${sizeTokens.height}px`,
+          ["--select-multi-item-border-color" as any]: "#D4D4D4",
+          transition: "all 0.2s ease",
           ...style,
         }}
-        onChange={(val: SelectProps["value"], opt: DefaultOptionType) => {
+        onChange={(
+          val: SelectProps["value"],
+          opt: DefaultOptionType | DefaultOptionType[]
+        ) => {
           setCurrentValue(val);
           rest.onChange?.(val, opt);
         }}
