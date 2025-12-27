@@ -6,6 +6,7 @@ export * from "./Radio";
 export * from "./Switch";
 export * from "./Tag";
 export * from "./Input";
+export * from "./Select";
 export * from "./Card";
 export * from "./PageHeader";
 export * from "./Upload";

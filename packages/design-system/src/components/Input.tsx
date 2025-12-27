@@ -139,6 +139,7 @@ const InputComponent = (
           colorBorder: "transparent",
           colorError: designSystemColors.feedback.red[500],
           colorTextDisabled: designSystemColors.neutral[400],
+          colorBgContainerDisabled: designSystemColors.neutral[50],
           colorTextPlaceholder: designSystemColors.neutral[500],
         },
       }}
@@ -155,10 +156,6 @@ const InputComponent = (
         className={combinedClassName}
         style={{
           height: `${sizeTokens.height}px`,
-          outline:
-            status === "error"
-              ? `1px solid ${designSystemColors.feedback.red[500]}`
-              : `1px solid ${designSystemColors.neutral[300]}`,
           ...style,
         }}
         {...rest}
@@ -186,6 +183,8 @@ export function TextArea(
           colorError: designSystemColors.feedback.red[500],
           colorTextDisabled: designSystemColors.neutral[400],
           colorTextPlaceholder: designSystemColors.neutral[500],
+          colorBgContainerDisabled: designSystemColors.neutral[50],
+          colorTextPlaceholderDisabled: designSystemColors.neutral[400],
           borderRadius: radius.xl,
         },
       }}

@@ -8,6 +8,7 @@ export type ComponentKey =
   | "switch"
   | "tag"
   | "input"
+  | "select"
   | "card"
   | "pageheader"
   | "form"

@@ -34,8 +34,6 @@ export {
   // Data Entry
   InputNumber,
   type InputNumberProps,
-  Select,
-  type SelectProps,
   TreeSelect,
   type TreeSelectProps,
   Cascader,

@@ -17,6 +17,7 @@ import { RadioShowcase } from "./components/radio";
 import { SwitchShowcase } from "./components/switch";
 import { TagShowcase } from "./components/tag";
 import { InputShowcase } from "./components/input";
+import { SelectShowcase } from "./components/select";
 import { CardShowcase } from "./components/card";
 import { PageHeaderShowcase } from "./components/pageheader";
 import { FormShowcase } from "./components/form";
@@ -108,7 +109,10 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
     );
   }
 
-  if (selectedComponent === "input") {
+      if (selectedComponent === "select") {
+        return <SelectShowcase />;
+      }
+      if (selectedComponent === "input") {
     return (
       <Space vertical size={16} style={{ width: "100%" }}>
         <Button type="secondary" onClick={() => onSelect(null)}>
@@ -247,6 +251,16 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
           <Heading4>Input</Heading4>
           <Body2 style={{ color: "rgba(0,0,0,0.6)" }}>
             Campo de entrada com tamanhos xs, s, m, l e estados variados.
+          </Body2>
+        </Card>
+        <Card
+          hoverable
+          style={{ width: 280 }}
+          onClick={() => onSelect("select")}
+        >
+          <Heading4>Select</Heading4>
+          <Body2 style={{ color: "rgba(0,0,0,0.6)" }}>
+            Seleção com tamanhos xs, s, m, l, busca e opções desabilitadas.
           </Body2>
         </Card>
         <Card hoverable style={{ width: 280 }} onClick={() => onSelect("card")}>

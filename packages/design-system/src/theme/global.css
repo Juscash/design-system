@@ -78,7 +78,8 @@
 
 
 .ds-input-outline.ant-input-status-error,
-.ds-input-outline.ant-input-textarea-status-error {
+.ds-input-outline.ant-input-textarea-status-error,
+.ds-input-outline.ant-select-status-error {
   outline: 1px solid #D2190B !important;
 }
 
@@ -98,4 +99,10 @@
   border-color: #D2190B !important;
   outline: 1px solid #D2190B !important;
   box-shadow: 0 0 0 3px rgba(210, 25, 11, 0.4) !important;
+}
+
+.ant-select-item-option-content {
+  display: flex !important;
+  align-items: center !important;
+
 }
