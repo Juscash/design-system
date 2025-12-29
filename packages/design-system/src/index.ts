@@ -4,6 +4,7 @@ export * from "./theme";
 export { LIST_IGNORE } from "antd/es/upload/Upload";
 export { type RcFile } from "antd/es/upload/interface";
 export * from "./components";
+
 export {
   type UploadFile,
 

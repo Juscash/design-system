@@ -1,7 +1,6 @@
 import React from "react";
 import { Layout, Heading4, Body2 } from "@Juscash/design-system";
-import { logoSrc } from "../utils/logo";
-
+import logoJuscash from "../utils/logo.png";
 const { Header } = Layout;
 
 export const HeaderBar: React.FC = () => (
@@ -15,7 +14,7 @@ export const HeaderBar: React.FC = () => (
       borderBottom: "1px solid #f0f0f0",
     }}
   >
-    <img src={logoSrc} alt="Juscash" style={{ width: 40 }} />
+    <img src={logoJuscash} alt="Juscash" style={{ width: 200 }} />
     <div>
       <Heading4 style={{ margin: 0 }}>Juscash Design System</Heading4>
       <Body2>
