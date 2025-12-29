@@ -74,6 +74,7 @@
 .ds-input-outline {
   outline: 1px solid #D4D4D4 !important;
   transition: outline 0.2s ease;
+  outline-offset: 0 !important;
 }
 
 
@@ -81,6 +82,7 @@
 .ds-input-outline.ant-input-textarea-status-error,
 .ds-input-outline.ant-select-status-error {
   outline: 1px solid #D2190B !important;
+  outline-offset: 0 !important;
 }
 
 .upload-error-state {
@@ -206,4 +208,8 @@
 .ant-pagination-options .ant-select-content-value::before {
   content: "Itens por página: " !important;
   font-weight: 400;
+}
+
+.ant-btn-block:hover {
+  box-shadow: none !important;
 }
