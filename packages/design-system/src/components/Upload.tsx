@@ -38,10 +38,12 @@ export function Upload(props: UploadProps): React.ReactElement {
     listType = "text",
     className,
     children,
-
+    fileList,
+    showUploadList,
+    iconRender,
     ...rest
   } = props;
-
+  const hasFiles = fileList && fileList.length > 0;
   // Mapear tamanhos do Upload para tamanhos do Button
   const mapToButtonSize = (size: UploadSize): "xs" | "s" | "m" => {
     if (size === "xs") return "xs";
@@ -87,11 +89,19 @@ export function Upload(props: UploadProps): React.ReactElement {
 
   const uploadChildren = children || defaultChildren;
 
-  const uploadClassName =
-    layout === "horizontal"
-      ? `juscash-upload-horizontal ${className || ""}`.trim()
-      : className;
-
+  const uploadClassName = [
+    layout === "horizontal" ? "juscash-upload-horizontal" : "",
+    layout === "horizontal" && hasFiles ? "juscash-upload-has-files" : "",
+    className,
+  ]
+    .filter(Boolean)
+    .join(" ");
+  const defaultShowUploadList = {
+    removeIcon: <Trash2 size={14} color={designSystemColors.neutral[800]} />,
+    ...(showUploadList && typeof showUploadList === "object"
+      ? { ...showUploadList }
+      : {}),
+  };
   return (
     <ConfigProvider
       theme={{
@@ -110,15 +120,12 @@ export function Upload(props: UploadProps): React.ReactElement {
       }}
     >
       <AntdUpload
+        fileList={fileList}
         listType={listType}
         className={uploadClassName}
         {...rest}
-        iconRender={() => <Link size={14} />}
-        showUploadList={{
-          removeIcon: (
-            <Trash2 size={14} color={designSystemColors.neutral[800]} />
-          ),
-        }}
+        iconRender={iconRender || (() => <Link size={14} />)}
+        showUploadList={defaultShowUploadList}
       >
         {uploadChildren}
       </AntdUpload>

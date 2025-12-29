@@ -19,31 +19,59 @@
 }
 
 .juscash-upload-horizontal {
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  gap: 8px;
-
+  display: flex !important;
+  flex-direction: row !important;
+  align-items: center !important;
+  gap: 8px !important;
+  width: 100% !important;
+  max-width: 100% !important;
 }
+
+.juscash-upload-horizontal .ant-upload {
+  width: 100% !important;
+  transition: all 0.3s ease;
+}
+
+.juscash-upload-horizontal.juscash-upload-has-files .ant-upload {
+  width: 50% !important;
+  flex: 0 0 50% !important;
+  min-width: 0 !important;
+}
+
+
+.juscash-upload-horizontal .ant-upload-list-item-container {
+  width: 100% !important;
+}
+
+
 
 .juscash-upload-horizontal .ant-upload-list-item {
   margin-top: 0 !important;
+  display: flex !important;
+  align-items: center;
 }
 
-.ant-upload-list {
-  width: 100% !important;
+.juscash-upload-horizontal .ant-upload-list-item-name {
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  flex: 1;
 }
+
+.juscash-upload-horizontal.juscash-upload-has-files .ant-upload-list {
+  width: 50% !important;
+}
+
+.juscash-upload-horizontal .ant-upload-list {
+  line-height: 1;
+}
+
+
 
 .ant-upload-icon {
   display: flex !important;
 }
 
-.juscash-upload-horizontal.juscash-upload-has-files .ant-upload {
-  width: 50%;
-  min-width: fit-content;
-  max-width: 50%;
-  flex: 0 0 50%;
-}
 
 .juscash-upload-button {
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
