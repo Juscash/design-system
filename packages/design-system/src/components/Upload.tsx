@@ -110,7 +110,6 @@ export function Upload(props: UploadProps): React.ReactElement {
       }}
     >
       <AntdUpload
-        disabled={disabled}
         listType={listType}
         className={uploadClassName}
         {...rest}
