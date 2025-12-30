@@ -20,10 +20,6 @@ const buttonVariants: ButtonVariant[] = [
   "outlined",
   "ghost",
   "destructive",
-  "default",
-  "dashed",
-  "link",
-  "text",
 ];
 
 const buttonSizes: NonNullable<
