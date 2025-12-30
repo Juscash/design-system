@@ -110,10 +110,10 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
     );
   }
 
-      if (selectedComponent === "select") {
-        return <SelectShowcase />;
-      }
-      if (selectedComponent === "input") {
+  if (selectedComponent === "select") {
+    return <SelectShowcase />;
+  }
+  if (selectedComponent === "input") {
     return (
       <Space vertical size={16} style={{ width: "100%" }}>
         <Button type="secondary" onClick={() => onSelect(null)}>
@@ -249,12 +249,7 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
             Interruptor on/off com estados normal, erro e desabilitado.
           </Body2>
         </Card>
-        <Card hoverable style={{ width: 280 }} onClick={() => onSelect("tag")}>
-          <Heading4>Tag</Heading4>
-          <Body2 style={{ color: "rgba(0,0,0,0.6)" }}>
-            Rótulos com variações padrão, sucesso, aviso e erro.
-          </Body2>
-        </Card>
+
         <Card
           hoverable
           style={{ width: 280 }}
@@ -314,7 +309,8 @@ export const ComponentsSection: React.FC<ComponentsSectionProps> = ({
         >
           <Heading4>Table</Heading4>
           <Body2 style={{ color: "rgba(0,0,0,0.6)" }}>
-            Tabela para exibir dados com paginação, ordenação, seleção e ellipsis.
+            Tabela para exibir dados com paginação, ordenação, seleção e
+            ellipsis.
           </Body2>
         </Card>
       </Space>
