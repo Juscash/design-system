@@ -1,7 +1,7 @@
 ---
 title: Integração de Agentes de Componentes
 summary: Ajustar Frontend Specialist, Feature Developer e Documentation Writer para utilizar Component Creator e Component Docs Agent na criação/ajuste de componentes.
-status: approved
+status: completed
 generated: 2026-01-21
 authors:
   - Antigravity
@@ -47,7 +47,7 @@ Garantir que qualquer solicitação de criação ou ajuste de componentes UI sej
 - Simular (mentalmente) um prompt para garantir que a instrução seria ativada.
 
 ## Critérios de Aceite
-- [ ] `frontend-specialist.md` referencia `component-creator` e `component-docs-agent`.
-- [ ] `feature-developer.md` referencia `component-creator`.
-- [ ] `documentation-writer.md` referencia `component-docs-agent`.
+- [x] `frontend-specialist.md` referencia `component-creator` e `component-docs-agent`.
+- [x] `feature-developer.md` referencia `component-creator`.
+- [x] `documentation-writer.md` referencia `component-docs-agent`.
 transferred.
