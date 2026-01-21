@@ -1,0 +1,22 @@
+{
+  "active": [
+    {
+      "slug": "component-creator-agent",
+      "path": "plans/component-creator-agent.md",
+      "title": "🎨 Agente Especialista Criador de Componentes",
+      "summary": "Criar um agente especializado na criação de componentes do Design System JusCash, que seguirá sempre o mesmo padrão, salvando componentes em `packages/design-system/src/components` e integrando com MCP Figma para obter designs.",
+      "linkedAt": "2026-01-21T18:28:31.783Z",
+      "status": "active"
+    },
+    {
+      "slug": "component-creator-skills-docs",
+      "path": "plans/component-creator-skills-docs.md",
+      "title": "📚 Skills e Docs para Component Creator",
+      "summary": "Criar skills customizadas e preencher docs que serão utilizados pelo agente `component-creator` para criação de componentes do Design System JusCash.",
+      "linkedAt": "2026-01-21T18:43:59.905Z",
+      "status": "active"
+    }
+  ],
+  "completed": [],
+  "primary": "component-creator-agent"
+}

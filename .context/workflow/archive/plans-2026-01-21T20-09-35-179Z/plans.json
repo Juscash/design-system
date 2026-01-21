@@ -1,0 +1,14 @@
+{
+  "active": [],
+  "completed": [
+    {
+      "slug": "component-docs-agent",
+      "path": "plans/component-docs-agent.md",
+      "title": "Agente de Documentação de Componentes - JusCash Design System",
+      "linkedAt": "2026-01-21T18:52:38.136Z",
+      "completedAt": "2026-01-21T19:05:17.000Z",
+      "status": "completed"
+    }
+  ],
+  "primary": null
+}

@@ -1,0 +1,13 @@
+{
+  "active": [
+    {
+      "slug": "update-component-creator-with-docs",
+      "path": "plans/update-component-creator-with-docs.md",
+      "title": "Update Component Creator to Mandate Ant Design Docs",
+      "linkedAt": "2026-01-21T20:09:39.408Z",
+      "status": "active"
+    }
+  ],
+  "completed": [],
+  "primary": "update-component-creator-with-docs"
+}

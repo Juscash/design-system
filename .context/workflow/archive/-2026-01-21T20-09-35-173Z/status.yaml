@@ -1,0 +1,18 @@
+# Workflow Status
+# Nenhum workflow ativo no momento.
+# Para iniciar um novo workflow, use: workflow-init
+
+project: null
+current_phase: null
+is_complete: true
+
+phases: {}
+
+execution:
+  history: []
+  last_activity: null
+  resume_context: null
+
+approval:
+  plan_created: false
+  plan_approved: false

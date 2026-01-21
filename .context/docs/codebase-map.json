@@ -1,0 +1,1050 @@
+{
+  "version": "1.0.0",
+  "generated": "2026-01-21T16:57:30.810Z",
+  "stack": {
+    "primaryLanguage": "typescript",
+    "languages": [
+      "javascript",
+      "typescript"
+    ],
+    "frameworks": [],
+    "buildTools": [],
+    "testFrameworks": [],
+    "packageManager": "npm",
+    "isMonorepo": false,
+    "hasDocker": false,
+    "hasCI": true
+  },
+  "structure": {
+    "totalFiles": 169,
+    "topDirectories": [
+      {
+        "name": "apps",
+        "fileCount": 84
+      },
+      {
+        "name": "assets",
+        "fileCount": 6
+      },
+      {
+        "name": "documentacao",
+        "fileCount": 2
+      },
+      {
+        "name": "package-lock.json",
+        "fileCount": 1
+      },
+      {
+        "name": "package.json",
+        "fileCount": 1
+      },
+      {
+        "name": "packages",
+        "fileCount": 71
+      },
+      {
+        "name": "README.md",
+        "fileCount": 1
+      },
+      {
+        "name": "scripts",
+        "fileCount": 2
+      },
+      {
+        "name": "tsconfig.base.json",
+        "fileCount": 1
+      }
+    ],
+    "languageDistribution": [
+      {
+        "extension": ".ts",
+        "count": 69
+      },
+      {
+        "extension": ".tsx",
+        "count": 38
+      },
+      {
+        "extension": ".png",
+        "count": 12
+      },
+      {
+        "extension": ".json",
+        "count": 11
+      },
+      {
+        "extension": ".md",
+        "count": 7
+      },
+      {
+        "extension": ".woff2",
+        "count": 7
+      },
+      {
+        "extension": ".woff",
+        "count": 7
+      },
+      {
+        "extension": ".js",
+        "count": 4
+      },
+      {
+        "extension": ".css",
+        "count": 4
+      },
+      {
+        "extension": ".html",
+        "count": 2
+      }
+    ]
+  },
+  "architecture": {
+    "layers": [
+      {
+        "name": "Components",
+        "description": "UI components and views",
+        "directories": [
+          "packages\\design-system\\src\\components",
+          "apps\\docs\\src\\sections",
+          "apps\\docs\\src\\sections\\components\\upload",
+          "apps\\docs\\src\\sections\\components\\typography",
+          "apps\\docs\\src\\sections\\components\\table",
+          "apps\\docs\\src\\sections\\components\\tag",
+          "apps\\docs\\src\\sections\\components\\segmented",
+          "apps\\docs\\src\\sections\\components\\select",
+          "apps\\docs\\src\\sections\\components\\switch",
+          "apps\\docs\\src\\sections\\components\\radio",
+          "apps\\docs\\src\\sections\\components\\pageheader",
+          "apps\\docs\\src\\sections\\components\\input",
+          "apps\\docs\\src\\sections\\components\\form",
+          "apps\\docs\\src\\sections\\components\\checkbox",
+          "apps\\docs\\src\\sections\\components\\card",
+          "apps\\docs\\src\\sections\\components\\buttons"
+        ],
+        "symbolCount": 69,
+        "dependsOn": []
+      }
+    ],
+    "patterns": [],
+    "entryPoints": [
+      "packages\\design-system\\src\\index.ts",
+      "packages\\design-system\\src\\theme\\index.ts",
+      "packages\\design-system\\src\\components\\index.ts",
+      "packages\\design-system\\src\\theme\\foundations\\index.ts",
+      "apps\\docs\\src\\main.tsx",
+      "apps\\docs\\src\\sections\\components\\upload\\index.tsx",
+      "apps\\docs\\src\\sections\\components\\typography\\index.tsx",
+      "apps\\docs\\src\\sections\\components\\table\\index.tsx",
+      "apps\\docs\\src\\sections\\components\\tag\\index.tsx",
+      "apps\\docs\\src\\sections\\components\\segmented\\index.tsx",
+      "apps\\docs\\src\\sections\\components\\select\\index.tsx",
+      "apps\\docs\\src\\sections\\components\\switch\\index.tsx",
+      "apps\\docs\\src\\sections\\components\\radio\\index.tsx",
+      "apps\\docs\\src\\sections\\components\\pageheader\\index.tsx",
+      "apps\\docs\\src\\sections\\components\\input\\index.tsx",
+      "apps\\docs\\src\\sections\\components\\form\\index.tsx",
+      "apps\\docs\\src\\sections\\components\\checkbox\\index.tsx",
+      "apps\\docs\\src\\sections\\components\\card\\index.tsx",
+      "apps\\docs\\src\\sections\\components\\buttons\\index.tsx"
+    ]
+  },
+  "symbols": {
+    "classes": [],
+    "interfaces": [
+      {
+        "name": "ComponentsSectionProps",
+        "kind": "interface",
+        "file": "apps\\docs\\src\\sections\\ComponentsSection.tsx",
+        "line": 27,
+        "exported": true
+      },
+      {
+        "name": "CustomFormItemProps",
+        "kind": "interface",
+        "file": "packages\\design-system\\src\\components\\FormItem.tsx",
+        "line": 8,
+        "exported": true
+      },
+      {
+        "name": "JuscashProviderProps",
+        "kind": "interface",
+        "file": "packages\\design-system\\src\\theme\\JuscashProvider.tsx",
+        "line": 14,
+        "exported": true
+      },
+      {
+        "name": "MainLayoutProps",
+        "kind": "interface",
+        "file": "apps\\docs\\src\\layouts\\MainLayout.tsx",
+        "line": 9,
+        "exported": true
+      },
+      {
+        "name": "PageHeaderProps",
+        "kind": "interface",
+        "file": "packages\\design-system\\src\\components\\PageHeader.tsx",
+        "line": 9,
+        "exported": true
+      },
+      {
+        "name": "RichRadioGroupProps",
+        "kind": "interface",
+        "file": "packages\\design-system\\src\\components\\Radio.tsx",
+        "line": 94,
+        "exported": true
+      },
+      {
+        "name": "RichRadioOption",
+        "kind": "interface",
+        "file": "packages\\design-system\\src\\components\\Radio.tsx",
+        "line": 87,
+        "exported": true
+      },
+      {
+        "name": "SidebarProps",
+        "kind": "interface",
+        "file": "apps\\docs\\src\\sections\\Sidebar.tsx",
+        "line": 15,
+        "exported": true
+      },
+      {
+        "name": "ButtonPlaygroundProps",
+        "kind": "interface",
+        "file": "apps\\docs\\src\\sections\\components\\buttons\\ButtonPlayground.tsx",
+        "line": 5,
+        "exported": false
+      },
+      {
+        "name": "DataType",
+        "kind": "interface",
+        "file": "apps\\docs\\src\\sections\\components\\table\\index.tsx",
+        "line": 60,
+        "exported": false
+      },
+      {
+        "name": "DemoCardProps",
+        "kind": "interface",
+        "file": "apps\\docs\\src\\sections\\components\\upload\\index.tsx",
+        "line": 16,
+        "exported": false
+      },
+      {
+        "name": "DemoCardProps",
+        "kind": "interface",
+        "file": "apps\\docs\\src\\sections\\components\\typography\\index.tsx",
+        "line": 19,
+        "exported": false
+      },
+      {
+        "name": "DemoCardProps",
+        "kind": "interface",
+        "file": "apps\\docs\\src\\sections\\components\\table\\index.tsx",
+        "line": 16,
+        "exported": false
+      },
+      {
+        "name": "DemoCardProps",
+        "kind": "interface",
+        "file": "apps\\docs\\src\\sections\\components\\tag\\index.tsx",
+        "line": 15,
+        "exported": false
+      },
+      {
+        "name": "DemoCardProps",
+        "kind": "interface",
+        "file": "apps\\docs\\src\\sections\\components\\segmented\\index.tsx",
+        "line": 15,
+        "exported": false
+      },
+      {
+        "name": "DemoCardProps",
+        "kind": "interface",
+        "file": "apps\\docs\\src\\sections\\components\\select\\index.tsx",
+        "line": 17,
+        "exported": false
+      },
+      {
+        "name": "DemoCardProps",
+        "kind": "interface",
+        "file": "apps\\docs\\src\\sections\\components\\switch\\index.tsx",
+        "line": 14,
+        "exported": false
+      },
+      {
+        "name": "DemoCardProps",
+        "kind": "interface",
+        "file": "apps\\docs\\src\\sections\\components\\radio\\index.tsx",
+        "line": 16,
+        "exported": false
+      },
+      {
+        "name": "DemoCardProps",
+        "kind": "interface",
+        "file": "apps\\docs\\src\\sections\\components\\pageheader\\index.tsx",
+        "line": 15,
+        "exported": false
+      },
+      {
+        "name": "DemoCardProps",
+        "kind": "interface",
+        "file": "apps\\docs\\src\\sections\\components\\input\\index.tsx",
+        "line": 16,
+        "exported": false
+      },
+      {
+        "name": "DemoCardProps",
+        "kind": "interface",
+        "file": "apps\\docs\\src\\sections\\components\\checkbox\\index.tsx",
+        "line": 14,
+        "exported": false
+      },
+      {
+        "name": "DemoCardProps",
+        "kind": "interface",
+        "file": "apps\\docs\\src\\sections\\components\\card\\index.tsx",
+        "line": 15,
+        "exported": false
+      },
+      {
+        "name": "DemoCardProps",
+        "kind": "interface",
+        "file": "apps\\docs\\src\\sections\\components\\buttons\\index.tsx",
+        "line": 29,
+        "exported": false
+      }
+    ],
+    "functions": [
+      {
+        "name": "Card",
+        "kind": "function",
+        "file": "packages\\design-system\\src\\components\\Card.tsx",
+        "line": 16,
+        "exported": true
+      },
+      {
+        "name": "Checkbox",
+        "kind": "function",
+        "file": "packages\\design-system\\src\\components\\Checkbox.tsx",
+        "line": 26,
+        "exported": true
+      },
+      {
+        "name": "PageHeader",
+        "kind": "function",
+        "file": "packages\\design-system\\src\\components\\PageHeader.tsx",
+        "line": 15,
+        "exported": true
+      },
+      {
+        "name": "Radio",
+        "kind": "function",
+        "file": "packages\\design-system\\src\\components\\Radio.tsx",
+        "line": 43,
+        "exported": true
+      },
+      {
+        "name": "Segmented",
+        "kind": "function",
+        "file": "packages\\design-system\\src\\components\\Segmented.tsx",
+        "line": 60,
+        "exported": true
+      },
+      {
+        "name": "Switch",
+        "kind": "function",
+        "file": "packages\\design-system\\src\\components\\Switch.tsx",
+        "line": 47,
+        "exported": true
+      },
+      {
+        "name": "Tag",
+        "kind": "function",
+        "file": "packages\\design-system\\src\\components\\Tag.tsx",
+        "line": 57,
+        "exported": true
+      },
+      {
+        "name": "Typography",
+        "kind": "function",
+        "file": "packages\\design-system\\src\\components\\Typography.tsx",
+        "line": 98,
+        "exported": true
+      },
+      {
+        "name": "getDestructiveTokens",
+        "kind": "function",
+        "file": "packages\\design-system\\src\\components\\Button.tsx",
+        "line": 101,
+        "exported": false
+      },
+      {
+        "name": "getGhostTokens",
+        "kind": "function",
+        "file": "packages\\design-system\\src\\components\\Button.tsx",
+        "line": 85,
+        "exported": false
+      },
+      {
+        "name": "getNeutralTokens",
+        "kind": "function",
+        "file": "packages\\design-system\\src\\components\\Button.tsx",
+        "line": 116,
+        "exported": false
+      },
+      {
+        "name": "getOutlinedTokens",
+        "kind": "function",
+        "file": "packages\\design-system\\src\\components\\Button.tsx",
+        "line": 59,
+        "exported": false
+      },
+      {
+        "name": "getPrimaryTokens",
+        "kind": "function",
+        "file": "packages\\design-system\\src\\components\\Button.tsx",
+        "line": 34,
+        "exported": false
+      },
+      {
+        "name": "getSecondaryTokens",
+        "kind": "function",
+        "file": "packages\\design-system\\src\\components\\Button.tsx",
+        "line": 46,
+        "exported": false
+      },
+      {
+        "name": "getSizeTokens",
+        "kind": "function",
+        "file": "packages\\design-system\\src\\components\\Select.tsx",
+        "line": 33,
+        "exported": false
+      },
+      {
+        "name": "getSizeTokens",
+        "kind": "function",
+        "file": "packages\\design-system\\src\\components\\Input.tsx",
+        "line": 34,
+        "exported": false
+      },
+      {
+        "name": "getSizeTokens",
+        "kind": "function",
+        "file": "packages\\design-system\\src\\components\\Button.tsx",
+        "line": 127,
+        "exported": false
+      },
+      {
+        "name": "mapToDsSize",
+        "kind": "function",
+        "file": "packages\\design-system\\src\\components\\Select.tsx",
+        "line": 26,
+        "exported": false
+      },
+      {
+        "name": "mapToDsSize",
+        "kind": "function",
+        "file": "packages\\design-system\\src\\components\\Input.tsx",
+        "line": 27,
+        "exported": false
+      },
+      {
+        "name": "mapToDsSize",
+        "kind": "function",
+        "file": "packages\\design-system\\src\\components\\Button.tsx",
+        "line": 152,
+        "exported": false
+      },
+      {
+        "name": "resolveSize",
+        "kind": "function",
+        "file": "packages\\design-system\\src\\components\\Segmented.tsx",
+        "line": 19,
+        "exported": false
+      }
+    ],
+    "types": [
+      {
+        "name": "Breakpoints",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\theme\\foundations\\breakpoints.ts",
+        "line": 10,
+        "exported": true
+      },
+      {
+        "name": "ButtonProps",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Button.tsx",
+        "line": 29,
+        "exported": true
+      },
+      {
+        "name": "CardProps",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Card.tsx",
+        "line": 9,
+        "exported": true
+      },
+      {
+        "name": "CheckboxProps",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Checkbox.tsx",
+        "line": 9,
+        "exported": true
+      },
+      {
+        "name": "ComponentKey",
+        "kind": "type",
+        "file": "apps\\docs\\src\\types\\navigation.ts",
+        "line": 2,
+        "exported": true
+      },
+      {
+        "name": "CustomTypographyProps",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Typography.tsx",
+        "line": 40,
+        "exported": true
+      },
+      {
+        "name": "DesignSystemColors",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\theme\\foundations\\colors.ts",
+        "line": 69,
+        "exported": true
+      },
+      {
+        "name": "InputProps",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Input.tsx",
+        "line": 22,
+        "exported": true
+      },
+      {
+        "name": "RadioProps",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Radio.tsx",
+        "line": 9,
+        "exported": true
+      },
+      {
+        "name": "Radius",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\theme\\foundations\\radius.ts",
+        "line": 9,
+        "exported": true
+      },
+      {
+        "name": "SectionKey",
+        "kind": "type",
+        "file": "apps\\docs\\src\\types\\navigation.ts",
+        "line": 1,
+        "exported": true
+      },
+      {
+        "name": "SegmentedProps",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Segmented.tsx",
+        "line": 12,
+        "exported": true
+      },
+      {
+        "name": "SelectProps",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Select.tsx",
+        "line": 21,
+        "exported": true
+      },
+      {
+        "name": "Shadow",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\theme\\foundations\\shadow.ts",
+        "line": 11,
+        "exported": true
+      },
+      {
+        "name": "Spacing",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\theme\\foundations\\spacing.ts",
+        "line": 18,
+        "exported": true
+      },
+      {
+        "name": "SwitchProps",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Switch.tsx",
+        "line": 9,
+        "exported": true
+      },
+      {
+        "name": "TableProps",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Table.tsx",
+        "line": 12,
+        "exported": true
+      },
+      {
+        "name": "TagProps",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Tag.tsx",
+        "line": 9,
+        "exported": true
+      },
+      {
+        "name": "UploadProps",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Upload.tsx",
+        "line": 18,
+        "exported": true
+      },
+      {
+        "name": "AntdButtonType",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Button.tsx",
+        "line": 13,
+        "exported": false
+      },
+      {
+        "name": "AntdTypographyAllProps",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Typography.tsx",
+        "line": 36,
+        "exported": false
+      },
+      {
+        "name": "BaseUploadProps",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Upload.tsx",
+        "line": 16,
+        "exported": false
+      },
+      {
+        "name": "ButtonVariant",
+        "kind": "type",
+        "file": "apps\\docs\\src\\sections\\components\\buttons\\index.tsx",
+        "line": 15,
+        "exported": false
+      },
+      {
+        "name": "CleanAntdProps",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Select.tsx",
+        "line": 15,
+        "exported": false
+      },
+      {
+        "name": "CleanAntdProps",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Input.tsx",
+        "line": 16,
+        "exported": false
+      },
+      {
+        "name": "CleanAntdProps",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Button.tsx",
+        "line": 24,
+        "exported": false
+      },
+      {
+        "name": "DSColor",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Typography.tsx",
+        "line": 34,
+        "exported": false
+      },
+      {
+        "name": "DsSize",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Button.tsx",
+        "line": 23,
+        "exported": false
+      },
+      {
+        "name": "ExtendedButtonType",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Button.tsx",
+        "line": 15,
+        "exported": false
+      },
+      {
+        "name": "InputSize",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Input.tsx",
+        "line": 14,
+        "exported": false
+      },
+      {
+        "name": "SegmentedSize",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Segmented.tsx",
+        "line": 10,
+        "exported": false
+      },
+      {
+        "name": "SelectSize",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Select.tsx",
+        "line": 13,
+        "exported": false
+      },
+      {
+        "name": "TypographyVariant",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Typography.tsx",
+        "line": 12,
+        "exported": false
+      },
+      {
+        "name": "UploadLayout",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Upload.tsx",
+        "line": 14,
+        "exported": false
+      },
+      {
+        "name": "UploadSize",
+        "kind": "type",
+        "file": "packages\\design-system\\src\\components\\Upload.tsx",
+        "line": 13,
+        "exported": false
+      }
+    ],
+    "enums": []
+  },
+  "publicAPI": [
+    {
+      "name": "Breakpoints",
+      "kind": "type",
+      "file": "packages\\design-system\\src\\theme\\foundations\\breakpoints.ts",
+      "line": 10,
+      "exported": true
+    },
+    {
+      "name": "ButtonProps",
+      "kind": "type",
+      "file": "packages\\design-system\\src\\components\\Button.tsx",
+      "line": 29,
+      "exported": true
+    },
+    {
+      "name": "Card",
+      "kind": "function",
+      "file": "packages\\design-system\\src\\components\\Card.tsx",
+      "line": 16,
+      "exported": true
+    },
+    {
+      "name": "CardProps",
+      "kind": "type",
+      "file": "packages\\design-system\\src\\components\\Card.tsx",
+      "line": 9,
+      "exported": true
+    },
+    {
+      "name": "Checkbox",
+      "kind": "function",
+      "file": "packages\\design-system\\src\\components\\Checkbox.tsx",
+      "line": 26,
+      "exported": true
+    },
+    {
+      "name": "CheckboxProps",
+      "kind": "type",
+      "file": "packages\\design-system\\src\\components\\Checkbox.tsx",
+      "line": 9,
+      "exported": true
+    },
+    {
+      "name": "ComponentKey",
+      "kind": "type",
+      "file": "apps\\docs\\src\\types\\navigation.ts",
+      "line": 2,
+      "exported": true
+    },
+    {
+      "name": "ComponentsSectionProps",
+      "kind": "interface",
+      "file": "apps\\docs\\src\\sections\\ComponentsSection.tsx",
+      "line": 27,
+      "exported": true
+    },
+    {
+      "name": "CustomFormItemProps",
+      "kind": "interface",
+      "file": "packages\\design-system\\src\\components\\FormItem.tsx",
+      "line": 8,
+      "exported": true
+    },
+    {
+      "name": "CustomTypographyProps",
+      "kind": "type",
+      "file": "packages\\design-system\\src\\components\\Typography.tsx",
+      "line": 40,
+      "exported": true
+    },
+    {
+      "name": "DesignSystemColors",
+      "kind": "type",
+      "file": "packages\\design-system\\src\\theme\\foundations\\colors.ts",
+      "line": 69,
+      "exported": true
+    },
+    {
+      "name": "InputProps",
+      "kind": "type",
+      "file": "packages\\design-system\\src\\components\\Input.tsx",
+      "line": 22,
+      "exported": true
+    },
+    {
+      "name": "JuscashProviderProps",
+      "kind": "interface",
+      "file": "packages\\design-system\\src\\theme\\JuscashProvider.tsx",
+      "line": 14,
+      "exported": true
+    },
+    {
+      "name": "MainLayoutProps",
+      "kind": "interface",
+      "file": "apps\\docs\\src\\layouts\\MainLayout.tsx",
+      "line": 9,
+      "exported": true
+    },
+    {
+      "name": "PageHeader",
+      "kind": "function",
+      "file": "packages\\design-system\\src\\components\\PageHeader.tsx",
+      "line": 15,
+      "exported": true
+    },
+    {
+      "name": "PageHeaderProps",
+      "kind": "interface",
+      "file": "packages\\design-system\\src\\components\\PageHeader.tsx",
+      "line": 9,
+      "exported": true
+    },
+    {
+      "name": "Radio",
+      "kind": "function",
+      "file": "packages\\design-system\\src\\components\\Radio.tsx",
+      "line": 43,
+      "exported": true
+    },
+    {
+      "name": "RadioProps",
+      "kind": "type",
+      "file": "packages\\design-system\\src\\components\\Radio.tsx",
+      "line": 9,
+      "exported": true
+    },
+    {
+      "name": "Radius",
+      "kind": "type",
+      "file": "packages\\design-system\\src\\theme\\foundations\\radius.ts",
+      "line": 9,
+      "exported": true
+    },
+    {
+      "name": "RichRadioGroupProps",
+      "kind": "interface",
+      "file": "packages\\design-system\\src\\components\\Radio.tsx",
+      "line": 94,
+      "exported": true
+    },
+    {
+      "name": "RichRadioOption",
+      "kind": "interface",
+      "file": "packages\\design-system\\src\\components\\Radio.tsx",
+      "line": 87,
+      "exported": true
+    },
+    {
+      "name": "SectionKey",
+      "kind": "type",
+      "file": "apps\\docs\\src\\types\\navigation.ts",
+      "line": 1,
+      "exported": true
+    },
+    {
+      "name": "Segmented",
+      "kind": "function",
+      "file": "packages\\design-system\\src\\components\\Segmented.tsx",
+      "line": 60,
+      "exported": true
+    },
+    {
+      "name": "SegmentedProps",
+      "kind": "type",
+      "file": "packages\\design-system\\src\\components\\Segmented.tsx",
+      "line": 12,
+      "exported": true
+    },
+    {
+      "name": "SelectProps",
+      "kind": "type",
+      "file": "packages\\design-system\\src\\components\\Select.tsx",
+      "line": 21,
+      "exported": true
+    },
+    {
+      "name": "Shadow",
+      "kind": "type",
+      "file": "packages\\design-system\\src\\theme\\foundations\\shadow.ts",
+      "line": 11,
+      "exported": true
+    },
+    {
+      "name": "SidebarProps",
+      "kind": "interface",
+      "file": "apps\\docs\\src\\sections\\Sidebar.tsx",
+      "line": 15,
+      "exported": true
+    },
+    {
+      "name": "Spacing",
+      "kind": "type",
+      "file": "packages\\design-system\\src\\theme\\foundations\\spacing.ts",
+      "line": 18,
+      "exported": true
+    },
+    {
+      "name": "Switch",
+      "kind": "function",
+      "file": "packages\\design-system\\src\\components\\Switch.tsx",
+      "line": 47,
+      "exported": true
+    },
+    {
+      "name": "SwitchProps",
+      "kind": "type",
+      "file": "packages\\design-system\\src\\components\\Switch.tsx",
+      "line": 9,
+      "exported": true
+    },
+    {
+      "name": "TableProps",
+      "kind": "type",
+      "file": "packages\\design-system\\src\\components\\Table.tsx",
+      "line": 12,
+      "exported": true
+    },
+    {
+      "name": "Tag",
+      "kind": "function",
+      "file": "packages\\design-system\\src\\components\\Tag.tsx",
+      "line": 57,
+      "exported": true
+    },
+    {
+      "name": "TagProps",
+      "kind": "type",
+      "file": "packages\\design-system\\src\\components\\Tag.tsx",
+      "line": 9,
+      "exported": true
+    },
+    {
+      "name": "Typography",
+      "kind": "function",
+      "file": "packages\\design-system\\src\\components\\Typography.tsx",
+      "line": 98,
+      "exported": true
+    },
+    {
+      "name": "UploadProps",
+      "kind": "type",
+      "file": "packages\\design-system\\src\\components\\Upload.tsx",
+      "line": 18,
+      "exported": true
+    }
+  ],
+  "dependencies": {
+    "mostImported": [
+      {
+        "file": "C:\\projetos\\design_juscash\\packages\\design-system\\src\\theme/index.ts",
+        "importedBy": 17
+      },
+      {
+        "file": "C:\\projetos\\design_juscash\\apps\\docs\\src\\sections\\components\\buttons\\ButtonPlayground.tsx",
+        "importedBy": 13
+      },
+      {
+        "file": "C:\\projetos\\design_juscash\\apps\\docs\\src\\types\\navigation.ts",
+        "importedBy": 4
+      },
+      {
+        "file": "C:\\projetos\\design_juscash\\packages\\design-system\\src\\components\\Typography.tsx",
+        "importedBy": 4
+      },
+      {
+        "file": "C:\\projetos\\design_juscash\\apps\\docs\\src\\sections\\components\\typography",
+        "importedBy": 2
+      },
+      {
+        "file": "C:\\projetos\\design_juscash\\packages\\design-system\\src\\theme\\global.css",
+        "importedBy": 1
+      },
+      {
+        "file": "C:\\projetos\\design_juscash\\apps\\docs\\src\\global.css",
+        "importedBy": 1
+      },
+      {
+        "file": "C:\\projetos\\design_juscash\\apps\\docs\\src\\App.tsx",
+        "importedBy": 1
+      },
+      {
+        "file": "C:\\projetos\\design_juscash\\apps\\docs\\src\\layouts\\MainLayout.tsx",
+        "importedBy": 1
+      },
+      {
+        "file": "C:\\projetos\\design_juscash\\apps\\docs\\src\\sections\\ComponentsSection.tsx",
+        "importedBy": 1
+      },
+      {
+        "file": "C:\\projetos\\design_juscash\\apps\\docs\\src\\sections\\TokensSection.tsx",
+        "importedBy": 1
+      },
+      {
+        "file": "C:\\projetos\\design_juscash\\apps\\docs\\src\\sections\\AboutSection.tsx",
+        "importedBy": 1
+      },
+      {
+        "file": "C:\\projetos\\design_juscash\\packages\\design-system\\src\\theme\\foundations/index.ts",
+        "importedBy": 1
+      },
+      {
+        "file": "C:\\projetos\\design_juscash\\packages\\design-system\\src\\components\\Button.tsx",
+        "importedBy": 1
+      },
+      {
+        "file": "C:\\projetos\\design_juscash\\packages\\design-system\\src\\components\\Select.tsx",
+        "importedBy": 1
+      },
+      {
+        "file": "C:\\projetos\\design_juscash\\packages\\design-system\\src\\components\\Checkbox.tsx",
+        "importedBy": 1
+      },
+      {
+        "file": "C:\\projetos\\design_juscash\\packages\\design-system\\src\\components\\Card.tsx",
+        "importedBy": 1
+      },
+      {
+        "file": "C:\\projetos\\design_juscash\\apps\\docs\\src\\utils\\logo_branco.png",
+        "importedBy": 1
+      },
+      {
+        "file": "C:\\projetos\\design_juscash\\apps\\docs\\src\\utils\\logo.png",
+        "importedBy": 1
+      },
+      {
+        "file": "C:\\projetos\\design_juscash\\apps\\docs\\src\\sections\\components\\buttons",
+        "importedBy": 1
+      }
+    ]
+  },
+  "stats": {
+    "totalSymbols": 79,
+    "exportedSymbols": 35,
+    "analysisTimeMs": 365
+  }
+}
