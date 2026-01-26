@@ -1,6 +1,7 @@
 :root {
   /* Fallback caso o consumidor não defina a fonte */
   --font-primary: 'Inter', sans-serif;
+  --ant-radio-radio-bg-color: #FAFAFA !important;
 }
 
 .ant-segmented-item-selected {
@@ -229,4 +230,21 @@
 
 .ant-btn-block:hover {
   box-shadow: none !important;
+}
+
+.ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
+  background-color: #FAFAFA !important;
+  border-color: var(--ant-radio-button-solid-checked-bg) !important;
+}
+
+.ant-radio-wrapper .ant-radio-inner:after {
+  background-color: var(--ant-color-primary) !important;
+}
+
+.ds-radio-error .ant-radio .ant-radio-inner {
+  box-shadow: 0px 0px 0px 3px rgba(210, 25, 11, 0.4) !important;
+}
+
+.ds-neutral .ant-radio .ant-radio-inner {
+  box-shadow: 0px 0px 0px 3px #d4d4d4 !important
 }
