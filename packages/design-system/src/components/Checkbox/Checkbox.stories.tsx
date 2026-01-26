@@ -18,7 +18,7 @@ const meta: Meta<CheckboxStoryProps> = {
     docs: {
       description: {
         component:
-          "Componente de checkbox baseado no [Ant Design Checkbox](https://ant.design/components/checkbox).",
+          "Componente de checkbox baseado no [Ant Design Checkbox](https://ant.design/components/checkbox). Extende todas as props padrão do Ant Design Checkbox e adiciona a prop `error` para indicar estado de erro.",
       },
     },
   },
