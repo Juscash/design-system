@@ -4,14 +4,14 @@
   "private": true,
   "workspaces": [
     "packages/*",
-    "apps/*"
+    "apps/*",
+    "docs"
   ],
   "scripts": {
     "build": "npm run build -w @Juscash/design-system && npm run build -w docs",
     "build:design-system": "npm run build -w @Juscash/design-system",
     "build:docs": "npm run build -w docs",
     "dev:docs": "npm run dev -w docs",
- 
     "lint": "echo \"no lint configured\"",
     "test": "echo \"no tests configured\"",
     "version:patch": "node scripts/version.js patch",
@@ -23,7 +23,11 @@
     "node": ">=20.0.0"
   },
   "devDependencies": {
+    "@rollup/rollup-win32-x64-msvc": "^4.56.0",
     "@types/node": "^20.17.0",
+    "fdir": "^6.5.0",
+    "is-core-module": "^2.16.1",
+    "tinyglobby": "^0.2.15",
     "typescript": "^5.6.3"
   }
 }

@@ -1,0 +1,1 @@
+import"./index-CqIc3cxq.js";import{C as c}from"./color-3_T3BsFS.js";import"./colors-D51g0Eqm.js";const b=(o,r)=>{const{r:t,g:n,b:i,a:s}=o.toRgb(),g=new c(o.toRgbString()).onBackground(r).toHsv();return s<=.5?g.v>.5:t*.299+n*.587+i*.114>192};export{b as i};
