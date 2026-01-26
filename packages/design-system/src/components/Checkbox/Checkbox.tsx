@@ -6,7 +6,9 @@ import type { CheckboxProps as AntdCheckboxProps } from "antd";
 import { designSystemColors, spacing, radius } from "../../theme";
 import type { ComponentToken } from "antd/es/checkbox/style";
 
-export type CheckboxProps = AntdCheckboxProps;
+export type CheckboxProps = AntdCheckboxProps & {
+  error?: boolean;
+};
 
 const checkboxTokens: Partial<ComponentToken> = {
   colorPrimary: designSystemColors.brand.primary[600],
@@ -23,7 +25,35 @@ const checkboxTokens: Partial<ComponentToken> = {
   paddingXS: spacing[2],
 };
 
-export function Checkbox(props: CheckboxProps): React.ReactElement {
+const errorTokens: Partial<ComponentToken> = {
+  ...checkboxTokens,
+  colorPrimary: designSystemColors.feedback.red[500],
+  colorPrimaryHover: designSystemColors.feedback.red[900],
+  colorPrimaryBorder: designSystemColors.feedback.red[500],
+  colorPrimaryBorderHover: designSystemColors.feedback.red[900],
+  colorBorder: designSystemColors.feedback.red[500],
+};
+
+export function Checkbox({
+  error,
+  ...props
+}: CheckboxProps): React.ReactElement {
+  return (
+    <ConfigProvider
+      theme={{
+        components: {
+          Checkbox: error ? errorTokens : checkboxTokens,
+        },
+      }}
+    >
+      <AntdCheckbox {...props} />
+    </ConfigProvider>
+  );
+}
+
+export function CheckboxGroup(
+  props: React.ComponentProps<typeof AntdCheckbox.Group>,
+): React.ReactElement {
   return (
     <ConfigProvider
       theme={{
@@ -32,7 +62,9 @@ export function Checkbox(props: CheckboxProps): React.ReactElement {
         },
       }}
     >
-      <AntdCheckbox {...props} />
+      <AntdCheckbox.Group {...props} />
     </ConfigProvider>
   );
 }
+
+Checkbox.Group = CheckboxGroup;
