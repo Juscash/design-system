@@ -1,13 +1,26 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 import { Button } from "./Button";
 
-const meta: Meta<typeof Button> = {
+type ButtonStoryProps = React.ComponentProps<typeof Button> & {
+  hover?: boolean;
+  active?: boolean;
+  focus?: boolean;
+};
+
+const meta: Meta<ButtonStoryProps> = {
   title: "Components/Button",
   component: Button,
   parameters: {
     design: {
       type: "figma",
       url: "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4035-4133&m=dev",
+    },
+    docs: {
+      description: {
+        component:
+          "Componente de botão baseado no [Ant Design Button](https://ant.design/components/button).",
+      },
     },
   },
   tags: ["autodocs"],
@@ -33,11 +46,43 @@ const meta: Meta<typeof Button> = {
     loading: {
       control: "boolean",
     },
+    hover: {
+      control: "boolean",
+      description: "Força o estado hover",
+      table: { category: "Pseudo States" },
+    },
+    active: {
+      control: "boolean",
+      description: "Força o estado active",
+      table: { category: "Pseudo States" },
+    },
+    focus: {
+      control: "boolean",
+      description: "Força o estado focus",
+      table: { category: "Pseudo States" },
+    },
+  },
+  args: {
+    hover: false,
+    active: false,
+    focus: false,
+  },
+  render: (args) => {
+    const { hover, active, focus, ...props } = args;
+    const pseudoClasses = [
+      hover && "pseudo-hover",
+      active && "pseudo-active",
+      focus && "pseudo-focus",
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+    return <Button {...props} className={pseudoClasses} />;
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof Button>;
+type Story = StoryObj<ButtonStoryProps>;
 
 export const Primary: Story = {
   args: {

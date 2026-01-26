@@ -8,6 +8,11 @@ const preview: Preview = {
         date: /Date$/i,
       },
     },
+    options: {
+      storySort: {
+        method: "alphabetical",
+      },
+    },
     viewport: {
       viewports: {
         mobile: {
@@ -25,6 +30,19 @@ const preview: Preview = {
           styles: { width: "1440px", height: "900px" },
           type: "desktop",
         },
+      },
+    },
+  },
+  globalTypes: {
+    locale: {
+      description: "Internationalization locale",
+      defaultValue: "pt-BR",
+      toolbar: {
+        icon: "globe",
+        items: [
+          { value: "pt-BR", right: "🇧🇷", title: "Português" },
+          { value: "en", right: "🇺🇸", title: "English" },
+        ],
       },
     },
   },
