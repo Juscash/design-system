@@ -124,7 +124,6 @@ const InputComponent = (
 
   const resolvedSize = size ? mapToDsSize(size) : dsSize;
   const sizeTokens = getSizeTokens(resolvedSize);
-  const combinedClassName = `ds-input-outline ${className || ""}`.trim();
   return (
     <ConfigProvider
       theme={{
@@ -136,7 +135,7 @@ const InputComponent = (
         },
         token: {
           ...sizeTokens.globalToken,
-          colorBorder: "transparent",
+          colorBorder: designSystemColors.neutral[300],
           colorError: designSystemColors.feedback.red[500],
           colorTextDisabled: designSystemColors.neutral[400],
           colorBgContainerDisabled: designSystemColors.neutral[50],
@@ -153,7 +152,7 @@ const InputComponent = (
             marginLeft: spacing[2],
           },
         }}
-        className={combinedClassName}
+        className={className}
         style={{
           height: `${sizeTokens.height}px`,
           ...style,
@@ -171,7 +170,6 @@ export function TextArea(
   props: TextAreaProps,
 ): ReturnType<React.FC<TextAreaProps>> {
   const { className, ...rest } = props;
-  const combinedClassName = `ds-input-outline ${className || ""}`.trim();
   return (
     <ConfigProvider
       theme={{
@@ -188,7 +186,7 @@ export function TextArea(
         },
       }}
     >
-      <AntdTextArea className={combinedClassName} {...rest} />
+      <AntdTextArea className={className} {...rest} />
     </ConfigProvider>
   );
 }
