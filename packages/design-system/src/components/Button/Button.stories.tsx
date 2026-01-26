@@ -19,8 +19,17 @@ const meta: Meta<ButtonStoryProps> = {
     },
     docs: {
       description: {
-        component:
-          "Componente de botão baseado no [Ant Design Button](https://ant.design/components/button).",
+        component: `
+Componente de botão baseado no [Ant Design Button](https://ant.design/components/button).
+
+### Props:
+- **Extended (Ant Design)**: A maioria das propriedades padrão do AntD Button são suportadas.
+- **Customized**:
+  - \`type\`: Estendido com variantes exclusivas (\`secondary\`, \`destructive\`, \`ghost\`, \`neutral\`, \`outlined\`).
+  - \`size\`: Mapeado internamente para o \`dsSize\` do sistema Juscash.
+- **Custom (Juscash)**:
+  - \`dsSize\`: Define o tamanho específico seguindo o Design System (\`xs\`, \`s\`, \`m\`).
+`,
       },
     },
   },
