@@ -11,7 +11,12 @@ const config: StorybookConfig = {
     "../../packages/design-system/src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
   ],
 
-  addons: [getAbsolutePath("@storybook/addon-links"), getAbsolutePath("@storybook/addon-docs")],
+  addons: [
+    getAbsolutePath("@storybook/addon-links"),
+    getAbsolutePath("@storybook/addon-docs"),
+    getAbsolutePath("@storybook/addon-vitest"),
+    getAbsolutePath("@storybook/addon-a11y"),
+  ],
 
   framework: {
     name: getAbsolutePath("@storybook/react-vite"),
@@ -28,11 +33,11 @@ const config: StorybookConfig = {
         },
       },
     });
-  }
+  },
 };
 
 export default config;
 
 function getAbsolutePath(value: string): any {
-  return dirname(fileURLToPath(import.meta.resolve(`${value}/package.json`)));
+  return dirname(require.resolve(`${value}/package.json`));
 }

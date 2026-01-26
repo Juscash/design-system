@@ -1,5 +1,5 @@
 {
-  "name": "@Juscash/storybook",
+  "name": "@juscash/storybook",
   "version": "0.0.0",
   "private": true,
   "scripts": {
@@ -7,17 +7,24 @@
     "build-storybook": "storybook build"
   },
   "devDependencies": {
+    "@storybook/addon-a11y": "^10.2.0",
+    "@storybook/addon-docs": "^10.2.0",
     "@storybook/addon-links": "^10.2.0",
+    "@storybook/addon-vitest": "^10.2.0",
     "@storybook/react": "^10.2.0",
     "@storybook/react-vite": "^10.2.0",
-    "storybook": "^10.2.0",
-    "@vitejs/plugin-react": "^4.3.0",
-    "vite": "^5.4.0",
-    "react": "^19.0.0",
-    "react-dom": "^19.0.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "@storybook/addon-docs": "^10.2.0"
+    "@vitejs/plugin-react": "^4.3.0",
+    "@vitest/browser": "^4.0.18",
+    "@vitest/browser-playwright": "^4.0.18",
+    "@vitest/coverage-v8": "^4.0.18",
+    "playwright": "^1.58.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "storybook": "^10.2.0",
+    "vite": "^5.4.0",
+    "vitest": "^4.0.18"
   },
   "dependencies": {
     "@Juscash/design-system": "*"

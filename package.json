@@ -4,14 +4,13 @@
   "private": true,
   "workspaces": [
     "packages/*",
-    "apps/*",
     "docs"
   ],
   "scripts": {
-    "build": "npm run build -w @Juscash/design-system && npm run build -w docs",
+    "build": "npm run build -w @Juscash/design-system && npm run build-storybook -w @Juscash/storybook",
     "build:design-system": "npm run build -w @Juscash/design-system",
-    "build:docs": "npm run build -w docs",
-    "dev:docs": "npm run dev -w docs",
+    "build:docs": "npm run build-storybook -w @Juscash/storybook",
+    "dev:docs": "npm run storybook -w @Juscash/storybook",
     "lint": "echo \"no lint configured\"",
     "test": "echo \"no tests configured\"",
     "version:patch": "node scripts/version.js patch",

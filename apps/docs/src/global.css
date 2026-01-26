@@ -1,7 +1,0 @@
-:root {
-    --font-primary: "Inter", system-ui, -apple-system, "Segoe UI", sans-serif;
-}
-
-body {
-    font-family: var(--font-primary), sans-serif;
-}
