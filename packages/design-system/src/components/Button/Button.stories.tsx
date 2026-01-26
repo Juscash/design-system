@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
+import { Search, Plus } from "lucide-react";
 import { Button } from "./Button";
 
 type ButtonStoryProps = React.ComponentProps<typeof Button> & {
@@ -126,30 +127,6 @@ export const Outlined: Story = {
   },
 };
 
-export const SizeXS: Story = {
-  args: {
-    type: "primary",
-    dsSize: "xs",
-    children: "Extra Small",
-  },
-};
-
-export const SizeS: Story = {
-  args: {
-    type: "primary",
-    dsSize: "s",
-    children: "Small",
-  },
-};
-
-export const SizeM: Story = {
-  args: {
-    type: "primary",
-    dsSize: "m",
-    children: "Medium",
-  },
-};
-
 export const Disabled: Story = {
   args: {
     type: "primary",
@@ -163,5 +140,20 @@ export const Loading: Story = {
     type: "primary",
     loading: true,
     children: "Loading Button",
+  },
+};
+
+export const WithIcon: Story = {
+  args: {
+    type: "primary",
+    icon: <Search size={16} />,
+    children: "Search",
+  },
+};
+
+export const IconButton: Story = {
+  args: {
+    type: "primary",
+    icon: <Plus size={16} />,
   },
 };

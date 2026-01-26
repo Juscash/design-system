@@ -116,6 +116,7 @@ function getDestructiveTokens(): Partial<ButtonToken> {
 function getNeutralTokens(): Partial<ButtonToken> {
   return {
     colorPrimary: designSystemColors.neutral[200],
+    primaryShadow: undefined,
     colorPrimaryHover: designSystemColors.neutral[400],
     colorPrimaryActive: designSystemColors.neutral[400],
     colorTextLightSolid: designSystemColors.neutral[800],
