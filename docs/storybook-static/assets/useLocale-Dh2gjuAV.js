@@ -1,1 +1,0 @@
-import{r as l}from"./index-CqIc3cxq.js";import{L as u,l as c}from"./colors-D51g0Eqm.js";const i=(t,s)=>{const e=l.useContext(u),r=l.useMemo(()=>{const o=s||c[t],n=e?.[t]??{};return{...typeof o=="function"?o():o,...n||{}}},[t,s,e]),a=l.useMemo(()=>{const o=e?.locale;return e?.exist&&!o?c.locale:o},[e]);return[r,a]};export{i as u};

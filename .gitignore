@@ -5,7 +5,11 @@ dist
 coverage
 .turbo
 .vite
-storybook-static
+.storybook-static
+docs/storybook-static
 
 
 
+
+
+docs/storybook-static
