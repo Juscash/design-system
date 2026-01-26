@@ -1,38 +1,41 @@
 project:
-  name: "integrate-component-agents"
-  scale: SMALL
-  started: "2026-01-21T20:38:39.993Z"
+  name: "create-collapse-component"
+  scale: MEDIUM
+  started: "2026-01-21T21:53:41.120Z"
   current_phase: V
 
 phases:
   P:
     status: filled
-    started_at: "2026-01-21T20:38:39.993Z"
-    completed_at: "2026-01-21T20:38:53.877Z"
+    started_at: "2026-01-21T21:53:41.120Z"
+    completed_at: "2026-01-21T21:53:47.775Z"
   R:
-    status: skipped
-    reason: "Not required for scale SMALL"
+    status: filled
+    started_at: "2026-01-21T21:53:47.779Z"
+    completed_at: "2026-01-21T21:53:50.994Z"
   E:
     status: filled
-    started_at: "2026-01-21T20:38:53.880Z"
-    completed_at: "2026-01-21T21:04:14.911Z"
+    started_at: "2026-01-21T21:53:50.996Z"
+    completed_at: "2026-01-21T21:59:03.861Z"
   V:
-    status: completed
-    started_at: "2026-01-21T21:04:14.917Z"
-    completed_at: "2026-01-21T21:09:37.344Z"
+    status: in_progress
+    started_at: "2026-01-21T21:59:03.863Z"
   C:
     status: skipped
-    reason: "Not required for scale SMALL"
+    reason: "Not required for scale MEDIUM"
 
 execution:
   history:
-    - timestamp: "2026-01-21T21:09:37.344Z"
+    - timestamp: "2026-01-21T21:59:03.863Z"
       phase: V
-      action: completed
-  last_activity: "2026-01-21T21:09:37.344Z"
-  resume_context: "Fase V (Validação) concluída"
+      action: started
+  last_activity: "2026-01-21T21:59:03.863Z"
+  resume_context: "Fase V (Validação) em progresso"
 
 approval:
   plan_created: true
-  plan_approved: false
+  plan_approved: true
+  approved_by: "reviewer"
+  approved_at: "2026-01-21T21:53:41.593Z"
+  approval_notes: "Plan approved by user in chat conversation."
 

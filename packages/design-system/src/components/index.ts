@@ -13,3 +13,4 @@ export * from "./Upload";
 export * from "./Table";
 
 export * from "./FormItem";
+export * from "./Collapse";

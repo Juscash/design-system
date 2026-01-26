@@ -1,14 +1,13 @@
 {
-  "active": [],
-  "completed": [
+  "active": [
     {
-      "slug": "integrar-agentes-componentes",
-      "path": "plans/integrar-agentes-componentes.md",
-      "title": "Integração de Agentes de Componentes",
-      "linkedAt": "2026-01-21T20:38:40.344Z",
-      "status": "completed",
-      "completedAt": "2026-01-21T21:13:00.000Z"
+      "slug": "create-collapse-component",
+      "path": "plans/create-collapse-component.md",
+      "title": "🏗️ Plan: Create Collapse Component",
+      "linkedAt": "2026-01-21T21:53:41.557Z",
+      "status": "active"
     }
   ],
-  "primary": null
+  "completed": [],
+  "primary": "create-collapse-component"
 }

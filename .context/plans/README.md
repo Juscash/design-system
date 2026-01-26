@@ -3,11 +3,7 @@
 This directory contains plans for coordinating work across documentation and playbooks.
 
 ## Plan Queue
-1. [Component Creator Agent](./component-creator-agent.md)
-2. [Component Creator Skills Docs](./component-creator-skills-docs.md)
-3. [Component Docs Agent](./component-docs-agent.md)
-4. [Update Component Creator With Docs](./update-component-creator-with-docs.md)
-5. [Validate Component Docs Agent](./validate-component-docs-agent.md)
+1. [Create Collapse Component](./create-collapse-component.md)
 
 ## How To Create Or Update Plans
 - Run "ai-context plan <name>" to scaffold a new plan template.
