@@ -2,7 +2,7 @@
   "compilerOptions": {
     "target": "ES2018",
     "module": "ESNext",
-    "moduleResolution": "Node",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "strict": true,
@@ -14,10 +14,5 @@
     "noEmit": true,
     "types": ["node"]
   },
-  "include": [
-    "packages",
-    "apps"
-  ]
+  "include": ["packages", "apps"]
 }
-
-

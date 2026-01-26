@@ -4,6 +4,12 @@ import { Button } from "./Button";
 const meta: Meta<typeof Button> = {
   title: "Components/Button",
   component: Button,
+  parameters: {
+    design: {
+      type: "figma",
+      url: "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4035-4133&m=dev",
+    },
+  },
   tags: ["autodocs"],
   argTypes: {
     type: {

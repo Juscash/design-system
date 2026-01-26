@@ -16,6 +16,7 @@ const config: StorybookConfig = {
     getAbsolutePath("@storybook/addon-docs"),
     getAbsolutePath("@storybook/addon-vitest"),
     getAbsolutePath("@storybook/addon-a11y"),
+    getAbsolutePath("@storybook/addon-designs"),
   ],
 
   framework: {
