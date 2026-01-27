@@ -1,10 +1,11 @@
 ---
 type: skill
-name: Component Creation
-description: Create Design System components extending Ant Design following JusCash patterns
+name: component-creation
+description: Criar componentes do Design System com pasta dedicada, story/test obrigatorios e tokens do tema
 skillSlug: component-creation
 phases: [P, E]
-generated: 2026-01-21
+mode: false
+generated: 2026-01-26
 status: filled
 scaffoldVersion: "2.0.0"
 ---
@@ -15,19 +16,24 @@ scaffoldVersion: "2.0.0"
 
 ## 🎯 Objetivo
 
-Esta skill ensina como criar componentes React/TypeScript que:
+Criar componentes React/TypeScript que:
 - Estendem componentes do Ant Design
 - Usam tokens do Design System JusCash
-- Seguem padrões consistentes de código
+- Seguem o Figma como fonte da verdade
+- Sempre incluem story e test
 
 ---
 
-## 📍 Localização
+## 📍 Localizacao
 
 Todos os componentes devem ser criados em:
 
 ```
-packages/design-system/src/components/NomeComponente.tsx
+packages/design-system/src/components/NomeComponente/
+├── NomeComponente.tsx
+├── NomeComponente.stories.tsx
+├── NomeComponente.test.tsx
+└── index.ts
 ```
 
 ---
@@ -35,6 +41,7 @@ packages/design-system/src/components/NomeComponente.tsx
 ## 📋 Template Completo
 
 ```typescript
+// packages/design-system/src/components/NomeComponente/NomeComponente.tsx
 "use client";
 
 import React from "react";
@@ -44,7 +51,7 @@ import {
 } from "antd";
 import type { NomeComponenteProps as AntdNomeComponenteProps } from "antd";
 import type { ComponentToken } from "antd/es/nome-componente/style/token";
-import { designSystemColors, radius, spacing } from "../theme";
+import { designSystemColors, radius, spacing } from "../../theme";
 
 // ============================================
 // TYPES
@@ -53,7 +60,7 @@ import { designSystemColors, radius, spacing } from "../theme";
 type NomeComponenteSize = "xs" | "s" | "m" | "l";
 type NomeComponenteVariant = "primary" | "secondary" | "neutral";
 
-// Usar mapped types ao invés de Omit
+// Usar mapped types ao inves de Omit
 type CleanAntdProps = {
   [K in keyof AntdNomeComponenteProps as K extends "size" | "type"
     ? never
@@ -192,6 +199,21 @@ function mapAntdSize(size: AntdNomeComponenteProps["size"]): NomeComponenteSize 
 }
 ```
 
+```typescript
+// packages/design-system/src/components/NomeComponente/index.ts
+export * from "./NomeComponente";
+```
+
+```typescript
+// packages/design-system/src/components/NomeComponente/NomeComponente.stories.tsx
+// Storybook baseado no Figma, cobrindo props principais e props criadas
+```
+
+```typescript
+// packages/design-system/src/components/NomeComponente/NomeComponente.test.tsx
+// React Testing Library + Vitest
+```
+
 ---
 
 ## 🎨 Tokens Disponíveis
@@ -257,7 +279,8 @@ shadow.focusError  // Focus ring de erro
 
 Antes de finalizar o componente:
 
-- [ ] Arquivo em `packages/design-system/src/components/`
+- [ ] Pasta criada em `packages/design-system/src/components/NomeComponente/`
+- [ ] Arquivos `NomeComponente.tsx`, `NomeComponente.stories.tsx`, `NomeComponente.test.tsx`, `index.ts`
 - [ ] `"use client"` no topo
 - [ ] Import do Antd com alias (`as AntdComponente`)
 - [ ] Types usando mapped types (não Omit)
@@ -266,6 +289,8 @@ Antes de finalizar o componente:
 - [ ] ConfigProvider envolvendo componente
 - [ ] `displayName` definido
 - [ ] Export adicionado em `components/index.ts`
+- [ ] Story baseado no Figma com props principais e props criadas
+- [ ] Test com RTL + Vitest cobrindo render e variacao do Figma
 
 ---
 

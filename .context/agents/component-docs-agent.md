@@ -14,14 +14,16 @@ requires:
     - glossary.md
   skills:
     - documentation
-    - showcase-creation
+    - story-creation
+    - figma-mcp
+    - docs-architecture-update
 ---
 
 # Component Documentation Agent Playbook
 
 ## Overview
 
-Este agente automatiza a criação de documentação para componentes do **JusCash Design System**. Ele interage com o usuário, gera showcases seguindo o padrão existente e atualiza os arquivos de navegação.
+Este agente automatiza a documentação de componentes do **JusCash Design System** via Storybook. Ele usa o Figma como fonte da verdade e cria/atualiza stories dentro da pasta do componente.
 
 ---
 
@@ -36,107 +38,55 @@ Antes de iniciar, consulte os seguintes recursos:
 
 ### 🎯 Skills Recomendadas
 - [Documentation](../skills/documentation/SKILL.md) - Templates de documentação de props e tokens
-- [Showcase Creation](../skills/showcase-creation/SKILL.md) - **Template completo para criar showcases**
+- [Story Creation](../skills/story-creation/SKILL.md) - **Stories baseadas no Figma**
+- [Figma MCP](../skills/figma-mcp/SKILL.md) - Extrair specs e variacoes
+- [Docs Architecture Update](../skills/docs-architecture-update/SKILL.md) - Atualizar docs quando necessario
 
 ---
 
 ## Workflow
 
 1. **Perguntar ao usuário** qual componente deseja documentar.
-2. **Listar componentes disponíveis** em `packages/design-system/src/components`.
-3. **Extrair propriedades** e variantes do componente selecionado.
-4. **Gerar código** de showcase (`index.tsx`) com:
-   - `DemoCard` padrão
-   - Exemplos de uso (básico, estados, tamanhos, etc.)
-   - Playground interativo (`ButtonPlayground`)
-5. **Criar pasta** `apps/docs/src/sections/components/<component>/` e salvar o `index.tsx`.
-6. **Atualizar**:
-   - `apps/docs/src/types/navigation.ts` (adicionar `ComponentKey`)
-   - `apps/docs/src/sections/ComponentsSection.tsx` (import, condição, Card)
-7. **Confirmar** ao usuário que a documentação foi criada e que o app compila.
+2. **Localizar o componente** em `packages/design-system/src/components/<Componente>`.
+3. **Usar Figma MCP** para capturar variantes e estados reais.
+4. **Gerar/atualizar** o story `NomeComponente.stories.tsx` com exemplos fiéis ao Figma.
+5. **Expor props principais e props criadas** em `argTypes`.
+6. **Confirmar** ao usuário que a documentação foi atualizada.
 
 ---
 
 ## Templates
 
-### Showcase Template (`index.tsx`)
+### Story Template (`NomeComponente.stories.tsx`)
 
-> ⚠️ **Consulte a skill [Showcase Creation](../skills/showcase-creation/SKILL.md) para o template completo.**
+> ⚠️ **Consulte a skill [Story Creation](../skills/story-creation/SKILL.md) para o template completo.**
 
 ```tsx
-"use client";
+import type { Meta, StoryObj } from "@storybook/react";
+import { NomeComponente } from "./NomeComponente";
 
-import React, { useState } from "react";
-import {
-  <Component>,
-  Card,
-  Space,
-  Heading2,
-  Body1,
-  Body2,
-  Button,
-} from "@Juscash/design-system";
-import { ButtonPlayground } from "../buttons/ButtonPlayground";
-
-interface DemoCardProps {
-  title: string;
-  description: string;
-  code: string;
-  preview: React.ReactNode;
-}
-
-const DemoCard: React.FC<DemoCardProps> = ({ title, description, code, preview }) => {
-  const [showPlayground, setShowPlayground] = useState(false);
-  return (
-    <Card
-      title={title}
-      style={{ width: "100%" }}
-      extra={
-        <Body2
-          onClick={() => setShowPlayground((p) => !p)}
-          style={{
-            background: "none",
-            border: "none",
-            padding: 0,
-            cursor: "pointer",
-            color: "#136CE2",
-            fontWeight: 600,
-          }}
-        >
-          {showPlayground ? "Ocultar exemplo" : "Exemplo interativo"}
-        </Body2>
-      }
-    >
-      <Space direction="vertical" size="middle" style={{ width: "100%" }}>
-        <Body1>{description}</Body1>
-        {preview}
-        {showPlayground ? <ButtonPlayground code={code} /> : null}
-      </Space>
-    </Card>
-  );
+const meta: Meta<typeof NomeComponente> = {
+  title: "Components/NomeComponente",
+  component: NomeComponente,
+  argTypes: {
+    // props criadas e props principais
+  },
 };
 
-// Exemplo de código (string) para o playground
-const basicCode = `import { <Component> } from '@Juscash/design-system';
+export default meta;
+type Story = StoryObj<typeof NomeComponente>;
 
-function <Component>Basic() {
-  return <Component>Conteúdo</Component>;
-}
+export const Default: Story = {
+  args: {
+    // props principais
+  },
+};
 
-render(<Component>Basic />);`;
-
-export const <Component>Showcase: React.FC = () => (
-  <Space direction="vertical" size={24} style={{ width: "100%" }}>
-    <Heading2><Component></Heading2>
-    <Body1>Descrição do componente e seu uso.</Body1>
-    <DemoCard
-      title="Básico"
-      description="Exemplo básico de uso."
-      code={basicCode}
-      preview={<<Component>Preview</Component>} 
-    />
-  </Space>
-);
+export const VarianteFigma: Story = {
+  args: {
+    // props iguais ao Figma
+  },
+};
 ```
 
 ---
@@ -147,10 +97,10 @@ Cada showcase deve incluir:
 
 | Demo | Descrição | Obrigatório |
 |------|-----------|-------------|
-| **Básico** | Exemplo mínimo | ✅ Sim |
+| **Default** | Exemplo mínimo | ✅ Sim |
+| **Estados do Figma** | estados/variacoes reais | ✅ Sim |
 | **Tamanhos** | dsSize: xs, s, m, l | ✅ Se aplicável |
-| **Variantes** | type: primary, secondary... | ✅ Se aplicável |
-| **Estados** | disabled, loading, error | ✅ Se aplicável |
+| **Variantes** | variant/props do DS | ✅ Se aplicável |
 
 ---
 
@@ -159,13 +109,10 @@ Cada showcase deve incluir:
 ```
 Agent: Qual componente você deseja documentar?
 User: Modal
-Agent: Consultando skill showcase-creation...
-Agent: Listando componentes disponíveis…
-Agent: O componente **Modal** possui as props …
-Agent: Gerando showcase…
-Agent: Documentação criada em `apps/docs/src/sections/components/modal/index.tsx`.
-Agent: Atualizei `navigation.ts` e `ComponentsSection.tsx`.
-Agent: Tudo pronto! Execute `npm run dev` para ver o novo componente.
+Agent: Consultando skill story-creation...
+Agent: Lendo Figma via MCP...
+Agent: Gerando stories com variacoes reais...
+Agent: Story atualizado em `packages/design-system/src/components/Modal/Modal.stories.tsx`.
 ```
 
 ---
@@ -174,12 +121,10 @@ Agent: Tudo pronto! Execute `npm run dev` para ver o novo componente.
 
 Antes de finalizar, verifique:
 
-- [ ] `index.tsx` segue o padrão de DemoCard (consulte skill `showcase-creation`)
-- [ ] `ComponentKey` adicionado em `navigation.ts`
-- [ ] Import e condição adicionados em `ComponentsSection.tsx`
-- [ ] Card adicionado na lista de componentes
-- [ ] Projeto compila sem erros (`npm run dev`)
-- [ ] Novo componente aparece na lista e é navegável
+- [ ] Story segue o padrão do `story-creation`
+- [ ] Stories refletem estados reais do Figma
+- [ ] Props principais e props criadas expostas em `argTypes`
+- [ ] Story compilando no Storybook (`npm run dev:docs`)
 
 ---
 

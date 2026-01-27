@@ -29,8 +29,12 @@ On-demand expertise for AI agents. Skills are task-specific procedures that get 
 
 | Skill | Description | Phases |
 |-------|-------------|--------|
-| [Component Creation](./component-creation/SKILL.md) | Create Design System components extending Ant Design | P, E |
-| [Showcase Creation](./showcase-creation/SKILL.md) | Criar showcases visuais de componentes para documentação | P, E |
+| [Component Creation](./component-creation/SKILL.md) | Criar componentes com pasta dedicada, story/test e tokens | P, E |
+| [Figma MCP](./figma-mcp/SKILL.md) | Usar MCP do Figma para extrair specs e variacoes | P, E |
+| [Story Creation](./story-creation/SKILL.md) | Criar stories baseadas no Figma com props principais | E |
+| [Test Creation](./test-creation/SKILL.md) | Criar testes com RTL + Vitest | E, V |
+| [Run Tests](./run-tests/SKILL.md) | Executar testes do Design System | V |
+| [Docs Architecture Update](./docs-architecture-update/SKILL.md) | Atualizar docs e codebase-map com MCP | P, C |
 
 ## Creating Custom Skills
 

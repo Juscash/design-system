@@ -17,9 +17,18 @@ scaffoldVersion: "2.0.0"
 
 Criar componentes React/TypeScript que:
 - **Estendem** componentes do Ant Design (antd)
-- **Seguem** os padrões visuais do Design System JusCash
+- **Seguem** o Figma como fonte da verdade
 - **Usam** tokens do tema (`designSystemColors`, `spacing`, `radius`)
-- **São salvos** em `packages/design-system/src/components/`
+- **Criam** pasta dedicada por componente com `ts`, `story`, `test`, `index`
+
+## 🧩 Skills obrigatorias
+
+- `component-creation`
+- `figma-mcp`
+- `story-creation`
+- `test-creation`
+- `run-tests`
+- `docs-architecture-update`
 
 ---
 
@@ -33,10 +42,10 @@ Criar componentes React/TypeScript que:
 |---|----------|---------------------|
 | 1 | **Qual o nome do componente?** (PascalCase) | `Tooltip`, `Breadcrumb`, `Avatar` |
 | 2 | **Qual componente do Antd será a base?** | `Tooltip`, `Breadcrumb`, `Avatar` do antd |
-| 3 | **Qual o propósito/uso principal?** | "Mostrar dicas ao passar o mouse" |
-| 4 | **Quais variantes/tipos são necessários?** | `primary`, `secondary`, `neutral` |
-| 5 | **Existem props customizadas além do Antd?** | `dsSize`, `variant` |
-| 6 | **Você tem um design no Figma?** | Link ou nodeId do Figma |
+| 3 | **Link do Figma (node)?** | URL com `node-id` |
+| 4 | **Link da doc do Antd?** | URL do componente |
+| 5 | **Classificação?** | entrada, acao, layout, feedback, tipografia |
+| 6 | **Props extras?** (apenas se o Figma exigir) | `dsSize`, `variant` |
 
 ### Template de Perguntas
 
@@ -45,17 +54,17 @@ Vou criar o componente para você! Antes, preciso de algumas informações:
 
 1. 📛 **Nome do componente:** (ex: Tooltip, Avatar, Badge)
 2. 🧱 **Componente base do Antd:** Qual componente do Ant Design será estendido?
-3. 🎯 **Propósito:** Para que esse componente será usado?
-4. 🎨 **Variantes:** Quais tipos/variantes visuais são necessários?
-5. ⚙️ **Props extras:** Alguma prop customizada além das do Antd?
-6. 🖼️ **Design Figma:** Tem um link ou nodeId do design no Figma?
+3. 🖼️ **Link do Figma (node):** URL com `node-id`
+4. 📚 **Link da doc do Antd:** URL do componente
+5. 🧭 **Classificação:** entrada, acao, layout, feedback, tipografia
+6. ⚙️ **Props extras:** Só se o Figma exigir algo além do Antd
 ```
 
 ---
 
-## 🖼️ FASE 2: Integração com Figma MCP
+## 🖼️ FASE 2: Figma MCP + Doc Antd
 
-Se o usuário fornecer um link/nodeId do Figma, use as ferramentas do MCP:
+Use o Figma como fonte da verdade e consulte a doc do Antd antes de implementar:
 
 ### Ferramentas Disponíveis
 
@@ -81,9 +90,12 @@ get_variable_defs:
 
 1. **Extrair nodeId** do link Figma (formato: `123:456` ou `123-456`)
 2. **Chamar `get_design_context`** para obter informações do design
-3. **Analisar** cores, espaçamentos, tipografia
-4. **Mapear** para tokens do design system (`designSystemColors`, `spacing`, `radius`)
-5. **Gerar** componente seguindo o design
+3. **Chamar `get_screenshot`** para validar visual
+4. **Chamar `get_variable_defs`** para mapear tokens
+5. **Inferir variantes e estados** diretamente do Figma
+6. **Consultar a doc do Antd** para props/slots necessários
+7. **Mapear** para tokens do design system (`designSystemColors`, `spacing`, `radius`)
+8. **Só perguntar variantes extras** se o Figma estiver ambíguo
 
 ---
 
@@ -92,12 +104,17 @@ get_variable_defs:
 ### Localização Obrigatória
 
 ```
-packages/design-system/src/components/NomeComponente.tsx
+packages/design-system/src/components/NomeComponente/
+├── NomeComponente.tsx
+├── NomeComponente.stories.tsx
+├── NomeComponente.test.tsx
+└── index.ts
 ```
 
 ### Template de Componente
 
 ```typescript
+// packages/design-system/src/components/NomeComponente/NomeComponente.tsx
 "use client";
 
 import React from "react";
@@ -107,7 +124,7 @@ import {
 } from "antd";
 import type { NomeComponenteProps as AntdNomeComponenteProps } from "antd";
 import type { ComponentToken } from "antd/es/nome-componente/style/token";
-import { designSystemColors, radius, spacing } from "../theme";
+import { designSystemColors, radius, spacing } from "../../theme";
 
 // ============================================
 // TYPES
@@ -205,6 +222,21 @@ export function NomeComponente(props: NomeComponenteProps): React.ReactElement {
 NomeComponente.displayName = "NomeComponente";
 ```
 
+```typescript
+// packages/design-system/src/components/NomeComponente/index.ts
+export * from "./NomeComponente";
+```
+
+```typescript
+// packages/design-system/src/components/NomeComponente/NomeComponente.stories.tsx
+// Storybook com exemplos fiéis ao Figma
+```
+
+```typescript
+// packages/design-system/src/components/NomeComponente/NomeComponente.test.tsx
+// Tests com React Testing Library + Vitest
+```
+
 ---
 
 ## ✅ FASE 4: Checklist de Validação
@@ -212,7 +244,8 @@ NomeComponente.displayName = "NomeComponente";
 Antes de finalizar, verificar TODOS os itens:
 
 ### Estrutura do Arquivo
-- [ ] Arquivo criado em `packages/design-system/src/components/NomeComponente.tsx`
+- [ ] Pasta criada em `packages/design-system/src/components/NomeComponente/`
+- [ ] Arquivos `NomeComponente.tsx`, `NomeComponente.stories.tsx`, `NomeComponente.test.tsx`, `index.ts`
 - [ ] Diretiva `"use client"` no topo
 - [ ] Imports organizados (antd, types, theme)
 
@@ -229,6 +262,17 @@ Antes de finalizar, verificar TODOS os itens:
 ### Exports
 - [ ] Componente com `displayName`
 - [ ] Export adicionado em `components/index.ts`
+
+### Storybook
+- [ ] Stories baseadas no Figma
+- [ ] Props principais e props criadas expostas no story
+- [ ] `argTypes` definidos para props criadas
+
+### Testes
+- [ ] React Testing Library + Vitest
+- [ ] Render básico
+- [ ] Variação do Figma coberta
+- [ ] Props criadas testadas
 
 ### Funcionamento
 - [ ] Componente renderiza corretamente
@@ -247,7 +291,7 @@ designSystemColors.brand.primary[50-900]
 designSystemColors.brand.secondary[50-900]
 
 // Neutral
-designSystemColors.neutral[50-950]
+designSystemColors.neutral[50-900]
 
 // Feedback
 designSystemColors.feedback.red[50-900]
@@ -259,24 +303,22 @@ designSystemColors.feedback.blue[50-900]
 ### Spacing
 
 ```typescript
-spacing[0]  // 0px
 spacing[1]  // 4px
 spacing[2]  // 8px
 spacing[3]  // 12px
 spacing[4]  // 16px
 spacing[5]  // 20px
 spacing[6]  // 24px
-// ... até spacing[10]
+// ... até spacing[24]
 ```
 
 ### Radius
 
 ```typescript
-radius.none  // 0px
-radius.sm    // 2px
 radius.md    // 4px
-radius.lg    // 8px
-radius.xl    // 12px
+radius.xl    // 8px
+radius["2xl"] // 12px
+radius["3xl"] // 16px
 radius.full  // 9999px
 ```
 
@@ -303,21 +345,23 @@ Vou criar o componente Avatar para você! Antes, preciso de algumas informaçõe
 
 1. 📛 **Nome do componente:** Avatar (confirmado)
 2. 🧱 **Componente base do Antd:** `Avatar` do antd
-3. 🎯 **Propósito:** Para que esse componente será usado?
-4. 🎨 **Variantes:** Quais tipos visuais são necessários? (ex: circular, quadrado, com borda)
-5. ⚙️ **Props extras:** Alguma prop customizada além das do Antd?
-6. 🖼️ **Design Figma:** Tem um link ou nodeId do design no Figma?
+3. 🖼️ **Link do Figma (node):** figma.com/design/xxx?node-id=123-456
+4. 📚 **Link da doc do Antd:** ant.design/components/avatar
+5. 🧭 **Classificação:** display
+6. ⚙️ **Props extras:** Nenhuma (Figma não exige)
 ```
 
-**Usuário:** "É pra mostrar foto de usuário, quero circular e quadrado, tem o design aqui: figma.com/design/xxx?node-id=123-456"
+**Usuário:** "Figma: figma.com/design/xxx?node-id=123-456, doc Antd: ant.design/components/avatar"
 
 **Agente:** 
 1. Usa `get_design_context` com nodeId `123:456`
-2. Analisa cores e tamanhos do Figma
-3. Mapeia para tokens do design system
-4. Cria `packages/design-system/src/components/Avatar.tsx`
-5. Atualiza `components/index.ts`
-6. Apresenta o código final
+2. Usa `get_screenshot` e `get_variable_defs`
+3. Infere variantes e estados do Figma
+4. Mapeia para tokens do design system
+5. Cria `packages/design-system/src/components/Avatar/Avatar.tsx`
+6. Cria `Avatar.stories.tsx` e `Avatar.test.tsx`
+7. Atualiza `components/index.ts`
+8. Apresenta o código final
 
 ---
 
@@ -329,3 +373,4 @@ Vou criar o componente Avatar para você! Antes, preciso de algumas informaçõe
 - ❌ Esquecer de adicionar export no index
 - ❌ Implementar sem fazer as perguntas primeiro
 - ❌ Ignorar design do Figma quando fornecido
+- ❌ Criar story/test fora do padrão baseado no Figma
