@@ -1,3 +1,4 @@
+export * from "./Alert";
 export * from "./Button";
 export * from "./Typography";
 export * from "./Segmented";
@@ -15,3 +16,4 @@ export * from "./Table";
 
 export * from "./FormItem";
 export * from "./Collapse";
+export * from "./Notification";
