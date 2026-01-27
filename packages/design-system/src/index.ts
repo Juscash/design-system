@@ -73,8 +73,6 @@ export {
   type CarouselProps,
   Avatar,
   type AvatarProps,
-  Badge,
-  type BadgeProps,
   Descriptions,
   type DescriptionsProps,
   Empty,
