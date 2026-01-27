@@ -17,3 +17,4 @@ export * from "./Table";
 export * from "./FormItem";
 export * from "./Collapse";
 export * from "./Notification";
+export * from "./Popover";

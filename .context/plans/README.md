@@ -3,7 +3,8 @@
 This directory contains plans for coordinating work across documentation and playbooks.
 
 ## Plan Queue
-1. [Create Collapse Component](./create-collapse-component.md)
+1. [Badge Component](./badge-component.md)
+2. [Create Collapse Component](./create-collapse-component.md)
 
 ## How To Create Or Update Plans
 - Run "ai-context plan <name>" to scaffold a new plan template.
