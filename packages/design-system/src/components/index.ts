@@ -20,3 +20,4 @@ export * from "./Collapse";
 export * from "./Notification";
 export * from "./Popover";
 export * from "./Tabs";
+export * from "./Modal";
