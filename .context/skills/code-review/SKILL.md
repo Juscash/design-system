@@ -13,6 +13,11 @@ scaffoldVersion: "2.0.0"
 
 > Revisar qualidade de código para componentes do Design System JusCash.
 
+## Perguntas ao usuario
+
+- Sempre que precisar de uma decisao do usuario, faca uma pergunta com opcoes usando selecao (lista de escolhas).
+- Evite pedir resposta livre.
+
 ## 📋 Checklist de Revisão
 
 ### 1. Estrutura do Arquivo

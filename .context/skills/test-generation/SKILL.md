@@ -13,6 +13,11 @@ scaffoldVersion: "2.0.0"
 
 > Gerar testes para componentes React do Design System JusCash.
 
+## Perguntas ao usuario
+
+- Sempre que precisar de uma decisao do usuario, faca uma pergunta com opcoes usando selecao (lista de escolhas).
+- Evite pedir resposta livre.
+
 ## 📋 Estrutura de Testes
 
 ### Localização

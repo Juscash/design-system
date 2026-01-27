@@ -30,6 +30,11 @@ Criar componentes React/TypeScript que:
 - `run-tests`
 - `docs-architecture-update`
 
+## ❓ Perguntas ao usuario
+
+- Sempre que precisar de uma decisao do usuario, faca uma pergunta com opcoes usando selecao (lista de escolhas).
+- Evite pedir resposta livre.
+
 ## 🧭 Fluxo orquestrado por skills
 
 1. **Coleta minima** → `figma-mcp`

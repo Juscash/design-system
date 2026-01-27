@@ -14,6 +14,11 @@ scaffoldVersion: "2.0.0"
 
 > Manter docs e codebase-map alinhados com a estrutura real do projeto.
 
+## Perguntas ao usuario
+
+- Sempre que precisar de uma decisao do usuario, faca uma pergunta com opcoes usando selecao (lista de escolhas).
+- Evite pedir resposta livre.
+
 ## ✅ Quando usar
 
 - Mudanca de estrutura de pastas.

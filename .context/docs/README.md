@@ -7,6 +7,7 @@ Welcome to the repository knowledge base. Start with the project overview, then 
 - [Architecture Notes](./architecture.md)
 - [Development Workflow](./development-workflow.md)
 - [Glossary & Domain Concepts](./glossary.md)
+- [AI Context Rules](./ai-context-rules.md)
 - [Tooling & Productivity Guide](./tooling.md)
 
 ## Repository Snapshot
@@ -29,4 +30,5 @@ Welcome to the repository knowledge base. Start with the project overview, then 
 | Architecture Notes | `architecture.md` | ADRs, service boundaries, dependency graphs |
 | Development Workflow | `development-workflow.md` | Branching rules, CI config, contributing guide |
 | Glossary & Domain Concepts | `glossary.md` | Business terminology, user personas, domain rules |
+| AI Context Rules | `ai-context-rules.md` | Agent and skill priority rules |
 | Tooling & Productivity Guide | `tooling.md` | CLI scripts, IDE configs, automation workflows |

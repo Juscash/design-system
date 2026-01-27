@@ -14,6 +14,11 @@ scaffoldVersion: "2.0.0"
 
 > Criar componentes para o Design System JusCash estendendo Ant Design.
 
+## Perguntas ao usuario
+
+- Sempre que precisar de uma decisao do usuario, faca uma pergunta com opcoes usando selecao (lista de escolhas).
+- Evite pedir resposta livre.
+
 ## 🎯 Objetivo
 
 Criar componentes React/TypeScript que:

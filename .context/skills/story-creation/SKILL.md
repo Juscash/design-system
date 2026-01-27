@@ -14,6 +14,11 @@ scaffoldVersion: "2.0.0"
 
 > Criar stories fieis ao Figma e expor props essenciais, seguindo o padrao real do repositorio.
 
+## Perguntas ao usuario
+
+- Sempre que precisar de uma decisao do usuario, faca uma pergunta com opcoes usando selecao (lista de escolhas).
+- Evite pedir resposta livre.
+
 ## ✅ Quando usar
 
 - Sempre que criar ou alterar componente do Design System.

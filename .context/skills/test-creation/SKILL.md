@@ -14,6 +14,11 @@ scaffoldVersion: "2.0.0"
 
 > Criar testes base para componentes do Design System, refletindo estados do Figma.
 
+## Perguntas ao usuario
+
+- Sempre que precisar de uma decisao do usuario, faca uma pergunta com opcoes usando selecao (lista de escolhas).
+- Evite pedir resposta livre.
+
 ## ✅ Quando usar
 
 - Sempre que criar componente novo.

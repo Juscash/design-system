@@ -14,6 +14,11 @@ This directory contains ready-to-customize playbooks for AI agents collaborating
 - [Refactoring Specialist](./refactoring-specialist.md) — Identify code smells and improvement opportunities
 - [Documentation Writer](./documentation-writer.md) — Create clear, comprehensive documentation
 
+## Default Rules
+
+- Sempre priorizar agentes custom do projeto.
+- Usar agentes built-in apenas quando nao houver agente custom equivalente.
+
 ## How To Use These Playbooks
 1. Pick the agent that matches your task.
 2. Enrich the template with project-specific context or links.

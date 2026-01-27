@@ -25,6 +25,11 @@ requires:
 
 Este agente automatiza a documentação de componentes do **JusCash Design System** via Storybook. Ele usa o Figma como fonte da verdade e cria/atualiza stories dentro da pasta do componente.
 
+## ❓ Perguntas ao usuario
+
+- Sempre que precisar de uma decisao do usuario, faca uma pergunta com opcoes usando selecao (lista de escolhas).
+- Evite pedir resposta livre.
+
 ---
 
 ## Prerequisites

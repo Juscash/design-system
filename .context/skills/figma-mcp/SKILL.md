@@ -14,6 +14,11 @@ scaffoldVersion: "2.0.0"
 
 > Usar o MCP do Figma para obter specs reais antes de escrever codigo.
 
+## Perguntas ao usuario
+
+- Sempre que precisar de uma decisao do usuario, faca uma pergunta com opcoes usando selecao (lista de escolhas).
+- Evite pedir resposta livre.
+
 ## ✅ Quando usar
 
 - Sempre que houver link/node do Figma.

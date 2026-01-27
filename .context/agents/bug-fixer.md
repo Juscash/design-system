@@ -1,4 +1,10 @@
 ---
+
+# Bug Fixer - Agent Playbook
+
+## User Decisions
+- Sempre que precisar de uma decisao do usuario, faca uma pergunta com opcoes usando selecao (lista de escolhas).
+- Evite pedir resposta livre.
 type: agent
 name: Bug Fixer
 description: Analyze bug reports and error messages

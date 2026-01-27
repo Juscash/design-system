@@ -10,6 +10,11 @@ On-demand expertise for AI agents. Skills are task-specific procedures that get 
 2. **Matching**: When a task matches a skill's description, it's activated
 3. **Execution**: The skill's instructions guide the AI's behavior
 
+## Default Rules
+
+- Sempre priorizar skills custom do projeto.
+- Usar skills built-in apenas quando nao houver skill custom equivalente.
+
 ## Available Skills
 
 ### Built-in Skills

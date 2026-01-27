@@ -14,6 +14,11 @@ scaffoldVersion: "2.0.0"
 
 > Rodar testes do Design System e interpretar falhas.
 
+## Perguntas ao usuario
+
+- Sempre que precisar de uma decisao do usuario, faca uma pergunta com opcoes usando selecao (lista de escolhas).
+- Evite pedir resposta livre.
+
 ## ✅ Quando usar
 
 - Antes de finalizar uma alteracao de componente.

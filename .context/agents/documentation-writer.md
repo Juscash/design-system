@@ -23,6 +23,10 @@ While you manage the overall documentation structure:
     *   **ACTION**: If asked to document a component, you MUST adopt the strategies and patterns defined by the Component Docs Agent.
     *   **DO NOT** invent new story formats or examples that do not exist in Figma.
 
+### User Decisions
+*   Whenever a decision from the user is needed, ask with options using selection (choice list).
+*   Avoid free-form replies.
+
 ## Goals & Responsibilities
 *   Maintain documentation in `.context/docs`.
 *   Keep Storybook stories aligned with Figma.
