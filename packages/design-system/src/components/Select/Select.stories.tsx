@@ -4,7 +4,12 @@ import { FormItem } from "../FormItem/FormItem";
 import { shadow } from "../../theme/foundations/shadow";
 import { Form } from "antd";
 
-const meta: Meta<typeof Select> = {
+type SelectStoryProps = React.ComponentProps<typeof Select> & {
+  focus?: boolean;
+  hover?: boolean;
+  active?: boolean;
+};
+const meta: Meta<SelectStoryProps> = {
   title: "Components/Select",
   component: Select,
   tags: ["autodocs"],
@@ -26,9 +31,7 @@ Componente de seleção (Select) baseado no [Ant Design Select](https://ant.desi
       },
     },
   },
-  args: {
-    style: { width: "100%" },
-  },
+
   argTypes: {
     dsSize: {
       control: "select",
@@ -65,21 +68,13 @@ Componente de seleção (Select) baseado no [Ant Design Select](https://ant.desi
     ),
   ],
   render: (args) => {
-    // @ts-ignore
     const { focus, hover, style, ...props } = args;
     const mergedStyle = { ...style };
 
-    // Simulação visual de Focus para o Storybook
     if (focus) {
-      // O input do Select é interno, mas podemos simular o anel de foco no container
-      // Como o Select do AntD é complexo, aplicamos uma sombra no container principal
-      // via inline style se possível, ou usamos a prop de estilo do componente
-      // Nota: O Select aplica estilos em elementos internos (.ant-select-selector)
-      // Aqui forçamos via box-shadow no style wrapper para efeito visual nos docs
-      // (Isso é apenas para visualização, o componente real usa tokens)
       mergedStyle.boxShadow =
         props.status === "error" ? shadow.focusError : shadow.focus;
-      mergedStyle.borderRadius = "8px"; // Ajuste fino para matching visual se necessário
+      mergedStyle.borderRadius = "8px";
     }
 
     return (
@@ -91,7 +86,7 @@ Componente de seleção (Select) baseado no [Ant Design Select](https://ant.desi
 };
 
 export default meta;
-type Story = StoryObj<typeof Select>;
+type Story = StoryObj<SelectStoryProps>;
 
 const options = [
   { value: "option1", label: "Option 1" },

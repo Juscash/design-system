@@ -74,9 +74,9 @@ function getSizeTokens(dsSize?: SelectSize): {
 }
 
 const baseTokens: Partial<ComponentToken> = {
-  activeBorderColor: "transparent",
-  hoverBorderColor: "transparent",
-  activeOutlineColor: "transparent",
+  activeBorderColor: designSystemColors.neutral[300],
+  hoverBorderColor: designSystemColors.neutral[300],
+  activeOutlineColor: designSystemColors.neutral[300],
 
   optionFontSize: 13,
 };
@@ -102,7 +102,6 @@ export function Select(props: SelectProps): React.ReactElement {
   >(value ?? defaultValue);
   const resolvedSize = size ? mapToDsSize(size) : dsSize;
   const sizeTokens = getSizeTokens(resolvedSize);
-  const combinedClassName = `ds-input-outline ${className || ""}`.trim();
 
   const isMultiple = rest.mode === "multiple" || rest.mode === "tags";
 
@@ -145,7 +144,7 @@ export function Select(props: SelectProps): React.ReactElement {
         },
         token: {
           ...sizeTokens.globalToken,
-          colorBorder: "transparent",
+          colorBorder: designSystemColors.neutral[300],
           colorError: designSystemColors.feedback.red[500],
           colorTextDisabled: designSystemColors.neutral[400],
           colorBgContainerDisabled: designSystemColors.neutral[50],
@@ -158,7 +157,7 @@ export function Select(props: SelectProps): React.ReactElement {
         {...rest}
         status={status}
         maxTagCount={maxTagCount}
-        className={combinedClassName}
+        className={className}
         suffixIcon={suffixIcon ?? <ChevronsUpDown size={16} />}
         menuItemSelectedIcon={
           isMultiple ? null : (
