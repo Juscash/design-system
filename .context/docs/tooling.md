@@ -59,11 +59,8 @@ get_design_context({ nodeId });
 Bundler usado para gerar o pacote:
 
 ```bash
-# Build
-npm run build
-
-# Dev mode com watch
-npm run dev
+# Build da biblioteca
+npm run build:design-system
 ```
 
 **Configuração** (`tsup.config.ts`):
@@ -80,10 +77,22 @@ export default defineConfig({
 
 ```
 dist/
-├── index.js      # ESM
-├── index.cjs     # CommonJS
+├── index.js      # CommonJS
+├── index.mjs     # ESM
 ├── index.d.ts    # TypeScript definitions
+├── index.d.mts   # TypeScript definitions (ESM)
+├── index.css     # Tokens globais
 └── ...
+```
+
+### Storybook (docs)
+
+```bash
+# Rodar vitrine
+npm run dev:docs
+
+# Build da vitrine
+npm run build:docs
 ```
 
 ---
@@ -100,6 +109,10 @@ packages/design-system/
 ├── package.json
 ├── tsconfig.json
 └── tsup.config.ts
+
+docs/
+├── .storybook/        # Config do Storybook
+└── storybook-static/  # Build da vitrine
 ```
 
 ---
@@ -109,22 +122,19 @@ packages/design-system/
 ### Executar Testes
 
 ```bash
-# Todos os testes
-npm test
+# Testes do design-system
+npm run test -w @Juscash/design-system
 
-# Com coverage
-npm run test:coverage
-
-# Watch mode
-npm run test:watch
+# Rodar uma vez (CI local)
+npm run test:run -w @Juscash/design-system
 ```
 
 ### Estrutura de Testes
 
 ```
-src/components/__tests__/
-├── Button.test.tsx
-├── Input.test.tsx
+src/components/
+├── Button/Button.test.tsx
+├── Input/Input.test.tsx
 └── ...
 ```
 
@@ -136,10 +146,12 @@ src/components/__tests__/
 
 | Script | Comando | Descrição |
 |--------|---------|-----------|
-| `build` | `tsup` | Build para produção |
-| `dev` | `tsup --watch` | Build com watch |
-| `lint` | `eslint src` | Verificar código |
-| `type-check` | `tsc --noEmit` | Verificar tipos |
+| `build` | `npm run build -w @Juscash/design-system && npm run build-storybook -w @Juscash/storybook` | Build total |
+| `build:design-system` | `npm run build -w @Juscash/design-system` | Build da biblioteca |
+| `build:docs` | `npm run build-storybook -w @Juscash/storybook` | Build da vitrine |
+| `dev:docs` | `node scripts/kill-port-6006.js && npm run storybook -w @Juscash/storybook` | Storybook local |
+| `lint` | `echo "no lint configured"` | Lint placeholder |
+| `test` | `echo "no tests configured"` | Test placeholder |
 
 ---
 

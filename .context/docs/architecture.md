@@ -18,10 +18,26 @@ scaffoldVersion: "2.0.0"
 packages/design-system/
 ├── src/
 │   ├── components/           # Componentes React
-│   │   ├── Button.tsx        # Componente de botão
-│   │   ├── Input.tsx         # Campo de entrada
-│   │   ├── Select.tsx        # Seletor
-│   │   ├── Table.tsx         # Tabela de dados
+│   │   ├── Button/
+│   │   │   ├── Button.tsx        # Componente
+│   │   │   ├── Button.test.tsx   # Teste
+│   │   │   ├── Button.stories.tsx # Storybook
+│   │   │   └── index.ts          # Export local
+│   │   ├── Input/
+│   │   │   ├── Input.tsx
+│   │   │   ├── Input.test.tsx
+│   │   │   ├── Input.stories.tsx
+│   │   │   └── index.ts
+│   │   ├── Select/
+│   │   │   ├── Select.tsx
+│   │   │   ├── Select.test.tsx
+│   │   │   ├── Select.stories.tsx
+│   │   │   └── index.ts
+│   │   ├── Table/
+│   │   │   ├── Table.tsx
+│   │   │   ├── Table.test.tsx
+│   │   │   ├── Table.stories.tsx
+│   │   │   └── index.ts
 │   │   ├── index.ts          # Re-exports
 │   │   └── ...
 │   ├── theme/                # Sistema de tokens
@@ -39,6 +55,10 @@ packages/design-system/
 ├── package.json
 ├── tsconfig.json
 └── tsup.config.ts            # Build config
+
+docs/
+├── .storybook/               # Config do Storybook
+└── storybook-static/         # Build da vitrine
 ```
 
 ---
@@ -177,15 +197,17 @@ type CleanAntdProps = Omit<AntdProps, "size">;
 | `tsup` | Bundler (ESM + CJS) |
 | `TypeScript` | Tipagem |
 | `React 18+` | Framework |
-| `Ant Design` | Componentes base |
+| `Ant Design` | Componentes base (v6) |
 
 ### Output
 
 ```
 dist/
-├── index.js      # ESM
-├── index.cjs     # CommonJS
+├── index.js      # CommonJS
+├── index.mjs     # ESM
 ├── index.d.ts    # Types
+├── index.d.mts   # Types (ESM)
+├── index.css     # Tokens globais
 └── ...
 ```
 
@@ -202,8 +224,8 @@ import { Button, Input, designSystemColors } from "@juscash/design-system";
 
 | Pacote | Versão | Uso |
 |--------|--------|-----|
-| `antd` | 5.x | Componentes base |
-| `react` | 18.x | Framework |
+| `antd` | 6.x | Componentes base |
+| `react` | 18.x/19.x | Framework |
 | `lucide-react` | latest | Ícones |
 
 ---

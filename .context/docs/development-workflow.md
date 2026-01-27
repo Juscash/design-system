@@ -19,8 +19,8 @@ scaffoldVersion: "2.0.0"
 ### Visão Geral
 
 ```
-1. Perguntas    →  2. Design Figma  →  3. Implementação  →  4. Validação  →  5. Export
-   (Clarificar)     (Obter specs)       (Código)            (Review)         (Index)
+1. Perguntas    →  2. Figma + Antd Docs  →  3. Implementação  →  4. Validação  →  5. Export
+   (Clarificar)     (Specs reais)          (Código)            (Review)         (Index)
 ```
 
 ### Passo a Passo
@@ -33,30 +33,33 @@ Antes de criar qualquer componente, responder:
 |----------|---------|
 | Nome do componente? | `Avatar` |
 | Componente base Antd? | `Avatar` do antd |
-| Propósito? | Mostrar foto de usuário |
-| Variantes necessárias? | circular, quadrado |
+| Link do Figma? | URL do node |
+| Link da doc Antd? | URL do componente |
+| Classificacao? | entrada, acao, layout, feedback, tipografia |
+| Variantes extras? | validar com o Figma |
 | Props customizadas? | `dsSize`, `bordered` |
-| Tem design no Figma? | Link ou nodeId |
 
-#### 2️⃣ Design do Figma (se disponível)
+#### 2️⃣ Figma + Doc Antd
 
 ```bash
 # 1. Extrair nodeId do link
 # figma.com/design/xxx?node-id=123-456 → 123:456
 
-# 2. Usar ferramentas MCP
+# 2. Usar ferramentas MCP (fonte da verdade)
 get_design_context({ nodeId: "123:456" })
 get_screenshot({ nodeId: "123:456" })
 get_variable_defs({ nodeId: "123:456" })
 
-# 3. Mapear cores/espaçamentos para tokens do DS
+# 3. Conferir props e slots na doc do Antd
+# 4. Mapear cores/espaçamentos para tokens do DS
 ```
 
 #### 3️⃣ Implementação
 
-**Localização:** `packages/design-system/src/components/NomeComponente.tsx`
+**Localização:** `packages/design-system/src/components/NomeComponente/`
 
 ```typescript
+// packages/design-system/src/components/NomeComponente/NomeComponente.tsx
 "use client";
 
 import React from "react";
@@ -88,6 +91,21 @@ export function Componente(props: ComponenteProps) {
 Componente.displayName = "Componente";
 ```
 
+```typescript
+// packages/design-system/src/components/NomeComponente/index.ts
+export * from "./NomeComponente";
+```
+
+```typescript
+// packages/design-system/src/components/NomeComponente/NomeComponente.stories.tsx
+// Storybook do componente
+```
+
+```typescript
+// packages/design-system/src/components/NomeComponente/NomeComponente.test.tsx
+// Testes do componente
+```
+
 #### 4️⃣ Validação
 
 Checklist antes de finalizar:
@@ -112,28 +130,29 @@ export * from "./NomeComponente";
 
 | Tipo | Localização |
 |------|-------------|
-| Componente | `packages/design-system/src/components/Nome.tsx` |
-| Testes | `packages/design-system/src/components/__tests__/Nome.test.tsx` |
+| Componente | `packages/design-system/src/components/Nome/Nome.tsx` |
+| Stories | `packages/design-system/src/components/Nome/Nome.stories.tsx` |
+| Testes | `packages/design-system/src/components/Nome/Nome.test.tsx` |
 | Tokens | `packages/design-system/src/theme/foundations/` |
 
 ---
 
 ## 🏷️ Commits
 
-Usar padrão **Gitmoji** sem scopes, em português:
+Usar **Conventional Commits** com escopo, em português:
 
 ```bash
 # Novo componente
-✨ feat: cria componente Avatar no design system
+feat(components): cria componente Avatar no design system
 
 # Correção
-🐛 fix: corrige estilos do Button quando disabled
+fix(components): corrige estilos do Button quando disabled
 
 # Refatoração
-♻️ refactor: simplifica lógica de tokens do Input
+refactor(tokens): simplifica lógica de tokens do Input
 
 # Documentação
-📚 docs: documenta props do componente Select
+docs(architecture): documenta props do componente Select
 ```
 
 ---
@@ -173,14 +192,11 @@ Usar padrão **Gitmoji** sem scopes, em português:
 ### Executar
 
 ```bash
-# Todos os testes
-npm test
+# Testes do design-system
+npm run test -w @Juscash/design-system
 
-# Específico
-npm test Button
-
-# Watch mode
-npm test -- --watch
+# Rodar uma vez (CI local)
+npm run test:run -w @Juscash/design-system
 ```
 
 ### O que testar
@@ -196,11 +212,11 @@ npm test -- --watch
 ## 📦 Build
 
 ```bash
-# Build normal
+# Build do monorepo
 npm run build
 
-# Watch mode (dev)
-npm run dev
+# Build apenas da biblioteca
+npm run build:design-system
 ```
 
 ### Output esperado

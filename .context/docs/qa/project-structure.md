@@ -9,8 +9,10 @@ generatedAt: 2026-01-21T16:57:36.816Z
 ## Project Structure
 
 ```
-apps/
+.changeset/
+.github/
 assets/
+docs/
 documentacao/
 packages/
 scripts/

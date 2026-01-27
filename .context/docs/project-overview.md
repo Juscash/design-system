@@ -16,7 +16,7 @@ scaffoldVersion: "2.0.0"
 
 O **JusCash Design System** é uma biblioteca de componentes React/TypeScript que:
 
-- Estende componentes do **Ant Design 5.x**
+- Estende componentes do **Ant Design 6.x**
 - Aplica a identidade visual JusCash via **tokens de design**
 - Garante consistência entre todos os produtos da empresa
 - Oferece APIs simplificadas e tipagem completa
@@ -46,11 +46,9 @@ design_juscash/
 │       │   └── index.ts        # Entry point
 │       └── dist/               # Build output
 │
-├── apps/
-│   └── docs/                   # App de documentação visual
-│       └── src/
-│           └── sections/
-│               └── components/ # Showcases de componentes
+├── docs/                       # Workspace Storybook
+│   ├── .storybook/             # Config do Storybook
+│   └── storybook-static/       # Build da vitrine
 │
 └── .context/                   # Contexto para AI agents
     ├── docs/                   # Documentação técnica
@@ -119,11 +117,11 @@ shadow.m    // Sombra média
 
 | Tecnologia | Versão | Uso |
 |------------|--------|-----|
-| React | 18.x | Framework UI |
+| React | 18.x/19.x | Framework UI |
 | TypeScript | 5.x | Tipagem |
-| Ant Design | 5.x | Componentes base |
+| Ant Design | 6.x | Componentes base |
 | tsup | latest | Bundler |
-| Vite | latest | Dev server (docs) |
+| Storybook | 10.x | Vitrine dos componentes |
 
 ---
 
@@ -146,11 +144,11 @@ shadow.m    // Sombra média
 # Instalar dependências
 npm install
 
-# Desenvolver biblioteca
-cd packages/design-system && npm run dev
+# Rodar vitrine (Storybook)
+npm run dev:docs
 
-# Rodar docs
-cd apps/docs && npm run dev
+# Build da biblioteca
+npm run build:design-system
 ```
 
 ---
