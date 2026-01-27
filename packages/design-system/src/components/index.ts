@@ -22,3 +22,4 @@ export * from "./Popover";
 export * from "./Tabs";
 export * from "./Modal";
 export * from "./ConfirmModal";
+export * from "./DatePicker";

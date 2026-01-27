@@ -248,3 +248,45 @@
 .ds-neutral .ant-radio .ant-radio-inner {
   box-shadow: 0px 0px 0px 3px #d4d4d4 !important
 }
+
+/* DatePicker compact style overrides */
+.range-picker-compact.ant-picker {
+  width: auto !important;
+}
+
+/* os 2 inputs não pegam largura 100% */
+.range-picker-compact .ant-picker-input {
+  width: auto !important;
+}
+
+/* largura aproximada do texto da data (11/11/2025 = 10 caracteres) */
+.range-picker-compact .ant-picker-input>input {
+  width: 10ch !important;
+}
+
+/* diminui espaço entre as duas datas */
+.ant-picker-range-separator {
+  margin: 0 !important;
+  margin-right: 5px !important;
+}
+
+.ant-picker-month-btn {
+  font-family: "Inter" !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  color: #262626 !important;
+}
+
+.ant-picker-year-btn {
+  font-family: "Inter" !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  color: #262626 !important;
+}
+
+.ant-picker-quarter-btn {
+  font-family: "Inter" !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  color: #262626 !important;
+}

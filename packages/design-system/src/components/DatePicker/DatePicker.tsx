@@ -1,0 +1,174 @@
+"use client";
+
+import React from "react";
+import {
+  DatePicker as AntdDatePicker,
+  ConfigProvider,
+  type TimeRangePickerProps,
+} from "antd";
+import type { DatePickerProps as AntdDatePickerProps } from "antd";
+import ptBR from "antd/locale/pt_BR";
+import type { ThemeConfig } from "antd";
+import { ChevronRight, Calendar, ChevronLeft } from "lucide-react";
+import { designSystemColors, radius } from "../../theme";
+
+// ============================================
+// TYPES
+// ============================================
+
+export type DatePickerProps = AntdDatePickerProps;
+export type RangePickerProps = TimeRangePickerProps;
+
+const { RangePicker: AntdRangePicker } = AntdDatePicker;
+
+// ============================================
+// THEME CONFIG
+// ============================================
+
+const datePickerTheme: ThemeConfig = {
+  token: {
+    colorPrimary: designSystemColors.brand.primary[500],
+    fontFamily: '"Inter", sans-serif',
+  },
+  components: {
+    DatePicker: {
+      colorTextPlaceholder: designSystemColors.neutral[500], // Aproximação de #6D6D6E
+      colorIcon: designSystemColors.neutral[500],
+      cellActiveWithRangeBg: designSystemColors.neutral[200], // #E5E5E5
+      colorIconHover: designSystemColors.neutral[700],
+    },
+  },
+};
+
+const datePickerLocale = ptBR.DatePicker
+  ? {
+      ...ptBR.DatePicker,
+      lang: {
+        ...ptBR.DatePicker.lang,
+        monthFormat: "MMMM",
+      },
+      timePickerLocale:
+        ptBR.DatePicker.timePickerLocale ??
+        ptBR.TimePicker ??
+        ({} as NonNullable<typeof ptBR.TimePicker>),
+    }
+  : undefined;
+
+// ============================================
+// COMPONENTS
+// ============================================
+
+export const DatePicker: React.FC<DatePickerProps> = ({
+  allowClear = false,
+  ...rest
+}) => {
+  return (
+    <ConfigProvider theme={datePickerTheme}>
+      <AntdDatePicker
+        {...rest}
+        locale={datePickerLocale}
+        allowClear={allowClear}
+        suffixIcon={null}
+        prefix={
+          <Calendar
+            size={16}
+            color={designSystemColors.neutral[500]}
+            style={{ marginRight: 8, marginLeft: 4 }}
+          />
+        }
+        prevIcon={
+          <div
+            style={{
+              borderRadius: radius.xl, // 8px
+              border: `1px solid ${designSystemColors.neutral[300]}`, // #D4D4D4
+              width: 28,
+              height: 28,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <ChevronLeft size={16} color={designSystemColors.neutral[500]} />
+          </div>
+        }
+        nextIcon={
+          <div
+            style={{
+              borderRadius: radius.xl, // 8px
+              border: `1px solid ${designSystemColors.neutral[300]}`, // #D4D4D4
+              width: 28,
+              height: 28,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <ChevronRight size={16} color={designSystemColors.neutral[500]} />
+          </div>
+        }
+        superNextIcon={null}
+        superPrevIcon={null}
+      />
+    </ConfigProvider>
+  );
+};
+
+DatePicker.displayName = "DatePicker";
+
+export const RangePicker: React.FC<RangePickerProps> = ({
+  allowClear = false,
+  ...rest
+}) => {
+  return (
+    <ConfigProvider theme={datePickerTheme}>
+      <AntdRangePicker
+        className="range-picker-compact"
+        {...rest}
+        allowClear={allowClear}
+        locale={datePickerLocale}
+        suffixIcon={null}
+        prefix={
+          <Calendar
+            size={16}
+            color={designSystemColors.neutral[500]}
+            style={{ marginRight: 4 }}
+          />
+        }
+        prevIcon={
+          <div
+            style={{
+              borderRadius: radius.xl, // 8px
+              border: `1px solid ${designSystemColors.neutral[300]}`, // #D4D4D4
+              width: 28,
+              height: 28,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <ChevronLeft size={16} color={designSystemColors.neutral[500]} />
+          </div>
+        }
+        nextIcon={
+          <div
+            style={{
+              borderRadius: radius.xl, // 8px
+              border: `1px solid ${designSystemColors.neutral[300]}`, // #D4D4D4
+              width: 28,
+              height: 28,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+            }}
+          >
+            <ChevronRight size={16} color={designSystemColors.neutral[500]} />
+          </div>
+        }
+        superNextIcon={null}
+        superPrevIcon={null}
+      />
+    </ConfigProvider>
+  );
+};
+
+RangePicker.displayName = "RangePicker";
