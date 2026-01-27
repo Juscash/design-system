@@ -67,9 +67,17 @@ npm run build:design-system
 ```typescript
 export default defineConfig({
   entry: ["src/index.ts"],
-  format: ["esm", "cjs"],
+  format: ["cjs", "esm"],
   dts: true,
+  sourcemap: true,
   clean: true,
+  splitting: false,
+  treeshake: true,
+  minify: false,
+  target: "es2018",
+  external: ["react", "react-dom", "antd", "@ant-design/cssinjs"],
+  platform: "browser",
+  injectStyle: true,
 });
 ```
 
@@ -84,6 +92,8 @@ dist/
 ├── index.css     # Tokens globais
 └── ...
 ```
+
+O build copia `src/theme/global.css` para `dist/index.css`.
 
 ### Storybook (docs)
 

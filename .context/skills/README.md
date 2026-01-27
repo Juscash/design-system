@@ -24,8 +24,6 @@ On-demand expertise for AI agents. Skills are task-specific procedures that get 
 | [Refactoring](./refactoring/SKILL.md) | Safe code refactoring with step-by-step approach | E |
 | [Bug Investigation](./bug-investigation/SKILL.md) | Systematic bug investigation and root cause analysis | E, V |
 | [Feature Breakdown](./feature-breakdown/SKILL.md) | Break down features into implementable tasks | P |
-| [Api Design](./api-design/SKILL.md) | Design RESTful APIs following best practices | P, R |
-| [Security Audit](./security-audit/SKILL.md) | Security review checklist for code and infrastructure | R, V |
 
 ### 🎨 Custom Skills (Projeto JusCash)
 
