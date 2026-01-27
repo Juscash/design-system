@@ -1,3 +1,4 @@
+export * from "./Breadcrumb";
 export * from "./Alert";
 export * from "./Button";
 export * from "./Typography";
@@ -18,3 +19,4 @@ export * from "./FormItem";
 export * from "./Collapse";
 export * from "./Notification";
 export * from "./Popover";
+export * from "./Tabs";
