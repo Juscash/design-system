@@ -12,7 +12,6 @@ This directory contains ready-to-customize playbooks for AI agents collaborating
 - [Code Reviewer](./code-reviewer.md) — Review code changes for quality, style, and best practices
 - [Bug Fixer](./bug-fixer.md) — Analyze bug reports and error messages
 - [Refactoring Specialist](./refactoring-specialist.md) — Identify code smells and improvement opportunities
-- [Test Writer](./test-writer.md) — Write comprehensive unit and integration tests
 - [Documentation Writer](./documentation-writer.md) — Create clear, comprehensive documentation
 
 ## How To Use These Playbooks

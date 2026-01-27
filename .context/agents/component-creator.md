@@ -9,9 +9,9 @@ status: filled
 scaffoldVersion: "2.0.0"
 ---
 
-# 🎨 Component Creator - Agente Especialista
+# 🎨 Component Creator - Agente Orquestrador
 
-> Agente especializado na criação de componentes para o Design System JusCash. Segue padrões rígidos, faz perguntas antes de implementar, e integra com Figma MCP.
+> Agente orquestrador para criar componentes do Design System JusCash. Usa skills por fase, segue padrões rígidos e usa o Figma como fonte da verdade.
 
 ## 🎯 Missão
 
@@ -30,41 +30,46 @@ Criar componentes React/TypeScript que:
 - `run-tests`
 - `docs-architecture-update`
 
+## 🧭 Fluxo orquestrado por skills
+
+1. **Coleta minima** → `figma-mcp`
+2. **Sugestoes e confirmacao** → perguntas guiadas pelo Figma
+3. **Implementacao do componente** → `component-creation`
+4. **Stories** → `story-creation`
+5. **Testes** → `test-creation` + `run-tests`
+6. **Docs/arquitetura (se necessario)** → `docs-architecture-update`
+
 ---
 
-## ❓ FASE 1: Perguntas Obrigatórias
+## 🔎 FASE 1: Coleta minima (antes das perguntas)
 
-**ANTES de escrever qualquer código, SEMPRE faça estas perguntas:**
+**ANTES de escrever qualquer codigo, coletar o minimo para analisar o Figma.**
 
-### Perguntas Essenciais
+### Entradas minimas
 
 | # | Pergunta | Exemplo de Resposta |
 |---|----------|---------------------|
-| 1 | **Qual o nome do componente?** (PascalCase) | `Tooltip`, `Breadcrumb`, `Avatar` |
-| 2 | **Qual componente do Antd será a base?** | `Tooltip`, `Breadcrumb`, `Avatar` do antd |
-| 3 | **Link do Figma (node)?** | URL com `node-id` |
-| 4 | **Link da doc do Antd?** | URL do componente |
-| 5 | **Classificação?** | entrada, acao, layout, feedback, tipografia |
-| 6 | **Props extras?** (apenas se o Figma exigir) | `dsSize`, `variant` |
+| 1 | **Link do Figma (node)?** | URL com `node-id` |
+| 2 | **Link da doc do Antd?** | URL do componente |
+| 3 | **Nome do componente?** (PascalCase) | `Tooltip`, `Breadcrumb`, `Avatar` |
+| 4 | **Componente base do Antd?** | `Tooltip`, `Breadcrumb`, `Avatar` |
 
-### Template de Perguntas
+### Template de coleta minima
 
 ```markdown
-Vou criar o componente para você! Antes, preciso de algumas informações:
+Vou criar o componente para voce! Antes, preciso do minimo para analisar o Figma:
 
-1. 📛 **Nome do componente:** (ex: Tooltip, Avatar, Badge)
-2. 🧱 **Componente base do Antd:** Qual componente do Ant Design será estendido?
-3. 🖼️ **Link do Figma (node):** URL com `node-id`
-4. 📚 **Link da doc do Antd:** URL do componente
-5. 🧭 **Classificação:** entrada, acao, layout, feedback, tipografia
-6. ⚙️ **Props extras:** Só se o Figma exigir algo além do Antd
+1. 🖼️ **Link do Figma (node):** URL com `node-id`
+2. 📚 **Link da doc do Antd:** URL do componente
+3. 📛 **Nome do componente:** (ex: Tooltip, Avatar, Badge)
+4. 🧱 **Componente base do Antd:** Qual componente do Ant Design sera estendido?
 ```
 
 ---
 
 ## 🖼️ FASE 2: Figma MCP + Doc Antd
 
-Use o Figma como fonte da verdade e consulte a doc do Antd antes de implementar:
+Use o Figma como fonte da verdade e consulte a doc do Antd antes de perguntar variantes:
 
 ### Ferramentas Disponíveis
 
@@ -88,158 +93,32 @@ get_variable_defs:
 
 ### Workflow de Uso
 
-1. **Extrair nodeId** do link Figma (formato: `123:456` ou `123-456`)
-2. **Chamar `get_design_context`** para obter informações do design
-3. **Chamar `get_screenshot`** para validar visual
-4. **Chamar `get_variable_defs`** para mapear tokens
-5. **Inferir variantes e estados** diretamente do Figma
-6. **Consultar a doc do Antd** para props/slots necessários
-7. **Mapear** para tokens do design system (`designSystemColors`, `spacing`, `radius`)
-8. **Só perguntar variantes extras** se o Figma estiver ambíguo
+1. **Usar a skill `figma-mcp`** para extrair specs e variacoes.
+2. **Consultar a doc do Antd** para props/slots necessarios.
+3. **Mapear tokens** para o design system (`designSystemColors`, `spacing`, `radius`).
+4. **Gerar sugestoes** de props e variantes com base no Figma.
 
 ---
 
-## 🏗️ FASE 3: Implementação do Componente
+## ❓ FASE 3: Perguntas guiadas pelo Figma
 
-### Localização Obrigatória
+Depois da analise do Figma, fazer apenas as perguntas necessarias:
 
-```
-packages/design-system/src/components/NomeComponente/
-├── NomeComponente.tsx
-├── NomeComponente.stories.tsx
-├── NomeComponente.test.tsx
-└── index.ts
-```
+- Classificacao (entrada, acao, layout, feedback, tipografia) se nao estiver clara.
+- Confirmar variantes sugeridas pelo Figma.
+- Props extras somente se o Figma indicar.
 
-### Template de Componente
+## 🏗️ FASE 4: Implementacao do Componente
 
-```typescript
-// packages/design-system/src/components/NomeComponente/NomeComponente.tsx
-"use client";
+### Padrao do componente (orquestrado por skill)
 
-import React from "react";
-import {
-  NomeComponente as AntdNomeComponente,
-  ConfigProvider,
-} from "antd";
-import type { NomeComponenteProps as AntdNomeComponenteProps } from "antd";
-import type { ComponentToken } from "antd/es/nome-componente/style/token";
-import { designSystemColors, radius, spacing } from "../../theme";
-
-// ============================================
-// TYPES
-// ============================================
-
-type NomeComponenteSize = "xs" | "s" | "m" | "l";
-
-type CleanAntdProps = {
-  [K in keyof AntdNomeComponenteProps as K extends "size" | "type"
-    ? never
-    : K]: AntdNomeComponenteProps[K];
-};
-
-export type NomeComponenteProps = CleanAntdProps & {
-  dsSize?: NomeComponenteSize;
-  size?: AntdNomeComponenteProps["size"];
-  variant?: "primary" | "secondary" | "neutral";
-};
-
-// ============================================
-// TOKEN FUNCTIONS
-// ============================================
-
-function getPrimaryTokens(): Partial<ComponentToken> {
-  return {
-    colorPrimary: designSystemColors.brand.primary[600],
-    colorPrimaryHover: designSystemColors.brand.primary[800],
-    // ... outros tokens
-  };
-}
-
-function getSecondaryTokens(): Partial<ComponentToken> {
-  return {
-    colorPrimary: designSystemColors.brand.secondary[700],
-    colorPrimaryHover: designSystemColors.brand.secondary[800],
-    // ... outros tokens
-  };
-}
-
-function getSizeTokens(dsSize?: NomeComponenteSize): Partial<ComponentToken> {
-  if (dsSize === "xs") {
-    return {
-      fontSize: 10,
-      controlHeight: 24,
-      paddingInline: spacing[2],
-      borderRadius: radius.md,
-    };
-  }
-  if (dsSize === "s") {
-    return {
-      fontSize: 13,
-      controlHeight: 32,
-      paddingInline: spacing[3],
-      borderRadius: radius.xl,
-    };
-  }
-  // ... outros tamanhos
-  return {};
-}
-
-// ============================================
-// COMPONENT
-// ============================================
-
-export function NomeComponente(props: NomeComponenteProps): React.ReactElement {
-  const { variant = "primary", dsSize = "m", size, ...rest } = props;
-
-  const resolvedSize = size ? mapToSize(size) : dsSize;
-  const sizeTokens = getSizeTokens(resolvedSize);
-
-  const getTokens = () => {
-    switch (variant) {
-      case "primary":
-        return getPrimaryTokens();
-      case "secondary":
-        return getSecondaryTokens();
-      default:
-        return {};
-    }
-  };
-
-  return (
-    <ConfigProvider
-      theme={{
-        components: {
-          NomeComponente: { ...getTokens(), ...sizeTokens },
-        },
-      }}
-    >
-      <AntdNomeComponente {...rest} />
-    </ConfigProvider>
-  );
-}
-
-NomeComponente.displayName = "NomeComponente";
-```
-
-```typescript
-// packages/design-system/src/components/NomeComponente/index.ts
-export * from "./NomeComponente";
-```
-
-```typescript
-// packages/design-system/src/components/NomeComponente/NomeComponente.stories.tsx
-// Storybook com exemplos fiéis ao Figma
-```
-
-```typescript
-// packages/design-system/src/components/NomeComponente/NomeComponente.test.tsx
-// Tests com React Testing Library + Vitest
-```
+- Use a skill `component-creation` para o template, estrutura e regras de codigo.
+- O componente deve refletir o Figma como fonte da verdade.
+- Stories e testes sao obrigatorios e devem usar as skills dedicadas.
 
 ---
 
-## ✅ FASE 4: Checklist de Validação
+## ✅ FASE 5: Checklist de Validacao
 
 Antes de finalizar, verificar TODOS os itens:
 
@@ -264,15 +143,20 @@ Antes de finalizar, verificar TODOS os itens:
 - [ ] Export adicionado em `components/index.ts`
 
 ### Storybook
+- [ ] Usou a skill `story-creation`
 - [ ] Stories baseadas no Figma
 - [ ] Props principais e props criadas expostas no story
 - [ ] `argTypes` definidos para props criadas
 
 ### Testes
+- [ ] Usou a skill `test-creation`
 - [ ] React Testing Library + Vitest
-- [ ] Render básico
-- [ ] Variação do Figma coberta
+- [ ] Render basico
+- [ ] Variacao do Figma coberta
 - [ ] Props criadas testadas
+
+### Docs e Arquitetura
+- [ ] Se houve mudanca de estrutura, usou a skill `docs-architecture-update`
 
 ### Funcionamento
 - [ ] Componente renderiza corretamente
@@ -281,50 +165,9 @@ Antes de finalizar, verificar TODOS os itens:
 
 ---
 
-## 📚 Tokens Disponíveis
-
-### Cores
-
-```typescript
-// Brand
-designSystemColors.brand.primary[50-900]
-designSystemColors.brand.secondary[50-900]
-
-// Neutral
-designSystemColors.neutral[50-900]
-
-// Feedback
-designSystemColors.feedback.red[50-900]
-designSystemColors.feedback.green[50-900]
-designSystemColors.feedback.yellow[50-900]
-designSystemColors.feedback.blue[50-900]
-```
-
-### Spacing
-
-```typescript
-spacing[1]  // 4px
-spacing[2]  // 8px
-spacing[3]  // 12px
-spacing[4]  // 16px
-spacing[5]  // 20px
-spacing[6]  // 24px
-// ... até spacing[24]
-```
-
-### Radius
-
-```typescript
-radius.md    // 4px
-radius.xl    // 8px
-radius["2xl"] // 12px
-radius["3xl"] // 16px
-radius.full  // 9999px
-```
-
 ---
 
-## 🔄 Atualização do Index
+## 🔄 Atualizacao do Index
 
 Após criar o componente, **SEMPRE** adicionar export em:
 
@@ -343,25 +186,31 @@ export * from "./NomeComponente";
 ```markdown
 Vou criar o componente Avatar para você! Antes, preciso de algumas informações:
 
-1. 📛 **Nome do componente:** Avatar (confirmado)
-2. 🧱 **Componente base do Antd:** `Avatar` do antd
-3. 🖼️ **Link do Figma (node):** figma.com/design/xxx?node-id=123-456
-4. 📚 **Link da doc do Antd:** ant.design/components/avatar
-5. 🧭 **Classificação:** display
-6. ⚙️ **Props extras:** Nenhuma (Figma não exige)
+1. 🖼️ **Link do Figma (node):** figma.com/design/xxx?node-id=123-456
+2. 📚 **Link da doc do Antd:** ant.design/components/avatar
+3. 📛 **Nome do componente:** Avatar
+4. 🧱 **Componente base do Antd:** Avatar
 ```
 
 **Usuário:** "Figma: figma.com/design/xxx?node-id=123-456, doc Antd: ant.design/components/avatar"
 
 **Agente:** 
-1. Usa `get_design_context` com nodeId `123:456`
-2. Usa `get_screenshot` e `get_variable_defs`
-3. Infere variantes e estados do Figma
-4. Mapeia para tokens do design system
-5. Cria `packages/design-system/src/components/Avatar/Avatar.tsx`
-6. Cria `Avatar.stories.tsx` e `Avatar.test.tsx`
-7. Atualiza `components/index.ts`
-8. Apresenta o código final
+1. Usa a skill `figma-mcp` para extrair specs
+2. Sugere variantes e props com base no Figma
+3. Confirma apenas o que estiver ambiguo
+4. Usa a skill `component-creation` para criar o componente
+5. Usa as skills `story-creation` e `test-creation`
+6. Usa a skill `run-tests`
+7. Se mudou estrutura, usa `docs-architecture-update`
+8. Atualiza `components/index.ts`
+9. Apresenta o codigo final
+
+## 📌 Quando rodar docs-architecture-update
+
+Use a skill `docs-architecture-update` sempre que:
+- Criar nova pasta de componente ou mudar estrutura de arquivos.
+- Alterar padrao de stories/testes.
+- Mudar comandos de build/test.
 
 ---
 
