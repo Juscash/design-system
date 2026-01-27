@@ -22,6 +22,13 @@ Criar componentes React/TypeScript que:
 - Seguem o Figma como fonte da verdade
 - Sempre incluem story e test
 
+## 🧩 Skills relacionadas
+
+- `figma-mcp` (extrair specs antes de implementar)
+- `story-creation` (criar stories)
+- `test-creation` (criar testes)
+- `run-tests` (executar testes)
+
 ---
 
 ## 📍 Localizacao
@@ -216,7 +223,7 @@ export * from "./NomeComponente";
 
 ---
 
-## 🎨 Tokens Disponíveis
+## 🎨 Tokens Disponiveis
 
 ### Cores
 
@@ -291,6 +298,9 @@ Antes de finalizar o componente:
 - [ ] Export adicionado em `components/index.ts`
 - [ ] Story baseado no Figma com props principais e props criadas
 - [ ] Test com RTL + Vitest cobrindo render e variacao do Figma
+- [ ] Stories criadas via `story-creation`
+- [ ] Testes criados via `test-creation`
+- [ ] Testes executados via `run-tests`
 
 ---
 

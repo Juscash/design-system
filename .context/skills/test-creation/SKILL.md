@@ -1,7 +1,7 @@
 ---
 type: skill
 name: test-creation
-description: Criar testes com React Testing Library e Vitest para componentes do DS
+description: Criar testes com RTL + Vitest seguindo o padrao do repo
 skillSlug: test-creation
 phases: [E, V]
 mode: false
@@ -12,7 +12,7 @@ scaffoldVersion: "2.0.0"
 
 # ✅ Skill: test-creation
 
-> Criar testes base para componentes do Design System.
+> Criar testes base para componentes do Design System, refletindo estados do Figma.
 
 ## ✅ Quando usar
 
@@ -21,17 +21,26 @@ scaffoldVersion: "2.0.0"
 
 ## 🧭 Passos
 
-1. Testar render basico.
+1. Testar render basico (role ou texto principal).
 2. Testar uma variacao real do Figma.
-3. Testar props criadas (ex.: `dsSize`, `variant`).
-4. Evitar snapshot por padrao.
+3. Testar props criadas (ex.: `dsSize`, `variant`, `layout`).
+4. Se houver estado disabled/erro, cobrir pelo menos um.
+5. Evitar snapshot por padrao.
 
 ## ✅ Obrigatorio no test
 
 - React Testing Library + Vitest.
-- Render basico.
+- Render basico com `getByRole` ou `getByText`.
 - Variacao do Figma coberta.
 - Props criadas testadas.
+- Sem snapshot por padrao.
+
+## 🧩 Padrao real do repo
+
+- Usar `describe`/`it` do Vitest.
+- Usar `render` e `screen` do RTL.
+- Testes pequenos e diretos (sem mocks complexos).
+- Validar a UI com `getByRole` quando possivel.
 
 ## ✍️ Template base
 
@@ -42,13 +51,24 @@ import { NomeComponente } from "./NomeComponente";
 
 describe("NomeComponente", () => {
   it("renderiza no estado padrao", () => {
-    render(<NomeComponente />);
-    expect(screen.getByRole("button")).toBeInTheDocument();
+    render(<NomeComponente>Label</NomeComponente>);
+    expect(screen.getByRole("button", { name: /label/i })).toBeInTheDocument();
   });
 
   it("aplica variacao do Figma", () => {
-    render(<NomeComponente variant="secondary" />);
-    expect(screen.getByRole("button")).toBeInTheDocument();
+    render(<NomeComponente variant="secondary">Secundario</NomeComponente>);
+    expect(screen.getByRole("button", { name: /secundario/i })).toBeInTheDocument();
+  });
+
+  it("suporta props criadas", () => {
+    render(<NomeComponente dsSize="s">Size S</NomeComponente>);
+    expect(screen.getByRole("button", { name: /size s/i })).toBeInTheDocument();
   });
 });
 ```
+
+## ✅ Checklist rapido
+
+- [ ] Render basico com role/label.
+- [ ] Variacao real do Figma coberta.
+- [ ] Props criadas testadas.
