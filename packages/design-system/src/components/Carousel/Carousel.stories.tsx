@@ -1,19 +1,90 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import React from "react";
 import { Carousel } from "./Carousel";
 
-const meta: Meta<typeof Carousel> = {
+import {
+  Title,
+  Subtitle,
+  Description,
+  Primary,
+  Controls,
+  Stories,
+} from "@storybook/addon-docs/blocks";
+import { Figma } from "@storybook/addon-designs/blocks";
+
+const FIGMA_URL =
+  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4080-20929&m=dev";
+
+type CarouselStoryProps = React.ComponentProps<typeof Carousel> & {
+  hover?: boolean;
+  active?: boolean;
+  focus?: boolean;
+};
+
+const meta: Meta<CarouselStoryProps> = {
   title: "Components/Carousel",
   component: Carousel,
   parameters: {
     layout: "centered",
+    design: {
+      type: "figma",
+      url: FIGMA_URL,
+    },
     docs: {
+      codePanel: true,
       description: {
-        component:
-          "Carrossel exibe uma sequência de conteúdos que podem ser navegados horizontalmente.",
+        component: `
+Carrossel exibe uma sequência de conteúdos que podem ser navegados horizontalmente.
+Baseado no [Ant Design Carousel](https://ant.design/components/carousel).
+
+### Props:
+- **Extended (Ant Design)**: Props padrão do AntD Carousel.
+
+### Como usar:
+
+\`\`\`tsx
+import { Carousel } from "@Juscash/design-system";
+
+function Example() {
+  return <Carousel autoplay showArrows />;
+}
+\`\`\`
+`,
       },
+      page: () => (
+        <>
+          <Title />
+          <Subtitle />
+          <Description />
+
+          <Primary />
+
+          <Controls />
+
+          <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
+            <h3
+              style={{
+                marginBottom: "1rem",
+                fontSize: "1.2rem",
+                fontWeight: "bold",
+              }}
+            >
+              🎨 Figma Spec
+            </h3>
+            <Figma showLink url={FIGMA_URL} height="400px" />
+          </div>
+
+          <Stories />
+        </>
+      ),
     },
   },
   tags: ["autodocs"],
+  args: {
+    hover: false,
+    active: false,
+    focus: false,
+  },
   argTypes: {
     showArrows: {
       control: "boolean",
@@ -27,11 +98,45 @@ const meta: Meta<typeof Carousel> = {
       control: "boolean",
       description: "Reprodução automática",
     },
+    hover: {
+      control: "boolean",
+      description: "Força o estado hover",
+      table: { category: "Pseudo States" },
+    },
+    active: {
+      control: "boolean",
+      description: "Força o estado active",
+      table: { category: "Pseudo States" },
+    },
+    focus: {
+      control: "boolean",
+      description: "Força o estado focus",
+      table: { category: "Pseudo States" },
+    },
+  },
+  render: (args) => {
+    const { hover, active, focus, className, ...props } = args;
+    const pseudoClasses = [
+      hover && "pseudo-hover",
+      active && "pseudo-active",
+      focus && "pseudo-focus-visible",
+    ]
+      .filter(Boolean)
+      .join(" ");
+    const mergedClassName = [className, pseudoClasses]
+      .filter(Boolean)
+      .join(" ");
+
+    return (
+      <div style={{ width: 600 }}>
+        <Carousel {...props} className={mergedClassName} />
+      </div>
+    );
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof Carousel>;
+type Story = StoryObj<CarouselStoryProps>;
 
 const contentStyle: React.CSSProperties = {
   height: "160px",
@@ -46,19 +151,21 @@ export const Default: Story = {
   args: {
     showArrows: true,
     dots: true,
+    autoplay: true,
+
     children: (
       <>
         <div>
-          <h3 style={contentStyle}>1</h3>
+          <h3 style={{ ...contentStyle, width: "100%" }}>1</h3>
         </div>
         <div>
-          <h3 style={contentStyle}>2</h3>
+          <h3 style={{ ...contentStyle, width: "100%" }}>2</h3>
         </div>
         <div>
-          <h3 style={contentStyle}>3</h3>
+          <h3 style={{ ...contentStyle, width: "100%" }}>3</h3>
         </div>
         <div>
-          <h3 style={contentStyle}>4</h3>
+          <h3 style={{ ...contentStyle, width: "100%" }}>4</h3>
         </div>
       </>
     ),
@@ -98,7 +205,6 @@ export const WithImages: Story = {
 export const FigmaExample: Story = {
   render: () => (
     <div style={{ width: 600 }}>
-      {/* Example simulating Figma slots with text content */}
       <Carousel
         showArrows
         dots
@@ -107,7 +213,7 @@ export const FigmaExample: Story = {
         style={{ textAlign: "center" }}
       >
         {Array.from({ length: 9 }).map((_, i) => (
-          <div key={i} style={{ padding: "0 8px" }}>
+          <div key={i} style={{ padding: "0 8px", width: "100%" }}>
             <div
               style={{
                 height: 200,
@@ -117,7 +223,7 @@ export const FigmaExample: Story = {
                 display: "flex",
                 alignItems: "center",
                 justifyContent: "center",
-                margin: "0 5px", // gap simulation
+                margin: "0 5px",
               }}
             >
               Slot {i + 1}
