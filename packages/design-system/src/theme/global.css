@@ -241,12 +241,12 @@
   background-color: var(--ant-color-primary) !important;
 }
 
-.ds-radio-error .ant-radio .ant-radio-inner {
+.ds-radio-error .ant-radio .ant-radio-inner:focus-visible {
   box-shadow: 0px 0px 0px 3px rgba(210, 25, 11, 0.4) !important;
 }
 
-.ds-neutral.pseudo-focus .ant-radio .ant-radio-inner {
-  box-shadow: 0px 0px 0px 3px #d4d4d4 !important
+.ds-neutral .ant-radio-inner:focus-visible {
+  box-shadow: 0px 0px 0px 3px #d4d4d4 !important;
 }
 
 /* DatePicker compact style overrides */

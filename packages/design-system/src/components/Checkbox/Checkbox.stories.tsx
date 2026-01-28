@@ -17,6 +17,7 @@ const FIGMA_URL =
 
 type CheckboxStoryProps = React.ComponentProps<typeof Checkbox> & {
   hover?: boolean;
+  active?: boolean;
   focus?: boolean;
 };
 
@@ -28,10 +29,7 @@ const meta: Meta<CheckboxStoryProps> = {
       type: "figma",
       url: FIGMA_URL,
     },
-    pseudo: {
-      hover: true,
-      focus: true,
-    },
+
     docs: {
       codePanel: true,
       description: {
@@ -83,6 +81,11 @@ function Example() {
     },
   },
   tags: ["autodocs"],
+  args: {
+    hover: false,
+    active: false,
+    focus: false,
+  },
   argTypes: {
     disabled: {
       control: "boolean",
@@ -93,8 +96,33 @@ function Example() {
     error: {
       control: "boolean",
     },
-    hover: { control: "boolean" },
-    focus: { control: "boolean" },
+    hover: {
+      control: "boolean",
+      description: "Forca o estado hover",
+      table: { category: "Pseudo States" },
+    },
+    active: {
+      control: "boolean",
+      description: "Forca o estado active",
+      table: { category: "Pseudo States" },
+    },
+    focus: {
+      control: "boolean",
+      description: "Forca o estado focus",
+      table: { category: "Pseudo States" },
+    },
+  },
+  render: (args) => {
+    const { hover, active, focus, ...props } = args;
+    const pseudoClasses = [
+      hover && "pseudo-hover",
+      active && "pseudo-active",
+      focus && "pseudo-focus-visible",
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+    return <Checkbox {...props} className={pseudoClasses} />;
   },
 };
 

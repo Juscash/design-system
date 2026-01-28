@@ -32,12 +32,7 @@ const meta: Meta<SegmentedStoryProps> = {
       type: "figma",
       url: FIGMA_URL,
     },
-    pseudo: {
-      hover: "hover",
-      active: "active",
-      focus: "focus",
-      selector: ".sb-pseudo-target",
-    },
+
     docs: {
       codePanel: true,
       description: {
