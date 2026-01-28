@@ -82,29 +82,31 @@ export function Modal(props: ModalProps): React.ReactElement {
   // Determinar largura: width customizado > dsSize > default
   const resolvedWidth = width ?? SIZE_MAP[dsSize];
 
+  const safeStyles = styles as any;
+
   // Estilos customizados para aplicar shadow do design system
-  const customStyles: AntdModalProps["styles"] = {
-    ...styles,
+  const customStyles: any = {
+    ...safeStyles,
     content: {
       boxShadow: shadow.xl,
       borderRadius: radius.xl,
-      ...styles?.content,
+      ...safeStyles?.content,
     },
     header: {
       borderBottom: `1px solid ${designSystemColors.neutral[200]}`,
       paddingBottom: 16,
       marginBottom: 0,
-      ...styles?.header,
+      ...safeStyles?.header,
     },
     body: {
       padding: 24,
-      ...styles?.body,
+      ...safeStyles?.body,
     },
     footer: {
       borderTop: `1px solid ${designSystemColors.neutral[200]}`,
       paddingTop: 16,
       marginTop: 0,
-      ...styles?.footer,
+      ...safeStyles?.footer,
     },
   };
 

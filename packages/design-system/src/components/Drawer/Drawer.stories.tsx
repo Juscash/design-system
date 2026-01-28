@@ -73,7 +73,7 @@ export const WithFooter: Story = {
         <Button>Cancelar</Button>
         <Button
           type="primary"
-          style={{ background: designSystemColors.brand[500] }}
+          style={{ background: designSystemColors.brand.primary[500] }}
         >
           Confirmar
         </Button>

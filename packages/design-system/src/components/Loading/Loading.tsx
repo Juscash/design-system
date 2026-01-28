@@ -38,11 +38,11 @@ export const Loading: React.FC<LoadingProps> = (props) => {
       theme={{
         components: {
           Spin: {
-            colorPrimary: designSystemColors.brand[500], // Match brand green
+            colorPrimary: designSystemColors.brand.primary[500], // Match brand green
           },
         },
         token: {
-          colorPrimary: designSystemColors.brand[500],
+          colorPrimary: designSystemColors.brand.primary[500],
         },
       }}
     >
