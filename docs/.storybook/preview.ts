@@ -1,13 +1,9 @@
-import type { Preview } from "@storybook/react";
+import type { Preview } from "@storybook/nextjs-vite";
 import React, { useEffect } from "react";
 import { JuscashProvider } from "@Juscash/design-system";
 import "@Juscash/design-system/dist/index.css";
 
-const AppRouterDecorator = ({
-  Story,
-}: {
-  Story: React.ComponentType;
-}) => {
+const AppRouterDecorator = ({ Story }: { Story: React.ComponentType }) => {
   useEffect(() => {
     document.documentElement.lang = "pt-BR";
     document.documentElement.style.setProperty("--font-inter", "Inter");
@@ -21,28 +17,30 @@ const AppRouterDecorator = ({
   return React.createElement(
     "div",
     { className: "sb-app-router" },
-    React.createElement(
-      JuscashProvider,
-      null,
-      React.createElement(Story)
-    )
+    React.createElement(JuscashProvider, null, React.createElement(Story)),
   );
 };
 
 const preview: Preview = {
   decorators: [(Story) => React.createElement(AppRouterDecorator, { Story })],
   parameters: {
+    docs: {
+      codePanel: true,
+    },
+
     controls: {
       matchers: {
         color: /(background|color)$/i,
         date: /Date$/i,
       },
     },
+
     options: {
       storySort: {
         method: "alphabetical",
       },
     },
+
     viewport: {
       viewports: {
         mobile: {
@@ -62,6 +60,13 @@ const preview: Preview = {
         },
       },
     },
+
+    a11y: {
+      // 'todo' - show a11y violations in the test UI only
+      // 'error' - fail CI on a11y violations
+      // 'off' - skip a11y checks entirely
+      test: "todo"
+    }
   },
   globalTypes: {
     locale: {

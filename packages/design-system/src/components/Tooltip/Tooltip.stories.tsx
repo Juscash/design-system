@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { Tooltip } from "./Tooltip";
 import { Button } from "../Button"; // Using our custom Button if available, or Antd Button
 import { Info } from "lucide-react";

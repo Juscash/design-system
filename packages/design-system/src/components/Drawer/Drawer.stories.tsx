@@ -1,4 +1,4 @@
-import type { Meta, StoryObj } from "@storybook/react";
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { Drawer } from "./Drawer";
 import { Button } from "antd";
 import React, { useState } from "react";

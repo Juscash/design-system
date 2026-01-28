@@ -18,6 +18,7 @@ const meta: Meta<ButtonStoryProps> = {
       url: "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4035-4133&m=dev",
     },
     docs: {
+      codePanel: true,
       description: {
         component: `
 Componente de botão baseado no [Ant Design Button](https://ant.design/components/button).
