@@ -3,6 +3,19 @@ import React from "react";
 import { Search, Plus } from "lucide-react";
 import { Button } from "./Button";
 
+import {
+  Title,
+  Subtitle,
+  Description,
+  Primary,
+  Controls,
+  Stories,
+} from "@storybook/addon-docs/blocks";
+import { Figma } from "@storybook/addon-designs/blocks";
+
+const FIGMA_URL =
+  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4035-4133&m=dev";
+
 type ButtonStoryProps = React.ComponentProps<typeof Button> & {
   hover?: boolean;
   active?: boolean;
@@ -11,14 +24,17 @@ type ButtonStoryProps = React.ComponentProps<typeof Button> & {
 
 const meta: Meta<ButtonStoryProps> = {
   title: "Components/Button",
+
   component: Button,
+  tags: ["autodocs"],
   parameters: {
     design: {
       type: "figma",
-      url: "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4035-4133&m=dev",
+      url: FIGMA_URL,
     },
     docs: {
       codePanel: true,
+
       description: {
         component: `
 Componente de botão baseado no [Ant Design Button](https://ant.design/components/button).
@@ -42,9 +58,35 @@ function Example() {
 \`\`\`
 `,
       },
+
+      page: () => (
+        <>
+          <Title />
+          <Subtitle />
+          <Description />
+
+          <Primary />
+
+          <Controls />
+
+          <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
+            <h3
+              style={{
+                marginBottom: "1rem",
+                fontSize: "1.2rem",
+                fontWeight: "bold",
+              }}
+            >
+              🎨 Figma Spec
+            </h3>
+            <Figma showLink url={FIGMA_URL} height="400px" />
+          </div>
+
+          <Stories />
+        </>
+      ),
     },
   },
-  tags: ["autodocs"],
   argTypes: {
     type: {
       control: "select",
@@ -105,7 +147,7 @@ function Example() {
 export default meta;
 type Story = StoryObj<ButtonStoryProps>;
 
-export const Primary: Story = {
+export const Primarys: Story = {
   args: {
     type: "primary",
     children: "Primary Button",

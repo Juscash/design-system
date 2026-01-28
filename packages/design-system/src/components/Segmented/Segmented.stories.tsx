@@ -1,7 +1,21 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 import { Segmented } from "./Segmented";
-import { Grid, Heart, List, User, Settings } from "lucide-react";
+import { Grid, List } from "lucide-react";
 import { designSystemColors } from "../../theme";
+
+import {
+  Title,
+  Subtitle,
+  Description,
+  Primary,
+  Controls,
+  Stories,
+} from "@storybook/addon-docs/blocks";
+import { Figma } from "@storybook/addon-designs/blocks";
+
+const FIGMA_URL =
+  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4886-14656&m=dev";
 
 const meta: Meta<typeof Segmented> = {
   title: "Components/Segmented",
@@ -10,9 +24,10 @@ const meta: Meta<typeof Segmented> = {
   parameters: {
     design: {
       type: "figma",
-      url: "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4886-14656&m=dev",
+      url: FIGMA_URL,
     },
     docs: {
+      codePanel: true,
       description: {
         component: `
 Componente de controle segmentado baseado no [Ant Design Segmented](https://ant.design/components/segmented).
@@ -21,8 +36,49 @@ Componente de controle segmentado baseado no [Ant Design Segmented](https://ant.
 - **Extended (Ant Design)**: Suporta as propriedades padrão do AntD Segmented.
 - **Custom (Juscash)**:
   - \`size\`: Estendido com tamanhos do Design System (\`small\`, \`middle\`, \`large\`). A propriedade original \`size\` do AntD é mapeada automaticamente.
+
+### Como usar:
+
+\`\`\`tsx
+import { Segmented } from "@Juscash/design-system";
+
+function Example() {
+  return (
+    <Segmented
+      options={["Daily", "Weekly", "Monthly"]}
+      defaultValue="Daily"
+    />
+  );
+}
+\`\`\`
 `,
       },
+      page: () => (
+        <>
+          <Title />
+          <Subtitle />
+          <Description />
+
+          <Primary />
+
+          <Controls />
+
+          <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
+            <h3
+              style={{
+                marginBottom: "1rem",
+                fontSize: "1.2rem",
+                fontWeight: "bold",
+              }}
+            >
+              🎨 Figma Spec
+            </h3>
+            <Figma showLink url={FIGMA_URL} height="400px" />
+          </div>
+
+          <Stories />
+        </>
+      ),
     },
   },
   args: {
