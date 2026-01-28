@@ -3,37 +3,49 @@ import React, { useState } from "react";
 import { Button } from "../Button";
 import { Modal } from "./Modal";
 
-const meta: Meta<typeof Modal> = {
-  title: "Components/Feedback/Modal",
+import {
+  Title,
+  Subtitle,
+  Description,
+  Primary,
+  Controls,
+  Stories,
+} from "@storybook/addon-docs/blocks";
+import { Figma } from "@storybook/addon-designs/blocks";
+
+const FIGMA_URL =
+  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4090-7467&m=dev";
+
+type ModalStoryProps = React.ComponentProps<typeof Modal> & {
+  hover?: boolean;
+  active?: boolean;
+  focus?: boolean;
+};
+
+const meta: Meta<ModalStoryProps> = {
+  title: "Components/Modal",
   component: Modal,
   tags: ["autodocs"],
   parameters: {
     design: {
       type: "figma",
-      url: "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4090-7467&m=dev",
+      url: FIGMA_URL,
     },
     docs: {
+      codePanel: true,
       description: {
         component: `
 Componente baseado no [Ant Design Modal](https://ant.design/components/modal).
 
-### Features Juscash:
-- **Tamanhos**: Prop \`dsSize\` com valores \`s\`, \`m\`, \`l\` para tamanhos padronizados.
-- **Tokens do Design System**: Sombra, border radius e cores aplicados via ConfigProvider.
-- **Header/Footer estilizados**: Bordas separadoras conforme Figma.
-- **Compatibilidade**: Mantém todas as props do Ant Design.
-
-### Tamanhos disponíveis:
-| dsSize | Largura |
-|--------|---------|
-| \`s\`  | 400px   |
-| \`m\`  | 520px   |
-| \`l\`  | 720px   |
+### Props:
+- **Extended (Ant Design)**: Suporta as propriedades padrão do AntD Modal.
+- **Custom (Juscash)**:
+  - \`dsSize\`: Tamanhos padronizados (\`s\`, \`m\`, \`l\`).
 
 ### Como usar:
 
 \`\`\`tsx
-import { Modal, Button } from '@juscash/design-system';
+import { Modal, Button } from "@Juscash/design-system";
 
 function Example() {
   const [open, setOpen] = useState(false);
@@ -55,7 +67,38 @@ function Example() {
 \`\`\`
 `,
       },
+      page: () => (
+        <>
+          <Title />
+          <Subtitle />
+          <Description />
+
+          <Primary />
+
+          <Controls />
+
+          <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
+            <h3
+              style={{
+                marginBottom: "1rem",
+                fontSize: "1.2rem",
+                fontWeight: "bold",
+              }}
+            >
+              🎨 Figma Spec
+            </h3>
+            <Figma showLink url={FIGMA_URL} height="400px" />
+          </div>
+
+          <Stories />
+        </>
+      ),
     },
+  },
+  args: {
+    hover: false,
+    active: false,
+    focus: false,
   },
   argTypes: {
     dsSize: {
@@ -121,12 +164,40 @@ function Example() {
         category: "Ant Design Props",
       },
     },
+    hover: {
+      control: "boolean",
+      description: "Força o estado hover",
+      table: { category: "Pseudo States" },
+    },
+    active: {
+      control: "boolean",
+      description: "Força o estado active",
+      table: { category: "Pseudo States" },
+    },
+    focus: {
+      control: "boolean",
+      description: "Força o estado focus",
+      table: { category: "Pseudo States" },
+    },
+  },
+  render: (args) => {
+    const { hover, active, focus, className, ...props } = args;
+    const pseudoClasses = [
+      hover && "pseudo-hover",
+      active && "pseudo-active",
+      focus && "pseudo-focus-visible",
+    ]
+      .filter(Boolean)
+      .join(" ");
+    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
+
+    return <Modal {...props} className={mergedClassName} />;
   },
 };
 
 export default meta;
 
-type Story = StoryObj<typeof Modal>;
+type Story = StoryObj<ModalStoryProps>;
 
 // Story 1: Default
 export const Default: Story = {

@@ -4,7 +4,7 @@ import { Button } from "../Button";
 import { ConfirmModal } from "./ConfirmModal";
 
 const meta: Meta<typeof ConfirmModal> = {
-  title: "Components/Feedback/ConfirmModal",
+  title: "Components/ConfirmModal",
   component: ConfirmModal,
   tags: ["autodocs"],
   parameters: {

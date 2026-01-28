@@ -1,30 +1,122 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 import { Collapse } from "./Collapse";
 
-const meta: Meta<typeof Collapse> = {
+import {
+  Title,
+  Subtitle,
+  Description,
+  Primary,
+  Controls,
+  Stories,
+} from "@storybook/addon-docs/blocks";
+import { Figma } from "@storybook/addon-designs/blocks";
+
+const FIGMA_URL =
+  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4069-5252&m=dev";
+
+type CollapseStoryProps = React.ComponentProps<typeof Collapse> & {
+  hover?: boolean;
+  active?: boolean;
+  focus?: boolean;
+};
+
+const meta: Meta<CollapseStoryProps> = {
   title: "Components/Collapse",
   component: Collapse,
   parameters: {
     design: {
       type: "figma",
-      url: "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4069-5252&m=dev",
+      url: FIGMA_URL,
     },
     docs: {
+      codePanel: true,
       description: {
         component: `
 Componente Collapse (Accordion) baseado no [Ant Design Collapse](https://ant.design/components/collapse).
 
 ### Props:
 - **Extended (Ant Design)**: Suporta todas as propriedades padrão do AntD Collapse.
+
+### Como usar:
+
+\`\`\`tsx
+import { Collapse } from "@Juscash/design-system";
+
+function Example() {
+  return <Collapse items={[{ key: "1", label: "Label", children: "Content" }]} />;
+}
+\`\`\`
 `,
       },
+      page: () => (
+        <>
+          <Title />
+          <Subtitle />
+          <Description />
+
+          <Primary />
+
+          <Controls />
+
+          <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
+            <h3
+              style={{
+                marginBottom: "1rem",
+                fontSize: "1.2rem",
+                fontWeight: "bold",
+              }}
+            >
+              🎨 Figma Spec
+            </h3>
+            <Figma showLink url={FIGMA_URL} height="400px" />
+          </div>
+
+          <Stories />
+        </>
+      ),
     },
   },
   tags: ["autodocs"],
+  args: {
+    hover: false,
+    active: false,
+    focus: false,
+  },
+  argTypes: {
+    hover: {
+      control: "boolean",
+      description: "Força o estado hover",
+      table: { category: "Pseudo States" },
+    },
+    active: {
+      control: "boolean",
+      description: "Força o estado active",
+      table: { category: "Pseudo States" },
+    },
+    focus: {
+      control: "boolean",
+      description: "Força o estado focus",
+      table: { category: "Pseudo States" },
+    },
+  },
+  render: (args) => {
+    const { hover, active, focus, className, ...props } = args;
+    const pseudoClasses = [
+      hover && "pseudo-hover",
+      active && "pseudo-active",
+      focus && "pseudo-focus-visible",
+    ]
+      .filter(Boolean)
+      .join(" ");
+    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
+
+    return <Collapse {...props} className={mergedClassName} />;
+  },
 };
 
 export default meta;
-type Story = StoryObj<typeof Collapse>;
+type Story = StoryObj<CollapseStoryProps>;
 
 const text = `O cashback será disponibilizado na plataforma após a comprovação da protocolização do contrato nos autos. Confira as regras em nossa política.`;
 

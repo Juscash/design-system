@@ -5,7 +5,7 @@ import React, { useState } from "react";
 import { designSystemColors } from "../../theme";
 
 const meta: Meta<typeof Drawer> = {
-  title: "Components/Feedback/Drawer",
+  title: "Components/Drawer",
   component: Drawer,
   parameters: {
     layout: "centered",
