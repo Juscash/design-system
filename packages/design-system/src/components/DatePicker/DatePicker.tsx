@@ -12,18 +12,10 @@ import type { ThemeConfig } from "antd";
 import { ChevronRight, Calendar, ChevronLeft } from "lucide-react";
 import { designSystemColors, radius } from "../../theme";
 
-// ============================================
-// TYPES
-// ============================================
-
 export type DatePickerProps = AntdDatePickerProps;
 export type RangePickerProps = TimeRangePickerProps;
 
 const { RangePicker: AntdRangePicker } = AntdDatePicker;
-
-// ============================================
-// THEME CONFIG
-// ============================================
 
 const datePickerTheme: ThemeConfig = {
   token: {
@@ -32,9 +24,9 @@ const datePickerTheme: ThemeConfig = {
   },
   components: {
     DatePicker: {
-      colorTextPlaceholder: designSystemColors.neutral[500], // Aproximação de #6D6D6E
+      colorTextPlaceholder: designSystemColors.neutral[500],
       colorIcon: designSystemColors.neutral[500],
-      cellActiveWithRangeBg: designSystemColors.neutral[200], // #E5E5E5
+      cellActiveWithRangeBg: designSystemColors.neutral[200],
       colorIconHover: designSystemColors.neutral[700],
     },
   },
@@ -53,10 +45,6 @@ const datePickerLocale = ptBR.DatePicker
         ({} as NonNullable<typeof ptBR.TimePicker>),
     }
   : undefined;
-
-// ============================================
-// COMPONENTS
-// ============================================
 
 export const DatePicker: React.FC<DatePickerProps> = ({
   allowClear = false,
@@ -79,8 +67,8 @@ export const DatePicker: React.FC<DatePickerProps> = ({
         prevIcon={
           <div
             style={{
-              borderRadius: radius.xl, // 8px
-              border: `1px solid ${designSystemColors.neutral[300]}`, // #D4D4D4
+              borderRadius: radius.xl,
+              border: `1px solid ${designSystemColors.neutral[300]}`,
               width: 28,
               height: 28,
               display: "flex",
@@ -94,8 +82,8 @@ export const DatePicker: React.FC<DatePickerProps> = ({
         nextIcon={
           <div
             style={{
-              borderRadius: radius.xl, // 8px
-              border: `1px solid ${designSystemColors.neutral[300]}`, // #D4D4D4
+              borderRadius: radius.xl,
+              border: `1px solid ${designSystemColors.neutral[300]}`,
               width: 28,
               height: 28,
               display: "flex",
@@ -137,8 +125,8 @@ export const RangePicker: React.FC<RangePickerProps> = ({
         prevIcon={
           <div
             style={{
-              borderRadius: radius.xl, // 8px
-              border: `1px solid ${designSystemColors.neutral[300]}`, // #D4D4D4
+              borderRadius: radius.xl,
+              border: `1px solid ${designSystemColors.neutral[300]}`,
               width: 28,
               height: 28,
               display: "flex",
@@ -152,8 +140,8 @@ export const RangePicker: React.FC<RangePickerProps> = ({
         nextIcon={
           <div
             style={{
-              borderRadius: radius.xl, // 8px
-              border: `1px solid ${designSystemColors.neutral[300]}`, // #D4D4D4
+              borderRadius: radius.xl,
+              border: `1px solid ${designSystemColors.neutral[300]}`,
               width: 28,
               height: 28,
               display: "flex",

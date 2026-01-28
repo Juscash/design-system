@@ -9,21 +9,9 @@ import type {
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { designSystemColors, radius } from "../../theme";
 
-// ============================================
-// TYPES
-// ============================================
-
 export interface CarouselProps extends AntdCarouselProps {
   showArrows?: boolean;
 }
-
-// ============================================
-// COMPONENT
-// ============================================
-
-// ============================================
-// COMPONENT
-// ============================================
 
 export const Carousel: React.FC<CarouselProps> = ({
   children,
@@ -54,11 +42,11 @@ export const Carousel: React.FC<CarouselProps> = ({
         position: "absolute",
         top: "50%",
         transform: "translateY(-50%)",
-        [direction]: -40, // Move further out
+        [direction]: -40,
         zIndex: 10,
         backgroundColor: designSystemColors.neutral[50],
         border: `1px solid ${designSystemColors.neutral[200]}`,
-        borderRadius: radius.md, // 4px squircle
+        borderRadius: radius.md,
         width: 32,
         height: 32,
         display: "flex",
@@ -89,7 +77,6 @@ export const Carousel: React.FC<CarouselProps> = ({
         },
       }}
     >
-      {/* Increased margin to accommodate arrows outside */}
       <div
         style={{
           position: "relative",
@@ -105,18 +92,16 @@ export const Carousel: React.FC<CarouselProps> = ({
       </div>
 
       <style>{`
-        /* Fix for potential stacking issue if slick css is missing */
         .ant-carousel .slick-slide {
           text-align: center;
-          height: auto; // Ensure it doesn't collapse
+          height: auto;
           background: transparent;
           overflow: hidden;
         }
         
-        /* Positioning dots below the content */
         .ant-carousel .slick-dots {
           position: absolute;
-          bottom: -25px !important; /* Move below the content */
+          bottom: -25px !important;
           left: 0;
           right: 0;
           display: flex !important;

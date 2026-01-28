@@ -5,10 +5,6 @@ import { Avatar as AntdAvatar, ConfigProvider } from "antd";
 import type { AvatarProps as AntdAvatarProps } from "antd";
 import { designSystemColors, radius } from "../../theme";
 
-// ============================================
-// TYPES
-// ============================================
-
 export type AvatarSize = "small" | "regular";
 export type AvatarRoundness = "round" | "roundrect";
 
@@ -17,17 +13,12 @@ export interface AvatarProps extends AntdAvatarProps {
   roundness?: AvatarRoundness;
 }
 
-// ============================================
-// COMPONENT
-// ============================================
-
 export const Avatar: React.FC<AvatarProps> = ({
   dsSize = "regular",
   roundness = "round",
   style,
   ...rest
 }) => {
-  // Map dsSize to AntD size or specific pixels
   const sizeMap: Record<AvatarSize, number> = {
     small: 32,
     regular: 40,
@@ -35,20 +26,16 @@ export const Avatar: React.FC<AvatarProps> = ({
 
   const currentSize = sizeMap[dsSize];
 
-  // Map roundness to border radius
-  const borderRadius = roundness === "round" ? "50%" : radius.md; // radius.md used for smaller roundness
-  // Checking previous components, radius.xl is 8px. Let's assume roundrect is slightly rounded. Figma usually uses 8px (radius.xl) or 4px (radius.m).
-  // Visual inspection of "roundrect" usually implies a squircle or standard rounded corners.
-  // Let's use radius.xl (8px) for roundrect as a safe bet for "JusCash" style which seems rounded.
+  const borderRadius = roundness === "round" ? "50%" : radius.md;
 
   const customStyle: React.CSSProperties = {
     ...style,
-    borderRadius: roundness === "round" ? "50%" : radius.xl, // radius.xl for roundrect (8px)
+    borderRadius: roundness === "round" ? "50%" : radius.xl,
     fontFamily: '"Inter", sans-serif',
-    fontWeight: 700, // Bold for initials
-    backgroundColor: designSystemColors.neutral[200], // Default background
-    color: designSystemColors.neutral[800], // text color
-    border: `1px solid ${designSystemColors.neutral[100]}`, // subtle border if needed/implied by "stroke-0" in design context
+    fontWeight: 700,
+    backgroundColor: designSystemColors.neutral[200],
+    color: designSystemColors.neutral[800],
+    border: `1px solid ${designSystemColors.neutral[100]}`,
   };
 
   return (
@@ -59,7 +46,7 @@ export const Avatar: React.FC<AvatarProps> = ({
             containerSize: currentSize,
             containerSizeSM: 32,
             containerSizeLG: 40,
-            textFontSize: dsSize === "small" ? 12 : 14, // Adjust font size based on avatar size
+            textFontSize: dsSize === "small" ? 12 : 14,
             textFontSizeSM: 12,
             textFontSizeLG: 14,
           },
@@ -76,5 +63,4 @@ export const Avatar: React.FC<AvatarProps> = ({
 
 Avatar.displayName = "Avatar";
 
-// Re-export AntD Group if needed, or wrap it
 export const AvatarGroup = AntdAvatar.Group;

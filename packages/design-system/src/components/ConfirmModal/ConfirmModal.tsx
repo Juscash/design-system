@@ -6,10 +6,6 @@ import type { ModalProps as AntdModalProps } from "antd";
 import { designSystemColors, radius, shadow, spacing } from "../../theme";
 import { Button } from "../Button";
 
-// ============================================
-// TYPES
-// ============================================
-
 type ConfirmType = "info" | "warning" | "danger";
 
 export type ConfirmModalProps = Omit<
@@ -52,27 +48,16 @@ export type ConfirmModalProps = Omit<
   confirmLoading?: boolean;
 };
 
-// ============================================
-// TOKEN FUNCTIONS
-// ============================================
-
 function getConfirmModalTokens(): Record<string, unknown> {
   return {
-    // Background
     contentBg: designSystemColors.neutral[50],
 
-    // Border
     borderRadiusLG: radius.xl,
 
-    // Padding
     paddingLG: spacing[6],
     paddingMD: spacing[4],
   };
 }
-
-// ============================================
-// COMPONENT
-// ============================================
 
 export function ConfirmModal(props: ConfirmModalProps): React.ReactElement {
   const {
@@ -88,13 +73,11 @@ export function ConfirmModal(props: ConfirmModalProps): React.ReactElement {
     ...rest
   } = props;
 
-  // Determinar tipo do botão de confirmação baseado no type
   const getConfirmButtonType = (): "primary" | "destructive" => {
     if (type === "danger") return "destructive";
     return "primary";
   };
 
-  // Renderizar footer customizado
   const renderFooter = () => (
     <div
       style={{
@@ -119,7 +102,6 @@ export function ConfirmModal(props: ConfirmModalProps): React.ReactElement {
     </div>
   );
 
-  // Estilos customizados
   const customStyles: any = {
     content: {
       boxShadow: shadow.l,

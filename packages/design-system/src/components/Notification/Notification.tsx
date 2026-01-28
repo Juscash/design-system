@@ -3,9 +3,7 @@ import React from "react";
 import { notification as antdNotification, ConfigProvider } from "antd";
 import type { NotificationArgsProps } from "antd";
 import { designSystemColors, radius, spacing, shadow } from "../../theme";
-// ============================================
-// TOKENS
-// ============================================
+
 function getNotificationTokens() {
   return {
     zIndexPopup: 1050,
@@ -19,12 +17,7 @@ function getNotificationTokens() {
     marginXS: spacing[2],
   };
 }
-// ============================================
-// HOOK
-// ============================================
-// ============================================
-// HOOK
-// ============================================
+
 export function useNotification() {
   const [api, contextHolder] = antdNotification.useNotification({
     maxCount: 3,
@@ -32,13 +25,13 @@ export function useNotification() {
     placement: "top",
     top: 16,
   });
-  // Wrapper to inject custom styles/classes
+
   const wrappedApi = React.useMemo(() => {
     const wrap =
       (type: "success" | "info" | "warning" | "error") =>
       (args: NotificationArgsProps) => {
         const isError = type === "error";
-        // Merge custom styles for Error type (Red Text)
+
         const customStyle = isError
           ? {
               color: designSystemColors.feedback.red[500],
@@ -49,8 +42,6 @@ export function useNotification() {
           ...args,
           style: { ...customStyle, ...args.style },
           className: `${customClassName} ${args.className || ""}`,
-          // If user provides icon, it overrides default.
-          // We can also enforce specific icon sizes here if needed via style on the iconNode.
         });
       };
     return {
@@ -80,8 +71,7 @@ export function useNotification() {
             margin-top: 4px; /* Minimal adjustment similar to original request */
         }
         
-        /* Error State Specifics */
-        /* Target both possible classes for Title */
+
         .ant-notification-error-custom .ant-notification-notice-message, 
         .ant-notification-error-custom .ant-notification-notice-title { 
             color: ${designSystemColors.feedback.red[900]} !important;
@@ -98,9 +88,7 @@ export function useNotification() {
   );
   return [wrappedApi, wrappedContextHolder] as const;
 }
-// ============================================
-// NAMESPACE COMPONENT
-// ============================================
+
 /**
  * Notification component
  *

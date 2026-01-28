@@ -5,15 +5,7 @@ import { Tooltip as AntdTooltip, ConfigProvider } from "antd";
 import type { TooltipProps as AntdTooltipProps } from "antd";
 import { designSystemColors, radius } from "../../theme";
 
-// ============================================
-// TYPES
-// ============================================
-
 export type TooltipProps = AntdTooltipProps;
-
-// ============================================
-// COMPONENT
-// ============================================
 
 export const Tooltip: React.FC<TooltipProps> = ({ children, ...rest }) => {
   return (

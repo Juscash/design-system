@@ -9,7 +9,6 @@ type AlertVariant = "neutral" | "error" | "success" | "info" | "warning";
 import { CircleCheck, CircleX, AlertCircle, Info } from "lucide-react";
 import { designSystemColors, radius, spacing } from "../../theme";
 
-// Usar mapped types ao inves de Omit
 type CleanAntdProps = {
   [K in keyof AntdAlertProps as K extends "type"
     ? never
@@ -18,14 +17,10 @@ type CleanAntdProps = {
 
 export type AlertProps = CleanAntdProps & {
   type?: AlertVariant;
-  showLine2?: boolean; // Mapped to description (handled by consumer usually, but we can enforce)
-  showButton?: boolean; // Mapped to action
-  showLeftIcon?: boolean; // Mapped to showIcon
+  showLine2?: boolean;
+  showButton?: boolean;
+  showLeftIcon?: boolean;
 };
-
-// ============================================
-// TOKEN FUNCTIONS
-// ============================================
 
 function getNeutralTokens(): Record<string, any> {
   return {
@@ -78,10 +73,6 @@ function getWarningTokens(): Record<string, any> {
   };
 }
 
-// ============================================
-// COMPONENT
-// ============================================
-
 export function Alert(props: AlertProps): React.ReactElement {
   const {
     type = "neutral",
@@ -91,17 +82,9 @@ export function Alert(props: AlertProps): React.ReactElement {
     ...rest
   } = props;
 
-  // Map custom props to Antd props if user didn't provide specific content
-  // Note: showLine2 usually implies description is present.
-  // showButton implies action is present.
-  // We can't auto-generate content, but we can set defaults if needed.
-  // However, strict mapping means we just handle the styling and pass props.
-  // 'showLeftIcon' directly maps to 'showIcon' if not explicitly passed.
-
   const finalShowIcon = rest.showIcon ?? showLeftIcon;
   const hasDescription = !!(rest.description || showLine2);
 
-  // Helper to get default icon for type
   const getDefaultIcon = () => {
     const iconProps = { size: 16 };
     switch (type) {
@@ -119,8 +102,6 @@ export function Alert(props: AlertProps): React.ReactElement {
     }
   };
 
-  // If we need to fix alignment (only when description is present), we wrap the icon
-  // or pass a styled clone.
   const resolvedIcon = rest.icon || (finalShowIcon ? getDefaultIcon() : null);
 
   const iconNode =
@@ -133,9 +114,6 @@ export function Alert(props: AlertProps): React.ReactElement {
         })
       : resolvedIcon;
 
-  // Antd 'type' prop only accepts specific string.
-  // If 'neutral', we pass 'info' (closest) and override styles, OR just rely on ConfigProvider.
-  // Actually, for 'neutral', we can use 'info' as base and override tokens.
   const antdType =
     type === "neutral" ? "info" : (type as AntdAlertProps["type"]);
 

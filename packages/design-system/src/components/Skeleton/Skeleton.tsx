@@ -5,17 +5,7 @@ import { Skeleton as AntdSkeleton, ConfigProvider } from "antd";
 import type { SkeletonProps as AntdSkeletonProps } from "antd";
 import { designSystemColors } from "../../theme";
 
-// ============================================
-// TYPES
-// ============================================
-
-export interface SkeletonProps extends AntdSkeletonProps {
-  // We can extend if needed, but AntD Skeleton is quite comprehensive
-}
-
-// ============================================
-// COMPONENT
-// ============================================
+export interface SkeletonProps extends AntdSkeletonProps {}
 
 type SkeletonComponent = React.FC<SkeletonProps> & {
   Button: typeof AntdSkeleton.Button;
@@ -31,7 +21,7 @@ export const Skeleton: SkeletonComponent = (props) => {
       theme={{
         components: {
           Skeleton: {
-            colorFill: designSystemColors.neutral[100], // Match Figma background #f5f5f5
+            colorFill: designSystemColors.neutral[100],
             colorFillContent: designSystemColors.neutral[100],
           },
         },

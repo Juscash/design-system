@@ -24,9 +24,7 @@ const baseTokens: Partial<ComponentToken> = {
   colorBorder: designSystemColors.neutral[300],
   colorText: designSystemColors.neutral[800],
   colorBg: designSystemColors.neutral[100],
-  // Filled default (if used)
   colorFill: designSystemColors.neutral[100],
-  // Closable icon inherits text color
   closeSize: 12,
 } as any;
 

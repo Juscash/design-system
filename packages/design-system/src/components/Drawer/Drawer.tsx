@@ -5,17 +5,7 @@ import { Drawer as AntdDrawer, ConfigProvider } from "antd";
 import type { DrawerProps as AntdDrawerProps } from "antd";
 import { designSystemColors } from "../../theme";
 
-// ============================================
-// TYPES
-// ============================================
-
-export interface DrawerProps extends AntdDrawerProps {
-  // Add custom props here if needed in the future
-}
-
-// ============================================
-// COMPONENT
-// ============================================
+export interface DrawerProps extends AntdDrawerProps {}
 
 export const Drawer: React.FC<DrawerProps> = ({ children, ...rest }) => {
   return (
@@ -23,11 +13,11 @@ export const Drawer: React.FC<DrawerProps> = ({ children, ...rest }) => {
       theme={{
         components: {
           Drawer: {
-            colorBgElevated: designSystemColors.neutral[50], // Background color
-            colorText: designSystemColors.neutral[900], // content text
-            colorTextHeading: designSystemColors.neutral[900], // Title color
-            colorIcon: designSystemColors.neutral[500], // Close icon color
-            paddingLG: 24, // Padding
+            colorBgElevated: designSystemColors.neutral[50],
+            colorText: designSystemColors.neutral[900],
+            colorTextHeading: designSystemColors.neutral[900],
+            colorIcon: designSystemColors.neutral[500],
+            paddingLG: 24,
           },
         },
       }}
