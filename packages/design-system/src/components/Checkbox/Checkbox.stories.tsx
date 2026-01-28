@@ -2,6 +2,19 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Checkbox } from "./Checkbox";
 
+import {
+  Title,
+  Subtitle,
+  Description,
+  Primary,
+  Controls,
+  Stories,
+} from "@storybook/addon-docs/blocks";
+import { Figma } from "@storybook/addon-designs/blocks";
+
+const FIGMA_URL =
+  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4052-2075&m=dev";
+
 type CheckboxStoryProps = React.ComponentProps<typeof Checkbox> & {
   hover?: boolean;
   focus?: boolean;
@@ -13,13 +26,56 @@ const meta: Meta<CheckboxStoryProps> = {
   parameters: {
     design: {
       type: "figma",
-      url: "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4052-2075&m=dev",
+      url: FIGMA_URL,
     },
     docs: {
+      codePanel: true,
       description: {
-        component:
-          "Componente de checkbox baseado no [Ant Design Checkbox](https://ant.design/components/checkbox). Extende todas as props padrão do Ant Design Checkbox e adiciona a prop `error` para indicar estado de erro.",
+        component: `
+Componente de checkbox baseado no [Ant Design Checkbox](https://ant.design/components/checkbox).
+
+### Props:
+- **Extended (Ant Design)**: Suporta as propriedades padrão do AntD Checkbox.
+- **Custom (Juscash)**:
+  - \`error\`: Indica estado de erro.
+
+### Como usar:
+
+\`\`\`tsx
+import { Checkbox } from "@Juscash/design-system";
+
+function Example() {
+  return <Checkbox>Concordo com os termos</Checkbox>;
+}
+\`\`\`
+`,
       },
+      page: () => (
+        <>
+          <Title />
+          <Subtitle />
+          <Description />
+
+          <Primary />
+
+          <Controls />
+
+          <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
+            <h3
+              style={{
+                marginBottom: "1rem",
+                fontSize: "1.2rem",
+                fontWeight: "bold",
+              }}
+            >
+              🎨 Figma Spec
+            </h3>
+            <Figma showLink url={FIGMA_URL} height="400px" />
+          </div>
+
+          <Stories />
+        </>
+      ),
     },
   },
   tags: ["autodocs"],
