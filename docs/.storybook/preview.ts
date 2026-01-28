@@ -1,4 +1,4 @@
-import type { Preview } from "@storybook/react-vite";
+import type { Preview } from "@storybook/react";
 import "../../packages/design-system/src/theme/global.css";
 
 const preview: Preview = {

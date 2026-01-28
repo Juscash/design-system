@@ -2,6 +2,7 @@
   "name": "@Juscash/storybook",
   "version": "0.0.0",
   "private": true,
+  "type": "module",
   "scripts": {
     "storybook": "storybook dev -p 6006",
     "build-storybook": "storybook build"
@@ -12,8 +13,8 @@
     "@storybook/addon-docs": "^10.2.0",
     "@storybook/addon-links": "^10.2.0",
     "@storybook/addon-vitest": "^10.2.0",
+    "@storybook/nextjs-vite": "^10.2.1",
     "@storybook/react": "^10.2.0",
-    "@storybook/react-vite": "^10.2.0",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.0",
@@ -29,6 +30,6 @@
     "vitest": "^4.0.18"
   },
   "dependencies": {
-    "@Juscash/design-system": "*"
+    "@Juscash/design-system": "file:../packages/design-system"
   }
 }
