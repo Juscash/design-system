@@ -28,6 +28,10 @@ const meta: Meta<CheckboxStoryProps> = {
       type: "figma",
       url: FIGMA_URL,
     },
+    pseudo: {
+      hover: true,
+      focus: true,
+    },
     docs: {
       codePanel: true,
       description: {
@@ -89,28 +93,8 @@ function Example() {
     error: {
       control: "boolean",
     },
-    hover: {
-      control: "boolean",
-      description: "Estado hover",
-      table: { category: "Pseudo States" },
-    },
-    focus: {
-      control: "boolean",
-      description: "Estado focus",
-      table: { category: "Pseudo States" },
-    },
-  },
-  render: (args) => {
-    const { hover, focus, ...props } = args;
-    const pseudoClasses = [hover && "pseudo-hover", focus && "pseudo-focus"]
-      .filter(Boolean)
-      .join(" ");
-
-    return (
-      <div className={pseudoClasses}>
-        <Checkbox {...props} />
-      </div>
-    );
+    hover: { control: "boolean" },
+    focus: { control: "boolean" },
   },
 };
 

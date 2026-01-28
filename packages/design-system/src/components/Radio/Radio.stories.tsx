@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import { Radio, RadioGroup } from "./Radio";
-import { shadow } from "../../theme/foundations/shadow";
+
 import { designSystemColors } from "../../theme";
 
 type RadioStoryProps = React.ComponentProps<typeof Radio> & {
@@ -65,24 +65,12 @@ Componente de seleção única baseado no [Ant Design Radio](https://ant.design/
     },
   },
   render: (args) => {
-    const { focus, style, ...props } = args;
+    const { focus, active, style, ...props } = args;
+    const pseudoClasses = [focus && "pseudo-focus", active && "pseudo-active"]
+      .filter(Boolean)
+      .join(" ");
 
-    const focusColor = props.error ? shadow.focusError : shadow.focus;
-
-    const focusStyleContext = focus ? (
-      <style>{`
-        .story-radio-focus-target .ant-radio-inner {
-          box-shadow: ${focusColor} !important;
-        }
-      `}</style>
-    ) : null;
-
-    return (
-      <div className={focus ? "story-radio-focus-target" : ""}>
-        {focusStyleContext}
-        <Radio {...props} style={style} />
-      </div>
-    );
+    return <Radio {...props} style={style} className={pseudoClasses} />;
   },
 };
 

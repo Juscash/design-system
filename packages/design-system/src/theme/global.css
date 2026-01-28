@@ -245,7 +245,7 @@
   box-shadow: 0px 0px 0px 3px rgba(210, 25, 11, 0.4) !important;
 }
 
-.ds-neutral .ant-radio .ant-radio-inner {
+.ds-neutral.pseudo-focus .ant-radio .ant-radio-inner {
   box-shadow: 0px 0px 0px 3px #d4d4d4 !important
 }
 

@@ -32,6 +32,14 @@ const meta: Meta<ButtonStoryProps> = {
       type: "figma",
       url: FIGMA_URL,
     },
+    pseudo: {
+      hover: "hover", // Liga o arg 'hover' ao estado :hover
+      active: "active", // Liga o arg 'active' ao estado :active
+      focus: "focus", // Liga o arg 'focus' ao estado :focus
+      // O PULO DO GATO:
+      // Dizemos ao addon para procurar especificamente pela nossa classe de marcação
+      selector: ".sb-pseudo-target",
+    },
     docs: {
       codePanel: true,
 
@@ -135,7 +143,7 @@ function Example() {
     const pseudoClasses = [
       hover && "pseudo-hover",
       active && "pseudo-active",
-      focus && "pseudo-focus",
+      focus && "pseudo-focus-visible",
     ]
       .filter(Boolean)
       .join(" ");

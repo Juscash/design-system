@@ -17,7 +17,13 @@ import { Figma } from "@storybook/addon-designs/blocks";
 const FIGMA_URL =
   "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4886-14656&m=dev";
 
-const meta: Meta<typeof Segmented> = {
+type SegmentedStoryProps = React.ComponentProps<typeof Segmented> & {
+  hover?: boolean;
+  active?: boolean;
+  focus?: boolean;
+};
+
+const meta: Meta<SegmentedStoryProps> = {
   title: "Components/Segmented",
   component: Segmented,
   tags: ["autodocs"],
@@ -25,6 +31,12 @@ const meta: Meta<typeof Segmented> = {
     design: {
       type: "figma",
       url: FIGMA_URL,
+    },
+    pseudo: {
+      hover: "hover",
+      active: "active",
+      focus: "focus",
+      selector: ".sb-pseudo-target",
     },
     docs: {
       codePanel: true,
@@ -83,6 +95,9 @@ function Example() {
   },
   args: {
     size: "middle",
+    hover: false,
+    active: false,
+    focus: false,
   },
   argTypes: {
     size: {
@@ -98,11 +113,38 @@ function Example() {
       control: "boolean",
       description: "Desabilita todo o componente",
     },
+    hover: {
+      control: "boolean",
+      description: "Forca o estado hover",
+      table: { category: "Pseudo States" },
+    },
+    active: {
+      control: "boolean",
+      description: "Forca o estado active",
+      table: { category: "Pseudo States" },
+    },
+    focus: {
+      control: "boolean",
+      description: "Forca o estado focus",
+      table: { category: "Pseudo States" },
+    },
+  },
+  render: (args) => {
+    const { hover, active, focus, ...props } = args;
+    const pseudoClasses = [
+      hover && "pseudo-hover",
+      active && "pseudo-active",
+      focus && "pseudo-focus-visible",
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+    return <Segmented {...props} className={pseudoClasses} />;
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof Segmented>;
+type Story = StoryObj<SegmentedStoryProps>;
 
 // Basic Text Options
 const textOptions = ["Daily", "Weekly", "Monthly"];
