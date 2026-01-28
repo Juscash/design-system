@@ -1,7 +1,36 @@
 import type { Preview } from "@storybook/react";
-import "../../packages/design-system/src/theme/global.css";
+import React, { useEffect } from "react";
+import { JuscashProvider } from "@Juscash/design-system";
+import "@Juscash/design-system/dist/index.css";
+
+const AppRouterDecorator = ({
+  Story,
+}: {
+  Story: React.ComponentType;
+}) => {
+  useEffect(() => {
+    document.documentElement.lang = "pt-BR";
+    document.documentElement.style.setProperty("--font-inter", "Inter");
+    document.documentElement.style.setProperty("--font-roboto", "Roboto");
+    document.body.classList.add("sb-app-router");
+    return () => {
+      document.body.classList.remove("sb-app-router");
+    };
+  }, []);
+
+  return React.createElement(
+    "div",
+    { className: "sb-app-router" },
+    React.createElement(
+      JuscashProvider,
+      null,
+      React.createElement(Story)
+    )
+  );
+};
 
 const preview: Preview = {
+  decorators: [(Story) => React.createElement(AppRouterDecorator, { Story })],
   parameters: {
     controls: {
       matchers: {

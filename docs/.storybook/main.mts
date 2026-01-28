@@ -1,9 +1,14 @@
 // This file has been automatically migrated to valid ESM format by Storybook.
 import { createRequire } from "node:module";
-import { dirname } from "node:path";
+import { dirname, resolve } from "node:path";
+import { fileURLToPath } from "node:url";
 import type { StorybookConfig } from "@storybook/nextjs-vite";
 
 const require = createRequire(import.meta.url);
+
+const rootDir = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
+const designSystemSrc = resolve(rootDir, "packages/design-system/src");
+const designSystemDist = resolve(rootDir, "packages/design-system/dist");
 
 const config: StorybookConfig = {
   stories: [
@@ -24,14 +29,33 @@ const config: StorybookConfig = {
     options: {},
   },
 
-  async viteFinal(config) {
+  async viteFinal(config, { configType }) {
     const { mergeConfig } = await import("vite");
+    const designSystemAlias =
+      configType === "DEVELOPMENT" ? designSystemSrc : designSystemDist;
+    const aliases = [
+      {
+        find: "@ant-design/nextjs-registry",
+        replacement: require.resolve("./AntdRegistryMock.js"),
+      },
+      {
+        find: /^@Juscash\/design-system$/,
+        replacement: designSystemAlias,
+      },
+    ];
+
+    if (configType === "DEVELOPMENT") {
+      aliases.push({
+        find: "@Juscash/design-system/dist/index.css",
+        replacement: resolve(
+          rootDir,
+          "packages/design-system/src/theme/global.css"
+        ),
+      });
+    }
     return mergeConfig(config, {
       resolve: {
-        alias: {
-          "@ant-design/nextjs-registry":
-            require.resolve("./AntdRegistryMock.js"),
-        },
+        alias: aliases,
       },
     });
   },

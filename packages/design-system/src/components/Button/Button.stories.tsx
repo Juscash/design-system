@@ -29,6 +29,16 @@ Componente de botão baseado no [Ant Design Button](https://ant.design/component
   - \`size\`: Mapeado internamente para o \`dsSize\` do sistema Juscash.
 - **Custom (Juscash)**:
   - \`dsSize\`: Define o tamanho específico seguindo o Design System (\`xs\`, \`s\`, \`m\`).
+
+### Como usar:
+
+\`\`\`tsx
+import { Button } from "@Juscash/design-system";
+
+function Example() {
+  return <Button onClick={() => {}}>Excluir</Button>;
+}
+\`\`\`
 `,
       },
     },
