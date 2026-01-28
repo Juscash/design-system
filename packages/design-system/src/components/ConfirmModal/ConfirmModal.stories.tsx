@@ -3,30 +3,67 @@ import React, { useState } from "react";
 import { Button } from "../Button";
 import { ConfirmModal } from "./ConfirmModal";
 
-const meta: Meta<typeof ConfirmModal> = {
+import {
+  Title,
+  Subtitle,
+  Description,
+  Primary,
+  Controls,
+  Stories,
+} from "@storybook/addon-docs/blocks";
+import { Figma } from "@storybook/addon-designs/blocks";
+
+const FIGMA_URL =
+  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4098-6577&m=dev";
+
+type ConfirmModalStoryProps = React.ComponentProps<typeof ConfirmModal> & {
+  hover?: boolean;
+  active?: boolean;
+  focus?: boolean;
+};
+
+const getPseudoClassName = (args: {
+  hover?: boolean;
+  active?: boolean;
+  focus?: boolean;
+  className?: string;
+}) => {
+  const pseudoClasses = [
+    args.hover && "pseudo-hover",
+    args.active && "pseudo-active",
+    args.focus && "pseudo-focus-visible",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return [args.className, pseudoClasses].filter(Boolean).join(" ");
+};
+
+const meta: Meta<ConfirmModalStoryProps> = {
   title: "Components/ConfirmModal",
   component: ConfirmModal,
   tags: ["autodocs"],
   parameters: {
     design: {
       type: "figma",
-      url: "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4098-6577&m=dev",
+      url: FIGMA_URL,
     },
     docs: {
+      codePanel: true,
       description: {
         component: `
 Modal de confirmação para ações que requerem aprovação do usuário.
 
-### Features Juscash:
-- **Tipos**: \`info\`, \`warning\`, \`danger\` (afeta cor do botão de confirmação)
-- **Botão único ou duplo**: Use \`cancelText\` para exibir botão de cancelar
-- **Loading state**: Prop \`confirmLoading\` para estados de carregamento
-- **Sem botão X**: Focado em decisão do usuário
+### Props:
+- **Custom (Juscash)**:
+  - \`type\`: \`info\`, \`warning\`, \`danger\`.
+  - \`confirmText\`/\`cancelText\`: Define os textos dos botões.
+  - \`confirmLoading\`: Estado de carregamento do botão de confirmação.
 
 ### Como usar:
 
 \`\`\`tsx
-import { ConfirmModal, Button } from '@juscash/design-system';
+import { ConfirmModal, Button } from "@Juscash/design-system";
 
 function Example() {
   const [open, setOpen] = useState(false);
@@ -50,7 +87,38 @@ function Example() {
 \`\`\`
 `,
       },
+      page: () => (
+        <>
+          <Title />
+          <Subtitle />
+          <Description />
+
+          <Primary />
+
+          <Controls />
+
+          <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
+            <h3
+              style={{
+                marginBottom: "1rem",
+                fontSize: "1.2rem",
+                fontWeight: "bold",
+              }}
+            >
+              🎨 Figma Spec
+            </h3>
+            <Figma showLink url={FIGMA_URL} height="400px" />
+          </div>
+
+          <Stories />
+        </>
+      ),
     },
+  },
+  args: {
+    hover: false,
+    active: false,
+    focus: false,
   },
   argTypes: {
     type: {
@@ -105,12 +173,38 @@ function Example() {
         category: "Juscash Props",
       },
     },
+    hover: {
+      control: "boolean",
+      description: "Força o estado hover",
+      table: { category: "Pseudo States" },
+    },
+    active: {
+      control: "boolean",
+      description: "Força o estado active",
+      table: { category: "Pseudo States" },
+    },
+    focus: {
+      control: "boolean",
+      description: "Força o estado focus",
+      table: { category: "Pseudo States" },
+    },
+  },
+  render: (args) => {
+    const { hover, active, focus, className, ...props } = args;
+    const mergedClassName = getPseudoClassName({
+      hover,
+      active,
+      focus,
+      className,
+    });
+
+    return <ConfirmModal {...props} className={mergedClassName} />;
   },
 };
 
 export default meta;
 
-type Story = StoryObj<typeof ConfirmModal>;
+type Story = StoryObj<ConfirmModalStoryProps>;
 
 // Story 1: Default (com dois botões)
 export const Default: Story = {
@@ -121,13 +215,21 @@ export const Default: Story = {
       },
     },
   },
-  render: function DefaultStory() {
+  render: function DefaultStory(args) {
     const [open, setOpen] = useState(false);
+    const { hover, active, focus, className, ...props } = args;
+    const mergedClassName = getPseudoClassName({
+      hover,
+      active,
+      focus,
+      className,
+    });
 
     return (
       <div style={{ padding: 40 }}>
         <Button onClick={() => setOpen(true)}>Abrir Confirmação</Button>
         <ConfirmModal
+          {...props}
           open={open}
           title="Tem certeza que deseja sair desta página?"
           description="Suas alterações podem ser perdidas."
@@ -135,6 +237,7 @@ export const Default: Story = {
           cancelText="Não, ficar na página"
           onConfirm={() => setOpen(false)}
           onCancel={() => setOpen(false)}
+          className={mergedClassName}
         />
       </div>
     );
@@ -150,8 +253,15 @@ export const Danger: Story = {
       },
     },
   },
-  render: function DangerStory() {
+  render: function DangerStory(args) {
     const [open, setOpen] = useState(false);
+    const { hover, active, focus, className, ...props } = args;
+    const mergedClassName = getPseudoClassName({
+      hover,
+      active,
+      focus,
+      className,
+    });
 
     return (
       <div style={{ padding: 40 }}>
@@ -159,6 +269,7 @@ export const Danger: Story = {
           Excluir Item
         </Button>
         <ConfirmModal
+          {...props}
           open={open}
           title="Excluir"
           description="Você tem certeza que deseja excluir este item?"
@@ -167,6 +278,7 @@ export const Danger: Story = {
           cancelText="Cancelar"
           onConfirm={() => setOpen(false)}
           onCancel={() => setOpen(false)}
+          className={mergedClassName}
         />
       </div>
     );
@@ -182,19 +294,28 @@ export const SingleButton: Story = {
       },
     },
   },
-  render: function SingleButtonStory() {
+  render: function SingleButtonStory(args) {
     const [open, setOpen] = useState(false);
+    const { hover, active, focus, className, ...props } = args;
+    const mergedClassName = getPseudoClassName({
+      hover,
+      active,
+      focus,
+      className,
+    });
 
     return (
       <div style={{ padding: 40 }}>
         <Button onClick={() => setOpen(true)}>Abrir Alerta</Button>
         <ConfirmModal
+          {...props}
           open={open}
           title="Excluir"
           description="Você tem certeza que deseja excluir este item?"
           confirmText="Label"
           onConfirm={() => setOpen(false)}
           onCancel={() => setOpen(false)}
+          className={mergedClassName}
         />
       </div>
     );
@@ -210,9 +331,16 @@ export const WithLoading: Story = {
       },
     },
   },
-  render: function WithLoadingStory() {
+  render: function WithLoadingStory(args) {
     const [open, setOpen] = useState(false);
     const [loading, setLoading] = useState(false);
+    const { hover, active, focus, className, ...props } = args;
+    const mergedClassName = getPseudoClassName({
+      hover,
+      active,
+      focus,
+      className,
+    });
 
     const handleConfirm = () => {
       setLoading(true);
@@ -226,6 +354,7 @@ export const WithLoading: Story = {
       <div style={{ padding: 40 }}>
         <Button onClick={() => setOpen(true)}>Salvar Alterações</Button>
         <ConfirmModal
+          {...props}
           open={open}
           title="Salvar alterações?"
           description="Deseja salvar as alterações feitas?"
@@ -234,6 +363,7 @@ export const WithLoading: Story = {
           confirmLoading={loading}
           onConfirm={handleConfirm}
           onCancel={() => setOpen(false)}
+          className={mergedClassName}
         />
       </div>
     );
@@ -249,10 +379,17 @@ export const FigmaExample: Story = {
       },
     },
   },
-  render: function FigmaExampleStory() {
+  render: function FigmaExampleStory(args) {
     const [open1, setOpen1] = useState(false);
     const [open2, setOpen2] = useState(false);
     const [open3, setOpen3] = useState(false);
+    const { hover, active, focus, className, ...props } = args;
+    const mergedClassName = getPseudoClassName({
+      hover,
+      active,
+      focus,
+      className,
+    });
 
     return (
       <div style={{ padding: 40, display: "flex", gap: 16 }}>
@@ -264,16 +401,19 @@ export const FigmaExample: Story = {
 
         {/* Exemplo 1: Botão único */}
         <ConfirmModal
+          {...props}
           open={open1}
           title="Excluir"
           description="Você tem certeza que deseja excluir este item?"
           confirmText="Label"
           onConfirm={() => setOpen1(false)}
           onCancel={() => setOpen1(false)}
+          className={mergedClassName}
         />
 
         {/* Exemplo 2: Com cancelar */}
         <ConfirmModal
+          {...props}
           open={open2}
           title="Excluir"
           description="Você tem certeza que deseja excluir este item?"
@@ -282,10 +422,12 @@ export const FigmaExample: Story = {
           type="danger"
           onConfirm={() => setOpen2(false)}
           onCancel={() => setOpen2(false)}
+          className={mergedClassName}
         />
 
         {/* Exemplo 3: Sair da página */}
         <ConfirmModal
+          {...props}
           open={open3}
           title="Tem certeza que deseja sair desta página?"
           description="Suas alterações podem ser perdidas."
@@ -293,6 +435,7 @@ export const FigmaExample: Story = {
           cancelText="Não, ficar na página"
           onConfirm={() => setOpen3(false)}
           onCancel={() => setOpen3(false)}
+          className={mergedClassName}
         />
       </div>
     );

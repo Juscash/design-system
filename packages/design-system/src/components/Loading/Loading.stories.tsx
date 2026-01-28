@@ -3,7 +3,7 @@ import { Loading } from "./Loading";
 import { designSystemColors } from "../../theme";
 
 const meta: Meta<typeof Loading> = {
-  title: "Components/Feedback/Loading",
+  title: "Components/Loading",
   component: Loading,
   parameters: {
     layout: "centered",

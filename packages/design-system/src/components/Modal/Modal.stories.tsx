@@ -22,6 +22,23 @@ type ModalStoryProps = React.ComponentProps<typeof Modal> & {
   focus?: boolean;
 };
 
+const getPseudoClassName = (args: {
+  hover?: boolean;
+  active?: boolean;
+  focus?: boolean;
+  className?: string;
+}) => {
+  const pseudoClasses = [
+    args.hover && "pseudo-hover",
+    args.active && "pseudo-active",
+    args.focus && "pseudo-focus-visible",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return [args.className, pseudoClasses].filter(Boolean).join(" ");
+};
+
 const meta: Meta<ModalStoryProps> = {
   title: "Components/Modal",
   component: Modal,
@@ -182,14 +199,12 @@ function Example() {
   },
   render: (args) => {
     const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
-      .filter(Boolean)
-      .join(" ");
-    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
+    const mergedClassName = getPseudoClassName({
+      hover,
+      active,
+      focus,
+      className,
+    });
 
     return <Modal {...props} className={mergedClassName} />;
   },
@@ -208,19 +223,28 @@ export const Default: Story = {
       },
     },
   },
-  render: function DefaultStory() {
+  render: function DefaultStory(args) {
     const [open, setOpen] = useState(false);
+    const { hover, active, focus, className, ...props } = args;
+    const mergedClassName = getPseudoClassName({
+      hover,
+      active,
+      focus,
+      className,
+    });
 
     return (
       <div style={{ padding: 40 }}>
         <Button onClick={() => setOpen(true)}>Abrir Modal</Button>
         <Modal
+          {...props}
           title="Título do Modal"
           open={open}
           onOk={() => setOpen(false)}
           onCancel={() => setOpen(false)}
           okText="Confirmar"
           cancelText="Cancelar"
+          className={mergedClassName}
         >
           <p>Este é um modal básico com o estilo do Design System JusCash.</p>
           <p>Clique em Confirmar ou Cancelar para fechar.</p>
@@ -239,10 +263,17 @@ export const Sizes: Story = {
       },
     },
   },
-  render: function SizesStory() {
+  render: function SizesStory(args) {
     const [openS, setOpenS] = useState(false);
     const [openM, setOpenM] = useState(false);
     const [openL, setOpenL] = useState(false);
+    const { hover, active, focus, className, ...props } = args;
+    const mergedClassName = getPseudoClassName({
+      hover,
+      active,
+      focus,
+      className,
+    });
 
     return (
       <div style={{ padding: 40, display: "flex", gap: 16 }}>
@@ -251,31 +282,37 @@ export const Sizes: Story = {
         <Button onClick={() => setOpenL(true)}>Large (720px)</Button>
 
         <Modal
+          {...props}
           title="Modal Small"
           open={openS}
           onCancel={() => setOpenS(false)}
           dsSize="s"
           footer={null}
+          className={mergedClassName}
         >
           <p>Modal com tamanho small (400px de largura).</p>
         </Modal>
 
         <Modal
+          {...props}
           title="Modal Medium"
           open={openM}
           onCancel={() => setOpenM(false)}
           dsSize="m"
           footer={null}
+          className={mergedClassName}
         >
           <p>Modal com tamanho medium (520px de largura).</p>
         </Modal>
 
         <Modal
+          {...props}
           title="Modal Large"
           open={openL}
           onCancel={() => setOpenL(false)}
           dsSize="l"
           footer={null}
+          className={mergedClassName}
         >
           <p>Modal com tamanho large (720px de largura).</p>
         </Modal>
@@ -293,13 +330,21 @@ export const WithFooter: Story = {
       },
     },
   },
-  render: function WithFooterStory() {
+  render: function WithFooterStory(args) {
     const [open, setOpen] = useState(false);
+    const { hover, active, focus, className, ...props } = args;
+    const mergedClassName = getPseudoClassName({
+      hover,
+      active,
+      focus,
+      className,
+    });
 
     return (
       <div style={{ padding: 40 }}>
         <Button onClick={() => setOpen(true)}>Abrir com Footer</Button>
         <Modal
+          {...props}
           title="Confirmar Ação"
           open={open}
           onCancel={() => setOpen(false)}
@@ -315,6 +360,7 @@ export const WithFooter: Story = {
               </Button>
             </div>
           }
+          className={mergedClassName}
         >
           <p>Tem certeza que deseja prosseguir com esta operação?</p>
           <p>Esta ação não poderá ser desfeita.</p>
@@ -333,17 +379,26 @@ export const NoFooter: Story = {
       },
     },
   },
-  render: function NoFooterStory() {
+  render: function NoFooterStory(args) {
     const [open, setOpen] = useState(false);
+    const { hover, active, focus, className, ...props } = args;
+    const mergedClassName = getPseudoClassName({
+      hover,
+      active,
+      focus,
+      className,
+    });
 
     return (
       <div style={{ padding: 40 }}>
         <Button onClick={() => setOpen(true)}>Modal Informativo</Button>
         <Modal
+          {...props}
           title="Informação"
           open={open}
           onCancel={() => setOpen(false)}
           footer={null}
+          className={mergedClassName}
         >
           <p>Este modal é apenas informativo.</p>
           <p>Use o X no canto superior direito para fechar.</p>
@@ -362,19 +417,28 @@ export const WithScroll: Story = {
       },
     },
   },
-  render: function WithScrollStory() {
+  render: function WithScrollStory(args) {
     const [open, setOpen] = useState(false);
+    const { hover, active, focus, className, ...props } = args;
+    const mergedClassName = getPseudoClassName({
+      hover,
+      active,
+      focus,
+      className,
+    });
 
     return (
       <div style={{ padding: 40 }}>
         <Button onClick={() => setOpen(true)}>Modal com Scroll</Button>
         <Modal
+          {...props}
           title="Termos e Condições"
           open={open}
           onCancel={() => setOpen(false)}
           okText="Aceitar"
           cancelText="Recusar"
           dsSize="m"
+          className={mergedClassName}
         >
           <div style={{ maxHeight: 300, overflow: "auto" }}>
             {Array.from({ length: 20 }, (_, i) => (
@@ -400,13 +464,21 @@ export const FigmaExample: Story = {
       },
     },
   },
-  render: function FigmaExampleStory() {
+  render: function FigmaExampleStory(args) {
     const [open, setOpen] = useState(false);
+    const { hover, active, focus, className, ...props } = args;
+    const mergedClassName = getPseudoClassName({
+      hover,
+      active,
+      focus,
+      className,
+    });
 
     return (
       <div style={{ padding: 40 }}>
         <Button onClick={() => setOpen(true)}>Exemplo Figma</Button>
         <Modal
+          {...props}
           title="Título do Dialog"
           open={open}
           onCancel={() => setOpen(false)}
@@ -423,6 +495,7 @@ export const FigmaExample: Story = {
               </Button>
             </div>
           }
+          className={mergedClassName}
         >
           <p>
             Conteúdo do modal seguindo o design do Figma. O modal possui header

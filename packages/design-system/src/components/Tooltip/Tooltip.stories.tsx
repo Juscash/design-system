@@ -4,7 +4,7 @@ import { Button } from "../Button"; // Using our custom Button if available, or 
 import { Info } from "lucide-react";
 
 const meta: Meta<typeof Tooltip> = {
-  title: "Components/Feedback/Tooltip",
+  title: "Components/Tooltip",
   component: Tooltip,
   parameters: {
     layout: "centered",

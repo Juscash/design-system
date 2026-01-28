@@ -3,7 +3,7 @@ import { Skeleton } from "./Skeleton";
 import { designSystemColors } from "../../theme";
 
 const meta: Meta<typeof Skeleton> = {
-  title: "Components/Feedback/Skeleton",
+  title: "Components/Skeleton",
   component: Skeleton,
   parameters: {
     layout: "centered",

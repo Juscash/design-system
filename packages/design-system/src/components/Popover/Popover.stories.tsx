@@ -5,7 +5,7 @@ import { Popover } from "./Popover";
 import { Bell, Info } from "lucide-react";
 
 const meta: Meta<typeof Popover> = {
-  title: "Components/Feedback/Popover",
+  title: "Components/Popover",
   component: Popover,
   tags: ["autodocs"],
   parameters: {
@@ -181,10 +181,10 @@ export const Complete: Story = {
     content: "Tem certeza que deseja prosseguir com esta operação?",
     footer: (
       <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
-        <Button variant="neutral" dsSize="s">
+        <Button type="neutral" dsSize="s">
           Cancelar
         </Button>
-        <Button variant="primary" dsSize="s">
+        <Button type="primary" dsSize="s">
           Confirmar
         </Button>
       </div>

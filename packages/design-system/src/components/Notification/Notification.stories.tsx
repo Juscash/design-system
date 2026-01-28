@@ -4,7 +4,7 @@ import { Button } from "../Button";
 import { Notification } from "./Notification";
 
 const meta: Meta = {
-  title: "Components/Feedback/Notification",
+  title: "Components/Notification",
   tags: ["autodocs"],
   parameters: {
     design: {
