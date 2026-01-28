@@ -23,3 +23,4 @@ export * from "./Tabs";
 export * from "./Modal";
 export * from "./ConfirmModal";
 export * from "./DatePicker";
+export * from "./Avatar";
