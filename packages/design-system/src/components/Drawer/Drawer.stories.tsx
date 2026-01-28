@@ -15,7 +15,7 @@ import {
 import { Figma } from "@storybook/addon-designs/blocks";
 
 const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash";
+  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4098-11176&m=dev";
 
 type DrawerStoryProps = React.ComponentProps<typeof Drawer> & {
   hover?: boolean;

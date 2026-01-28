@@ -4,16 +4,53 @@ import { Button } from "../Button";
 import { Popover } from "./Popover";
 import { Bell, Info } from "lucide-react";
 
-const meta: Meta<typeof Popover> = {
+import {
+  Title,
+  Subtitle,
+  Description,
+  Primary,
+  Controls,
+  Stories,
+} from "@storybook/addon-docs/blocks";
+import { Figma } from "@storybook/addon-designs/blocks";
+
+const FIGMA_URL =
+  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4125-10702&m=dev";
+
+type PopoverStoryProps = React.ComponentProps<typeof Popover> & {
+  hover?: boolean;
+  active?: boolean;
+  focus?: boolean;
+};
+
+const getPseudoClassName = (args: {
+  hover?: boolean;
+  active?: boolean;
+  focus?: boolean;
+  className?: string;
+}) => {
+  const pseudoClasses = [
+    args.hover && "pseudo-hover",
+    args.active && "pseudo-active",
+    args.focus && "pseudo-focus-visible",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return [args.className, pseudoClasses].filter(Boolean).join(" ");
+};
+
+const meta: Meta<PopoverStoryProps> = {
   title: "Components/Popover",
   component: Popover,
   tags: ["autodocs"],
   parameters: {
     design: {
       type: "figma",
-      url: "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4125-10702&m=dev",
+      url: FIGMA_URL,
     },
     docs: {
+      codePanel: true,
       description: {
         component: `
 Componente baseado no [Ant Design Popover](https://ant.design/components/popover).
@@ -27,7 +64,7 @@ Componente baseado no [Ant Design Popover](https://ant.design/components/popover
 ### Como usar:
 
 \`\`\`tsx
-import { Popover, Button } from '@juscash/design-system';
+import { Popover, Button } from "@Juscash/design-system";
 
 // Uso simples (1 slot)
 <Popover content="Conteúdo do popover">
@@ -46,7 +83,38 @@ import { Popover, Button } from '@juscash/design-system';
 \`\`\`
 `,
       },
+      page: () => (
+        <>
+          <Title />
+          <Subtitle />
+          <Description />
+
+          <Primary />
+
+          <Controls />
+
+          <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
+            <h3
+              style={{
+                marginBottom: "1rem",
+                fontSize: "1.2rem",
+                fontWeight: "bold",
+              }}
+            >
+              🎨 Figma Spec
+            </h3>
+            <Figma showLink url={FIGMA_URL} height="400px" />
+          </div>
+
+          <Stories />
+        </>
+      ),
     },
+  },
+  args: {
+    hover: false,
+    active: false,
+    focus: false,
   },
   argTypes: {
     header: {
@@ -122,12 +190,27 @@ import { Popover, Button } from '@juscash/design-system';
         category: "Ant Design Props",
       },
     },
+    hover: {
+      control: "boolean",
+      description: "Força o estado hover",
+      table: { category: "Pseudo States" },
+    },
+    active: {
+      control: "boolean",
+      description: "Força o estado active",
+      table: { category: "Pseudo States" },
+    },
+    focus: {
+      control: "boolean",
+      description: "Força o estado focus",
+      table: { category: "Pseudo States" },
+    },
   },
 };
 
 export default meta;
 
-type Story = StoryObj<typeof Popover>;
+type Story = StoryObj<PopoverStoryProps>;
 
 // Story 1: Default (1 slot - apenas content)
 export const Default: Story = {
@@ -135,13 +218,26 @@ export const Default: Story = {
     content: "Este é um popover simples com apenas conteúdo.",
     trigger: "click",
   },
-  render: (args) => (
-    <div style={{ padding: 100, display: "flex", justifyContent: "center" }}>
-      <Popover {...args}>
-        <Button>Clique aqui</Button>
-      </Popover>
-    </div>
-  ),
+  render: (args) => {
+    const { hover, active, focus, className, ...props } = args;
+    const mergedClassName = getPseudoClassName({
+      hover,
+      active,
+      focus,
+      className,
+    });
+
+    return (
+      <div
+        className={mergedClassName}
+        style={{ padding: 100, display: "flex", justifyContent: "center" }}
+      >
+        <Popover {...props}>
+          <Button>Clique aqui</Button>
+        </Popover>
+      </div>
+    );
+  },
 };
 
 // Story 2: With Header (2 slots)
@@ -158,13 +254,26 @@ export const WithHeader: Story = {
     content: "Você tem 3 novas notificações para revisar.",
     trigger: "click",
   },
-  render: (args) => (
-    <div style={{ padding: 100, display: "flex", justifyContent: "center" }}>
-      <Popover {...args}>
-        <Button>Ver Notificações</Button>
-      </Popover>
-    </div>
-  ),
+  render: (args) => {
+    const { hover, active, focus, className, ...props } = args;
+    const mergedClassName = getPseudoClassName({
+      hover,
+      active,
+      focus,
+      className,
+    });
+
+    return (
+      <div
+        className={mergedClassName}
+        style={{ padding: 100, display: "flex", justifyContent: "center" }}
+      >
+        <Popover {...props}>
+          <Button>Ver Notificações</Button>
+        </Popover>
+      </div>
+    );
+  },
 };
 
 // Story 3: Complete (3 slots - header + content + footer)
@@ -191,13 +300,26 @@ export const Complete: Story = {
     ),
     trigger: "click",
   },
-  render: (args) => (
-    <div style={{ padding: 100, display: "flex", justifyContent: "center" }}>
-      <Popover {...args}>
-        <Button>Abrir Confirmação</Button>
-      </Popover>
-    </div>
-  ),
+  render: (args) => {
+    const { hover, active, focus, className, ...props } = args;
+    const mergedClassName = getPseudoClassName({
+      hover,
+      active,
+      focus,
+      className,
+    });
+
+    return (
+      <div
+        className={mergedClassName}
+        style={{ padding: 100, display: "flex", justifyContent: "center" }}
+      >
+        <Popover {...props}>
+          <Button>Abrir Confirmação</Button>
+        </Popover>
+      </div>
+    );
+  },
 };
 
 // Story 4: Custom Icon
@@ -215,13 +337,26 @@ export const CustomIcon: Story = {
     icon: <Info size={16} />,
     trigger: "click",
   },
-  render: (args) => (
-    <div style={{ padding: 100, display: "flex", justifyContent: "center" }}>
-      <Popover {...args}>
-        <Button>Ver Info</Button>
-      </Popover>
-    </div>
-  ),
+  render: (args) => {
+    const { hover, active, focus, className, ...props } = args;
+    const mergedClassName = getPseudoClassName({
+      hover,
+      active,
+      focus,
+      className,
+    });
+
+    return (
+      <div
+        className={mergedClassName}
+        style={{ padding: 100, display: "flex", justifyContent: "center" }}
+      >
+        <Popover {...props}>
+          <Button>Ver Info</Button>
+        </Popover>
+      </div>
+    );
+  },
 };
 
 // Story 5: Different Placements
@@ -233,10 +368,12 @@ export const Placements: Story = {
       },
     },
   },
-  render: () => {
+  render: (args) => {
     const content = "Conteúdo do popover";
+    const mergedClassName = getPseudoClassName(args);
     return (
       <div
+        className={mergedClassName}
         style={{
           padding: 100,
           display: "grid",
@@ -294,26 +431,31 @@ export const Triggers: Story = {
       },
     },
   },
-  render: () => (
-    <div
-      style={{
-        padding: 100,
-        display: "flex",
-        gap: 16,
-        justifyContent: "center",
-      }}
-    >
-      <Popover content="Abre ao passar o mouse" trigger="hover">
-        <Button>Hover</Button>
-      </Popover>
-      <Popover content="Abre ao clicar" trigger="click">
-        <Button>Click</Button>
-      </Popover>
-      <Popover content="Abre ao focar" trigger="focus">
-        <Button>Focus</Button>
-      </Popover>
-    </div>
-  ),
+  render: (args) => {
+    const mergedClassName = getPseudoClassName(args);
+
+    return (
+      <div
+        className={mergedClassName}
+        style={{
+          padding: 100,
+          display: "flex",
+          gap: 16,
+          justifyContent: "center",
+        }}
+      >
+        <Popover content="Abre ao passar o mouse" trigger="hover">
+          <Button>Hover</Button>
+        </Popover>
+        <Popover content="Abre ao clicar" trigger="click">
+          <Button>Click</Button>
+        </Popover>
+        <Popover content="Abre ao focar" trigger="focus">
+          <Button>Focus</Button>
+        </Popover>
+      </div>
+    );
+  },
 };
 
 // Story 7: Using Antd Title (compatibility)
@@ -331,11 +473,24 @@ export const WithAntdTitle: Story = {
     content: "Conteúdo usando a prop title do Ant Design.",
     trigger: "click",
   },
-  render: (args) => (
-    <div style={{ padding: 100, display: "flex", justifyContent: "center" }}>
-      <Popover {...args}>
-        <Button>Abrir (Antd Title)</Button>
-      </Popover>
-    </div>
-  ),
+  render: (args) => {
+    const { hover, active, focus, className, ...props } = args;
+    const mergedClassName = getPseudoClassName({
+      hover,
+      active,
+      focus,
+      className,
+    });
+
+    return (
+      <div
+        className={mergedClassName}
+        style={{ padding: 100, display: "flex", justifyContent: "center" }}
+      >
+        <Popover {...props}>
+          <Button>Abrir (Antd Title)</Button>
+        </Popover>
+      </div>
+    );
+  },
 };

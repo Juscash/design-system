@@ -3,15 +3,48 @@ import React from "react";
 import { Button } from "../Button";
 import { Notification } from "./Notification";
 
-const meta: Meta = {
+import {
+  Title,
+  Subtitle,
+  Description,
+  Primary,
+  Controls,
+  Stories,
+} from "@storybook/addon-docs/blocks";
+import { Figma } from "@storybook/addon-designs/blocks";
+
+const FIGMA_URL =
+  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4098-8063&m=dev";
+
+type NotificationStoryProps = {
+  hover?: boolean;
+  active?: boolean;
+  focus?: boolean;
+  className?: string;
+};
+
+const getPseudoClassName = (args: NotificationStoryProps) => {
+  const pseudoClasses = [
+    args.hover && "pseudo-hover",
+    args.active && "pseudo-active",
+    args.focus && "pseudo-focus-visible",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return [args.className, pseudoClasses].filter(Boolean).join(" ");
+};
+
+const meta: Meta<NotificationStoryProps> = {
   title: "Components/Notification",
   tags: ["autodocs"],
   parameters: {
     design: {
       type: "figma",
-      url: "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4098-8063&m=dev",
+      url: FIGMA_URL,
     },
     docs: {
+      codePanel: true,
       description: {
         component: `
 Componente baseado no [Ant Design Notification](https://ant.design/components/notification).
@@ -25,7 +58,7 @@ Componente baseado no [Ant Design Notification](https://ant.design/components/no
 ### Como usar:
 
 \`\`\`tsx
-import { Notification } from '@juscash/design-system';
+import { Notification } from "@Juscash/design-system";
 
 const MyComponent = () => {
   const [api, contextHolder] = Notification.useNotification();
@@ -47,20 +80,72 @@ const MyComponent = () => {
 \`\`\`
 `,
       },
+      page: () => (
+        <>
+          <Title />
+          <Subtitle />
+          <Description />
+
+          <Primary />
+
+          <Controls />
+
+          <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
+            <h3
+              style={{
+                marginBottom: "1rem",
+                fontSize: "1.2rem",
+                fontWeight: "bold",
+              }}
+            >
+              🎨 Figma Spec
+            </h3>
+            <Figma showLink url={FIGMA_URL} height="400px" />
+          </div>
+
+          <Stories />
+        </>
+      ),
+    },
+  },
+  args: {
+    hover: false,
+    active: false,
+    focus: false,
+  },
+  argTypes: {
+    hover: {
+      control: "boolean",
+      description: "Força o estado hover",
+      table: { category: "Pseudo States" },
+    },
+    active: {
+      control: "boolean",
+      description: "Força o estado active",
+      table: { category: "Pseudo States" },
+    },
+    focus: {
+      control: "boolean",
+      description: "Força o estado focus",
+      table: { category: "Pseudo States" },
     },
   },
 };
 
 export default meta;
 
-type Story = StoryObj;
+type Story = StoryObj<NotificationStoryProps>;
 
 export const Default: Story = {
-  render: () => {
+  render: (args) => {
     const [api, contextHolder] = Notification.useNotification();
+    const mergedClassName = getPseudoClassName(args);
 
     return (
-      <div style={{ display: "flex", gap: 16, padding: 20 }}>
+      <div
+        className={mergedClassName}
+        style={{ display: "flex", gap: 16, padding: 20 }}
+      >
         {contextHolder}
         <Button
           onClick={() =>
@@ -115,8 +200,9 @@ export const Stacking: Story = {
       },
     },
   },
-  render: () => {
+  render: (args) => {
     const [api, contextHolder] = Notification.useNotification();
+    const mergedClassName = getPseudoClassName(args);
 
     const triggerMultiple = () => {
       api.info({ message: "First Notification", description: "Order 1" });
@@ -147,7 +233,7 @@ export const Stacking: Story = {
     };
 
     return (
-      <div style={{ padding: 20 }}>
+      <div className={mergedClassName} style={{ padding: 20 }}>
         {contextHolder}
         <Button onClick={triggerMultiple}>Trigger Multiple (Stack Test)</Button>
       </div>
@@ -163,8 +249,9 @@ export const CustomIcon: Story = {
       },
     },
   },
-  render: () => {
+  render: (args) => {
     const [api, contextHolder] = Notification.useNotification();
+    const mergedClassName = getPseudoClassName(args);
 
     const openCustom = () => {
       api.info({
@@ -175,7 +262,7 @@ export const CustomIcon: Story = {
     };
 
     return (
-      <div style={{ padding: 20 }}>
+      <div className={mergedClassName} style={{ padding: 20 }}>
         {contextHolder}
         <Button onClick={openCustom}>Trigger Custom Icon</Button>
       </div>

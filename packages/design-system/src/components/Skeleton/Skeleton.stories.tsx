@@ -1,30 +1,128 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import React from "react";
 import { Skeleton } from "./Skeleton";
-import { designSystemColors } from "../../theme";
 
-const meta: Meta<typeof Skeleton> = {
+import {
+  Title,
+  Subtitle,
+  Description,
+  Primary,
+  Controls,
+  Stories,
+} from "@storybook/addon-docs/blocks";
+import { Figma } from "@storybook/addon-designs/blocks";
+
+const FIGMA_URL =
+  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4080-20627&m=dev";
+
+type SkeletonStoryProps = React.ComponentProps<typeof Skeleton> & {
+  hover?: boolean;
+  active?: boolean;
+  focus?: boolean;
+};
+
+const meta: Meta<SkeletonStoryProps> = {
   title: "Components/Skeleton",
   component: Skeleton,
   parameters: {
     layout: "centered",
+    design: {
+      type: "figma",
+      url: FIGMA_URL,
+    },
     docs: {
+      codePanel: true,
       description: {
-        component: "Placeholder usado para indicar carregamento de conteúdo.",
+        component: `
+Placeholder usado para indicar carregamento de conteúdo.
+Baseado no [Ant Design Skeleton](https://ant.design/components/skeleton).
+
+### Props:
+- **Extended (Ant Design)**: Props padrão do AntD Skeleton.
+
+### Como usar:
+
+\`\`\`tsx
+import { Skeleton } from "@Juscash/design-system";
+
+function Example() {
+  return <Skeleton active />;
+}
+\`\`\`
+`,
       },
+      page: () => (
+        <>
+          <Title />
+          <Subtitle />
+          <Description />
+
+          <Primary />
+
+          <Controls />
+
+          <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
+            <h3
+              style={{
+                marginBottom: "1rem",
+                fontSize: "1.2rem",
+                fontWeight: "bold",
+              }}
+            >
+              🎨 Figma Spec
+            </h3>
+            <Figma showLink url={FIGMA_URL} height="400px" />
+          </div>
+
+          <Stories />
+        </>
+      ),
     },
   },
   tags: ["autodocs"],
+  args: {
+    hover: false,
+    active: false,
+    focus: false,
+  },
   argTypes: {
-    active: { control: "boolean", description: "Mostra animação" },
     loading: { control: "boolean", description: "Estado de carregamento" },
     avatar: { control: "boolean", description: "Mostra placeholder de avatar" },
     title: { control: "boolean", description: "Mostra placeholder de título" },
     paragraph: { control: "object", description: "Configuração do parágrafo" },
+    hover: {
+      control: "boolean",
+      description: "Força o estado hover",
+      table: { category: "Pseudo States" },
+    },
+    active: {
+      control: "boolean",
+      description: "Força o estado active",
+      table: { category: "Pseudo States" },
+    },
+    focus: {
+      control: "boolean",
+      description: "Força o estado focus",
+      table: { category: "Pseudo States" },
+    },
+  },
+  render: (args) => {
+    const { hover, active, focus, className, ...props } = args;
+    const pseudoClasses = [
+      hover && "pseudo-hover",
+      active && "pseudo-active",
+      focus && "pseudo-focus-visible",
+    ]
+      .filter(Boolean)
+      .join(" ");
+    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
+
+    return <Skeleton {...props} className={mergedClassName} />;
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof Skeleton>;
+type Story = StoryObj<SkeletonStoryProps>;
 
 export const Default: Story = {
   args: {

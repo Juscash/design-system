@@ -1,6 +1,26 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import React from "react";
 import { Tabs } from "./Tabs";
 import type { TabsProps } from "antd";
+
+import {
+  Title,
+  Subtitle,
+  Description,
+  Primary as DocsPrimary,
+  Controls,
+  Stories,
+} from "@storybook/addon-docs/blocks";
+import { Figma } from "@storybook/addon-designs/blocks";
+
+const FIGMA_URL =
+  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4077-9817&m=dev";
+
+type TabsStoryProps = React.ComponentProps<typeof Tabs> & {
+  hover?: boolean;
+  active?: boolean;
+  focus?: boolean;
+};
 
 const items: TabsProps["items"] = [
   {
@@ -20,16 +40,17 @@ const items: TabsProps["items"] = [
   },
 ];
 
-const meta: Meta<typeof Tabs> = {
+const meta: Meta<TabsStoryProps> = {
   title: "Components/Tabs",
   component: Tabs,
   parameters: {
     layout: "centered",
     design: {
       type: "figma",
-      url: "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4077-9817&m=dev",
+      url: FIGMA_URL,
     },
     docs: {
+      codePanel: true,
       description: {
         component: `
 Componente baseado no [Ant Design Tabs](https://ant.design/components/tabs).
@@ -43,7 +64,7 @@ Componente baseado no [Ant Design Tabs](https://ant.design/components/tabs).
 ### Como usar:
 
 \`\`\`tsx
-import { Tabs } from '@juscash/design-system';
+import { Tabs } from "@Juscash/design-system";
 
 const items = [
   {
@@ -64,9 +85,40 @@ const MyComponent = () => (
 \`\`\`
 `,
       },
+      page: () => (
+        <>
+          <Title />
+          <Subtitle />
+          <Description />
+
+          <DocsPrimary />
+
+          <Controls />
+
+          <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
+            <h3
+              style={{
+                marginBottom: "1rem",
+                fontSize: "1.2rem",
+                fontWeight: "bold",
+              }}
+            >
+              🎨 Figma Spec
+            </h3>
+            <Figma showLink url={FIGMA_URL} height="400px" />
+          </div>
+
+          <Stories />
+        </>
+      ),
     },
   },
   tags: ["autodocs"],
+  args: {
+    hover: false,
+    active: false,
+    focus: false,
+  },
   argTypes: {
     variant: {
       control: "radio",
@@ -89,11 +141,39 @@ const MyComponent = () => (
       description: "Chave da aba ativa inicial",
     },
     onChange: { action: "changed" },
+    hover: {
+      control: "boolean",
+      description: "Força o estado hover",
+      table: { category: "Pseudo States" },
+    },
+    active: {
+      control: "boolean",
+      description: "Força o estado active",
+      table: { category: "Pseudo States" },
+    },
+    focus: {
+      control: "boolean",
+      description: "Força o estado focus",
+      table: { category: "Pseudo States" },
+    },
+  },
+  render: (args) => {
+    const { hover, active, focus, className, ...props } = args;
+    const pseudoClasses = [
+      hover && "pseudo-hover",
+      active && "pseudo-active",
+      focus && "pseudo-focus-visible",
+    ]
+      .filter(Boolean)
+      .join(" ");
+    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
+
+    return <Tabs {...props} className={mergedClassName} />;
   },
 };
 
 export default meta;
-type Story = StoryObj<typeof Tabs>;
+type Story = StoryObj<TabsStoryProps>;
 
 export const Default: Story = {
   args: {
