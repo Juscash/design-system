@@ -1,31 +1,54 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import { DatePicker, RangePicker } from "./DatePicker";
 import React from "react";
+import { DatePicker, RangePicker } from "./DatePicker";
 
-const meta: Meta<typeof DatePicker> = {
-  title: "Components/Data Entry/DatePicker",
+import {
+  Title,
+  Subtitle,
+  Description,
+  Primary,
+  Controls,
+  Stories,
+} from "@storybook/addon-docs/blocks";
+import { Figma } from "@storybook/addon-designs/blocks";
+
+const FIGMA_URL =
+  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4066-8379&m=dev";
+
+type DatePickerStoryProps = React.ComponentProps<typeof DatePicker> & {
+  hover?: boolean;
+  active?: boolean;
+  focus?: boolean;
+};
+
+type RangePickerStoryProps = React.ComponentProps<typeof RangePicker> & {
+  hover?: boolean;
+  active?: boolean;
+  focus?: boolean;
+};
+
+const meta: Meta<DatePickerStoryProps> = {
+  title: "Components/DatePicker",
   component: DatePicker,
   tags: ["autodocs"],
   parameters: {
     design: {
       type: "figma",
-      url: "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4066-8379&m=dev",
+      url: FIGMA_URL,
     },
     docs: {
+      codePanel: true,
       description: {
         component: `
-Componente de seleção de data (DatePicker) e intervalo de datas (RangePicker).
+Componente de seleção de data (DatePicker) baseado no [Ant Design DatePicker](https://ant.design/components/date-picker).
 
-### Features Juscash:
-- **Ícones Customizados**: Uso de ícones Lucide (Chevron, Calendar).
-- **Navegação**: Botões de navegação (anterior/próximo) estilizados com borda.
-- **Locale**: Configurado para pt-BR com formato de mês completo.
-- **Tema**: Cores customizadas para placeholder e estados ativos.
+### Props:
+- **Extended (Ant Design)**: Suporta as propriedades padrão do AntD DatePicker.
 
 ### Como usar:
 
 \`\`\`tsx
-import { DatePicker, RangePicker } from '@juscash/design-system';
+import { DatePicker, RangePicker } from "@Juscash/design-system";
 
 function Example() {
   return (
@@ -38,71 +61,151 @@ function Example() {
 \`\`\`
 `,
       },
+      page: () => (
+        <>
+          <Title />
+          <Subtitle />
+          <Description />
+
+          <Primary />
+
+          <Controls />
+
+          <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
+            <h3
+              style={{
+                marginBottom: "1rem",
+                fontSize: "1.2rem",
+                fontWeight: "bold",
+              }}
+            >
+              🎨 Figma Spec
+            </h3>
+            <Figma showLink url={FIGMA_URL} height="400px" />
+          </div>
+
+          <Stories />
+        </>
+      ),
     },
+  },
+  args: {
+    hover: false,
+    active: false,
+    focus: false,
+  },
+  argTypes: {
+    hover: {
+      control: "boolean",
+      description: "Força o estado hover",
+      table: { category: "Pseudo States" },
+    },
+    active: {
+      control: "boolean",
+      description: "Força o estado active",
+      table: { category: "Pseudo States" },
+    },
+    focus: {
+      control: "boolean",
+      description: "Força o estado focus",
+      table: { category: "Pseudo States" },
+    },
+  },
+  render: (args) => {
+    const { hover, active, focus, className, ...props } = args;
+    const pseudoClasses = [
+      hover && "pseudo-hover",
+      active && "pseudo-active",
+      focus && "pseudo-focus-visible",
+    ]
+      .filter(Boolean)
+      .join(" ");
+    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
+
+    return <DatePicker {...props} className={mergedClassName} />;
   },
 };
 
 export default meta;
 
-type DatePickerStory = StoryObj<typeof DatePicker>;
-type RangePickerStory = StoryObj<typeof RangePicker>;
+type DatePickerStory = StoryObj<DatePickerStoryProps>;
+type RangePickerStory = StoryObj<RangePickerStoryProps>;
 
 export const Default: DatePickerStory = {
-  render: () => <DatePicker />,
+  render: (args) => {
+    const { hover, active, focus, className, ...props } = args;
+    const pseudoClasses = [
+      hover && "pseudo-hover",
+      active && "pseudo-active",
+      focus && "pseudo-focus-visible",
+    ]
+      .filter(Boolean)
+      .join(" ");
+    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
+
+    return <DatePicker {...props} className={mergedClassName} />;
+  },
 };
 
 export const WithPlaceholder: DatePickerStory = {
   args: {
     placeholder: "Selecione uma data",
   },
+  render: (args) => {
+    const { hover, active, focus, className, ...props } = args;
+    const pseudoClasses = [
+      hover && "pseudo-hover",
+      active && "pseudo-active",
+      focus && "pseudo-focus-visible",
+    ]
+      .filter(Boolean)
+      .join(" ");
+    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
+
+    return <DatePicker {...props} className={mergedClassName} />;
+  },
 };
 
 export const Range: RangePickerStory = {
-  render: () => <RangePicker />,
+  args: {
+    hover: false,
+    active: false,
+    focus: false,
+  },
+  render: (args) => {
+    const { hover, active, focus, className, ...props } = args;
+    const pseudoClasses = [
+      hover && "pseudo-hover",
+      active && "pseudo-active",
+      focus && "pseudo-focus-visible",
+    ]
+      .filter(Boolean)
+      .join(" ");
+    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
+
+    return <RangePicker {...props} className={mergedClassName} />;
+  },
 };
 
 export const RangeWithPlaceholder: RangePickerStory = {
-  render: () => <RangePicker placeholder={["Data inicial", "Data final"]} />,
+  args: {
+    placeholder: ["Data inicial", "Data final"],
+    hover: false,
+    active: false,
+    focus: false,
+  },
+  render: (args) => {
+    const { hover, active, focus, className, ...props } = args;
+    const pseudoClasses = [
+      hover && "pseudo-hover",
+      active && "pseudo-active",
+      focus && "pseudo-focus-visible",
+    ]
+      .filter(Boolean)
+      .join(" ");
+    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
+
+    return <RangePicker {...props} className={mergedClassName} />;
+  },
 };
 
-export const FigmaExample: DatePickerStory = {
-  parameters: {
-    docs: {
-      description: {
-        story: "Exemplo demonstrando DatePicker e RangePicker lado a lado.",
-      },
-    },
-  },
-  render: () => (
-    <div
-      style={{ display: "flex", flexDirection: "column", gap: 24, width: 400 }}
-    >
-      <div>
-        <label
-          style={{
-            display: "block",
-            marginBottom: 8,
-            fontFamily: "Inter",
-            fontSize: 14,
-          }}
-        >
-          Date Picker
-        </label>
-        <DatePicker style={{ width: "100%" }} />
-      </div>
-      <div>
-        <label
-          style={{
-            display: "block",
-            marginBottom: 8,
-            fontFamily: "Inter",
-            fontSize: 14,
-          }}
-        >
-          Range Picker
-        </label>
-        <RangePicker style={{ width: "100%" }} />
-      </div>
-    </div>
-  ),
-};
