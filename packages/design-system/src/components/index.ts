@@ -26,3 +26,4 @@ export * from "./DatePicker";
 export * from "./Avatar";
 export * from "./Tooltip";
 export * from "./Carousel";
+export * from "./Drawer";
