@@ -1,8 +1,21 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 import { Select } from "./Select";
 import { FormItem } from "../FormItem/FormItem";
-import { shadow } from "../../theme/foundations/shadow";
 import { Form } from "antd";
+
+import {
+  Title,
+  Subtitle,
+  Description,
+  Primary,
+  Controls,
+  Stories,
+} from "@storybook/addon-docs/blocks";
+import { Figma } from "@storybook/addon-designs/blocks";
+
+const FIGMA_URL =
+  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4062-7843&m=dev";
 
 type SelectStoryProps = React.ComponentProps<typeof Select> & {
   focus?: boolean;
@@ -16,9 +29,10 @@ const meta: Meta<SelectStoryProps> = {
   parameters: {
     design: {
       type: "figma",
-      url: "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4062-7843&m=dev",
+      url: FIGMA_URL,
     },
     docs: {
+      codePanel: true,
       description: {
         component: `
 Componente de seleção (Select) baseado no [Ant Design Select](https://ant.design/components/select).
@@ -27,9 +41,55 @@ Componente de seleção (Select) baseado no [Ant Design Select](https://ant.desi
 - **Extended (Ant Design)**: Suporta as propriedades padrão do AntD Select.
 - **Custom (Juscash)**:
   - \`dsSize\`: Define o tamanho específico seguindo o Design System (\`xs\`, \`s\`, \`m\`, \`l\`).
+
+### Como usar:
+
+\`\`\`tsx
+import { Select } from "@Juscash/design-system";
+
+function Example() {
+  return (
+    <Select
+      placeholder="Selecione uma opcao"
+      options={[{ value: "a", label: "Opcao A" }]}
+    />
+  );
+}
+\`\`\`
 `,
       },
+      page: () => (
+        <>
+          <Title />
+          <Subtitle />
+          <Description />
+
+          <Primary />
+
+          <Controls />
+
+          <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
+            <h3
+              style={{
+                marginBottom: "1rem",
+                fontSize: "1.2rem",
+                fontWeight: "bold",
+              }}
+            >
+              🎨 Figma Spec
+            </h3>
+            <Figma showLink url={FIGMA_URL} height="400px" />
+          </div>
+
+          <Stories />
+        </>
+      ),
     },
+  },
+  args: {
+    hover: false,
+    active: false,
+    focus: false,
   },
 
   argTypes: {
@@ -46,6 +106,11 @@ Componente de seleção (Select) baseado no [Ant Design Select](https://ant.desi
       control: "select",
       options: ["", "error", "warning"],
       description: "Estado de validação",
+    },
+    active: {
+      control: "boolean",
+      description: "Força o estado active",
+      table: { category: "Pseudo States" },
     },
     focus: {
       control: "boolean",
@@ -68,18 +133,19 @@ Componente de seleção (Select) baseado no [Ant Design Select](https://ant.desi
     ),
   ],
   render: (args) => {
-    const { focus, hover, style, ...props } = args;
-    const mergedStyle = { ...style };
-
-    if (focus) {
-      mergedStyle.boxShadow =
-        props.status === "error" ? shadow.focusError : shadow.focus;
-      mergedStyle.borderRadius = "8px";
-    }
+    const { focus, hover, active, className, ...props } = args;
+    const pseudoClasses = [
+      hover && "pseudo-hover",
+      active && "pseudo-active",
+      focus && "pseudo-focus-visible",
+    ]
+      .filter(Boolean)
+      .join(" ");
+    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
 
     return (
       <FormItem label="Label">
-        <Select {...props} style={mergedStyle} />
+        <Select {...props} className={mergedClassName} />
       </FormItem>
     );
   },

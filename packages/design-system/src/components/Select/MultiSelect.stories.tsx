@@ -11,7 +11,7 @@ type SelectStoryProps = React.ComponentProps<typeof Select> & {
 };
 
 const meta: Meta<SelectStoryProps> = {
-  title: "Components/Select/MultiSelect",
+  title: "Components/MultiSelect",
   component: Select,
   tags: ["autodocs"],
   parameters: {
