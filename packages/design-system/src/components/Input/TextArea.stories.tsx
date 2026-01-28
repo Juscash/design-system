@@ -1,8 +1,21 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
 import { Input, TextAreaProps } from "./Input";
 import { FormItem } from "../FormItem/FormItem";
-import { shadow } from "../../theme/foundations/shadow";
 import { Form } from "antd";
+
+import {
+  Title,
+  Subtitle,
+  Description,
+  Primary,
+  Controls,
+  Stories,
+} from "@storybook/addon-docs/blocks";
+import { Figma } from "@storybook/addon-designs/blocks";
+
+const FIGMA_URL =
+  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4059-2085&m=dev";
 
 // TextArea é exportado como prop estática de Input, mas para o Storybook
 // criamos uma referência direta para facilitar o uso no meta.
@@ -11,33 +24,72 @@ const { TextArea } = Input;
 type TextAreaStoryProps = TextAreaProps & {
   focus?: boolean;
   hover?: boolean;
+  active?: boolean;
 };
 
 const meta: Meta<TextAreaStoryProps> = {
-  title: "Components/Input/TextArea",
+  title: "Components/TextArea",
   component: TextArea,
   tags: ["autodocs"],
   parameters: {
     design: {
       type: "figma",
-      url: "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4059-2085&m=dev",
+      url: FIGMA_URL,
     },
     docs: {
+      codePanel: true,
       description: {
         component: `
 Componente de área de texto (TextArea) baseado no [Ant Design Input.TextArea](https://ant.design/components/input#inputtextarea).
 
 ### Props:
 - **Extended (Ant Design)**: Suporta as propriedades padrão do AntD TextArea.
-- **Custom (Juscash)**:
-  - \`dsSize\`: Define o tamanho específico seguindo o Design System (\`xs\`, \`s\`, \`m\`, \`l\`).
+
+### Como usar:
+
+\`\`\`tsx
+import { Input } from "@Juscash/design-system";
+
+function Example() {
+  return <Input.TextArea rows={4} placeholder="Digite sua mensagem" />;
+}
+\`\`\`
 `,
       },
+      page: () => (
+        <>
+          <Title />
+          <Subtitle />
+          <Description />
+
+          <Primary />
+
+          <Controls />
+
+          <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
+            <h3
+              style={{
+                marginBottom: "1rem",
+                fontSize: "1.2rem",
+                fontWeight: "bold",
+              }}
+            >
+              🎨 Figma Spec
+            </h3>
+            <Figma showLink url={FIGMA_URL} height="400px" />
+          </div>
+
+          <Stories />
+        </>
+      ),
     },
   },
   args: {
     placeholder: "Type your message here...",
     rows: 4,
+    hover: false,
+    active: false,
+    focus: false,
   },
   argTypes: {
     disabled: {
@@ -54,6 +106,16 @@ Componente de área de texto (TextArea) baseado no [Ant Design Input.TextArea](h
       description: "Força o estado de focus (Visual)",
       table: { category: "Pseudo States" },
     },
+    hover: {
+      control: "boolean",
+      description: "Força o estado de hover (Visual)",
+      table: { category: "Pseudo States" },
+    },
+    active: {
+      control: "boolean",
+      description: "Força o estado active",
+      table: { category: "Pseudo States" },
+    },
   },
   decorators: [
     (Story) => (
@@ -65,21 +127,19 @@ Componente de área de texto (TextArea) baseado no [Ant Design Input.TextArea](h
     ),
   ],
   render: (args) => {
-    // @ts-ignore
-    const { focus, hover, style, ...props } = args;
-    const mergedStyle = { ...style };
-
-    if (focus) {
-      mergedStyle.boxShadow =
-        props.status === "error" ? shadow.focusError : shadow.focus;
-      // Ajuste visual para borda do textarea
-      mergedStyle.borderColor = "transparent";
-      mergedStyle.outline = "none";
-    }
+    const { focus, hover, active, className, ...props } = args;
+    const pseudoClasses = [
+      hover && "pseudo-hover",
+      active && "pseudo-active",
+      focus && "pseudo-focus-visible pseudo-focus",
+    ]
+      .filter(Boolean)
+      .join(" ");
+    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
 
     return (
       <FormItem label="Label">
-        <TextArea {...props} style={mergedStyle} />
+        <TextArea {...props} className={mergedClassName} />
       </FormItem>
     );
   },
