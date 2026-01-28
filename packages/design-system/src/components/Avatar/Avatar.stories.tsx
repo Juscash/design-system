@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { Avatar, AvatarGroup } from "./Avatar";
 
 const meta: Meta<typeof Avatar> = {
-  title: "Components/Data Display/Avatar",
+  title: "Components/Avatar",
   component: Avatar,
   parameters: {
     layout: "centered",

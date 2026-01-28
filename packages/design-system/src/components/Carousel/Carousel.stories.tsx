@@ -2,7 +2,7 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import { Carousel } from "./Carousel";
 
 const meta: Meta<typeof Carousel> = {
-  title: "Components/Data Display/Carousel",
+  title: "Components/Carousel",
   component: Carousel,
   parameters: {
     layout: "centered",

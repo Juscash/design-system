@@ -3,7 +3,22 @@ import React from "react";
 import { Heart } from "lucide-react";
 import { Badge } from "./Badge";
 
+import {
+  Title,
+  Subtitle,
+  Description,
+  Primary as DocsPrimary,
+  Controls,
+  Stories,
+} from "@storybook/addon-docs/blocks";
+import { Figma } from "@storybook/addon-designs/blocks";
+
+const FIGMA_URL =
+  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4080-6201&m=dev";
+
 type BadgeStoryProps = React.ComponentProps<typeof Badge> & {
+  hover?: boolean;
+  active?: boolean;
   focus?: boolean;
 };
 
@@ -14,9 +29,10 @@ const meta: Meta<BadgeStoryProps> = {
   parameters: {
     design: {
       type: "figma",
-      url: "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4080-6201&m=dev",
+      url: FIGMA_URL,
     },
     docs: {
+      codePanel: true,
       description: {
         component: `
 Componente de badge baseado no [Ant Design Badge](https://ant.design/components/badge).
@@ -28,9 +44,50 @@ Componente de badge baseado no [Ant Design Badge](https://ant.design/components/
   - \`statusColor\`: Cores de status para a variante secondary (success, error, warning).
   - \`leftIcon\`/\`rightIcon\`: Icones opcionais ao lado do label.
   - \`count\`: Numero exibido na variante counter.
+
+### Como usar:
+
+\`\`\`tsx
+import { Badge } from "@Juscash/design-system";
+
+function Example() {
+  return <Badge variant="primary">Label</Badge>;
+}
+\`\`\`
 `,
       },
+      page: () => (
+        <>
+          <Title />
+          <Subtitle />
+          <Description />
+
+          <DocsPrimary />
+
+          <Controls />
+
+          <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
+            <h3
+              style={{
+                marginBottom: "1rem",
+                fontSize: "1.2rem",
+                fontWeight: "bold",
+              }}
+            >
+              🎨 Figma Spec
+            </h3>
+            <Figma showLink url={FIGMA_URL} height="400px" />
+          </div>
+
+          <Stories />
+        </>
+      ),
     },
+  },
+  args: {
+    hover: false,
+    active: false,
+    focus: false,
   },
   argTypes: {
     variant: {
@@ -63,13 +120,26 @@ Componente de badge baseado no [Ant Design Badge](https://ant.design/components/
       description: "Forca o estado focus",
       table: { category: "Pseudo States" },
     },
-  },
-  args: {
-    focus: false,
+    hover: {
+      control: "boolean",
+      description: "Forca o estado hover",
+      table: { category: "Pseudo States" },
+    },
+    active: {
+      control: "boolean",
+      description: "Forca o estado active",
+      table: { category: "Pseudo States" },
+    },
   },
   render: (args) => {
-    const { focus, ...props } = args;
-    const pseudoClasses = [focus && "pseudo-focus"].filter(Boolean).join(" ");
+    const { focus, hover, active, ...props } = args;
+    const pseudoClasses = [
+      hover && "pseudo-hover",
+      active && "pseudo-active",
+      focus && "pseudo-focus-visible",
+    ]
+      .filter(Boolean)
+      .join(" ");
 
     return <Badge {...props} className={pseudoClasses} />;
   },
