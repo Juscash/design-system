@@ -116,9 +116,11 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
         }),
       title:
         typeof col.title === "string" ? (
-          <Body2 color="dark" strong ellipsis>
-            {col.title}
-          </Body2>
+          <Tooltip title={col.title}>
+            <Body2 color="dark" strong ellipsis>
+              {col.title}
+            </Body2>
+          </Tooltip>
         ) : (
           col.title
         ),
