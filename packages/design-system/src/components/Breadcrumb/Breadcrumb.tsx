@@ -5,6 +5,7 @@ import { Breadcrumb as AntdBreadcrumb, ConfigProvider } from "antd";
 import type { BreadcrumbProps as AntdBreadcrumbProps } from "antd";
 import { designSystemColors } from "../../theme/foundations";
 import { ChevronRight } from "lucide-react";
+import { Body2 } from "../../components/Typography/Typography";
 
 // Mapped types explicitly
 type CleanAntdProps = {
@@ -53,10 +54,18 @@ export function Breadcrumb(props: BreadcrumbProps): React.ReactElement {
       <AntdBreadcrumb
         separator={<ChevronRight size={16} />}
         {...rest}
-        items={rest.items?.map((item) => ({
-          ...item,
-          className: "font-inter", // Ensure Inter font if not set globally
-        }))}
+        items={rest.items?.map((item, index) => {
+          const isLast = index === (rest.items?.length ?? 0) - 1;
+          return {
+            ...item,
+            title: (
+              <Body2 color={isLast ? "dark" : "neutral"}>
+                {item.title as React.ReactNode}
+              </Body2>
+            ),
+            className: "font-inter", // Ensure Inter font if not set globally
+          };
+        })}
       />
     </ConfigProvider>
   );
