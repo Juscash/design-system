@@ -29,6 +29,7 @@ const colorMap = {
   warning: designSystemColors.feedback.yellow[500],
   success: designSystemColors.feedback.green[500],
   disabled: designSystemColors.neutral[400],
+  info: designSystemColors.feedback.blue[500],
 } as const;
 
 type DSColor = keyof typeof colorMap;

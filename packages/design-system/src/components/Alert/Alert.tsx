@@ -3,11 +3,12 @@
 import React from "react";
 import { Alert as AntdAlert, ConfigProvider } from "antd";
 import type { AlertProps as AntdAlertProps } from "antd";
-// import type { ComponentToken } from "antd/es/alert/style/token";
 
 type AlertVariant = "neutral" | "error" | "success" | "info" | "warning";
 import { CircleCheck, CircleX, AlertCircle, Info } from "lucide-react";
 import { designSystemColors, radius, spacing } from "../../theme";
+import { Body1, Body2 } from "../../components/Typography/Typography";
+import type { CustomTypographyProps } from "../../components/Typography/Typography";
 
 type CleanAntdProps = {
   [K in keyof AntdAlertProps as K extends "type"
@@ -130,8 +131,6 @@ export function Alert(props: AlertProps): React.ReactElement {
       case "warning":
         return getWarningTokens();
       default:
-        // For standard Antd types without override, we might want to enforce our style too.
-        // But mapped types usually cover it.
         return {};
     }
   };
@@ -142,10 +141,10 @@ export function Alert(props: AlertProps): React.ReactElement {
         components: {
           Alert: {
             ...getVariantTokens(),
-            paddingContentVertical: spacing[2], // 8px
-            paddingContentHorizontal: spacing[4], // 16px
-            borderRadiusLG: radius.xl, // 8px (container)
-            withDescriptionIconSize: 16, // heading/06 - 20px
+            paddingContentVertical: spacing[2],
+            paddingContentHorizontal: spacing[4],
+            borderRadiusLG: radius.xl,
+            withDescriptionIconSize: 16,
             defaultPadding: `${spacing[2]}px ${spacing[4]}px`,
           },
         },
@@ -156,6 +155,32 @@ export function Alert(props: AlertProps): React.ReactElement {
         type={antdType}
         showIcon={finalShowIcon}
         icon={iconNode}
+        message={
+          rest.message ? (
+            <Body1
+              color={
+                type === "neutral"
+                  ? "dark"
+                  : (type as CustomTypographyProps["color"])
+              }
+            >
+              {rest.message}
+            </Body1>
+          ) : undefined
+        }
+        description={
+          rest.description ? (
+            <Body2
+              color={
+                type === "neutral"
+                  ? "neutral"
+                  : (type as CustomTypographyProps["color"])
+              }
+            >
+              {rest.description}
+            </Body2>
+          ) : undefined
+        }
         className={type === "neutral" ? "ant-alert-neutral" : ""}
         style={{
           ...rest.style,
