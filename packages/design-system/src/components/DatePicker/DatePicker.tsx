@@ -40,7 +40,7 @@ const datePickerLocale =
 
 export const DatePicker: React.FC<DatePickerProps> = ({
   allowClear = false,
-  placeholder = "dd/mm/aaaa",
+  placeholder = "__/__/____",
   format = "DD/MM/YYYY",
   inputReadOnly = true,
   ...rest
@@ -95,7 +95,13 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 
 DatePicker.displayName = "DatePicker";
 
-export const RangePicker: React.FC<RangePickerProps> = ({ allowClear = false, ...rest }) => {
+export const RangePicker: React.FC<RangePickerProps> = ({
+  allowClear = false,
+  placeholder = ["__/__/____", "__/__/____"],
+  format = "DD/MM/YYYY",
+  inputReadOnly = true,
+  ...rest
+}) => {
   return (
     <ConfigProvider theme={datePickerTheme}>
       <AntdRangePicker
@@ -103,6 +109,9 @@ export const RangePicker: React.FC<RangePickerProps> = ({ allowClear = false, ..
         {...rest}
         allowClear={allowClear}
         locale={datePickerLocale}
+        placeholder={placeholder}
+        format={format}
+        inputReadOnly={inputReadOnly}
         suffixIcon={null}
         prefix={<Calendar size={16} color={designSystemColors.neutral[500]} style={{ marginRight: 4 }} />}
         prevIcon={

@@ -471,6 +471,15 @@
   color: var(--color-neutral-800) !important;
 }
 
+.ant-picker-active-bar {
+  display: none !important;
+}
+
+.ant-picker-outlined:focus-within {
+  box-shadow: var(--shadow-focus) !important;
+  border-color: var(--color-neutral-300) !important;
+}
+
 .ant-picker-year-btn {
   font-family: var(--font-primary) !important;
   font-size: 13px !important;
