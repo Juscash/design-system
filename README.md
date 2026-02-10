@@ -15,14 +15,13 @@ Bem-vindo ao repositório do **Juscash Design System**. Este projeto é um monor
 O projeto utiliza **NPM Workspaces** para gerenciar os pacotes:
 
 - `packages/design-system`: O núcleo da biblioteca. Construído sobre o **Ant Design 6** e estilizado com tokens proprietários da Juscash.
-- `apps/docs`: Aplicativo Vite que serve como vitrine (Showcase) e playground para os componentes.
+- `docs`: Aplicativo Vite que serve como vitrine (Showcase) e playground para os componentes.
 
 ### Principais Dependências da Biblioteca
 
 - **React 18/19**
 - **Ant Design 6** (Base técnica)
 - **Lucide React** (Biblioteca única de ícones)
-- **Tailwind CSS** (Utilizado em alguns contextos de layout)
 
 ---
 
@@ -41,7 +40,7 @@ npm install
 Para visualizar as alterações nos componentes em tempo real:
 
 ```bash
-npm run dev:docs
+npm run dev
 ```
 
 ### 3. Build Completo

@@ -4,6 +4,7 @@ import React from "react";
 import { Popover as AntdPopover, ConfigProvider } from "antd";
 import type { PopoverProps as AntdPopoverProps } from "antd";
 import { designSystemColors, radius, shadow } from "../../theme";
+import { Heading6, Body2 } from "../../components/Typography/Typography";
 
 export type PopoverProps = AntdPopoverProps & {
   /**
@@ -66,10 +67,16 @@ export function Popover(props: PopoverProps): React.ReactElement {
                   {icon}
                 </div>
               )}
-              <div style={{ flex: 1 }}>{header}</div>
+              <div style={{ flex: 1 }}>
+                <Heading6 color="dark">{header}</Heading6>
+              </div>
             </div>
           )}
-          {content && <div>{content as React.ReactNode}</div>}
+          {content && (
+            <div>
+              <Body2 color="neutral">{content as React.ReactNode}</Body2>
+            </div>
+          )}
           {footer && (
             <div
               style={{
@@ -77,14 +84,14 @@ export function Popover(props: PopoverProps): React.ReactElement {
                 borderTop: `1px solid ${designSystemColors.neutral[200]}`,
               }}
             >
-              {footer}
+              <Body2 color="neutral">{footer}</Body2>
             </div>
           )}
         </div>
       );
     }
 
-    return content;
+    return <Body2 color="neutral">{content as React.ReactNode}</Body2>;
   }, [header, footer, icon, content]);
 
   const finalTitle = header ? undefined : title;
