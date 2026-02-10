@@ -60,11 +60,11 @@ function getOutlinedTokens(): Partial<ButtonToken> {
     defaultActiveBg: designSystemColors.neutral[100],
 
     colorTextDisabled: designSystemColors.neutral[400],
-    colorBgContainerDisabled: designSystemColors.neutral[50],
+
     colorBorderDisabled: designSystemColors.neutral[200],
 
-    defaultBgDisabled: designSystemColors.neutral[50],
-
+    defaultBgDisabled: "transparent",
+    colorBgContainerDisabled: "transparent",
     primaryShadow: "none",
     defaultShadow: "none",
   };
