@@ -634,3 +634,11 @@
   line-height: 1.2 !important;
   color: var(--color-neutral-600) !important;
 }
+
+
+
+
+.ant-switch.pseudo-focus-visible {
+  box-shadow: var(--shadow-focus) !important;
+  outline: none !important;
+}

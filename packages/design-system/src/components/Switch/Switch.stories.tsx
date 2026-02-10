@@ -8,8 +8,6 @@ import { Figma } from "@storybook/addon-designs/blocks";
 const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4062-5352&m=dev";
 
 type SwitchStoryProps = React.ComponentProps<typeof Switch> & {
-  hover?: boolean;
-  active?: boolean;
   focus?: boolean;
 };
 
@@ -73,8 +71,6 @@ function Example() {
     },
   },
   args: {
-    hover: false,
-    active: false,
     focus: false,
   },
   argTypes: {
@@ -94,16 +90,7 @@ function Example() {
       control: "boolean",
       description: "Estado de carregamento",
     },
-    hover: {
-      control: "boolean",
-      description: "Força o estado hover",
-      table: { category: "Pseudo States" },
-    },
-    active: {
-      control: "boolean",
-      description: "Força o estado active",
-      table: { category: "Pseudo States" },
-    },
+
     focus: {
       control: "boolean",
       description: "Força o estado focus",
@@ -111,10 +98,8 @@ function Example() {
     },
   },
   render: (args) => {
-    const { hover, active, focus, ...props } = args;
-    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
-      .filter(Boolean)
-      .join(" ");
+    const { focus, ...props } = args;
+    const pseudoClasses = [focus && "pseudo-focus-visible"].filter(Boolean).join(" ");
 
     return <Switch {...props} className={pseudoClasses} />;
   },
