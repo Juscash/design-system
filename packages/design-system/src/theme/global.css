@@ -1,7 +1,7 @@
 :root {
   /* Fallback caso o consumidor não defina a fonte */
   --font-primary: 'Inter', sans-serif;
-  --ant-radio-radio-bg-color: #FAFAFA !important;
+  --ant-radio-radio-bg-color: var(--color-neutral-50) !important;
 
   /* ============================================
      COLORS - Design System Juscash
@@ -105,6 +105,46 @@
   --spacing-16: 64px;
   --spacing-20: 80px;
   --spacing-24: 96px;
+
+  /* ============================================
+     TYPOGRAPHY - Design System Juscash
+     ============================================ */
+  
+  /* Headings */
+  --font-heading-1-size: 61px;
+  --font-heading-1-weight: 700;
+  --font-heading-1-line-height: 0;
+  
+  --font-heading-2-size: 49px;
+  --font-heading-2-weight: 700;
+  --font-heading-2-line-height: 0;
+  
+  --font-heading-3-size: 39px;
+  --font-heading-3-weight: 700;
+  --font-heading-3-line-height: 0;
+  
+  --font-heading-4-size: 31px;
+  --font-heading-4-weight: 700;
+  --font-heading-4-line-height: 0;
+  
+  --font-heading-5-size: 25px;
+  --font-heading-5-weight: 700;
+  --font-heading-5-line-height: 0;
+  
+  --font-heading-6-size: 20px;
+  --font-heading-6-weight: 700;
+  --font-heading-6-line-height: 0;
+  
+  /* Body */
+  --font-body-1-size: 16px;
+  --font-body-1-line-height: 0;
+  
+  --font-body-2-size: 13px;
+  --font-body-2-line-height: 0;
+  
+  /* Caption */
+  --font-caption-size: 10px;
+  --font-caption-line-height: 0;
 }
 
 .ant-segmented-item-selected {
@@ -122,7 +162,7 @@
 
 .ant-form-item-label>label.ant-form-item-required::after {
   content: '*';
-  color: #D2190B !important;
+  color: var(--color-feedback-red-500) !important;
   visibility: visible !important;
 }
 
@@ -130,7 +170,7 @@
   display: flex !important;
   flex-direction: row !important;
   align-items: center !important;
-  gap: 8px !important;
+  gap: var(--spacing-2) !important;
   width: 100% !important;
   max-width: 100% !important;
 }
@@ -186,14 +226,14 @@
 }
 
 .juscash-upload-button:hover {
-  background-color: #f0f0f0 !important;
+  background-color: var(--color-neutral-100) !important;
   background-color: transparent !important;
 
   color: inherit !important;
-  border-color: #d4d4d4 !important;
+  border-color: var(--color-neutral-300) !important;
 
 
-  box-shadow: 0px 0px 0px 3px #d4d4d4 !important;
+  box-shadow: var(--shadow-focus) !important;
 }
 
 
@@ -211,21 +251,21 @@
 
 
 .upload-error-state {
-  border-color: #D2190B !important;
-  outline: 1px solid #D2190B !important;
+  border-color: var(--color-feedback-red-500) !important;
+  outline: 1px solid var(--color-feedback-red-500) !important;
 }
 
 
 .upload-error-state:focus {
-  border-color: #D2190B !important;
-  outline: 1px solid #D2190B !important;
-  box-shadow: 0 0 0 3px rgba(210, 25, 11, 0.4) !important;
+  border-color: var(--color-feedback-red-500) !important;
+  outline: 1px solid var(--color-feedback-red-500) !important;
+  box-shadow: var(--shadow-focus-error) !important;
 }
 
 .upload-error-state:hover {
-  border-color: #D2190B !important;
-  outline: 1px solid #D2190B !important;
-  box-shadow: 0 0 0 3px rgba(210, 25, 11, 0.4) !important;
+  border-color: var(--color-feedback-red-500) !important;
+  outline: 1px solid var(--color-feedback-red-500) !important;
+  box-shadow: var(--shadow-focus-error) !important;
 }
 
 .ant-select-item-option-content {
@@ -235,9 +275,9 @@
 }
 
 .ds-select-search-container {
-  padding: 8px;
-  border-bottom: 1px solid rgba(212, 212, 212, 1);
-  margin-bottom: 4px;
+  padding: var(--spacing-2);
+  border-bottom: 1px solid var(--color-neutral-300);
+  margin-bottom: var(--spacing-1);
 }
 
 .ds-select-search-input {
@@ -269,13 +309,13 @@
 
 .ds-input-outline:not(.ant-select-disabled):not(.ant-select-status-error):hover,
 .ds-input-outline.ant-select-focused:not(.ant-select-status-error) {
-  box-shadow: 0px 0px 0px 3px #d4d4d4 !important;
+  box-shadow: var(--shadow-focus) !important;
   border-color: transparent !important;
 }
 
 .ds-input-outline.ant-select-status-error:hover,
 .ds-input-outline.ant-select-status-error.ant-select-focused {
-  box-shadow: 0px 0px 0px 3px rgba(210, 25, 11, 0.4) !important;
+  box-shadow: var(--shadow-focus-error) !important;
   border-color: transparent !important;
 }
 
@@ -285,15 +325,15 @@
 }
 
 .ant-table-container {
-  border: 1px solid #D4D4D4 !important;
+  border: 1px solid var(--color-neutral-300) !important;
 }
 
 .ant-table-container {
-  border-radius: 8px !important;
+  border-radius: var(--radius-xl) !important;
 }
 
 .ant-table-tbody>.ant-table-row>td {
-  border-top: 1px solid #D4D4D4 !important;
+  border-top: 1px solid var(--color-neutral-300) !important;
 }
 
 .ant-pagination-total-text {
@@ -336,7 +376,7 @@
 }
 
 .ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
-  background-color: #FAFAFA !important;
+  background-color: var(--color-neutral-50) !important;
   border-color: var(--ant-radio-button-solid-checked-bg) !important;
 }
 
@@ -345,11 +385,11 @@
 }
 
 .ds-radio-error .ant-radio .ant-radio-inner:focus-visible {
-  box-shadow: 0px 0px 0px 3px rgba(210, 25, 11, 0.4) !important;
+  box-shadow: var(--shadow-focus-error) !important;
 }
 
 .ds-neutral .ant-radio-inner:focus-visible {
-  box-shadow: 0px 0px 0px 3px #d4d4d4 !important;
+  box-shadow: var(--shadow-focus) !important;
 }
 
 /* DatePicker compact style overrides */
@@ -377,21 +417,21 @@
   font-family: "Inter" !important;
   font-size: 13px !important;
   font-weight: 400 !important;
-  color: #262626 !important;
+  color: var(--color-neutral-800) !important;
 }
 
 .ant-picker-year-btn {
   font-family: "Inter" !important;
   font-size: 13px !important;
   font-weight: 400 !important;
-  color: #262626 !important;
+  color: var(--color-neutral-800) !important;
 }
 
 .ant-picker-quarter-btn {
   font-family: "Inter" !important;
   font-size: 13px !important;
   font-weight: 400 !important;
-  color: #262626 !important;
+  color: var(--color-neutral-800) !important;
 }
 
 
@@ -399,7 +439,7 @@
 /* BUtton  */
 
 .ant-btn:not(:disabled):focus-visible {
-  outline: 3px solid #D4D4D4 !important;
+  outline: 3px solid var(--color-neutral-300) !important;
   outline-offset: -1px !important;
 }
 
