@@ -635,8 +635,61 @@
   color: var(--color-neutral-600) !important;
 }
 
+/* ============================================
+   RICH RADIO - Variação com label e secondary text
+   ============================================ */
 
+.rich-radio-wrapper {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: var(--spacing-2) !important;
+  padding: var(--spacing-2) var(--spacing-3) !important;
+  border: 1px solid var(--color-neutral-300) !important;
+  border-radius: var(--radius-xl) !important;
+  background-color: var(--color-neutral-50) !important;
+  transition: all 0.2s ease-in-out !important;
+  cursor: pointer !important;
+}
 
+.rich-radio-wrapper:hover {
+  background-color: var(--color-neutral-100) !important;
+}
+
+.rich-radio-wrapper.rich-radio-checked {
+  background-color: var(--color-neutral-100) !important;
+}
+
+.rich-radio-wrapper .ant-radio-wrapper {
+  margin: 0 !important;
+  padding-top: 2.5px !important;
+}
+
+.rich-radio-content {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+}
+
+.rich-radio-label {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  line-height: 1.2 !important;
+  color: var(--color-neutral-800) !important;
+}
+
+.rich-radio-secondary {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 400 !important;
+  line-height: 1.2 !important;
+  color: var(--color-neutral-600) !important;
+}
+
+/* ============================================
+   SWITCH
+   ============================================ */
 
 .ant-switch.pseudo-focus-visible {
   box-shadow: var(--shadow-focus) !important;

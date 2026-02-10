@@ -16,16 +16,8 @@ type CleanAntdProps = {
 };
 
 export type InputProps = CleanAntdProps & {
-  dsSize?: InputSize;
-  size?: AntdInputProps["size"];
+  size?: InputSize;
 };
-
-function mapToDsSize(size?: AntdInputProps["size"]): InputSize {
-  if (size === "small") return "xs";
-  if (size === "middle") return "m";
-  if (size === "large") return "l";
-  return "m";
-}
 
 function getSizeTokens(dsSize?: InputSize): {
   componentToken: Partial<ComponentToken>;
@@ -114,10 +106,8 @@ const baseTokens: Partial<ComponentToken> = {
 };
 
 const InputComponent = (props: InputProps): ReturnType<React.FC<InputProps>> => {
-  const { dsSize = "m", size, style, status, className, ...rest } = props;
-
-  const resolvedSize = size ? mapToDsSize(size) : dsSize;
-  const sizeTokens = getSizeTokens(resolvedSize);
+  const { size = "m", style, status, className, ...rest } = props;
+  const sizeTokens = getSizeTokens(size);
   return (
     <ConfigProvider
       theme={{

@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Radio, RadioGroup } from "./Radio";
+import { RichRadio } from "./RichRadio";
 
 import { designSystemColors } from "../../theme";
 
@@ -234,76 +235,68 @@ export const GroupList: Story = {
 // RICH RADIO - Variação com label e secondary text
 // ============================================
 
-export const RichRadio: Story = {
+export const RichRadioUnchecked: Story = {
+  render: () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <label style={{ fontSize: 13, color: designSystemColors.neutral[900] }}>Rich Radio - Unchecked</label>
+      <RichRadio label="Opção Premium" secondaryText="Inclui todos os benefícios" />
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Rich Radio não marcado com label e secondary text.",
+      },
+    },
+  },
+};
+
+export const RichRadioChecked: Story = {
+  render: () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+      <label style={{ fontSize: 13, color: designSystemColors.neutral[900] }}>Rich Radio - Checked</label>
+      <RichRadio label="Opção Premium" secondaryText="Inclui todos os benefícios" checked />
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Rich Radio marcado com label e secondary text.",
+      },
+    },
+  },
+};
+
+export const RichRadioGroup: Story = {
   render: () => {
     const [value, setValue] = React.useState("option1");
-
-    const options = [
-      {
-        value: "option1",
-        label: "Opção Premium",
-        secondaryText: "Inclui todos os benefícios",
-      },
-      {
-        value: "option2",
-        label: "Opção Básica",
-        secondaryText: "Funcionalidades essenciais",
-      },
-      {
-        value: "option3",
-        label: "Opção Desabilitada",
-        secondaryText: "Não disponível no momento",
-        disabled: true,
-      },
-    ];
 
     return (
       <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
         <label style={{ fontSize: 13, color: designSystemColors.neutral[900] }}>Rich Radio Group</label>
-        <div style={{ display: "flex", flexDirection: "column", gap: 0 }}>
-          {options.map((option) => (
-            <div
-              key={option.value}
-              style={{
-                display: "flex",
-                alignItems: "flex-start",
-                gap: 12,
-                padding: "8px 0",
-              }}
-            >
-              <Radio
-                value={option.value}
-                checked={value === option.value}
-                disabled={option.disabled}
-                onChange={() => setValue(option.value)}
-              />
-              <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
-                <span
-                  style={{
-                    fontSize: "13px",
-                    fontWeight: 400,
-                    color: designSystemColors.neutral[800],
-                    lineHeight: 1.2,
-                  }}
-                >
-                  {option.label}
-                </span>
-                {option.secondaryText && (
-                  <span
-                    style={{
-                      fontSize: "10px",
-                      fontWeight: 400,
-                      color: designSystemColors.neutral[500],
-                      lineHeight: 1.2,
-                      marginTop: 2,
-                    }}
-                  >
-                    {option.secondaryText}
-                  </span>
-                )}
-              </div>
-            </div>
-          ))}
+        <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
+          <RichRadio
+            value="option1"
+            label="Opção Premium"
+            secondaryText="Inclui todos os benefícios"
+            checked={value === "option1"}
+            onChange={() => setValue("option1")}
+          />
+          <RichRadio
+            value="option2"
+            label="Opção Básica"
+            secondaryText="Funcionalidades essenciais"
+            checked={value === "option2"}
+            onChange={() => setValue("option2")}
+          />
+          <RichRadio
+            value="option3"
+            label="Opção Desabilitada"
+            secondaryText="Não disponível no momento"
+            checked={value === "option3"}
+            disabled
+            onChange={() => setValue("option3")}
+          />
         </div>
       </div>
     );
@@ -311,7 +304,7 @@ export const RichRadio: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Rich Radio com label principal e texto secundário. Similar ao padrão usado no Checkbox.",
+        story: "Grupo de Rich Radio com gerenciamento de estado. Similar ao RichCheckbox.",
       },
     },
   },
