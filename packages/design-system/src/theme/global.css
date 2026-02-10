@@ -2,6 +2,109 @@
   /* Fallback caso o consumidor não defina a fonte */
   --font-primary: 'Inter', sans-serif;
   --ant-radio-radio-bg-color: #FAFAFA !important;
+
+  /* ============================================
+     COLORS - Design System Juscash
+     ============================================ */
+
+  /* Neutral */
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-200: #e5e5e5;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-400: #a3a3a3;
+  --color-neutral-500: #737373;
+  --color-neutral-600: #525252;
+  --color-neutral-700: #404040;
+  --color-neutral-800: #262626;
+  --color-neutral-900: #171717;
+
+  /* Brand - Primary */
+  --color-brand-primary-50: #AAFFBE;
+  --color-brand-primary-100: #8AF3A3;
+  --color-brand-primary-200: #6ADD89;
+  --color-brand-primary-300: #4AC771;
+  --color-brand-primary-400: #2CBD62;
+  --color-brand-primary-500: #009C46;
+  --color-brand-primary-600: #008633;
+  --color-brand-primary-700: #007122;
+  --color-brand-primary-800: #005C12;
+  --color-brand-primary-900: #004706;
+
+  /* Brand - Secondary */
+  --color-brand-secondary-50: #C7DDFA;
+  --color-brand-secondary-100: #A1C6F7;
+  --color-brand-secondary-200: #7BAFF4;
+  --color-brand-secondary-300: #5698F1;
+  --color-brand-secondary-400: #3081EE;
+  --color-brand-secondary-500: #136CE2;
+  --color-brand-secondary-600: #105ABC;
+  --color-brand-secondary-700: #0D4897;
+  --color-brand-secondary-800: #093671;
+  --color-brand-secondary-900: #072854;
+
+  /* Feedback - Green */
+  --color-feedback-green-50: #C9FFD6;
+  --color-feedback-green-500: #1E7E34;
+  --color-feedback-green-900: #065F1B;
+
+  /* Feedback - Red */
+  --color-feedback-red-50: #FEF2EC;
+  --color-feedback-red-500: #D2190B;
+  --color-feedback-red-900: #9D231C;
+
+  /* Feedback - Yellow */
+  --color-feedback-yellow-50: #FFFBE0;
+  --color-feedback-yellow-500: #867400;
+  --color-feedback-yellow-900: #675413;
+
+  /* Feedback - Blue */
+  --color-feedback-blue-50: #ECF5FE;
+  --color-feedback-blue-500: #207AC3;
+  --color-feedback-blue-900: #1D4F79;
+
+  /* Feedback - Orange */
+  --color-feedback-orange-50: #FFE9D2;
+  --color-feedback-orange-500: #B15600;
+  --color-feedback-orange-900: #8B4400;
+
+  /* ============================================
+     RADIUS
+     ============================================ */
+  --radius-md: 4px;
+  --radius-xl: 8px;
+  --radius-2xl: 12px;
+  --radius-3xl: 16px;
+  --radius-full: 9999px;
+
+  /* ============================================
+     SHADOW
+     ============================================ */
+  --shadow-xs: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+  --shadow-s: 0px 1px 3px 0px rgba(0, 0, 0, 0.1), 0px 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-m: 0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-l: 0px 10px 15px -3px rgba(0, 0, 0, 0.1), 0px 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0px 20px 25px -5px rgba(0, 0, 0, 0.1), 0px 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-focus: 0px 0px 0px 3px #d4d4d4;
+  --shadow-focus-error: 0px 0px 0px 3px rgba(210, 25, 11, 0.4);
+
+  /* ============================================
+     SPACING
+     ============================================ */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-7: 28px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-14: 56px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+  --spacing-24: 96px;
 }
 
 .ant-segmented-item-selected {
@@ -297,4 +400,13 @@
 
 .ant-btn:not(:disabled):focus-visible {
   outline: 3px solid #D4D4D4 !important;
+  outline-offset: -1px !important;
+}
+
+.ant-btn-variant-outlined.ant-btn:not(:disabled):not(.ant-btn-disabled):hover {
+  color: var(--color-neutral-800) !important;
+}
+
+.ant-btn-variant-outlined.ant-btn:not(:disabled):not(.ant-btn-disabled):active {
+  color: var(--color-neutral-800) !important;
 }

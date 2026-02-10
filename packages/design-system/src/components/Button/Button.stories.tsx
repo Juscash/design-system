@@ -43,10 +43,8 @@ Componente de botão baseado no [Ant Design Button](https://ant.design/component
 ### Props:
 - **Extended (Ant Design)**: A maioria das propriedades padrão do AntD Button são suportadas.
 - **Customized**:
-  - \`type\`: Estendido com variantes exclusivas (\`secondary\`, \`destructive\`, \`ghost\`, \`neutral\`, \`outlined\`).
-  - \`size\`: Mapeado internamente para o \`dsSize\` do sistema Juscash.
-- **Custom (Juscash)**:
-  - \`dsSize\`: Define o tamanho específico seguindo o Design System (\`xs\`, \`s\`, \`m\`).
+  - \`type\` ou \`variant\`: Define o estilo do botão (\`primary\`, \`secondary\`, \`outline\`, \`ghost\`, \`destructive\`, \`neutral\`). A prop \`variant\` tem prioridade sobre \`type\`.
+  - \`size\`: Define o tamanho do botão seguindo o Design System (\`xs\`, \`s\`, \`m\`).
 
 ### Como usar:
 
@@ -94,13 +92,25 @@ function Example() {
       options: [
         "primary",
         "secondary",
-        "destructive",
+        "outline",
         "ghost",
+        "destructive",
         "neutral",
-        "outlined",
       ],
     },
-    dsSize: {
+    variant: {
+      control: "select",
+      options: [
+        "primary",
+        "secondary",
+        "outline",
+        "ghost",
+        "destructive",
+        "neutral",
+      ],
+      description: "Alias para 'type'. Se definido, tem prioridade.",
+    },
+    size: {
       control: "select",
       options: ["xs", "s", "m"],
     },
@@ -183,10 +193,10 @@ export const Neutral: Story = {
   },
 };
 
-export const Outlined: Story = {
+export const Outline: Story = {
   args: {
-    type: "outlined",
-    children: "Outlined Button",
+    type: "outline",
+    children: "Outline Button",
   },
 };
 
@@ -239,7 +249,7 @@ export const ExemplosFigma: Story = {
       <div style={{ display: "flex", flexWrap: "wrap", gap: "24px" }}>
         <Button type="primary">Ativar promoção</Button>
         <Button type="secondary">Baixar relatório</Button>
-        <Button type="outlined">Ver detalhes</Button>
+        <Button type="outline">Ver detalhes</Button>
       </div>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: "24px" }}>

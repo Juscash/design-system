@@ -13,21 +13,21 @@ describe("Button", () => {
   });
 
   it("renders primary button", () => {
-    render(<Button type="primary">Primary</Button>);
+    render(<Button variant="primary">Primary</Button>);
     expect(
       screen.getByRole("button", { name: /primary/i }),
     ).toBeInTheDocument();
   });
 
   it("renders secondary button", () => {
-    render(<Button type="secondary">Secondary</Button>);
+    render(<Button variant="secondary">Secondary</Button>);
     expect(
       screen.getByRole("button", { name: /secondary/i }),
     ).toBeInTheDocument();
   });
 
   it("renders destructive button", () => {
-    render(<Button type="destructive">Destructive</Button>);
+    render(<Button variant="destructive">Destructive</Button>);
     expect(
       screen.getByRole("button", { name: /destructive/i }),
     ).toBeInTheDocument();
@@ -39,18 +39,18 @@ describe("Button", () => {
   });
 
   it("renders with different sizes", () => {
-    const { rerender } = render(<Button dsSize="xs">XS</Button>);
+    const { rerender } = render(<Button size="xs">XS</Button>);
     expect(screen.getByRole("button", { name: /xs/i })).toBeInTheDocument();
 
-    rerender(<Button dsSize="s">S</Button>);
+    rerender(<Button size="s">S</Button>);
     expect(screen.getByRole("button", { name: /^s$/i })).toBeInTheDocument();
 
-    rerender(<Button dsSize="m">M</Button>);
+    rerender(<Button size="m">M</Button>);
     expect(screen.getByRole("button", { name: /^m$/i })).toBeInTheDocument();
   });
 
   it("does not apply focus shadow in default primary state", () => {
-    render(<Button type="primary">Primary</Button>);
+    render(<Button variant="primary">Primary</Button>);
     const button = screen.getByRole("button", { name: /primary/i });
     expect(button).not.toHaveStyle({ boxShadow: shadow.focus });
   });
@@ -58,7 +58,7 @@ describe("Button", () => {
   it("applies DS focus shadow for ghost variant when pseudo focus is active", () => {
     render(
       <Button
-        type="ghost"
+        variant="ghost"
         className="pseudo-focus-visible"
         aria-label="Ghost focus"
       >
@@ -72,7 +72,7 @@ describe("Button", () => {
   it("applies DS focus shadow for icon-only button when pseudo focus is active", () => {
     render(
       <Button
-        type="primary"
+        variant="primary"
         className="pseudo-focus-visible"
         icon={<Plus size={16} />}
         aria-label="Add icon"
@@ -85,18 +85,29 @@ describe("Button", () => {
   it("keeps custom variants rendering without regression", () => {
     render(
       <>
-        <Button type="ghost">Ghost</Button>
-        <Button type="outlined">Outlined</Button>
-        <Button type="neutral">Neutral</Button>
+        <Button variant="ghost">Ghost</Button>
+        <Button variant="outline">Outline</Button>
+        <Button variant="neutral">Neutral</Button>
       </>,
     );
 
     expect(screen.getByRole("button", { name: /ghost/i })).toBeInTheDocument();
     expect(
-      screen.getByRole("button", { name: /outlined/i }),
+      screen.getByRole("button", { name: /outline/i }),
     ).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: /neutral/i }),
     ).toBeInTheDocument();
+  });
+
+  it("renders with variant prop taking precedence over type", () => {
+    const { rerender } = render(<Button variant="destructive">Button</Button>);
+    expect(screen.getByRole("button", { name: /button/i })).toBeInTheDocument();
+
+    rerender(<Button variant="secondary">Button</Button>);
+    expect(screen.getByRole("button", { name: /button/i })).toBeInTheDocument();
+
+    rerender(<Button variant="outline">Button</Button>);
+    expect(screen.getByRole("button", { name: /button/i })).toBeInTheDocument();
   });
 });

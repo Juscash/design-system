@@ -10,26 +10,25 @@ import type { ButtonToken } from "antd/es/button/style/token";
 import { designSystemColors } from "../../theme";
 import { radius, shadow, spacing } from "../../theme";
 
-type AntdButtonType = NonNullable<AntdButtonProps["type"]>;
-
-type ExtendedButtonType =
-  | AntdButtonType
+type ButtonType =
+  | "primary"
   | "secondary"
-  | "destructive"
+  | "outline"
   | "ghost"
-  | "neutral"
-  | "outlined";
+  | "destructive"
+  | "neutral";
 
-type DsSize = "xs" | "s" | "m";
-type CleanAntdProps = {
-  [K in keyof AntdButtonProps as K extends "type" | "size" | "danger"
-    ? never
-    : K]: AntdButtonProps[K];
-};
+type ButtonSize = "xs" | "s" | "m";
+
+type CleanAntdProps = Omit<
+  AntdButtonProps,
+  "type" | "size" | "danger" | "variant"
+>;
+
 export type ButtonProps = CleanAntdProps & {
-  type?: ExtendedButtonType;
-  dsSize?: DsSize;
-  size?: AntdButtonProps["size"];
+  type?: ButtonType;
+  variant?: ButtonType;
+  size?: ButtonSize;
 };
 function getPrimaryTokens(): Partial<ButtonToken> {
   return {
@@ -58,6 +57,8 @@ function getSecondaryTokens(): Partial<ButtonToken> {
 
 function getOutlinedTokens(): Partial<ButtonToken> {
   return {
+    colorSuccessTextHover: designSystemColors.neutral[800],
+
     defaultColor: designSystemColors.neutral[50],
     defaultBorderColor: designSystemColors.neutral[300],
 
@@ -126,8 +127,8 @@ function getNeutralTokens(): Partial<ButtonToken> {
   };
 }
 
-function getSizeTokens(dsSize?: DsSize): Partial<ButtonToken> {
-  if (dsSize === "xs") {
+function getSizeTokens(buttonSize?: ButtonSize): Partial<ButtonToken> {
+  if (buttonSize === "xs") {
     return {
       fontSize: 10,
       controlHeight: 24,
@@ -135,7 +136,7 @@ function getSizeTokens(dsSize?: DsSize): Partial<ButtonToken> {
       borderRadius: radius.md,
     };
   }
-  if (dsSize === "s") {
+  if (buttonSize === "s") {
     return {
       fontSize: 13,
       controlHeight: 32,
@@ -151,44 +152,38 @@ function getSizeTokens(dsSize?: DsSize): Partial<ButtonToken> {
   };
 }
 
-function mapToDsSize(size?: AntdButtonProps["size"]): DsSize {
-  if (size === "small") return "xs";
-  if (size === "middle") return "s";
-  return "m";
-}
-
 export function Button(props: ButtonProps): React.ReactElement {
-  const { type, dsSize = "m", size, style, children, icon, ...rest } = props;
+  const { type, variant, size = "m", style, children, icon, ...rest } = props;
 
-  const resolvedSize = size ? mapToDsSize(size) : dsSize;
+  const resolvedType = variant || type || "primary";
   const isIconOnly = icon !== undefined && !children;
   const className = typeof rest.className === "string" ? rest.className : "";
   const hasFocusClass =
     className.includes("pseudo-focus-visible") ||
     className.includes("pseudo-focus");
-  const sizeTokens = getSizeTokens(resolvedSize);
+  const sizeTokens = getSizeTokens(size);
 
   const paddingBlockValue = isIconOnly
     ? 0
-    : resolvedSize === "xs"
+    : size === "xs"
       ? spacing[1]
-      : resolvedSize === "s"
+      : size === "s"
         ? spacing[1]
-        : resolvedSize === "m"
+        : size === "m"
           ? spacing[2]
           : undefined;
 
   const iconOnlySize = isIconOnly
-    ? resolvedSize === "xs"
+    ? size === "xs"
       ? 24
-      : resolvedSize === "s"
+      : size === "s"
         ? 32
         : 36
     : undefined;
 
   const applyTheme = (
     tokens: Partial<ButtonToken>,
-    antdType: AntdButtonType,
+    antdType: "primary" | "default",
   ) => (
     <ConfigProvider
       theme={{
@@ -226,31 +221,31 @@ export function Button(props: ButtonProps): React.ReactElement {
     </ConfigProvider>
   );
 
-  if (type === "primary") {
+  if (resolvedType === "primary") {
     return applyTheme(getPrimaryTokens(), "primary");
   }
 
-  if (type === "secondary") {
+  if (resolvedType === "secondary") {
     return applyTheme(getSecondaryTokens(), "primary");
   }
 
-  if (type === "ghost") {
+  if (resolvedType === "ghost") {
     return applyTheme(getGhostTokens(), "primary");
   }
 
-  if (type === "destructive") {
+  if (resolvedType === "destructive") {
     return applyTheme(getDestructiveTokens(), "primary");
   }
 
-  if (type === "neutral") {
+  if (resolvedType === "neutral") {
     return applyTheme(getNeutralTokens(), "primary");
   }
 
-  if (type === "outlined") {
+  if (resolvedType === "outline") {
     return applyTheme(getOutlinedTokens(), "default");
   }
 
-  if (resolvedSize) {
+  if (size) {
     return (
       <ConfigProvider theme={{ components: { Button: { ...sizeTokens } } }}>
         <AntdButton
