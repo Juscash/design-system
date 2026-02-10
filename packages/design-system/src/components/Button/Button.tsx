@@ -97,6 +97,8 @@ function getGhostTokens(): Partial<ButtonToken> {
     colorPrimaryHover: designSystemColors.neutral[100],
     colorTextDisabled: designSystemColors.neutral[400],
     primaryShadow: "none",
+    colorBorderDisabled: "transparent",
+    colorBgContainerDisabled: "transparent",
   };
 }
 
