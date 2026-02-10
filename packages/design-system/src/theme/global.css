@@ -290,3 +290,11 @@
   font-weight: 400 !important;
   color: #262626 !important;
 }
+
+
+
+/* BUtton  */
+
+.ant-btn:not(:disabled):focus-visible {
+  outline: 3px solid #D4D4D4 !important;
+}

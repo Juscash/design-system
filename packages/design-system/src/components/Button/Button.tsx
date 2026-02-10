@@ -8,7 +8,7 @@ import {
 } from "antd";
 import type { ButtonToken } from "antd/es/button/style/token";
 import { designSystemColors } from "../../theme";
-import { radius, spacing } from "../../theme";
+import { radius, shadow, spacing } from "../../theme";
 
 type AntdButtonType = NonNullable<AntdButtonProps["type"]>;
 
@@ -39,7 +39,7 @@ function getPrimaryTokens(): Partial<ButtonToken> {
     colorTextLightSolid: designSystemColors.neutral[50],
     colorBgContainerDisabled: designSystemColors.neutral[300],
     colorTextDisabled: designSystemColors.neutral[400],
-    primaryShadow: undefined,
+    primaryShadow: "none",
   };
 }
 
@@ -52,7 +52,7 @@ function getSecondaryTokens(): Partial<ButtonToken> {
 
     colorBgContainerDisabled: designSystemColors.neutral[300],
     colorTextDisabled: designSystemColors.neutral[400],
-    primaryShadow: undefined,
+    primaryShadow: "none",
   };
 }
 
@@ -79,7 +79,8 @@ function getOutlinedTokens(): Partial<ButtonToken> {
 
     defaultBgDisabled: designSystemColors.neutral[50],
 
-    primaryShadow: undefined,
+    primaryShadow: "none",
+    defaultShadow: "none",
   };
 }
 function getGhostTokens(): Partial<ButtonToken> {
@@ -94,7 +95,7 @@ function getGhostTokens(): Partial<ButtonToken> {
     colorPrimaryActive: designSystemColors.neutral[100],
     colorPrimaryHover: designSystemColors.neutral[100],
     colorTextDisabled: designSystemColors.neutral[400],
-    primaryShadow: undefined,
+    primaryShadow: "none",
   };
 }
 
@@ -102,7 +103,7 @@ function getDestructiveTokens(): Partial<ButtonToken> {
   return {
     colorPrimary: designSystemColors.feedback.red[500],
     colorPrimaryBorder: "transparent",
-    primaryShadow: undefined,
+    primaryShadow: "none",
     colorTextLightSolid: designSystemColors.neutral[50],
 
     colorPrimaryHover: designSystemColors.feedback.red[900],
@@ -116,7 +117,7 @@ function getDestructiveTokens(): Partial<ButtonToken> {
 function getNeutralTokens(): Partial<ButtonToken> {
   return {
     colorPrimary: designSystemColors.neutral[200],
-    primaryShadow: undefined,
+    primaryShadow: "none",
     colorPrimaryHover: designSystemColors.neutral[400],
     colorPrimaryActive: designSystemColors.neutral[400],
     colorTextLightSolid: designSystemColors.neutral[800],
@@ -157,19 +158,33 @@ function mapToDsSize(size?: AntdButtonProps["size"]): DsSize {
 }
 
 export function Button(props: ButtonProps): React.ReactElement {
-  const { type, dsSize = "m", size, style, ...rest } = props;
+  const { type, dsSize = "m", size, style, children, icon, ...rest } = props;
 
   const resolvedSize = size ? mapToDsSize(size) : dsSize;
+  const isIconOnly = icon !== undefined && !children;
+  const className = typeof rest.className === "string" ? rest.className : "";
+  const hasFocusClass =
+    className.includes("pseudo-focus-visible") ||
+    className.includes("pseudo-focus");
   const sizeTokens = getSizeTokens(resolvedSize);
 
-  const paddingBlockValue =
-    resolvedSize === "xs"
+  const paddingBlockValue = isIconOnly
+    ? 0
+    : resolvedSize === "xs"
       ? spacing[1]
       : resolvedSize === "s"
         ? spacing[1]
         : resolvedSize === "m"
           ? spacing[2]
           : undefined;
+
+  const iconOnlySize = isIconOnly
+    ? resolvedSize === "xs"
+      ? 24
+      : resolvedSize === "s"
+        ? 32
+        : 36
+    : undefined;
 
   const applyTheme = (
     tokens: Partial<ButtonToken>,
@@ -183,14 +198,29 @@ export function Button(props: ButtonProps): React.ReactElement {
       <AntdButton
         type={antdType}
         style={
-          paddingBlockValue !== undefined
+          paddingBlockValue !== undefined || iconOnlySize !== undefined
             ? {
+                ...(iconOnlySize !== undefined
+                  ? {
+                      width: `${iconOnlySize}px`,
+                      minWidth: `${iconOnlySize}px`,
+                      height: `${iconOnlySize}px`,
+                      paddingLeft: "0px",
+                      paddingRight: "0px",
+                    }
+                  : null),
                 paddingTop: `${paddingBlockValue}px`,
                 paddingBottom: `${paddingBlockValue}px`,
+                boxShadow: hasFocusClass ? shadow.focus : undefined,
                 ...style,
               }
-            : style
+            : {
+                boxShadow: hasFocusClass ? shadow.focus : undefined,
+                ...style,
+              }
         }
+        icon={icon}
+        {...(children !== undefined ? { children } : null)}
         {...rest}
       />
     </ConfigProvider>
@@ -226,21 +256,44 @@ export function Button(props: ButtonProps): React.ReactElement {
         <AntdButton
           type="default"
           style={
-            paddingBlockValue !== undefined
+            paddingBlockValue !== undefined || iconOnlySize !== undefined
               ? {
+                  ...(iconOnlySize !== undefined
+                    ? {
+                        width: `${iconOnlySize}px`,
+                        minWidth: `${iconOnlySize}px`,
+                        height: `${iconOnlySize}px`,
+                        paddingLeft: "0px",
+                        paddingRight: "0px",
+                      }
+                    : null),
                   paddingTop: `${paddingBlockValue}px`,
                   paddingBottom: `${paddingBlockValue}px`,
+                  boxShadow: hasFocusClass ? shadow.focus : undefined,
                   ...style,
                 }
-              : style
+              : {
+                  boxShadow: hasFocusClass ? shadow.focus : undefined,
+                  ...style,
+                }
           }
+          icon={icon}
+          {...(children !== undefined ? { children } : null)}
           {...rest}
         />
       </ConfigProvider>
     );
   }
 
-  return <AntdButton type="default" style={style} {...rest} />;
+  return (
+    <AntdButton
+      type="default"
+      style={{ boxShadow: hasFocusClass ? shadow.focus : undefined, ...style }}
+      icon={icon}
+      {...(children !== undefined ? { children } : null)}
+      {...rest}
+    />
+  );
 }
 
 Button.displayName = "Button";

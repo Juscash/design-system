@@ -1,6 +1,8 @@
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
+import { Plus } from "lucide-react";
 import { Button } from "./Button";
+import { shadow } from "../../theme";
 
 describe("Button", () => {
   it("renders the button with text", () => {
@@ -45,5 +47,56 @@ describe("Button", () => {
 
     rerender(<Button dsSize="m">M</Button>);
     expect(screen.getByRole("button", { name: /^m$/i })).toBeInTheDocument();
+  });
+
+  it("does not apply focus shadow in default primary state", () => {
+    render(<Button type="primary">Primary</Button>);
+    const button = screen.getByRole("button", { name: /primary/i });
+    expect(button).not.toHaveStyle({ boxShadow: shadow.focus });
+  });
+
+  it("applies DS focus shadow for ghost variant when pseudo focus is active", () => {
+    render(
+      <Button
+        type="ghost"
+        className="pseudo-focus-visible"
+        aria-label="Ghost focus"
+      >
+        Ghost Focus
+      </Button>,
+    );
+    const button = screen.getByRole("button", { name: /ghost focus/i });
+    expect(button).toHaveStyle({ boxShadow: shadow.focus });
+  });
+
+  it("applies DS focus shadow for icon-only button when pseudo focus is active", () => {
+    render(
+      <Button
+        type="primary"
+        className="pseudo-focus-visible"
+        icon={<Plus size={16} />}
+        aria-label="Add icon"
+      />,
+    );
+    const button = screen.getByRole("button", { name: /add icon/i });
+    expect(button).toHaveStyle({ boxShadow: shadow.focus });
+  });
+
+  it("keeps custom variants rendering without regression", () => {
+    render(
+      <>
+        <Button type="ghost">Ghost</Button>
+        <Button type="outlined">Outlined</Button>
+        <Button type="neutral">Neutral</Button>
+      </>,
+    );
+
+    expect(screen.getByRole("button", { name: /ghost/i })).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /outlined/i }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole("button", { name: /neutral/i }),
+    ).toBeInTheDocument();
   });
 });

@@ -217,6 +217,44 @@ export const WithIcon: Story = {
 export const IconButton: Story = {
   args: {
     type: "primary",
-    icon: <Plus size={16} />,
   },
+  render: (args) => {
+    const { hover, active, focus, ...props } = args;
+    const pseudoClasses = [
+      hover && "pseudo-hover",
+      active && "pseudo-active",
+      focus && "pseudo-focus-visible",
+    ]
+      .filter(Boolean)
+      .join(" ");
+
+    return <Button {...props} icon={<Plus size={16} />} className={pseudoClasses} />;
+  },
+};
+
+export const ExemplosFigma: Story = {
+  name: "Exemplos Figma",
+  render: () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "24px" }}>
+        <Button type="primary">Ativar promoção</Button>
+        <Button type="secondary">Baixar relatório</Button>
+        <Button type="outlined">Ver detalhes</Button>
+      </div>
+
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "24px" }}>
+        <Button type="neutral">Filtrar</Button>
+        <Button type="destructive">Excluir</Button>
+      </div>
+
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "24px" }}>
+        <Button type="primary" icon={<Plus size={16} />} aria-label="Adicionar" />
+        <Button
+          type="ghost"
+          icon={<Search size={16} />}
+          aria-label="Pesquisar"
+        />
+      </div>
+    </div>
+  ),
 };
