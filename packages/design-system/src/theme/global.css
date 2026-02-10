@@ -147,17 +147,20 @@
   --font-caption-line-height: 0;
 }
 
+/* ============================================
+   SEGMENTED
+   ============================================ */
 .ant-segmented-item-selected {
   font-weight: 700 !important;
 }
 
+/* ============================================
+   FORM
+   ============================================ */
+
 /* Mover asterisco obrigatório para a direita do label */
 .ant-form-item-label>label.ant-form-item-required::before {
   display: none !important;
-}
-
-.ds-input-outline {
-  transition: all 0.2s ease-in-out !important;
 }
 
 .ant-form-item-label>label.ant-form-item-required::after {
@@ -166,6 +169,59 @@
   visibility: visible !important;
 }
 
+/* ============================================
+   INPUT
+   ============================================ */
+.ds-input-outline {
+  transition: all 0.2s ease-in-out !important;
+}
+
+.ds-input-outline .ant-select-selector {
+  border-color: transparent !important;
+  box-shadow: none !important;
+}
+
+.ds-input-outline:not(.ant-select-disabled):not(.ant-select-status-error):hover,
+.ds-input-outline.ant-select-focused:not(.ant-select-status-error) {
+  box-shadow: var(--shadow-focus) !important;
+  border-color: transparent !important;
+}
+
+.ds-input-outline.ant-select-status-error:hover,
+.ds-input-outline.ant-select-status-error.ant-select-focused {
+  box-shadow: var(--shadow-focus-error) !important;
+  border-color: transparent !important;
+}
+
+/* ============================================
+   BUTTON
+   ============================================ */
+.ant-btn-icon {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+.ant-btn-block:hover {
+  box-shadow: none !important;
+}
+
+.ant-btn:not(:disabled):focus-visible {
+  outline: 3px solid var(--color-neutral-300) !important;
+  outline-offset: -1px !important;
+}
+
+.ant-btn-variant-outlined.ant-btn:not(:disabled):not(.ant-btn-disabled):hover {
+  color: var(--color-neutral-800) !important;
+}
+
+.ant-btn-variant-outlined.ant-btn:not(:disabled):not(.ant-btn-disabled):active {
+  color: var(--color-neutral-800) !important;
+}
+
+/* ============================================
+   UPLOAD
+   ============================================ */
 .juscash-upload-horizontal {
   display: flex !important;
   flex-direction: row !important;
@@ -186,12 +242,9 @@
   min-width: 0 !important;
 }
 
-
 .juscash-upload-horizontal .ant-upload-list-item-container {
   width: 100% !important;
 }
-
-
 
 .juscash-upload-horizontal .ant-upload-list-item {
   margin-top: 0 !important;
@@ -214,12 +267,13 @@
   line-height: 1;
 }
 
-
-
 .ant-upload-icon {
   display: flex !important;
 }
 
+.ant-upload {
+  width: 100% !important;
+}
 
 .juscash-upload-button {
   transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
@@ -228,33 +282,15 @@
 .juscash-upload-button:hover {
   background-color: var(--color-neutral-100) !important;
   background-color: transparent !important;
-
   color: inherit !important;
   border-color: var(--color-neutral-300) !important;
-
-
   box-shadow: var(--shadow-focus) !important;
 }
-
-
-.ant-btn-icon {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-.ant-upload {
-  width: 100% !important;
-}
-
-
-
 
 .upload-error-state {
   border-color: var(--color-feedback-red-500) !important;
   outline: 1px solid var(--color-feedback-red-500) !important;
 }
-
 
 .upload-error-state:focus {
   border-color: var(--color-feedback-red-500) !important;
@@ -268,10 +304,21 @@
   box-shadow: var(--shadow-focus-error) !important;
 }
 
+/* ============================================
+   SELECT
+   ============================================ */
 .ant-select-item-option-content {
   display: flex !important;
   align-items: center !important;
+  flex: auto;
+}
 
+.ant-select-single .ant-select-item-option-selected .ant-select-item-option-state {
+  display: flex !important;
+}
+
+.ant-select-dropdown {
+  padding: 0 !important;
 }
 
 .ds-select-search-container {
@@ -290,50 +337,27 @@
   outline: none !important;
 }
 
-.ant-select-dropdown {
-  padding: 0 !important;
-}
-
-.ant-select-single .ant-select-item-option-selected .ant-select-item-option-state {
-  display: flex !important;
-}
-
-.ant-select-item-option-content {
-  flex: auto;
-}
-
-.ds-input-outline .ant-select-selector {
-  border-color: transparent !important;
-  box-shadow: none !important;
-}
-
-.ds-input-outline:not(.ant-select-disabled):not(.ant-select-status-error):hover,
-.ds-input-outline.ant-select-focused:not(.ant-select-status-error) {
-  box-shadow: var(--shadow-focus) !important;
-  border-color: transparent !important;
-}
-
-.ds-input-outline.ant-select-status-error:hover,
-.ds-input-outline.ant-select-status-error.ant-select-focused {
-  box-shadow: var(--shadow-focus-error) !important;
-  border-color: transparent !important;
-}
-
-
+/* ============================================
+   TABLE
+   ============================================ */
 .ant-table-cell {
   border: none !important;
 }
 
 .ant-table-container {
   border: 1px solid var(--color-neutral-300) !important;
-}
-
-.ant-table-container {
   border-radius: var(--radius-xl) !important;
 }
 
 .ant-table-tbody>.ant-table-row>td {
   border-top: 1px solid var(--color-neutral-300) !important;
+}
+
+/* ============================================
+   PAGINATION
+   ============================================ */
+.ant-pagination {
+  align-items: center !important;
 }
 
 .ant-pagination-total-text {
@@ -348,33 +372,24 @@
   align-items: center !important;
 }
 
-.ant-pagination {
-  align-items: center !important;
-}
-
 .ant-pagination-options-size-select .ant-select-selection-item {
   display: flex !important;
   align-items: center;
 }
-
-
 
 .ant-pagination-options-size-select-dropdown .ant-select-item-option-content {
   display: flex !important;
   align-items: center;
 }
 
-
-
 .ant-pagination-options .ant-select-content-value::before {
   content: "Itens por página: " !important;
   font-weight: 400;
 }
 
-.ant-btn-block:hover {
-  box-shadow: none !important;
-}
-
+/* ============================================
+   RADIO
+   ============================================ */
 .ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
   background-color: var(--color-neutral-50) !important;
   border-color: var(--ant-radio-button-solid-checked-bg) !important;
@@ -392,22 +407,21 @@
   box-shadow: var(--shadow-focus) !important;
 }
 
-/* DatePicker compact style overrides */
+/* ============================================
+   DATEPICKER
+   ============================================ */
 .range-picker-compact.ant-picker {
   width: auto !important;
 }
 
-/* os 2 inputs não pegam largura 100% */
 .range-picker-compact .ant-picker-input {
   width: auto !important;
 }
 
-/* largura aproximada do texto da data (11/11/2025 = 10 caracteres) */
 .range-picker-compact .ant-picker-input>input {
   width: 10ch !important;
 }
 
-/* diminui espaço entre as duas datas */
 .ant-picker-range-separator {
   margin: 0 !important;
   margin-right: 5px !important;
@@ -431,22 +445,5 @@
   font-family: "Inter" !important;
   font-size: 13px !important;
   font-weight: 400 !important;
-  color: var(--color-neutral-800) !important;
-}
-
-
-
-/* BUtton  */
-
-.ant-btn:not(:disabled):focus-visible {
-  outline: 3px solid var(--color-neutral-300) !important;
-  outline-offset: -1px !important;
-}
-
-.ant-btn-variant-outlined.ant-btn:not(:disabled):not(.ant-btn-disabled):hover {
-  color: var(--color-neutral-800) !important;
-}
-
-.ant-btn-variant-outlined.ant-btn:not(:disabled):not(.ant-btn-disabled):active {
   color: var(--color-neutral-800) !important;
 }

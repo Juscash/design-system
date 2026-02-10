@@ -1,20 +1,12 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { Search, Plus } from "lucide-react";
+import { Search, DollarSign, Bell, Plus, Mail, Pencil, Trash, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "./Button";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4035-4133&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4035-4133&m=dev";
 
 type ButtonStoryProps = React.ComponentProps<typeof Button> & {
   hover?: boolean;
@@ -87,27 +79,9 @@ function Example() {
     },
   },
   argTypes: {
-    type: {
-      control: "select",
-      options: [
-        "primary",
-        "secondary",
-        "outline",
-        "ghost",
-        "destructive",
-        "neutral",
-      ],
-    },
     variant: {
       control: "select",
-      options: [
-        "primary",
-        "secondary",
-        "outline",
-        "ghost",
-        "destructive",
-        "neutral",
-      ],
+      options: ["primary", "secondary", "outline", "ghost", "destructive", "neutral"],
       description: "Alias para 'type'. Se definido, tem prioridade.",
     },
     size: {
@@ -143,11 +117,7 @@ function Example() {
   },
   render: (args) => {
     const { hover, active, focus, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
 
@@ -160,49 +130,49 @@ type Story = StoryObj<ButtonStoryProps>;
 
 export const Primarys: Story = {
   args: {
-    type: "primary",
+    variant: "primary",
     children: "Primary Button",
   },
 };
 
 export const Secondary: Story = {
   args: {
-    type: "secondary",
+    variant: "secondary",
     children: "Secondary Button",
   },
 };
 
 export const Destructive: Story = {
   args: {
-    type: "destructive",
+    variant: "destructive",
     children: "Destructive Button",
   },
 };
 
 export const Ghost: Story = {
   args: {
-    type: "ghost",
+    variant: "ghost",
     children: "Ghost Button",
   },
 };
 
 export const Neutral: Story = {
   args: {
-    type: "neutral",
+    variant: "neutral",
     children: "Neutral Button",
   },
 };
 
 export const Outline: Story = {
   args: {
-    type: "outline",
+    variant: "outline",
     children: "Outline Button",
   },
 };
 
 export const Disabled: Story = {
   args: {
-    type: "primary",
+    variant: "primary",
     disabled: true,
     children: "Disabled Button",
   },
@@ -210,7 +180,7 @@ export const Disabled: Story = {
 
 export const Loading: Story = {
   args: {
-    type: "primary",
+    variant: "primary",
     loading: true,
     children: "Loading Button",
   },
@@ -218,7 +188,7 @@ export const Loading: Story = {
 
 export const WithIcon: Story = {
   args: {
-    type: "primary",
+    variant: "primary",
     icon: <Search size={16} />,
     children: "Search",
   },
@@ -226,15 +196,11 @@ export const WithIcon: Story = {
 
 export const IconButton: Story = {
   args: {
-    type: "primary",
+    variant: "primary",
   },
   render: (args) => {
     const { hover, active, focus, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
 
@@ -247,23 +213,37 @@ export const ExemplosFigma: Story = {
   render: () => (
     <div style={{ display: "flex", flexDirection: "column", gap: "24px" }}>
       <div style={{ display: "flex", flexWrap: "wrap", gap: "24px" }}>
-        <Button type="primary">Ativar promoção</Button>
-        <Button type="secondary">Baixar relatório</Button>
-        <Button type="outline">Ver detalhes</Button>
+        <Button variant="primary" size="m" icon={<Mail size={15} />}>
+          Entrar com o e-mail
+        </Button>
+        <Button variant="primary" size="m">
+          Enviar processo
+        </Button>
+        <Button variant="secondary" size="m" icon={<Plus size={15} />}>
+          Adicionar cliente
+        </Button>
       </div>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: "24px" }}>
-        <Button type="neutral">Filtrar</Button>
-        <Button type="destructive">Excluir</Button>
+        <Button variant="outline" icon={<Pencil size={15} />}>
+          Editar
+        </Button>
+        <Button variant="destructive" icon={<Trash size={15} />}>
+          Excluir
+        </Button>
       </div>
 
       <div style={{ display: "flex", flexWrap: "wrap", gap: "24px" }}>
-        <Button type="primary" icon={<Plus size={16} />} aria-label="Adicionar" />
-        <Button
-          type="ghost"
-          icon={<Search size={16} />}
-          aria-label="Pesquisar"
-        />
+        <Button variant="neutral" icon={<ChevronLeft size={15} />}>
+          Anterior
+        </Button>
+        <Button variant="neutral" icon={<ChevronRight size={15} />} iconPlacement="end">
+          Proximo
+        </Button>
+      </div>
+      <div style={{ display: "flex", flexWrap: "wrap", gap: "24px" }}>
+        <Button variant="outline" size="m" icon={<DollarSign size={15} />} />
+        <Button variant="ghost" size="m" icon={<Bell size={15} />} />
       </div>
     </div>
   ),

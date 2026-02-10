@@ -1,0 +1,13 @@
+{
+  "trailingComma": "all",
+  "singleQuote": false,
+  "endOfLine": "lf",
+  "tabWidth": 2,
+  "arrowParens": "always",
+  "printWidth": 130,
+  "bracketSpacing": true,
+  "experimentalOperatorPosition": "start",
+  "experimentalTernaries": true,
+  "quoteProps": "consistent",
+  "semi": true
+}
