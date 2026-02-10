@@ -43,7 +43,7 @@ function getSizeTokens(size?: InputSize): {
   }
   if (size === "s") {
     const componentToken: Partial<ComponentToken> = {
-      inputFontSize: 16,
+      inputFontSize: 13,
       paddingBlock: spacing[2],
       paddingInline: spacing[3],
     };
@@ -59,7 +59,7 @@ function getSizeTokens(size?: InputSize): {
   }
   if (size === "m") {
     const componentToken: Partial<ComponentToken> = {
-      inputFontSize: 16,
+      inputFontSize: 13,
       paddingBlock: spacing[2],
       paddingInline: spacing[3],
     };
@@ -75,7 +75,7 @@ function getSizeTokens(size?: InputSize): {
   }
   if (size === "l") {
     const componentToken: Partial<ComponentToken> = {
-      inputFontSize: 16,
+      inputFontSize: 13,
       paddingBlock: spacing[2],
       paddingInline: spacing[3],
     };

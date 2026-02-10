@@ -123,7 +123,7 @@ function Example() {
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
 
     return (
-      <FormItem label="Label">
+      <FormItem label="Label" size={props.size}>
         <Input {...props} style={style} className={mergedClassName} />
       </FormItem>
     );
@@ -184,7 +184,7 @@ export const Error: Story = {
       mergedStyle.borderColor = "transparent";
     }
     return (
-      <FormItem label="Label" validateStatus="error" help="Error message">
+      <FormItem label="Label" size={props.size} validateStatus="error" help="Error message">
         <Input {...props} style={mergedStyle} className={mergedClassName} />
       </FormItem>
     );
@@ -207,7 +207,7 @@ export const ErrorFocus: Story = {
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
 
     return (
-      <FormItem label="Label" validateStatus="error" help="Error message">
+      <FormItem label="Label" size={props.size} validateStatus="error" help="Error message">
         <Input {...props} style={style} className={mergedClassName} />
       </FormItem>
     );

@@ -13,7 +13,7 @@ const { RangePicker: AntdRangePicker } = AntdDatePicker;
 
 const datePickerTheme: ThemeConfig = {
   token: {
-    colorPrimary: designSystemColors.brand.primary[500],
+    colorPrimary: designSystemColors.brand.primary[600],
     fontFamily: '"Inter", sans-serif',
   },
   components: {
@@ -38,13 +38,22 @@ const datePickerLocale =
     }
   : undefined;
 
-export const DatePicker: React.FC<DatePickerProps> = ({ allowClear = false, ...rest }) => {
+export const DatePicker: React.FC<DatePickerProps> = ({
+  allowClear = false,
+  placeholder = "dd/mm/aaaa",
+  format = "DD/MM/YYYY",
+  inputReadOnly = true,
+  ...rest
+}) => {
   return (
     <ConfigProvider theme={datePickerTheme}>
       <AntdDatePicker
         {...rest}
         locale={datePickerLocale}
         allowClear={allowClear}
+        placeholder={placeholder}
+        format={format}
+        inputReadOnly={inputReadOnly}
         suffixIcon={null}
         prefix={<Calendar size={16} color={designSystemColors.neutral[500]} style={{ marginRight: 8, marginLeft: 4 }} />}
         prevIcon={

@@ -465,24 +465,63 @@
 }
 
 .ant-picker-month-btn {
-  font-family: "Inter" !important;
+  font-family: var(--font-primary) !important;
   font-size: 13px !important;
-  font-weight: 400 !important;
+  font-weight: 500 !important;
   color: var(--color-neutral-800) !important;
 }
 
 .ant-picker-year-btn {
-  font-family: "Inter" !important;
+  font-family: var(--font-primary) !important;
   font-size: 13px !important;
-  font-weight: 400 !important;
+  font-weight: 500 !important;
   color: var(--color-neutral-800) !important;
 }
 
 .ant-picker-quarter-btn {
-  font-family: "Inter" !important;
+  font-family: var(--font-primary) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: var(--color-neutral-800) !important;
+}
+
+/* Dias da semana (Dom, Seg, Ter...) */
+.ant-picker-content thead th {
+  font-family: var(--font-primary) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  color: var(--color-neutral-500) !important;
+}
+
+/* Células de dia */
+.ant-picker-cell-inner {
+  font-family: var(--font-primary) !important;
   font-size: 13px !important;
   font-weight: 400 !important;
-  color: var(--color-neutral-800) !important;
+  min-width: 28px !important;
+  height: 28px !important;
+  line-height: 28px !important;
+}
+
+.ant-picker-outlined:focus {
+  box-shadow: var(--shadow-focus) !important;
+  border-color: var(--color-neutral-300) !important;
+}
+
+/* Dia de hoje (border) */
+.ant-picker-cell-today .ant-picker-cell-inner::before {
+  border-color: var(--color-brand-primary-600) !important;
+}
+
+.ant-picker-outlined:hover {
+  border-color: var(--color-neutral-300) !important;
+}
+
+/* Input do DatePicker */
+.ant-picker-input>input {
+  font-family: var(--font-primary);
+  font-size: 13px !important;
+  font-weight: 400 !important;
 }
 
 /* ============================================
@@ -593,7 +632,7 @@
 }
 
 .ant-checkbox-label {
-  font-family: 'Inter', sans-serif !important;
+  font-family: var(--font-primary) !important;
   font-size: 13px !important;
   font-weight: 400 !important;
   color: var(--color-neutral-800) !important;
@@ -620,7 +659,7 @@
 }
 
 .rich-checkbox-label {
-  font-family: 'Inter', sans-serif !important;
+  font-family: var(--font-primary) !important;
   font-size: 13px !important;
   font-weight: 400 !important;
   line-height: 1.2 !important;
@@ -628,7 +667,7 @@
 }
 
 .rich-checkbox-secondary {
-  font-family: 'Inter', sans-serif !important;
+  font-family: var(--font-primary) !important;
   font-size: 10px !important;
   font-weight: 400 !important;
   line-height: 1.2 !important;
@@ -672,7 +711,7 @@
 }
 
 .rich-radio-label {
-  font-family: 'Inter', sans-serif !important;
+  font-family: var(--font-primary) !important;
   font-size: 13px !important;
   font-weight: 400 !important;
   line-height: 1.2 !important;
@@ -680,7 +719,7 @@
 }
 
 .rich-radio-secondary {
-  font-family: 'Inter', sans-serif !important;
+  font-family: var(--font-primary) !important;
   font-size: 10px !important;
   font-weight: 400 !important;
   line-height: 1.2 !important;
@@ -749,4 +788,20 @@
 
 .ant-form-item-row {
   align-items: flex-start !important;
+}
+
+.ant-form-item-control-input {
+  min-height: 24px !important;
+}
+
+.ant-input-outlined.pseudo-hover {
+  border-color: var(--color-neutral-300) !important;
+}
+
+.ant-input-outlined:hover {
+  border-color: var(--color-neutral-300) !important;
+}
+
+.ant-input-outlined.ant-input-status-error:not(.ant-input-disabled):hover {
+  border-color: var(--color-feedback-red-500) !important;
 }
