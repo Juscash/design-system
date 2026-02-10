@@ -73,9 +73,9 @@ export function Upload(props: UploadProps): React.ReactElement {
   // Criar children padrão com Button se não fornecido
   const defaultChildren = (
     <Button
-      type="outlined"
+      type="outline"
       className={`juscash-upload-button ${isError ? "upload-error-state" : ""}`}
-      dsSize={mapToButtonSize(dsSize)}
+      size={mapToButtonSize(dsSize)}
       icon={<LucideIcons.Upload size={16} />}
       disabled={disabled}
       style={getButtonStyle()}

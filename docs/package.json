@@ -1,5 +1,5 @@
 {
-  "name": "@Juscash/storybook",
+  "name": "@juscash/storybook",
   "version": "0.0.0",
   "private": true,
   "type": "module",
@@ -10,12 +10,12 @@
     "start": "npx http-server storybook-static"
   },
   "devDependencies": {
-    "@storybook/addon-a11y": "^10.2.1",
-    "@storybook/addon-designs": "^11.1.1",
-    "@storybook/addon-docs": "^10.2.1",
-    "@storybook/addon-links": "^10.2.1",
-    "@storybook/addon-vitest": "^10.2.1",
-    "@storybook/nextjs-vite": "^10.2.1",
+    "@storybook/addon-a11y": "^10.2.8",
+    "@storybook/addon-designs": "^11.1.2",
+    "@storybook/addon-docs": "^10.2.8",
+    "@storybook/addon-links": "^10.2.8",
+    "@storybook/addon-vitest": "^10.2.8",
+    "@storybook/nextjs-vite": "^10.2.8",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
     "@vitejs/plugin-react": "^4.3.0",
@@ -25,8 +25,8 @@
     "playwright": "^1.58.0",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "storybook": "^10.2.1",
-    "storybook-addon-pseudo-states": "^10.2.1",
+    "storybook": "^10.2.8",
+    "storybook-addon-pseudo-states": "^10.2.8",
     "vite": "^5.4.0",
     "vitest": "^4.0.18"
   },

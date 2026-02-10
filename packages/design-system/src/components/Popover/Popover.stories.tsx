@@ -290,10 +290,10 @@ export const Complete: Story = {
     content: "Tem certeza que deseja prosseguir com esta operação?",
     footer: (
       <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
-        <Button type="neutral" dsSize="s">
+        <Button type="neutral" size="s">
           Cancelar
         </Button>
-        <Button type="primary" dsSize="s">
+        <Button type="primary" size="s">
           Confirmar
         </Button>
       </div>

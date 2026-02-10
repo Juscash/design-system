@@ -87,7 +87,7 @@ export function ConfirmModal(props: ConfirmModalProps): React.ReactElement {
       }}
     >
       {cancelText && (
-        <Button type="outlined" onClick={onCancel}>
+        <Button type="outline" onClick={onCancel}>
           {cancelText}
         </Button>
       )}
