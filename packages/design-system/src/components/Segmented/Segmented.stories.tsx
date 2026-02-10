@@ -8,8 +8,7 @@ import { designSystemColors } from "../../theme";
 
 const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4886-14656&m=dev";
 
-type SegmentedStoryProps = React.ComponentProps<typeof Segmented> & {
-};
+type SegmentedStoryProps = React.ComponentProps<typeof Segmented> & {};
 
 const meta: Meta<SegmentedStoryProps> = {
   title: "Components/Segmented",
@@ -88,7 +87,7 @@ const iconOnlyOptions = [
 
 const primaryOptions = [
   { value: "daily", text: "Daily", state: "active" as const },
-  { value: "weekly", text: "Weekly", counter: "3" },
+  { value: "weekly", text: "Weekly" },
   { value: "grid", text: "Grid", icon: <Grid size={16} /> },
   { value: "icon_only", icon: <List size={16} />, bold: false },
   { value: "monthly", text: "Monthly", disabled: true, state: "inactive" as const },

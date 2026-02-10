@@ -399,16 +399,49 @@
   border-color: var(--ant-radio-button-solid-checked-bg) !important;
 }
 
+.ant-radio-wrapper .ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
+  background-color: var(--color-neutral-300) !important;
+  border-color: var(--ant-radio-button-solid-checked-bg) !important;
+}
+
+.ant-radio-wrapper .ant-radio-disabled .ant-radio-inner:after {
+  background-color: var(--color-neutral-200) !important;
+}
+
 .ant-radio-wrapper .ant-radio-inner:after {
   background-color: var(--ant-color-primary) !important;
+}
+
+.ds-radio-error .ant-radio-inner {
+  border-color: var(--color-feedback-red-500) !important;
+}
+
+.ant-radio-disabled .ds-radio-error .ant-radio-inner {
+  border-color: transparent !important;
 }
 
 .ds-radio-error .ant-radio .ant-radio-inner:focus-visible {
   box-shadow: var(--shadow-focus-error) !important;
 }
 
-.ds-neutral .ant-radio-inner:focus-visible {
+.ant-radio-wrapper .ant-radio-checked.ant-radio-disabled .ant-radio-inner {
+
+  border-color: transparent !important;
+}
+
+.ds-radio-error.pseudo-focus-visible .ant-radio .ant-radio-inner {
+  box-shadow: var(--shadow-focus-error) !important;
+}
+
+.ds-neutral.pseudo-focus-visible .ant-radio-inner {
   box-shadow: var(--shadow-focus) !important;
+}
+
+.ant-radio-label {
+
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  color: var(--color-neutral-800) !important;
 }
 
 /* ============================================

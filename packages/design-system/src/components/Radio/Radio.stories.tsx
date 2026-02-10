@@ -11,7 +11,7 @@ const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-Sy
 
 type RadioStoryProps = React.ComponentProps<typeof Radio> & {
   focus?: boolean;
-  hover?: boolean;
+
   active?: boolean;
 };
 
@@ -77,7 +77,7 @@ function Example() {
   },
   args: {
     children: "Radio option",
-    hover: false,
+
     active: false,
     focus: false,
   },
@@ -95,11 +95,7 @@ function Example() {
       description: "Força o estado focus (visual)",
       table: { category: "Pseudo States" },
     },
-    hover: {
-      control: "boolean",
-      description: "Força o estado hover (visual)",
-      table: { category: "Pseudo States" },
-    },
+
     active: {
       control: "boolean",
       description: "Força o estado active (visual)",
@@ -107,8 +103,8 @@ function Example() {
     },
   },
   render: (args) => {
-    const { focus, hover, active, style, ...props } = args;
-    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
+    const { focus, active, style, ...props } = args;
+    const pseudoClasses = [active && "pseudo-active", focus && "pseudo-focus-visible pseudo-focus-visible-all"]
       .filter(Boolean)
       .join(" ");
 
