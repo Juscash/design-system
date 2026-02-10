@@ -19,12 +19,12 @@ export type InputProps = CleanAntdProps & {
   size?: InputSize;
 };
 
-function getSizeTokens(dsSize?: InputSize): {
+function getSizeTokens(size?: InputSize): {
   componentToken: Partial<ComponentToken>;
   globalToken: Partial<AliasToken>;
   height: number;
 } {
-  if (dsSize === "xs") {
+  if (size === "xs") {
     const componentToken: Partial<ComponentToken> = {
       inputFontSize: 13,
       paddingBlock: spacing[2],
@@ -41,7 +41,7 @@ function getSizeTokens(dsSize?: InputSize): {
       height: 24,
     };
   }
-  if (dsSize === "s") {
+  if (size === "s") {
     const componentToken: Partial<ComponentToken> = {
       inputFontSize: 16,
       paddingBlock: spacing[2],
@@ -57,7 +57,7 @@ function getSizeTokens(dsSize?: InputSize): {
       height: 32,
     };
   }
-  if (dsSize === "m") {
+  if (size === "m") {
     const componentToken: Partial<ComponentToken> = {
       inputFontSize: 16,
       paddingBlock: spacing[2],
@@ -73,7 +73,7 @@ function getSizeTokens(dsSize?: InputSize): {
       height: 36,
     };
   }
-  if (dsSize === "l") {
+  if (size === "l") {
     const componentToken: Partial<ComponentToken> = {
       inputFontSize: 16,
       paddingBlock: spacing[2],

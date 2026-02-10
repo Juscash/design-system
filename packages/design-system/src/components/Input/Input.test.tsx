@@ -14,13 +14,13 @@ describe("Input", () => {
   });
 
   it("renders with different sizes", () => {
-    const { rerender } = render(<Input dsSize="xs" placeholder="XS" />);
+    const { rerender } = render(<Input size="xs" placeholder="XS" />);
     expect(screen.getByPlaceholderText("XS")).toBeInTheDocument();
 
-    rerender(<Input dsSize="m" placeholder="M" />);
+    rerender(<Input size="m" placeholder="M" />);
     expect(screen.getByPlaceholderText("M")).toBeInTheDocument();
 
-    rerender(<Input dsSize="l" placeholder="L" />);
+    rerender(<Input size="l" placeholder="L" />);
     expect(screen.getByPlaceholderText("L")).toBeInTheDocument();
   });
 });

@@ -32,10 +32,8 @@ Componente de Input baseado no [Ant Design Input](https://ant.design/components/
 
 ### Props:
 - **Extended (Ant Design)**: Suporta as propriedades padrão do AntD Input.
-- **Customized**:
-  - \`size\`: Mapeado internamente para o \`dsSize\` do sistema Juscash.
 - **Custom (Juscash)**:
-  - \`dsSize\`: Define o tamanho específico seguindo o Design System (\`xs\`, \`s\`, \`m\`, \`l\`).
+  - \`size\`: Define o tamanho específico seguindo o Design System (\`xs\`, \`s\`, \`m\`, \`l\`).
 
 ### Como usar:
 
@@ -78,7 +76,7 @@ function Example() {
   },
   tags: ["autodocs"],
   argTypes: {
-    dsSize: {
+    size: {
       control: "select",
       options: ["xs", "s", "m", "l"],
     },
