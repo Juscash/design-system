@@ -1,18 +1,14 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { Segmented } from "./Segmented";
 import { Grid, List } from "lucide-react";
-import { designSystemColors } from "../../theme";
-
-import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
+import { Description, Controls, Primary as DocsPrimary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
+import { Segmented } from "./Segmented";
+import { designSystemColors } from "../../theme";
 
 const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4886-14656&m=dev";
 
 type SegmentedStoryProps = React.ComponentProps<typeof Segmented> & {
-  hover?: boolean;
-  active?: boolean;
-  focus?: boolean;
 };
 
 const meta: Meta<SegmentedStoryProps> = {
@@ -20,11 +16,7 @@ const meta: Meta<SegmentedStoryProps> = {
   component: Segmented,
   tags: ["autodocs"],
   parameters: {
-    design: {
-      type: "figma",
-      url: FIGMA_URL,
-    },
-
+    design: { type: "figma", url: FIGMA_URL },
     docs: {
       codePanel: true,
       description: {
@@ -32,24 +24,10 @@ const meta: Meta<SegmentedStoryProps> = {
 Componente de controle segmentado baseado no [Ant Design Segmented](https://ant.design/components/segmented).
 
 ### Props:
-- **Extended (Ant Design)**: Suporta as propriedades padrão do AntD Segmented.
+- **Extended (Ant Design)**: suporta propriedades nativas do AntD.
 - **Custom (Juscash)**:
-  - \`size\`: Estendido com tamanhos do Design System (\`small\`, \`middle\`, \`large\`). A propriedade original \`size\` do AntD é mapeada automaticamente.
-
-### Como usar:
-
-\`\`\`tsx
-import { Segmented } from "@juscash/design-system";
-
-function Example() {
-  return (
-    <Segmented
-      options={["Daily", "Weekly", "Monthly"]}
-      defaultValue="Daily"
-    />
-  );
-}
-\`\`\`
+  - \`size\`: \`m\` | \`s\` | \`xs\` (altura do root conforme Figma).
+  - \`options\`: aceita \`state\`, \`counter\`, \`icon\`, \`text\`, \`bold\` e \`disabled\` por item.
 `,
       },
       page: () => (
@@ -57,40 +35,29 @@ function Example() {
           <Title />
           <Subtitle />
           <Description />
-
-          <Primary />
-
+          <DocsPrimary />
           <Controls />
-
-          <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
-            <h3
-              style={{
-                marginBottom: "1rem",
-                fontSize: "1.2rem",
-                fontWeight: "bold",
-              }}
-            >
-              🎨 Figma Spec
-            </h3>
+          <div style={{ marginBottom: "2rem", marginTop: "2rem" }}>
+            <h3 style={{ fontSize: "1.2rem", fontWeight: "bold", marginBottom: "1rem" }}>Figma Spec</h3>
             <Figma showLink url={FIGMA_URL} height="400px" />
           </div>
-
           <Stories />
         </>
       ),
     },
   },
   args: {
-    size: "middle",
-    hover: false,
-    active: false,
-    focus: false,
+    size: "m",
   },
   argTypes: {
     size: {
       control: "select",
-      options: ["regular", "small", "middle", "large"],
+      options: ["m", "s", "xs"],
       description: "Tamanho do componente",
+    },
+    options: {
+      control: "object",
+      description: "Lista de opcoes do segmented",
     },
     block: {
       control: "boolean",
@@ -100,154 +67,70 @@ function Example() {
       control: "boolean",
       description: "Desabilita todo o componente",
     },
-    hover: {
-      control: "boolean",
-      description: "Forca o estado hover",
-      table: { category: "Pseudo States" },
-    },
-    active: {
-      control: "boolean",
-      description: "Forca o estado active",
-      table: { category: "Pseudo States" },
-    },
-    focus: {
-      control: "boolean",
-      description: "Forca o estado focus",
-      table: { category: "Pseudo States" },
-    },
   },
-  render: (args) => {
-    const { hover, active, focus, ...props } = args;
-    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
-      .filter(Boolean)
-      .join(" ");
-
-    return <Segmented {...props} className={pseudoClasses} />;
-  },
+  render: (args) => <Segmented {...args} />,
 };
 
 export default meta;
 type Story = StoryObj<SegmentedStoryProps>;
 
-// Basic Text Options
 const textOptions = ["Daily", "Weekly", "Monthly"];
 
-// Icon + Text Options (Simulating the 'With Icons' Figma variant)
 const iconTextOptions = [
-  {
-    label: (
-      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-        <Grid size={16} />
-        <span>Grid</span>
-      </div>
-    ),
-    value: "grid",
-  },
-  {
-    label: (
-      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-        <List size={16} />
-        <span>List</span>
-      </div>
-    ),
-    value: "list",
-  },
+  { value: "grid", text: "Grid", icon: <Grid size={16} /> },
+  { value: "list", text: "List", icon: <List size={16} /> },
 ];
 
-// Icon Only Options
 const iconOnlyOptions = [
-  {
-    label: (
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <Grid size={16} />
-      </div>
-    ),
-    value: "grid",
-  },
-  {
-    label: (
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
-        }}
-      >
-        <List size={16} />
-      </div>
-    ),
-    value: "list",
-  },
+  { value: "grid", icon: <Grid size={16} />, bold: false },
+  { value: "list", icon: <List size={16} />, bold: false },
 ];
+
+const primaryOptions = [
+  { value: "daily", text: "Daily", state: "active" as const },
+  { value: "weekly", text: "Weekly", counter: "3" },
+  { value: "grid", text: "Grid", icon: <Grid size={16} /> },
+  { value: "icon_only", icon: <List size={16} />, bold: false },
+  { value: "monthly", text: "Monthly", disabled: true, state: "inactive" as const },
+];
+
+export const Primary: Story = {
+  args: {
+    size: "m",
+    options: primaryOptions,
+  },
+  name: "Primary",
+};
 
 export const Default: Story = {
-  args: {
-    options: textOptions,
-    defaultValue: "Daily",
-  },
+  args: { options: ["Daily", "Weekly", "Monthly"], defaultValue: "Daily" },
   name: "Label Only",
 };
 
 export const WithIcon: Story = {
-  args: {
-    options: iconTextOptions,
-    defaultValue: "grid",
-  },
+  args: { options: iconTextOptions, defaultValue: "grid" },
   name: "Icon + Label",
 };
 
 export const IconOnly: Story = {
-  args: {
-    options: iconOnlyOptions,
-    defaultValue: "grid",
-  },
+  args: { options: iconOnlyOptions, defaultValue: "grid" },
   name: "Icon Only",
 };
 
 export const SizeVariants: Story = {
   render: () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-        <span
-          style={{
-            width: 60,
-            fontSize: 12,
-            color: designSystemColors.neutral[500],
-          }}
-        >
-          Small:
-        </span>
-        <Segmented size="small" options={textOptions} defaultValue="Daily" />
+      <div style={{ alignItems: "center", display: "flex", gap: 8 }}>
+        <span style={{ color: designSystemColors.neutral[500], fontSize: 12, width: 60 }}>M:</span>
+        <Segmented size="m" options={textOptions} defaultValue="Daily" />
       </div>
-      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-        <span
-          style={{
-            width: 60,
-            fontSize: 12,
-            color: designSystemColors.neutral[500],
-          }}
-        >
-          Middle:
-        </span>
-        <Segmented size="middle" options={textOptions} defaultValue="Daily" />
+      <div style={{ alignItems: "center", display: "flex", gap: 8 }}>
+        <span style={{ color: designSystemColors.neutral[500], fontSize: 12, width: 60 }}>S:</span>
+        <Segmented size="s" options={textOptions} defaultValue="Daily" />
       </div>
-      <div style={{ display: "flex", alignItems: "center", gap: 8 }}>
-        <span
-          style={{
-            width: 60,
-            fontSize: 12,
-            color: designSystemColors.neutral[500],
-          }}
-        >
-          Large:
-        </span>
-        <Segmented size="large" options={textOptions} defaultValue="Daily" />
+      <div style={{ alignItems: "center", display: "flex", gap: 8 }}>
+        <span style={{ color: designSystemColors.neutral[500], fontSize: 12, width: 60 }}>XS:</span>
+        <Segmented size="xs" options={textOptions} defaultValue="Daily" />
       </div>
     </div>
   ),
@@ -255,22 +138,25 @@ export const SizeVariants: Story = {
 };
 
 export const Disabled: Story = {
-  args: {
-    options: textOptions,
-    defaultValue: "Daily",
-    disabled: true,
-  },
+  args: { options: textOptions, defaultValue: "Daily", disabled: true },
 };
 
 export const Block: Story = {
-  args: {
-    options: textOptions,
-    defaultValue: "Weekly",
-    block: true,
-  },
+  args: { options: textOptions, defaultValue: "Weekly", block: true },
   render: (args) => (
     <div style={{ width: 400 }}>
       <Segmented {...args} />
     </div>
   ),
+};
+
+export const FigmaProps: Story = {
+  args: {
+    size: "m",
+    options: [
+      { value: "heart", text: "Label", icon: <Grid size={16} />, counter: "1", state: "active", bold: true },
+      { value: "list", text: "Label", icon: <List size={16} />, state: "inactive", bold: false },
+    ],
+  },
+  name: "Figma Props",
 };

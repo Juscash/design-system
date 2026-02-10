@@ -451,3 +451,153 @@
   font-weight: 400 !important;
   color: var(--color-neutral-800) !important;
 }
+
+/* ============================================
+   CHECKBOX
+   ============================================ */
+
+/* Focus state */
+.ant-checkbox-wrapper:has(.ant-checkbox-input:focus-visible) .ant-checkbox-inner,
+.ant-checkbox:has(.ant-checkbox-input:focus-visible) .ant-checkbox-inner {
+  box-shadow: var(--shadow-focus) !important;
+}
+
+/* Error + Focus state */
+.ds-checkbox-error:has(.ant-checkbox-input:focus-visible) .ant-checkbox-inner {
+  box-shadow: var(--shadow-focus-error) !important;
+}
+
+/* Hover state - apenas quando não disabled */
+.ant-checkbox-wrapper:hover:not(.ant-checkbox-wrapper-disabled) .ant-checkbox-inner,
+.ant-checkbox:hover:not(.ant-checkbox-disabled) .ant-checkbox-inner {
+  border-color: var(--color-neutral-300) !important;
+}
+
+/* Error hover state */
+.ds-checkbox-error:hover:not(.ant-checkbox-wrapper-disabled) .ant-checkbox-inner {
+  border-color: var(--color-feedback-red-900) !important;
+}
+
+/* Indeterminate state - usando ícone Minus do Lucide conforme Figma */
+.ant-checkbox-indeterminate .ant-checkbox-inner::after {
+  /* Remover o traço padrão do Ant Design */
+  display: none !important;
+}
+
+.ant-checkbox-indeterminate .ant-checkbox-inner {
+  background-color: var(--color-brand-primary-600) !important;
+  border-color: var(--color-neutral-300) !important;
+}
+
+/* Adicionar ícone Minus do Lucide */
+.ant-checkbox-indeterminate .ant-checkbox-inner::before {
+  content: '' !important;
+  display: block !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 12px !important;
+  height: 12px !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E") !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+}
+
+/* Pseudo-states para Storybook */
+
+
+.pseudo-focus-visible .ant-checkbox-inner {
+  box-shadow: var(--shadow-focus) !important;
+}
+
+.pseudo-focus-visible.ds-checkbox-error .ant-checkbox-inner {
+  box-shadow: var(--shadow-focus-error) !important;
+}
+
+.pseudo-active .ant-checkbox-inner {
+  border-color: var(--color-brand-primary-700) !important;
+}
+
+/* ============================================
+   DISABLED STATES - Correções conforme Figma
+   ============================================ */
+
+/* Disabled + Checked: ícone checkmark precisa ser branco */
+.ant-checkbox-wrapper-disabled .ant-checkbox-checked .ant-checkbox-inner::after {
+  border-color: white !important;
+}
+
+/* Disabled + Indeterminate: fundo cinza (não verde) */
+.ant-checkbox-wrapper-disabled .ant-checkbox-indeterminate .ant-checkbox-inner {
+  background-color: var(--color-neutral-300) !important;
+  border-color: var(--color-neutral-300) !important;
+}
+
+.ant-checkbox-disabled .ant-checkbox-inner {
+  background-color: var(--color-neutral-300) !important;
+  border-color: var(--color-neutral-300) !important;
+}
+
+/* Disabled + Indeterminate: ícone Minus branco */
+.ant-checkbox-wrapper-disabled .ant-checkbox-indeterminate .ant-checkbox-inner::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E") !important;
+}
+
+
+/* Rich Checkbox */
+.rich-checkbox-wrapper {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: var(--spacing-2) !important;
+  padding: var(--spacing-2) var(--spacing-3) !important;
+  border: 1px solid var(--color-neutral-300) !important;
+  border-radius: var(--radius-xl) !important;
+  background-color: var(--color-neutral-50) !important;
+  transition: all 0.2s ease-in-out !important;
+  cursor: pointer !important;
+}
+
+.ant-checkbox-label {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  color: var(--color-neutral-800) !important;
+}
+
+.rich-checkbox-wrapper:hover {
+  background-color: var(--color-neutral-100) !important;
+}
+
+.rich-checkbox-wrapper.rich-checkbox-checked {
+  background-color: var(--color-neutral-100) !important;
+}
+
+.rich-checkbox-wrapper .ant-checkbox-wrapper {
+  margin: 0 !important;
+  padding-top: 2.5px !important;
+}
+
+.rich-checkbox-content {
+  flex: 1 !important;
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 2px !important;
+}
+
+.rich-checkbox-label {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  line-height: 1.2 !important;
+  color: var(--color-neutral-800) !important;
+}
+
+.rich-checkbox-secondary {
+  font-family: 'Inter', sans-serif !important;
+  font-size: 10px !important;
+  font-weight: 400 !important;
+  line-height: 1.2 !important;
+  color: var(--color-neutral-600) !important;
+}

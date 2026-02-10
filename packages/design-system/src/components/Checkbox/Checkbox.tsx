@@ -10,9 +10,9 @@ export type CheckboxProps = AntdCheckboxProps & {
 
 const checkboxTokens: Partial<ComponentToken> = {
   colorPrimary: designSystemColors.brand.primary[600],
-  colorPrimaryHover: designSystemColors.brand.primary[700],
+  colorPrimaryHover: "transparent",
   colorPrimaryBorder: designSystemColors.brand.primary[600],
-  colorPrimaryBorderHover: designSystemColors.brand.primary[700],
+  colorPrimaryBorderHover: "transparent",
   colorBgContainer: designSystemColors.neutral[50] ?? "#ffffff",
   colorText: designSystemColors.neutral[800],
   colorTextDisabled: designSystemColors.neutral[400],
@@ -32,7 +32,9 @@ const errorTokens: Partial<ComponentToken> = {
   colorBorder: designSystemColors.feedback.red[500],
 };
 
-export function Checkbox({ error, ...props }: CheckboxProps): React.ReactElement {
+export function Checkbox({ error, className, ...props }: CheckboxProps): React.ReactElement {
+  const wrapperClassName = [className, error ? "ds-checkbox-error" : ""].filter(Boolean).join(" ");
+
   return (
     <ConfigProvider
       theme={{
@@ -41,7 +43,7 @@ export function Checkbox({ error, ...props }: CheckboxProps): React.ReactElement
         },
       }}
     >
-      <AntdCheckbox {...props} />
+      <AntdCheckbox {...props} className={wrapperClassName} />
     </ConfigProvider>
   );
 }

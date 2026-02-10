@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Checkbox } from "./Checkbox";
+import { RichCheckbox } from "./RichCheckbox";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
@@ -8,7 +9,6 @@ import { Figma } from "@storybook/addon-designs/blocks";
 const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4052-2075&m=dev";
 
 type CheckboxStoryProps = React.ComponentProps<typeof Checkbox> & {
-  hover?: boolean;
   active?: boolean;
   focus?: boolean;
 };
@@ -36,10 +36,18 @@ Componente de checkbox baseado no [Ant Design Checkbox](https://ant.design/compo
 ### Como usar:
 
 \`\`\`tsx
-import { Checkbox } from "@juscash/design-system";
+import { Checkbox, RichCheckbox } from "@juscash/design-system";
 
 function Example() {
-  return <Checkbox>Concordo com os termos</Checkbox>;
+  return (
+    <>
+      <Checkbox>Concordo com os termos</Checkbox>
+      <RichCheckbox 
+        label="Opção Premium" 
+        secondaryText="Inclui benefícios extras"
+      />
+    </>
+  );
 }
 \`\`\`
 `,
@@ -74,7 +82,6 @@ function Example() {
   },
   tags: ["autodocs"],
   args: {
-    hover: false,
     active: false,
     focus: false,
   },
@@ -85,14 +92,13 @@ function Example() {
     checked: {
       control: "boolean",
     },
+    indeterminate: {
+      control: "boolean",
+    },
     error: {
       control: "boolean",
     },
-    hover: {
-      control: "boolean",
-      description: "Forca o estado hover",
-      table: { category: "Pseudo States" },
-    },
+
     active: {
       control: "boolean",
       description: "Forca o estado active",
@@ -105,10 +111,8 @@ function Example() {
     },
   },
   render: (args) => {
-    const { hover, active, focus, ...props } = args;
-    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
-      .filter(Boolean)
-      .join(" ");
+    const { focus, ...props } = args;
+    const pseudoClasses = [focus && "pseudo-focus-visible"].filter(Boolean).join(" ");
 
     return <Checkbox {...props} className={pseudoClasses} />;
   },
@@ -116,6 +120,10 @@ function Example() {
 
 export default meta;
 type Story = StoryObj<CheckboxStoryProps>;
+
+// ============================================
+// CHECKBOX BÁSICO - Estados do Figma
+// ============================================
 
 export const Default: Story = {
   args: {
@@ -130,6 +138,34 @@ export const Checked: Story = {
   },
 };
 
+export const Indeterminate: Story = {
+  args: {
+    indeterminate: true,
+    children: "Indeterminate State",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "Estado indeterminate usado quando um grupo de checkboxes tem seleção parcial.",
+      },
+    },
+  },
+};
+
+export const Focused: Story = {
+  args: {
+    children: "Focused",
+    focus: true,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "Estado de foco com shadow conforme design do Figma.",
+      },
+    },
+  },
+};
+
 export const Error: Story = {
   args: {
     error: true,
@@ -138,16 +174,19 @@ export const Error: Story = {
   },
 };
 
-export const Group: StoryObj<typeof Checkbox.Group> = {
-  render: (args) => (
-    <Checkbox.Group {...args}>
-      <Checkbox value="A">Option A</Checkbox>
-      <Checkbox value="B">Option B</Checkbox>
-      <Checkbox value="C">Option C</Checkbox>
-    </Checkbox.Group>
-  ),
+export const ErrorFocused: Story = {
   args: {
-    defaultValue: ["A"],
+    error: true,
+    checked: true,
+    focus: true,
+    children: "Error + Focus",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "Combinação de estado de erro com foco, mostrando shadow vermelha.",
+      },
+    },
   },
 };
 
@@ -163,5 +202,116 @@ export const DisabledChecked: Story = {
     disabled: true,
     checked: true,
     children: "Disabled Checked",
+  },
+};
+
+export const DisabledIndeterminate: Story = {
+  args: {
+    disabled: true,
+    indeterminate: true,
+    children: "Disabled Indeterminate",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "Estado disabled + indeterminate com fundo cinza e ícone branco.",
+      },
+    },
+  },
+};
+
+// ============================================
+// CHECKBOX GROUP - Layouts do Figma
+// ============================================
+
+export const Group: StoryObj<typeof Checkbox.Group> = {
+  render: (args) => (
+    <Checkbox.Group {...args}>
+      <Checkbox value="A">Option A</Checkbox>
+      <Checkbox value="B">Option B</Checkbox>
+      <Checkbox value="C">Option C</Checkbox>
+    </Checkbox.Group>
+  ),
+  args: {
+    defaultValue: ["A"],
+  },
+};
+
+export const GroupInline: StoryObj<typeof Checkbox.Group> = {
+  render: () => (
+    <Checkbox.Group style={{ display: "flex", gap: "8px" }}>
+      <Checkbox value="A">Label</Checkbox>
+      <Checkbox value="B">Label</Checkbox>
+      <Checkbox value="C">Label</Checkbox>
+      <Checkbox value="D">Label</Checkbox>
+    </Checkbox.Group>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Layout inline conforme especificação do Figma - checkboxes lado a lado.",
+      },
+    },
+  },
+};
+
+export const GroupList: StoryObj<typeof Checkbox.Group> = {
+  render: () => (
+    <Checkbox.Group style={{ display: "flex", flexDirection: "column", gap: "8px", width: "240px" }}>
+      <Checkbox value="A">Label</Checkbox>
+      <Checkbox value="B">Label</Checkbox>
+      <Checkbox value="C">Label</Checkbox>
+      <Checkbox value="D">Label</Checkbox>
+    </Checkbox.Group>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Layout em lista conforme especificação do Figma - checkboxes empilhados verticalmente.",
+      },
+    },
+  },
+};
+
+// ============================================
+// RICH CHECKBOX - Variação do Figma
+// ============================================
+
+export const RichCheckboxUnchecked: StoryObj<typeof RichCheckbox> = {
+  render: () => <RichCheckbox label="Label" secondaryText="Secondary text" />,
+  parameters: {
+    docs: {
+      description: {
+        story: "Rich Checkbox não selecionado - variação com label e texto secundário conforme Figma.",
+      },
+    },
+  },
+};
+
+export const RichCheckboxChecked: StoryObj<typeof RichCheckbox> = {
+  render: () => <RichCheckbox checked label="Label" secondaryText="Secondary text" />,
+  parameters: {
+    docs: {
+      description: {
+        story: "Rich Checkbox selecionado - background muda para neutral/100 quando checked.",
+      },
+    },
+  },
+};
+
+export const RichCheckboxGroup: StoryObj = {
+  render: () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: "8px", width: "240px" }}>
+      <RichCheckbox label="Opção Premium" secondaryText="Inclui todos os benefícios" />
+      <RichCheckbox checked label="Opção Básica" secondaryText="Recursos essenciais" />
+      <RichCheckbox label="Opção Avançada" secondaryText="Para usuários experientes" />
+    </div>
+  ),
+  parameters: {
+    docs: {
+      description: {
+        story: "Grupo de Rich Checkboxes - exemplo de uso prático.",
+      },
+    },
   },
 };
