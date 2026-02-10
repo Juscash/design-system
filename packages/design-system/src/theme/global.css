@@ -109,39 +109,39 @@
   /* ============================================
      TYPOGRAPHY - Design System Juscash
      ============================================ */
-  
+
   /* Headings */
   --font-heading-1-size: 61px;
   --font-heading-1-weight: 700;
   --font-heading-1-line-height: 0;
-  
+
   --font-heading-2-size: 49px;
   --font-heading-2-weight: 700;
   --font-heading-2-line-height: 0;
-  
+
   --font-heading-3-size: 39px;
   --font-heading-3-weight: 700;
   --font-heading-3-line-height: 0;
-  
+
   --font-heading-4-size: 31px;
   --font-heading-4-weight: 700;
   --font-heading-4-line-height: 0;
-  
+
   --font-heading-5-size: 25px;
   --font-heading-5-weight: 700;
   --font-heading-5-line-height: 0;
-  
+
   --font-heading-6-size: 20px;
   --font-heading-6-weight: 700;
   --font-heading-6-line-height: 0;
-  
+
   /* Body */
   --font-body-1-size: 16px;
   --font-body-1-line-height: 0;
-  
+
   --font-body-2-size: 13px;
   --font-body-2-line-height: 0;
-  
+
   /* Caption */
   --font-caption-size: 10px;
   --font-caption-line-height: 0;
@@ -217,6 +217,10 @@
 
 .ant-btn-variant-outlined.ant-btn:not(:disabled):not(.ant-btn-disabled):active {
   color: var(--color-neutral-800) !important;
+}
+
+.ant-btn.ant-btn-loading {
+  opacity: 1 !important;
 }
 
 /* ============================================
