@@ -2,7 +2,7 @@
 
 ## 2.1 Visão Geral
 
-O pacote **`@Juscash/design-system`** não é apenas um "wrapper" simples do Ant Design. Ele atua como uma camada de abstração estratégica, garantindo que a aplicação final consuma componentes padronizados, seguros e alinhados visualmente com a marca Juscash, independentemente da implementação interna.
+O pacote **`@juscash/design-system`** não é apenas um "wrapper" simples do Ant Design. Ele atua como uma camada de abstração estratégica, garantindo que a aplicação final consuma componentes padronizados, seguros e alinhados visualmente com a marca Juscash, independentemente da implementação interna.
 
 Utilizamos uma estrutura de **Monorepo** (gerenciada via NPM Workspaces) para separar claramente a biblioteca distribuível da documentação:
 
@@ -17,7 +17,7 @@ O diagrama abaixo ilustra como a aplicação solicita um componente e como o Des
 
 Conforme ilustrado no fluxo acima:
 
-1.  **A Aplicação Consumidora** importa tudo exclusivamente de `@Juscash/design-system`.
+1.  **A Aplicação Consumidora** importa tudo exclusivamente de `@juscash/design-system`.
 2.  **O Design System** decide a origem do componente:
     - Se for um componente que precisa de ajustes (ex: `Button`), ele entrega a nossa versão (Wrapper).
     - Se for um componente estrutural (ex: `Row`, `Col`), ele repassa o original do Ant Design (Pass-through).
@@ -103,6 +103,6 @@ Entender a organização interna ajuda na hora de contribuir:
 
 ## 2.4 Benefícios desta Arquitetura
 
-1.  **Blindagem (Encapsulamento)**: Se o Ant Design lançar uma versão nova que quebra (`Breaking Change`), a aplicação consumidora não quebra imediatamente, pois ela depende do `@Juscash/design-system`, que pode tratar a compatibilidade internamente nos Wrappers.
+1.  **Blindagem (Encapsulamento)**: Se o Ant Design lançar uma versão nova que quebra (`Breaking Change`), a aplicação consumidora não quebra imediatamente, pois ela depende do `@juscash/design-system`, que pode tratar a compatibilidade internamente nos Wrappers.
 2.  **Controle Visual Unificado**: Ao forçar o uso dos componentes wrapper, garantimos que nenhum desenvolvedor use um botão "azul padrão do AntD" por engano. Todos os botões passarão pela nossa estilização.
 3.  **Produtividade (DX)**: O desenvolvedor não precisa importar CSS ou configurar temas em cada micro-frontend. Basta envolver a aplicação no `JuscashProvider` e usar os componentes.

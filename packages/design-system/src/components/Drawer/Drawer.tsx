@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Drawer as AntdDrawer, ConfigProvider } from "antd";
 import type { DrawerProps as AntdDrawerProps } from "antd";

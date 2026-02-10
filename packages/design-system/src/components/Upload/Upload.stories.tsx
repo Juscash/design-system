@@ -4,18 +4,10 @@ import { Upload } from "./Upload";
 import { FormItem } from "../FormItem/FormItem";
 import { Form } from "antd";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4051-2649&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4051-2649&m=dev";
 
 type UploadStoryProps = React.ComponentProps<typeof Upload> & {
   hover?: boolean;
@@ -47,7 +39,7 @@ Componente de upload de arquivos baseado no [Ant Design Upload](https://ant.desi
 ### Como usar:
 
 \`\`\`tsx
-import { Upload } from "@Juscash/design-system";
+import { Upload } from "@juscash/design-system";
 
 function Example() {
   return <Upload layout="vertical" />;
@@ -133,11 +125,7 @@ function Example() {
   ],
   render: (args) => {
     const { focus, hover, active, className, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
@@ -177,11 +165,7 @@ export const WithError: Story = {
   decorators: [
     (Story) => (
       <Form layout="vertical">
-        <Form.Item
-          validateStatus="error"
-          help="Error message"
-          style={{ marginBottom: 0 }}
-        >
+        <Form.Item validateStatus="error" help="Error message" style={{ marginBottom: 0 }}>
           <div style={{ width: 400 }}>
             <Story />
           </div>

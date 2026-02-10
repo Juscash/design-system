@@ -2,18 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Tag } from "./Tag";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4080-6517&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4080-6517&m=dev";
 
 type TagStoryProps = React.ComponentProps<typeof Tag> & {
   hover?: boolean;
@@ -42,7 +34,7 @@ Componente de tag baseado no [Ant Design Tag](https://ant.design/components/tag)
 ### Como usar:
 
 \`\`\`tsx
-import { Tag } from "@Juscash/design-system";
+import { Tag } from "@juscash/design-system";
 
 function Example() {
   return <Tag>Tag</Tag>;
@@ -111,11 +103,7 @@ function Example() {
   },
   render: (args) => {
     const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");

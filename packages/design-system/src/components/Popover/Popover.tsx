@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Popover as AntdPopover, ConfigProvider } from "antd";
 import type { PopoverProps as AntdPopoverProps } from "antd";
@@ -50,10 +48,7 @@ export function Popover(props: PopoverProps): React.ReactElement {
                 alignItems: "center",
                 gap: 8,
                 paddingBottom: footer || content ? 12 : 0,
-                borderBottom:
-                  footer || content
-                    ? `1px solid ${designSystemColors.neutral[200]}`
-                    : "none",
+                borderBottom: footer || content ? `1px solid ${designSystemColors.neutral[200]}` : "none",
               }}
             >
               {icon && (

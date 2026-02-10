@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Form as AntdForm } from "antd";
 import type { FormItemProps } from "antd";
@@ -10,11 +8,7 @@ export interface CustomFormItemProps extends FormItemProps {
   required?: boolean;
 }
 
-export const FormItem: React.FC<CustomFormItemProps> = ({
-  label,
-  required,
-  ...props
-}) => {
+export const FormItem: React.FC<CustomFormItemProps> = ({ label, required, ...props }) => {
   const customLabel = React.useMemo(() => {
     if (!label) return undefined;
 

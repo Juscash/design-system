@@ -1,6 +1,6 @@
 # 03. GETTING STARTED (COMEÇANDO)
 
-Este guia cobre a instalação, configuração obrigatória e o primeiro uso do **@Juscash/design-system**.
+Este guia cobre a instalação, configuração obrigatória e o primeiro uso do **@juscash/design-system**.
 
 ## 3.1 Pré-requisitos
 
@@ -14,7 +14,7 @@ Antes de instalar, certifique-se que seu ambiente atende aos requisitos:
 Como nosso pacote é **privado** e hospedado no **GitHub Packages**, você precisa autenticar seu cliente NPM. Crie um arquivo `.npmrc` na raiz do seu projeto com o seguinte conteúdo:
 
 ```ini
-@Juscash:registry=https://npm.pkg.github.com
+@juscash:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
@@ -28,10 +28,10 @@ Com o `.npmrc` configurado, instale a biblioteca:
 
 ```bash
 # Via NPM
-npm install @Juscash/design-system
+npm install @juscash/design-system
 
 # Via Yarn
-yarn add @Juscash/design-system
+yarn add @juscash/design-system
 ```
 
 Verifique se a instalação foi bem sucedida conferindo seu `package.json`.
@@ -53,15 +53,11 @@ No Next.js 13+, a configuração deve ser feita no **Root Layout** (`src/app/lay
 // src/app/layout.tsx
 import React from "react";
 // 1. IMPORTAÇÃO OBRIGATÓRIA DOS ESTILOS
-import "@Juscash/design-system/dist/index.css";
+import "@juscash/design-system/dist/index.css";
 // 2. IMPORTAÇÃO DO PROVIDER
-import { JuscashProvider } from "@Juscash/design-system";
+import { JuscashProvider } from "@juscash/design-system";
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR">
       <body>
@@ -85,9 +81,9 @@ import React from "react";
 import ReactDOM from "react-dom/client";
 import App from "./App";
 // 1. ESTILOS
-import "@Juscash/design-system/dist/index.css";
+import "@juscash/design-system/dist/index.css";
 // 2. PROVIDER
-import { JuscashProvider } from "@Juscash/design-system";
+import { JuscashProvider } from "@juscash/design-system";
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
@@ -104,10 +100,10 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
 
 Agora que tudo está configurado, você pode usar os componentes em qualquer página.
 
-**Regra de Ouro**: Sempre importe de `@Juscash/design-system`. **NUNCA** importe de `antd`.
+**Regra de Ouro**: Sempre importe de `@juscash/design-system`. **NUNCA** importe de `antd`.
 
 ```tsx
-import { Button, Flex } from "@Juscash/design-system";
+import { Button, Flex } from "@juscash/design-system";
 
 export default function MinhaPagina() {
   return (
@@ -132,7 +128,7 @@ export default function MinhaPagina() {
 | Sintoma                                        | Causa Provável                         | Solução                                                                                                                         |
 | :--------------------------------------------- | :------------------------------------- | :------------------------------------------------------------------------------------------------------------------------------ |
 | **Erro 401 / 403** ao instalar                 | Token inválido ou ausente no `.npmrc`. | Verifique se gerou um PAT (Personal Access Token) no GitHub com escopo `read:packages` e se a variável de ambiente está setada. |
-| **Componentes sem estilo** (brancos/quebrados) | CSS não importado.                     | Verifique se `@Juscash/design-system/dist/index.css` foi importado no layout raiz.                                              |
+| **Componentes sem estilo** (brancos/quebrados) | CSS não importado.                     | Verifique se `@juscash/design-system/dist/index.css` foi importado no layout raiz.                                              |
 | **Erro de Contexto** (useContext)              | Falta do Provider.                     | Verifique se o `JuscashProvider` está envolvendo a aplicação na raiz.                                                           |
 
 ---

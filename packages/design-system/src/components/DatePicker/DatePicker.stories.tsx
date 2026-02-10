@@ -2,18 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { DatePicker, RangePicker } from "./DatePicker";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4066-8379&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4066-8379&m=dev";
 
 type DatePickerStoryProps = React.ComponentProps<typeof DatePicker> & {
   hover?: boolean;
@@ -48,7 +40,7 @@ Componente de seleção de data (DatePicker) baseado no [Ant Design DatePicker](
 ### Como usar:
 
 \`\`\`tsx
-import { DatePicker, RangePicker } from "@Juscash/design-system";
+import { DatePicker, RangePicker } from "@juscash/design-system";
 
 function Example() {
   return (
@@ -113,11 +105,7 @@ function Example() {
   },
   render: (args) => {
     const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
@@ -134,11 +122,7 @@ type RangePickerStory = StoryObj<RangePickerStoryProps>;
 export const Default: DatePickerStory = {
   render: (args) => {
     const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
@@ -153,11 +137,7 @@ export const WithPlaceholder: DatePickerStory = {
   },
   render: (args) => {
     const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
@@ -174,11 +154,7 @@ export const Range: RangePickerStory = {
   },
   render: (args) => {
     const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
@@ -196,11 +172,7 @@ export const RangeWithPlaceholder: RangePickerStory = {
   },
   render: (args) => {
     const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
@@ -208,4 +180,3 @@ export const RangeWithPlaceholder: RangePickerStory = {
     return <RangePicker {...props} className={mergedClassName} />;
   },
 };
-

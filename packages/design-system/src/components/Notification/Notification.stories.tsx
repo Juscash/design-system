@@ -3,18 +3,10 @@ import React from "react";
 import { Button } from "../Button";
 import { Notification } from "./Notification";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4098-8063&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4098-8063&m=dev";
 
 type NotificationStoryProps = {
   hover?: boolean;
@@ -24,11 +16,7 @@ type NotificationStoryProps = {
 };
 
 const getPseudoClassName = (args: NotificationStoryProps) => {
-  const pseudoClasses = [
-    args.hover && "pseudo-hover",
-    args.active && "pseudo-active",
-    args.focus && "pseudo-focus-visible",
-  ]
+  const pseudoClasses = [args.hover && "pseudo-hover", args.active && "pseudo-active", args.focus && "pseudo-focus-visible"]
     .filter(Boolean)
     .join(" ");
 
@@ -58,7 +46,7 @@ Componente baseado no [Ant Design Notification](https://ant.design/components/no
 ### Como usar:
 
 \`\`\`tsx
-import { Notification } from "@Juscash/design-system";
+import { Notification } from "@juscash/design-system";
 
 const MyComponent = () => {
   const [api, contextHolder] = Notification.useNotification();
@@ -142,10 +130,7 @@ export const Default: Story = {
     const mergedClassName = getPseudoClassName(args);
 
     return (
-      <div
-        className={mergedClassName}
-        style={{ display: "flex", gap: 16, padding: 20 }}
-      >
+      <div className={mergedClassName} style={{ display: "flex", gap: 16, padding: 20 }}>
         {contextHolder}
         <Button
           onClick={() =>

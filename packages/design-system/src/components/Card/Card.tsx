@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { ConfigProvider, Card as AntdCard } from "antd";
 import type { CardProps as AntdCardProps } from "antd";
@@ -15,13 +13,8 @@ const baseTokens: Partial<ComponentToken> = {
   headerBg: designSystemColors.neutral[50],
 };
 
-export function Card({
-  clickable,
-  style,
-  ...props
-}: CardProps): React.ReactElement {
-  const AntdCardComponent =
-    AntdCard as unknown as React.ComponentType<CardProps>;
+export function Card({ clickable, style, ...props }: CardProps): React.ReactElement {
+  const AntdCardComponent = AntdCard as unknown as React.ComponentType<CardProps>;
 
   const mergedStyle = clickable ? { cursor: "pointer", ...style } : style;
 

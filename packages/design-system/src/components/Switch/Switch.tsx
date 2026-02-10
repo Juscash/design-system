@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { ConfigProvider, Switch as AntdSwitch } from "antd";
 import type { SwitchProps as AntdSwitchProps } from "antd";

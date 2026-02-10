@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { ConfigProvider, Tag as AntdTag } from "antd";
 import type { TagProps as AntdTagProps } from "antd";
@@ -28,10 +26,7 @@ const baseTokens: Partial<ComponentToken> = {
   closeSize: 12,
 } as any;
 
-const statusTokens: Record<
-  "error" | "success" | "warning",
-  Record<string, any>
-> = {
+const statusTokens: Record<"error" | "success" | "warning", Record<string, any>> = {
   error: {
     colorBg: designSystemColors.feedback.red[50],
     colorBorder: designSystemColors.feedback.red[500],

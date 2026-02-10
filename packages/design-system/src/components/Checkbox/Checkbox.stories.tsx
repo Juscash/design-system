@@ -2,18 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Checkbox } from "./Checkbox";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4052-2075&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4052-2075&m=dev";
 
 type CheckboxStoryProps = React.ComponentProps<typeof Checkbox> & {
   hover?: boolean;
@@ -44,7 +36,7 @@ Componente de checkbox baseado no [Ant Design Checkbox](https://ant.design/compo
 ### Como usar:
 
 \`\`\`tsx
-import { Checkbox } from "@Juscash/design-system";
+import { Checkbox } from "@juscash/design-system";
 
 function Example() {
   return <Checkbox>Concordo com os termos</Checkbox>;
@@ -114,11 +106,7 @@ function Example() {
   },
   render: (args) => {
     const { hover, active, focus, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
 

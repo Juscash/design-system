@@ -3,18 +3,10 @@ import React from "react";
 import { Tabs } from "./Tabs";
 import type { TabsProps } from "antd";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary as DocsPrimary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary as DocsPrimary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4077-9817&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4077-9817&m=dev";
 
 type TabsStoryProps = React.ComponentProps<typeof Tabs> & {
   hover?: boolean;
@@ -64,7 +56,7 @@ Componente baseado no [Ant Design Tabs](https://ant.design/components/tabs).
 ### Como usar:
 
 \`\`\`tsx
-import { Tabs } from "@Juscash/design-system";
+import { Tabs } from "@juscash/design-system";
 
 const items = [
   {
@@ -159,11 +151,7 @@ const MyComponent = () => (
   },
   render: (args) => {
     const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
@@ -190,8 +178,7 @@ export const Primary: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          "Variante principal do sistema, utilizando a cor primária da marca.",
+        story: "Variante principal do sistema, utilizando a cor primária da marca.",
       },
     },
   },
@@ -205,8 +192,7 @@ export const Secondary: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          "Variante secundária, utilizando a cor secundária (azul) da marca.",
+        story: "Variante secundária, utilizando a cor secundária (azul) da marca.",
       },
     },
   },

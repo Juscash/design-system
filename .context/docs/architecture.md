@@ -3,267 +3,72 @@ type: doc
 name: architecture
 description: System architecture, layers, patterns, and design decisions
 category: architecture
-generated: 2026-01-21
+generated: 2026-02-10
 status: filled
 scaffoldVersion: "2.0.0"
 ---
 
-# 🏗️ Arquitetura do Design System JusCash
+# Architecture Notes
 
-> Documentação da arquitetura, padrões e decisões de design do Design System.
+## System Architecture Overview
+O repositorio e um monorepo npm com duas frentes:
+- Biblioteca de componentes React (`packages/design-system`), baseada em Ant Design 6.
+- Documentacao interativa via Storybook (`docs`).
 
-## 📁 Estrutura do Projeto
+Fluxo principal:
+1. Componentes sao implementados em `packages/design-system/src/components`.
+2. Exportacoes publicas saem por `packages/design-system/src/index.ts`.
+3. Storybook consome o pacote local para showcase e validacao visual.
+4. Build da lib e docs e orquestrado pelos scripts da raiz.
 
-```
-packages/design-system/
-├── src/
-│   ├── components/           # Componentes React
-│   │   ├── Button/
-│   │   │   ├── Button.tsx        # Componente
-│   │   │   ├── Button.test.tsx   # Teste
-│   │   │   ├── Button.stories.tsx # Storybook
-│   │   │   └── index.ts          # Export local
-│   │   ├── Input/
-│   │   │   ├── Input.tsx
-│   │   │   ├── Input.test.tsx
-│   │   │   ├── Input.stories.tsx
-│   │   │   └── index.ts
-│   │   ├── Select/
-│   │   │   ├── Select.tsx
-│   │   │   ├── Select.test.tsx
-│   │   │   ├── Select.stories.tsx
-│   │   │   └── index.ts
-│   │   ├── Table/
-│   │   │   ├── Table.tsx
-│   │   │   ├── Table.test.tsx
-│   │   │   ├── Table.stories.tsx
-│   │   │   └── index.ts
-│   │   ├── index.ts          # Re-exports
-│   │   └── ...
-│   ├── theme/                # Sistema de tokens
-│   │   ├── foundations/      # Tokens primitivos
-│   │   │   ├── colors.ts     # Paleta de cores
-│   │   │   ├── spacing.ts    # Espaçamentos
-│   │   │   ├── radius.ts     # Border radius
-│   │   │   ├── shadow.ts     # Box shadows
-│   │   │   └── breakpoints.ts
-│   │   ├── JuscashProvider.tsx
-│   │   ├── global.css
-│   │   └── index.ts
-│   └── index.ts              # Entry point
-├── dist/                     # Build output
-├── package.json
-├── tsconfig.json
-└── tsup.config.ts            # Build config
+## Architectural Layers
+- Foundation tokens: `packages/design-system/src/theme/foundations`
+- Theme/provider: `packages/design-system/src/theme`
+- UI components: `packages/design-system/src/components/*`
+- Package API surface: `packages/design-system/src/index.ts`
+- Docs runtime/storys: `docs/`
+- Automation/scripts: `scripts/`
 
-docs/
-├── .storybook/               # Config do Storybook
-└── storybook-static/         # Build da vitrine
-```
+## Detected Design Patterns
+| Pattern | Confidence | Locations | Description |
+| --- | --- | --- | --- |
+| Wrapper over Antd | High | `packages/design-system/src/components/*/*.tsx` | Componentes encapsulam componentes Antd com tokens e props do DS. |
+| Local token mapping | High | `Button.tsx`, `Tabs.tsx`, `Alert.tsx` | Funcoes de tokens por variante mapeiam para tema/props. |
+| Barrel exports | High | `packages/design-system/src/components/index.ts`, `packages/design-system/src/index.ts` | API publica centralizada para consumo externo. |
+| Workspace split | High | `package.json`, `docs/package.json` | Separacao clara entre pacote de lib e pacote de docs. |
 
----
+## Entry Points
+- `package.json`
+- `packages/design-system/src/index.ts`
+- `docs/package.json`
+- `docs/.storybook/main.ts`
 
-## 🧱 Padrão de Componentes
+## Public API
+| Symbol Group | Type | Location |
+| --- | --- | --- |
+| Componentes (Button, Input, Badge, etc.) | React components | `packages/design-system/src/components/index.ts` |
+| Tokens (`designSystemColors`, `spacing`, `radius`, etc.) | theme exports | `packages/design-system/src/theme/foundations/*.ts` |
+| Provider (`JuscashProvider`) | React provider | `packages/design-system/src/theme/JuscashProvider.tsx` |
 
-### Arquitetura Base
+## External Dependencies
+- `antd`: base de componentes.
+- `react`/`react-dom`: runtime.
+- `storybook`: docs e playground.
+- `vitest` + testing-library: testes unitarios/componentes.
+- `tsup`: build da biblioteca.
 
-Todos os componentes seguem o padrão **Wrapper + ConfigProvider**:
+## Risks And Constraints
+- Risco de divergencia visual se storys nao forem atualizadas junto com componente.
+- Mudancas em tokens podem impactar varios componentes de uma vez.
+- `docs/storybook-static` e artefato de build; nao e fonte primaria.
 
-```
-┌─────────────────────────────────────┐
-│         Componente DS JusCash       │
-│  ┌───────────────────────────────┐  │
-│  │       ConfigProvider          │  │
-│  │  ┌─────────────────────────┐  │  │
-│  │  │   Componente Antd Base  │  │  │
-│  │  └─────────────────────────┘  │  │
-│  └───────────────────────────────┘  │
-└─────────────────────────────────────┘
-```
+## Top Directories Snapshot
+- `packages/`: codigo da biblioteca e build output.
+- `docs/`: app de Storybook e build estatico.
+- `documentacao/`: guias de processo e referencia interna.
+- `scripts/`: versao/publicacao e utilitarios.
 
-### Fluxo de Props
-
-```
-Props do Usuário
-       │
-       ▼
-┌──────────────────┐
-│ Componente DS    │
-│  - Valida props  │
-│  - Mapeia tipos  │
-│  - Gera tokens   │
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│ ConfigProvider   │
-│  - Aplica tokens │
-│  - Tema local    │
-└────────┬─────────┘
-         │
-         ▼
-┌──────────────────┐
-│ Componente Antd  │
-│  - Renderiza UI  │
-└──────────────────┘
-```
-
----
-
-## 🎨 Sistema de Tokens
-
-### Hierarquia
-
-```
-Tokens Primitivos (foundations/)
-       │
-       ├── colors.ts      → designSystemColors
-       ├── spacing.ts     → spacing
-       ├── radius.ts      → radius
-       └── shadow.ts      → shadow
-       │
-       ▼
-Token Functions (componentes)
-       │
-       ├── getPrimaryTokens()
-       ├── getSecondaryTokens()
-       └── getSizeTokens()
-       │
-       ▼
-ConfigProvider theme.components
-```
-
-### Tokens → Antd Mapping
-
-| Token DS | Token Antd |
-|----------|------------|
-| `brand.primary[600]` | `colorPrimary` |
-| `brand.primary[800]` | `colorPrimaryHover` |
-| `neutral[50]` | `colorTextLightSolid` |
-| `neutral[300]` | `colorBgContainerDisabled` |
-| `spacing[4]` | `paddingInline` |
-| `radius.xl` | `borderRadius` |
-
----
-
-## 🔧 Decisões de Arquitetura
-
-### ADR-001: Extensão do Ant Design
-
-**Decisão:** Todos os componentes estendem Ant Design ao invés de criar do zero.
-
-**Motivo:**
-- Reutiliza comportamentos testados
-- Mantém compatibilidade com props existentes
-- Acelera desenvolvimento
-- Herda acessibilidade
-
-### ADR-002: Mapped Types ao invés de Omit
-
-**Decisão:** Usar mapped types para limpar props do Antd.
-
-```typescript
-// ✅ Correto
-type CleanAntdProps = {
-  [K in keyof AntdProps as K extends "size" ? never : K]: AntdProps[K];
-};
-
-// ❌ Evitar
-type CleanAntdProps = Omit<AntdProps, "size">;
-```
-
-**Motivo:**
-- Não quebra tipagem
-- Permite manter prop original como opcional
-- Maior controle
-
-### ADR-003: ConfigProvider por Componente
-
-**Decisão:** Cada componente tem seu próprio ConfigProvider.
-
-**Motivo:**
-- Isolamento de estilos
-- Tokens específicos por variante
-- Não polui contexto global
-
----
-
-## 📦 Build e Bundle
-
-### Tecnologias
-
-| Ferramenta | Uso |
-|------------|-----|
-| `tsup` | Bundler (ESM + CJS) |
-| `TypeScript` | Tipagem |
-| `React 18+` | Framework |
-| `Ant Design` | Componentes base (v6) |
-
-### Output
-
-```
-dist/
-├── index.js      # CommonJS
-├── index.mjs     # ESM
-├── index.d.ts    # Types
-├── index.d.mts   # Types (ESM)
-├── index.css     # Tokens globais
-└── ...
-```
-
-### Importação
-
-```typescript
-// Consumidor
-import { Button, Input, designSystemColors } from "@juscash/design-system";
-```
-
----
-
-## 🔗 Dependências Principais
-
-| Pacote | Versão | Uso |
-|--------|--------|-----|
-| `antd` | 6.x | Componentes base |
-| `react` | 18.x/19.x | Framework |
-| `lucide-react` | latest | Ícones |
-
----
-
-## 📐 Padrões de Código
-
-### Estrutura de Arquivo
-
-```typescript
-"use client";
-
-// 1. Imports externos
-import React from "react";
-import { Component as AntdComponent, ConfigProvider } from "antd";
-import type { ComponentProps as AntdComponentProps } from "antd";
-
-// 2. Imports internos
-import { designSystemColors, radius, spacing } from "../theme";
-
-// 3. Types
-type CleanAntdProps = { ... };
-export type ComponentProps = CleanAntdProps & { ... };
-
-// 4. Token functions
-function getPrimaryTokens() { ... }
-
-// 5. Componente
-export function Component(props: ComponentProps) { ... }
-
-// 6. displayName
-Component.displayName = "Component";
-```
-
-### Nomenclatura
-
-| Tipo | Padrão | Exemplo |
-|------|--------|---------|
-| Componente | PascalCase | `Button`, `PageHeader` |
-| Props Type | PascalCase + Props | `ButtonProps` |
-| Token Function | get + Variante + Tokens | `getPrimaryTokens` |
-| Arquivo | PascalCase.tsx | `Button.tsx` |
+## Related Resources
+- [Project Overview](./project-overview.md)
+- [Development Workflow](./development-workflow.md)
+- [Tooling](./tooling.md)

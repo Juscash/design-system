@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Alert as AntdAlert, ConfigProvider } from "antd";
 import type { AlertProps as AntdAlertProps } from "antd";
@@ -11,9 +9,7 @@ import { Body1, Body2 } from "../../components/Typography/Typography";
 import type { CustomTypographyProps } from "../../components/Typography/Typography";
 
 type CleanAntdProps = {
-  [K in keyof AntdAlertProps as K extends "type"
-    ? never
-    : K]: AntdAlertProps[K];
+  [K in keyof AntdAlertProps as K extends "type" ? never : K]: AntdAlertProps[K];
 };
 
 export type AlertProps = CleanAntdProps & {
@@ -75,13 +71,7 @@ function getWarningTokens(): Record<string, any> {
 }
 
 export function Alert(props: AlertProps): React.ReactElement {
-  const {
-    type = "neutral",
-    showLine2,
-    showButton,
-    showLeftIcon,
-    ...rest
-  } = props;
+  const { type = "neutral", showLine2, showButton, showLeftIcon, ...rest } = props;
 
   const finalShowIcon = rest.showIcon ?? showLeftIcon;
   const hasDescription = !!(rest.description || showLine2);
@@ -106,17 +96,16 @@ export function Alert(props: AlertProps): React.ReactElement {
   const resolvedIcon = rest.icon || (finalShowIcon ? getDefaultIcon() : null);
 
   const iconNode =
-    hasDescription && resolvedIcon && React.isValidElement(resolvedIcon)
-      ? React.cloneElement(resolvedIcon as React.ReactElement<any>, {
-          style: {
-            marginTop: 4,
-            ...((resolvedIcon as React.ReactElement<any>).props?.style || {}),
-          },
-        })
-      : resolvedIcon;
+    hasDescription && resolvedIcon && React.isValidElement(resolvedIcon) ?
+      React.cloneElement(resolvedIcon as React.ReactElement<any>, {
+        style: {
+          marginTop: 4,
+          ...((resolvedIcon as React.ReactElement<any>).props?.style || {}),
+        },
+      })
+    : resolvedIcon;
 
-  const antdType =
-    type === "neutral" ? "info" : (type as AntdAlertProps["type"]);
+  const antdType = type === "neutral" ? "info" : (type as AntdAlertProps["type"]);
 
   const getVariantTokens = () => {
     switch (type) {
@@ -156,30 +145,14 @@ export function Alert(props: AlertProps): React.ReactElement {
         showIcon={finalShowIcon}
         icon={iconNode}
         message={
-          rest.message ? (
-            <Body1
-              color={
-                type === "neutral"
-                  ? "dark"
-                  : (type as CustomTypographyProps["color"])
-              }
-            >
-              {rest.message}
-            </Body1>
-          ) : undefined
+          rest.message ?
+            <Body1 color={type === "neutral" ? "dark" : (type as CustomTypographyProps["color"])}>{rest.message}</Body1>
+          : undefined
         }
         description={
-          rest.description ? (
-            <Body2
-              color={
-                type === "neutral"
-                  ? "neutral"
-                  : (type as CustomTypographyProps["color"])
-              }
-            >
-              {rest.description}
-            </Body2>
-          ) : undefined
+          rest.description ?
+            <Body2 color={type === "neutral" ? "neutral" : (type as CustomTypographyProps["color"])}>{rest.description}</Body2>
+          : undefined
         }
         className={type === "neutral" ? "ant-alert-neutral" : ""}
         style={{

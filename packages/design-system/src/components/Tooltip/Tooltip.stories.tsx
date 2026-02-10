@@ -4,18 +4,10 @@ import { Tooltip } from "./Tooltip";
 import { Button } from "../Button";
 import { Info } from "lucide-react";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4125-11510&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4125-11510&m=dev";
 
 type TooltipStoryProps = React.ComponentProps<typeof Tooltip> & {
   hover?: boolean;
@@ -23,17 +15,8 @@ type TooltipStoryProps = React.ComponentProps<typeof Tooltip> & {
   focus?: boolean;
 };
 
-const getPseudoClassName = (args: {
-  hover?: boolean;
-  active?: boolean;
-  focus?: boolean;
-  className?: string;
-}) => {
-  const pseudoClasses = [
-    args.hover && "pseudo-hover",
-    args.active && "pseudo-active",
-    args.focus && "pseudo-focus-visible",
-  ]
+const getPseudoClassName = (args: { hover?: boolean; active?: boolean; focus?: boolean; className?: string }) => {
+  const pseudoClasses = [args.hover && "pseudo-hover", args.active && "pseudo-active", args.focus && "pseudo-focus-visible"]
     .filter(Boolean)
     .join(" ");
 
@@ -62,7 +45,7 @@ Baseado no [Ant Design Tooltip](https://ant.design/components/tooltip).
 ### Como usar:
 
 \`\`\`tsx
-import { Tooltip, Button } from "@Juscash/design-system";
+import { Tooltip, Button } from "@juscash/design-system";
 
 function Example() {
   return (
@@ -149,11 +132,7 @@ function Example() {
   },
   render: (args) => {
     const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
@@ -279,10 +258,7 @@ export const FigmaExample: Story = {
     const mergedClassName = getPseudoClassName(args);
 
     return (
-      <div
-        className={mergedClassName}
-        style={{ display: "flex", gap: 40, alignItems: "center" }}
-      >
+      <div className={mergedClassName} style={{ display: "flex", gap: 40, alignItems: "center" }}>
         <Tooltip title="Tooltip text" defaultOpen>
           <Button type="primary" style={{ backgroundColor: "#262626" }}>
             Tooltip text

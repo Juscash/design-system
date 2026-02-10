@@ -1,34 +1,40 @@
+---
+type: doc
+name: README
+description: Indice de documentacao do projeto
+category: index
+generated: 2026-02-10
+status: filled
+scaffoldVersion: "2.0.0"
+---
+
 # Documentation Index
 
-Welcome to the repository knowledge base. Start with the project overview, then dive into specific guides as needed.
+Este diretorio concentra a base de conhecimento do repositorio `design_juscash`.
 
 ## Core Guides
 - [Project Overview](./project-overview.md)
 - [Architecture Notes](./architecture.md)
 - [Development Workflow](./development-workflow.md)
-- [Glossary & Domain Concepts](./glossary.md)
+- [Glossary](./glossary.md)
 - [AI Context Rules](./ai-context-rules.md)
-- [Tooling & Productivity Guide](./tooling.md)
+- [Tooling](./tooling.md)
 
 ## Repository Snapshot
-- `.changeset/`
-- `.github/`
-- `assets/`
-- `docs/`
-- `documentacao/`
-- `package-lock.json/`
-- `package.json/`
-- `packages/` — Workspace packages or modules.
-- `README.md/`
-- `scripts/`
-- `tsconfig.base.json/`
+- `apps/`: reservado para apps consumidores; atualmente nao ha app ativo na raiz.
+- `assets/`: imagens e artefatos de apoio (nao fonte de componentes).
+- `documentacao/`: documentacao de negocio e guias de uso/publicacao.
+- `package-lock.json`: lockfile da raiz do workspace npm.
+- `package.json`: scripts e configuracao do monorepo.
+- `packages/`: codigo principal; inclui `packages/design-system`.
+- `README.md`: visao geral publica do repositorio.
+- `scripts/`: scripts utilitarios de versao e ambiente local.
 
-## Document Map
-| Guide | File | Primary Inputs |
-| --- | --- | --- |
-| Project Overview | `project-overview.md` | Roadmap, README, stakeholder notes |
-| Architecture Notes | `architecture.md` | ADRs, service boundaries, dependency graphs |
-| Development Workflow | `development-workflow.md` | Branching rules, CI config, contributing guide |
-| Glossary & Domain Concepts | `glossary.md` | Business terminology, user personas, domain rules |
-| AI Context Rules | `ai-context-rules.md` | Agent and skill priority rules |
-| Tooling & Productivity Guide | `tooling.md` | CLI scripts, IDE configs, automation workflows |
+## Agent And Skill References
+- [Agent Handbook](../agents/README.md)
+- [Skills Index](../skills/README.md)
+- [Contributor Guide](../../CONTRIBUTING.md)
+
+## Notes
+- O projeto segue NPM Workspaces com dois focos: biblioteca (`@Juscash/design-system`) e docs (`@Juscash/storybook`).
+- Sempre que novas docs/agentes forem criados, atualizar este indice e `../agents/README.md`.

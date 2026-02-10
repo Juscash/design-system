@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Modal as AntdModal, ConfigProvider } from "antd";
 import type { ModalProps as AntdModalProps } from "antd";
@@ -8,10 +6,7 @@ import { Button } from "../Button";
 
 type ConfirmType = "info" | "warning" | "danger";
 
-export type ConfirmModalProps = Omit<
-  AntdModalProps,
-  "footer" | "closable" | "title"
-> & {
+export type ConfirmModalProps = Omit<AntdModalProps, "footer" | "closable" | "title"> & {
   /**
    * Título do modal de confirmação
    */

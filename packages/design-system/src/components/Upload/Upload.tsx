@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Upload as AntdUpload, ConfigProvider, Form } from "antd";
 import type { UploadProps as AntdUploadProps } from "antd";
@@ -98,9 +96,7 @@ export function Upload(props: UploadProps): React.ReactElement {
     .join(" ");
   const defaultShowUploadList = {
     removeIcon: <Trash2 size={14} color={designSystemColors.neutral[800]} />,
-    ...(showUploadList && typeof showUploadList === "object"
-      ? { ...showUploadList }
-      : {}),
+    ...(showUploadList && typeof showUploadList === "object" ? { ...showUploadList } : {}),
   };
   return (
     <ConfigProvider

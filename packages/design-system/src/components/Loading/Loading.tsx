@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Spin, ConfigProvider } from "antd";
 import type { SpinProps } from "antd";
@@ -13,7 +11,9 @@ export const Loading: React.FC<LoadingProps> = (props) => {
     <LoadingOutlined
       style={{
         fontSize:
-          props.size === "large" ? 40 : props.size === "small" ? 16 : 24,
+          props.size === "large" ? 40
+          : props.size === "small" ? 16
+          : 24,
       }}
       spin
     />

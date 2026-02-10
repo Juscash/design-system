@@ -1,5 +1,4 @@
-"use client";
-import { AntdRegistry } from '@ant-design/nextjs-registry';
+import { AntdRegistry } from "@ant-design/nextjs-registry";
 
 import React from "react";
 import { ConfigProvider, type ThemeConfig } from "antd";
@@ -23,10 +22,7 @@ const baseTheme: ThemeConfig = {
   },
 };
 
-export const JuscashProvider: React.FC<JuscashProviderProps> = ({
-  themeOverride,
-  children,
-}) => {
+export const JuscashProvider: React.FC<JuscashProviderProps> = ({ themeOverride, children }) => {
   const mergedTheme: ThemeConfig = {
     ...baseTheme,
     ...themeOverride,
@@ -47,7 +43,7 @@ export const JuscashProvider: React.FC<JuscashProviderProps> = ({
   };
   return (
     <AntdRegistry>
-    <ConfigProvider theme={mergedTheme} locale={customLocale}>
+      <ConfigProvider theme={mergedTheme} locale={customLocale}>
         {children}
       </ConfigProvider>
     </AntdRegistry>

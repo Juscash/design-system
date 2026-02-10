@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Tooltip as AntdTooltip, ConfigProvider } from "antd";
 import type { TooltipProps as AntdTooltipProps } from "antd";

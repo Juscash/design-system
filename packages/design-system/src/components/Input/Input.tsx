@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Input as AntdInput, ConfigProvider } from "antd";
 import type { InputProps as AntdInputProps } from "antd";
@@ -14,9 +12,7 @@ const { TextArea: AntdTextArea } = AntdInput;
 type InputSize = "xs" | "s" | "m" | "l";
 
 type CleanAntdProps = {
-  [K in keyof AntdInputProps as K extends "size"
-    ? never
-    : K]: AntdInputProps[K];
+  [K in keyof AntdInputProps as K extends "size" ? never : K]: AntdInputProps[K];
 };
 
 export type InputProps = CleanAntdProps & {
@@ -117,9 +113,7 @@ const baseTokens: Partial<ComponentToken> = {
   activeBg: "white",
 };
 
-const InputComponent = (
-  props: InputProps,
-): ReturnType<React.FC<InputProps>> => {
+const InputComponent = (props: InputProps): ReturnType<React.FC<InputProps>> => {
   const { dsSize = "m", size, style, status, className, ...rest } = props;
 
   const resolvedSize = size ? mapToDsSize(size) : dsSize;
@@ -166,9 +160,7 @@ const InputComponent = (
 
 export type TextAreaProps = AntdTextAreaProps;
 
-export function TextArea(
-  props: TextAreaProps,
-): ReturnType<React.FC<TextAreaProps>> {
+export function TextArea(props: TextAreaProps): ReturnType<React.FC<TextAreaProps>> {
   const { className, ...rest } = props;
   return (
     <ConfigProvider

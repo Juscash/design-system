@@ -4,18 +4,10 @@ import { Button } from "../Button";
 import { Popover } from "./Popover";
 import { Bell, Info } from "lucide-react";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4125-10702&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4125-10702&m=dev";
 
 type PopoverStoryProps = React.ComponentProps<typeof Popover> & {
   hover?: boolean;
@@ -23,17 +15,8 @@ type PopoverStoryProps = React.ComponentProps<typeof Popover> & {
   focus?: boolean;
 };
 
-const getPseudoClassName = (args: {
-  hover?: boolean;
-  active?: boolean;
-  focus?: boolean;
-  className?: string;
-}) => {
-  const pseudoClasses = [
-    args.hover && "pseudo-hover",
-    args.active && "pseudo-active",
-    args.focus && "pseudo-focus-visible",
-  ]
+const getPseudoClassName = (args: { hover?: boolean; active?: boolean; focus?: boolean; className?: string }) => {
+  const pseudoClasses = [args.hover && "pseudo-hover", args.active && "pseudo-active", args.focus && "pseudo-focus-visible"]
     .filter(Boolean)
     .join(" ");
 
@@ -64,7 +47,7 @@ Componente baseado no [Ant Design Popover](https://ant.design/components/popover
 ### Como usar:
 
 \`\`\`tsx
-import { Popover, Button } from "@Juscash/design-system";
+import { Popover, Button } from "@juscash/design-system";
 
 // Uso simples (1 slot)
 <Popover content="Conteúdo do popover">
@@ -228,10 +211,7 @@ export const Default: Story = {
     });
 
     return (
-      <div
-        className={mergedClassName}
-        style={{ padding: 100, display: "flex", justifyContent: "center" }}
-      >
+      <div className={mergedClassName} style={{ padding: 100, display: "flex", justifyContent: "center" }}>
         <Popover {...props}>
           <Button>Clique aqui</Button>
         </Popover>
@@ -264,10 +244,7 @@ export const WithHeader: Story = {
     });
 
     return (
-      <div
-        className={mergedClassName}
-        style={{ padding: 100, display: "flex", justifyContent: "center" }}
-      >
+      <div className={mergedClassName} style={{ padding: 100, display: "flex", justifyContent: "center" }}>
         <Popover {...props}>
           <Button>Ver Notificações</Button>
         </Popover>
@@ -310,10 +287,7 @@ export const Complete: Story = {
     });
 
     return (
-      <div
-        className={mergedClassName}
-        style={{ padding: 100, display: "flex", justifyContent: "center" }}
-      >
+      <div className={mergedClassName} style={{ padding: 100, display: "flex", justifyContent: "center" }}>
         <Popover {...props}>
           <Button>Abrir Confirmação</Button>
         </Popover>
@@ -347,10 +321,7 @@ export const CustomIcon: Story = {
     });
 
     return (
-      <div
-        className={mergedClassName}
-        style={{ padding: 100, display: "flex", justifyContent: "center" }}
-      >
+      <div className={mergedClassName} style={{ padding: 100, display: "flex", justifyContent: "center" }}>
         <Popover {...props}>
           <Button>Ver Info</Button>
         </Popover>
@@ -463,8 +434,7 @@ export const WithAntdTitle: Story = {
   parameters: {
     docs: {
       description: {
-        story:
-          "Demonstra compatibilidade com a prop `title` do Ant Design (sem usar `header`).",
+        story: "Demonstra compatibilidade com a prop `title` do Ant Design (sem usar `header`).",
       },
     },
   },
@@ -483,10 +453,7 @@ export const WithAntdTitle: Story = {
     });
 
     return (
-      <div
-        className={mergedClassName}
-        style={{ padding: 100, display: "flex", justifyContent: "center" }}
-      >
+      <div className={mergedClassName} style={{ padding: 100, display: "flex", justifyContent: "center" }}>
         <Popover {...props}>
           <Button>Abrir (Antd Title)</Button>
         </Popover>

@@ -3,18 +3,10 @@ import React, { useState } from "react";
 import { Button } from "../Button";
 import { Modal } from "./Modal";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4090-7467&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4090-7467&m=dev";
 
 type ModalStoryProps = React.ComponentProps<typeof Modal> & {
   hover?: boolean;
@@ -22,17 +14,8 @@ type ModalStoryProps = React.ComponentProps<typeof Modal> & {
   focus?: boolean;
 };
 
-const getPseudoClassName = (args: {
-  hover?: boolean;
-  active?: boolean;
-  focus?: boolean;
-  className?: string;
-}) => {
-  const pseudoClasses = [
-    args.hover && "pseudo-hover",
-    args.active && "pseudo-active",
-    args.focus && "pseudo-focus-visible",
-  ]
+const getPseudoClassName = (args: { hover?: boolean; active?: boolean; focus?: boolean; className?: string }) => {
+  const pseudoClasses = [args.hover && "pseudo-hover", args.active && "pseudo-active", args.focus && "pseudo-focus-visible"]
     .filter(Boolean)
     .join(" ");
 
@@ -62,7 +45,7 @@ Componente baseado no [Ant Design Modal](https://ant.design/components/modal).
 ### Como usar:
 
 \`\`\`tsx
-import { Modal, Button } from "@Juscash/design-system";
+import { Modal, Button } from "@juscash/design-system";
 
 function Example() {
   const [open, setOpen] = useState(false);
@@ -349,9 +332,7 @@ export const WithFooter: Story = {
           open={open}
           onCancel={() => setOpen(false)}
           footer={
-            <div
-              style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}
-            >
+            <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
               <Button type="neutral" onClick={() => setOpen(false)}>
                 Cancelar
               </Button>
@@ -443,9 +424,8 @@ export const WithScroll: Story = {
           <div style={{ maxHeight: 300, overflow: "auto" }}>
             {Array.from({ length: 20 }, (_, i) => (
               <p key={i}>
-                Parágrafo {i + 1}: Lorem ipsum dolor sit amet, consectetur
-                adipiscing elit. Sed do eiusmod tempor incididunt ut labore et
-                dolore magna aliqua.
+                Parágrafo {i + 1}: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut
+                labore et dolore magna aliqua.
               </p>
             ))}
           </div>
@@ -484,9 +464,7 @@ export const FigmaExample: Story = {
           onCancel={() => setOpen(false)}
           dsSize="m"
           footer={
-            <div
-              style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}
-            >
+            <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
               <Button type="neutral" onClick={() => setOpen(false)}>
                 Cancelar
               </Button>
@@ -498,9 +476,8 @@ export const FigmaExample: Story = {
           className={mergedClassName}
         >
           <p>
-            Conteúdo do modal seguindo o design do Figma. O modal possui header
-            com título e botão X, área de conteúdo com padding, e footer com
-            botões de ação alinhados à direita.
+            Conteúdo do modal seguindo o design do Figma. O modal possui header com título e botão X, área de conteúdo com
+            padding, e footer com botões de ação alinhados à direita.
           </p>
         </Modal>
       </div>

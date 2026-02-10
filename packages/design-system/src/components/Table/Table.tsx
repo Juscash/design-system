@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useMemo } from "react";
 import { ConfigProvider, Table as AntdTable, Tooltip } from "antd";
 import type { TableProps as AntdTableProps, ColumnsType } from "antd/es/table";
@@ -11,14 +9,7 @@ import { ArrowUp, ArrowDown, ChevronLeft, ChevronRight } from "lucide-react";
 export type TableProps<T> = AntdTableProps<T>;
 
 export function Table<T>(props: TableProps<T>): React.ReactElement {
-  const {
-    columns,
-    bordered = true,
-    tableLayout = "fixed",
-    scroll = undefined,
-    pagination,
-    ...rest
-  } = props;
+  const { columns, bordered = true, tableLayout = "fixed", scroll = undefined, pagination, ...rest } = props;
 
   const mergedPagination = useMemo(() => {
     if (pagination === false) return false;
@@ -38,33 +29,21 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
       }),
 
       ...(!pagination?.showTotal && {
-        showTotal: (total: number) => (
-          <Body2 color="dark">{total} registros</Body2>
-        ),
+        showTotal: (total: number) => <Body2 color="dark">{total} registros</Body2>,
       }),
 
       ...(!pagination?.itemRender && {
-        itemRender: (
-          _current: number,
-          type: string,
-          originalElement: React.ReactNode,
-        ) => {
+        itemRender: (_current: number, type: string, originalElement: React.ReactNode) => {
           if (type === "prev") {
             return (
-              <Body2
-                style={{ display: "flex", alignItems: "center", gap: 0 }}
-                color="dark"
-              >
+              <Body2 style={{ display: "flex", alignItems: "center", gap: 0 }} color="dark">
                 <ChevronLeft size={12} style={{ marginRight: 4 }} /> Anterior
               </Body2>
             );
           }
           if (type === "next") {
             return (
-              <Body2
-                style={{ display: "flex", alignItems: "center", gap: 0 }}
-                color="dark"
-              >
+              <Body2 style={{ display: "flex", alignItems: "center", gap: 0 }} color="dark">
                 Próximo <ChevronRight size={12} style={{ marginLeft: 4 }} />
               </Body2>
             );
@@ -83,47 +62,33 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
           target: "sorter-icon",
         },
       }),
-      ...(col.sorter &&
-        !col.sortIcon && {
-          sortIcon: ({
-            sortOrder,
-          }: {
-            sortOrder?: "ascend" | "descend" | null;
-          }) => {
+      ...(col.sorter
+        && !col.sortIcon && {
+          sortIcon: ({ sortOrder }: { sortOrder?: "ascend" | "descend" | null }) => {
             return (
               <span style={{ display: "flex", alignItems: "center", gap: 0 }}>
                 <ArrowUp
                   size={16}
-                  color={
-                    sortOrder === "ascend"
-                      ? designSystemColors.brand.secondary[600]
-                      : designSystemColors.neutral[400]
-                  }
+                  color={sortOrder === "ascend" ? designSystemColors.brand.secondary[600] : designSystemColors.neutral[400]}
                   style={{ margin: 0, padding: 0 }}
                 />
                 <ArrowDown
                   style={{ margin: 0, padding: 0 }}
                   size={16}
-                  color={
-                    sortOrder === "descend"
-                      ? designSystemColors.brand.secondary[600]
-                      : designSystemColors.neutral[400]
-                  }
+                  color={sortOrder === "descend" ? designSystemColors.brand.secondary[600] : designSystemColors.neutral[400]}
                 />
               </span>
             );
           },
         }),
       title:
-        typeof col.title === "string" ? (
+        typeof col.title === "string" ?
           <Tooltip title={col.title}>
             <Body2 color="dark" strong ellipsis>
               {col.title}
             </Body2>
           </Tooltip>
-        ) : (
-          col.title
-        ),
+        : col.title,
 
       render: (value: any, record: T, index: number) => {
         if (col.render) {

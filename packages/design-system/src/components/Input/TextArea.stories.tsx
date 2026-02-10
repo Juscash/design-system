@@ -4,18 +4,10 @@ import { Input, TextAreaProps } from "./Input";
 import { FormItem } from "../FormItem/FormItem";
 import { Form } from "antd";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4059-2085&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4059-2085&m=dev";
 
 // TextArea é exportado como prop estática de Input, mas para o Storybook
 // criamos uma referência direta para facilitar o uso no meta.
@@ -48,7 +40,7 @@ Componente de área de texto (TextArea) baseado no [Ant Design Input.TextArea](h
 ### Como usar:
 
 \`\`\`tsx
-import { Input } from "@Juscash/design-system";
+import { Input } from "@juscash/design-system";
 
 function Example() {
   return <Input.TextArea rows={4} placeholder="Digite sua mensagem" />;
@@ -128,11 +120,7 @@ function Example() {
   ],
   render: (args) => {
     const { focus, hover, active, className, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible pseudo-focus",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible pseudo-focus"]
       .filter(Boolean)
       .join(" ");
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");

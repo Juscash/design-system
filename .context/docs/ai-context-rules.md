@@ -3,26 +3,24 @@ type: doc
 name: ai-context-rules
 description: Regras de prioridade para agentes e skills do projeto
 category: rules
-generated: 2026-01-27
+generated: 2026-02-10
 status: filled
 scaffoldVersion: "2.0.0"
 ---
 
-# Regras do AI Context
+# Regras Do AI Context
 
-## Prioridade de agentes
+## Prioridade De Agentes
+- Priorizar agentes custom do projeto quando houver equivalente.
+- Usar agentes built-in somente como fallback.
 
-- Sempre priorizar agentes custom do projeto.
-- Usar agentes built-in apenas quando nao houver agente custom equivalente.
-
-Agentes custom do projeto:
+Agentes custom principais:
 - `component-creator`
 - `component-docs-agent`
 
-## Prioridade de skills
-
-- Sempre priorizar skills custom do projeto.
-- Usar skills built-in apenas quando nao houver skill custom equivalente.
+## Prioridade De Skills
+- Priorizar skills custom sob `.context/skills` para tarefas do design system.
+- Usar skills built-in apenas quando nao houver skill custom aplicavel.
 
 Skills custom do projeto:
 - `component-creation`
@@ -32,17 +30,17 @@ Skills custom do projeto:
 - `run-tests`
 - `docs-architecture-update`
 
-## Perguntas ao usuario
+## Regras De Execucao
+- Planejamento de feature: usar `feature-breakdown` quando a mudanca nao for trivial.
+- Criacao de componente: usar `component-creation` + `figma-mcp`.
+- Historias de Storybook: usar `story-creation`.
+- Testes de componente: usar `test-creation` e validar com `run-tests`.
+- Revisao: usar `pr-review` e `code-review`.
 
-- Sempre que precisar de uma decisao do usuario, faca uma pergunta com opcoes usando selecao (lista de escolhas).
-- Evite pedir resposta livre.
+## Decisoes Com Usuario
+- Quando faltar contexto critico, fazer pergunta objetiva antes de implementar.
+- Preferir opcoes fechadas e impacto de cada opcao.
 
-## Prompt padrao (plano)
-
-Use este prompt curto quando quiser um plano e garantir o uso de agentes/skills custom:
-
-```text
-Use apenas agentes e skills custom deste repo (ver .context/docs/ai-context-rules.md).
-Gere um plano via MCP ai-context antes de implementar qualquer coisa.
-Quando precisar de decisao, pergunte com lista de escolhas.
-```
+## Limites
+- Nao inventar API que nao exista no Figma/Antd quando a tarefa exigir aderencia a esses insumos.
+- Evitar alterar `dist/` manualmente; gerar por build.

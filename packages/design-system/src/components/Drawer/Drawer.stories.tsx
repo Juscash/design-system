@@ -4,18 +4,10 @@ import { Drawer } from "./Drawer";
 import { Button } from "antd";
 import { designSystemColors } from "../../theme";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4098-11176&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4098-11176&m=dev";
 
 type DrawerStoryProps = React.ComponentProps<typeof Drawer> & {
   hover?: boolean;
@@ -23,17 +15,8 @@ type DrawerStoryProps = React.ComponentProps<typeof Drawer> & {
   focus?: boolean;
 };
 
-const getPseudoClassName = (args: {
-  hover?: boolean;
-  active?: boolean;
-  focus?: boolean;
-  className?: string;
-}) => {
-  const pseudoClasses = [
-    args.hover && "pseudo-hover",
-    args.active && "pseudo-active",
-    args.focus && "pseudo-focus-visible",
-  ]
+const getPseudoClassName = (args: { hover?: boolean; active?: boolean; focus?: boolean; className?: string }) => {
+  const pseudoClasses = [args.hover && "pseudo-hover", args.active && "pseudo-active", args.focus && "pseudo-focus-visible"]
     .filter(Boolean)
     .join(" ");
 
@@ -62,7 +45,7 @@ Baseado no [Ant Design Drawer](https://ant.design/components/drawer).
 ### Como usar:
 
 \`\`\`tsx
-import { Drawer, Button } from "@Juscash/design-system";
+import { Drawer, Button } from "@juscash/design-system";
 
 function Example() {
   return <Drawer title="Titulo" open={false} />;
@@ -163,12 +146,7 @@ const DrawerWrapper = (props: DrawerStoryProps) => {
       <Button type="primary" onClick={showDrawer}>
         Abrir Drawer
       </Button>
-      <Drawer
-        {...drawerProps}
-        open={open}
-        onClose={onClose}
-        className={mergedClassName}
-      />
+      <Drawer {...drawerProps} open={open} onClose={onClose} className={mergedClassName} />
     </>
   );
 };
@@ -196,10 +174,7 @@ export const WithFooter: Story = {
     footer: (
       <div style={{ display: "flex", justifyContent: "flex-end", gap: 8 }}>
         <Button>Cancelar</Button>
-        <Button
-          type="primary"
-          style={{ background: designSystemColors.brand.primary[500] }}
-        >
+        <Button type="primary" style={{ background: designSystemColors.brand.primary[500] }}>
           Confirmar
         </Button>
       </div>

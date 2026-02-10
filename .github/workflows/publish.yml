@@ -21,7 +21,7 @@ jobs:
         with:
           node-version: "20"
           registry-url: "https://npm.pkg.github.com"
-          scope: "@Juscash"
+          scope: "@juscash"
 
       - name: Install dependencies
         working-directory: packages/design-system

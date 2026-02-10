@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Typography as AntdTypography, ConfigProvider } from "antd";
 import type { TitleProps } from "antd/es/typography/Title";
@@ -34,9 +32,7 @@ const colorMap = {
 
 type DSColor = keyof typeof colorMap;
 
-type AntdTypographyAllProps = Partial<
-  Omit<TitleProps, "level"> & TextProps & ParagraphProps
->;
+type AntdTypographyAllProps = Partial<Omit<TitleProps, "level"> & TextProps & ParagraphProps>;
 
 export type CustomTypographyProps = AntdTypographyAllProps & {
   variant?: TypographyVariant;
@@ -99,8 +95,7 @@ const typographyVariants = {
 export function Typography(props: CustomTypographyProps): React.ReactElement {
   const { variant = "body1", color = "dark", style, ...rest } = props;
 
-  const variantTheme =
-    typographyVariants[variant as keyof typeof typographyVariants];
+  const variantTheme = typographyVariants[variant as keyof typeof typographyVariants];
   const textColor = color ? colorMap[color as DSColor] : undefined;
 
   const baseStyle: React.CSSProperties = {
@@ -131,20 +126,10 @@ export function Typography(props: CustomTypographyProps): React.ReactElement {
       node = <Title level={5} style={baseStyle} {...(rest as TitleProps)} />;
       break;
     case "body1":
-      node = (
-        <Paragraph
-          style={{ ...baseStyle, fontSize: 16, lineHeight: 1.5 }}
-          {...(rest as ParagraphProps)}
-        />
-      );
+      node = <Paragraph style={{ ...baseStyle, fontSize: 16, lineHeight: 1.5 }} {...(rest as ParagraphProps)} />;
       break;
     case "body2":
-      node = (
-        <Paragraph
-          style={{ ...baseStyle, fontSize: 13, lineHeight: 1.4 }}
-          {...(rest as ParagraphProps)}
-        />
-      );
+      node = <Paragraph style={{ ...baseStyle, fontSize: 13, lineHeight: 1.4 }} {...(rest as ParagraphProps)} />;
       break;
     case "caption":
       node = <Text style={baseStyle} {...(rest as TextProps)} />;
@@ -153,13 +138,7 @@ export function Typography(props: CustomTypographyProps): React.ReactElement {
       node = <Paragraph style={baseStyle} {...(rest as ParagraphProps)} />;
   }
 
-  return (
-    <ConfigProvider
-      theme={{ token: { fontWeightStrong: 700, ...variantTheme } }}
-    >
-      {node}
-    </ConfigProvider>
-  );
+  return <ConfigProvider theme={{ token: { fontWeightStrong: 700, ...variantTheme } }}>{node}</ConfigProvider>;
 }
 type CleanHeadingProps = {
   [K in keyof TitleProps as K extends "level" ? never : K]: TitleProps[K];

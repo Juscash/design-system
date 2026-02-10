@@ -1,31 +1,15 @@
-"use client";
-
 import React from "react";
 import { Badge as AntdBadge, ConfigProvider } from "antd";
 import type { BadgeProps as AntdBadgeProps } from "antd";
 import type { ComponentToken } from "antd/es/badge/style";
 import { designSystemColors, radius, shadow, spacing } from "../../theme";
 
-type BadgeVariant =
-  | "primary"
-  | "secondary"
-  | "tertiary"
-  | "outline"
-  | "ghost"
-  | "destructive"
-  | "counter";
+type BadgeVariant = "primary" | "secondary" | "tertiary" | "outline" | "ghost" | "destructive" | "counter";
 
 type BadgeStatusColor = "success" | "error" | "warning";
 
 type CleanAntdProps = {
-  [K in keyof AntdBadgeProps as K extends
-    | "count"
-    | "color"
-    | "status"
-    | "text"
-    | "size"
-    ? never
-    : K]: AntdBadgeProps[K];
+  [K in keyof AntdBadgeProps as K extends "count" | "color" | "status" | "text" | "size" ? never : K]: AntdBadgeProps[K];
 };
 
 export type BadgeProps = CleanAntdProps & {
@@ -48,25 +32,12 @@ const baseTokens: Partial<ComponentToken> = {
 };
 
 export function Badge(props: BadgeProps): React.ReactElement {
-  const {
-    variant = "primary",
-    statusColor,
-    leftIcon,
-    rightIcon,
-    count,
-    children,
-    className,
-    styles,
-    showZero,
-    ...rest
-  } = props;
+  const { variant = "primary", statusColor, leftIcon, rightIcon, count, children, className, styles, showZero, ...rest } = props;
 
   const isCounter = variant === "counter";
   const shouldShowCounter = typeof count === "number";
   const resolvedShowZero = isCounter ? count === 0 || showZero : showZero;
-  const hasFocusClass =
-    className?.includes("pseudo-focus") ||
-    className?.includes("pseudo-focus-within");
+  const hasFocusClass = className?.includes("pseudo-focus") || className?.includes("pseudo-focus-within");
 
   const variantStyles = getVariantStyles(variant, statusColor);
   const contentStyles = {
@@ -76,29 +47,23 @@ export function Badge(props: BadgeProps): React.ReactElement {
   } satisfies React.CSSProperties;
 
   const hasLabel = children !== undefined && children !== null;
-  const badgeContent = isCounter
-    ? shouldShowCounter
-      ? (
-          <span style={contentStyles}>{count}</span>
-        )
+  const badgeContent =
+    isCounter ?
+      shouldShowCounter ? <span style={contentStyles}>{count}</span>
       : undefined
-    : hasLabel || leftIcon || rightIcon
-      ? (
-          <span style={contentStyles}>
-            {leftIcon ? (
-              <span style={{ display: "inline-flex", alignItems: "center" }}>
-                {leftIcon}
-              </span>
-            ) : null}
-            {hasLabel ? <span>{children}</span> : null}
-            {rightIcon ? (
-              <span style={{ display: "inline-flex", alignItems: "center" }}>
-                {rightIcon}
-              </span>
-            ) : null}
-          </span>
-        )
-      : undefined;
+    : hasLabel || leftIcon || rightIcon ?
+      <span style={contentStyles}>
+        {leftIcon ?
+          <span style={{ display: "inline-flex", alignItems: "center" }}>{leftIcon}</span>
+        : null}
+        {hasLabel ?
+          <span>{children}</span>
+        : null}
+        {rightIcon ?
+          <span style={{ display: "inline-flex", alignItems: "center" }}>{rightIcon}</span>
+        : null}
+      </span>
+    : undefined;
 
   const indicatorStyles = getIndicatorResetStyles();
 
@@ -173,10 +138,7 @@ function getIndicatorResetStyles(): React.CSSProperties {
   };
 }
 
-function getVariantStyles(
-  variant: BadgeVariant,
-  statusColor?: BadgeStatusColor,
-): React.CSSProperties {
+function getVariantStyles(variant: BadgeVariant, statusColor?: BadgeStatusColor): React.CSSProperties {
   if (variant === "secondary" && statusColor) {
     return getSecondaryStatusStyles(statusColor);
   }
@@ -224,9 +186,7 @@ function getVariantStyles(
   }
 }
 
-function getSecondaryStatusStyles(
-  statusColor: BadgeStatusColor,
-): React.CSSProperties {
+function getSecondaryStatusStyles(statusColor: BadgeStatusColor): React.CSSProperties {
   switch (statusColor) {
     case "error":
       return {
@@ -247,10 +207,7 @@ function getSecondaryStatusStyles(
   }
 }
 
-function mergeBadgeStyles(
-  styles: BadgeStylesProp | undefined,
-  indicatorStyles: React.CSSProperties,
-): BadgeStylesProp {
+function mergeBadgeStyles(styles: BadgeStylesProp | undefined, indicatorStyles: React.CSSProperties): BadgeStylesProp {
   if (!styles) {
     return { indicator: indicatorStyles };
   }

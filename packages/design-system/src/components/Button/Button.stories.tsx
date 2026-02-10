@@ -41,7 +41,7 @@ Componente de botão baseado no [Ant Design Button](https://ant.design/component
 ### Como usar:
 
 \`\`\`tsx
-import { Button } from "@Juscash/design-system";
+import { Button } from "@juscash/design-system";
 
 function Example() {
   return <Button onClick={() => {}}>Excluir</Button>;

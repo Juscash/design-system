@@ -2,18 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Card } from "./Card";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4069-6522&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4069-6522&m=dev";
 
 type CardStoryProps = React.ComponentProps<typeof Card> & {
   hover?: boolean;
@@ -43,7 +35,7 @@ Componente Card baseado no [Ant Design Card](https://ant.design/components/card)
 ### Como usar:
 
 \`\`\`tsx
-import { Card } from "@Juscash/design-system";
+import { Card } from "@juscash/design-system";
 
 function Example() {
   return <Card title="Card Title">Card content</Card>;
@@ -108,11 +100,7 @@ function Example() {
   },
   render: (args) => {
     const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");

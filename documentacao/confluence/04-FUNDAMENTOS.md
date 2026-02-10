@@ -68,11 +68,9 @@ Utilizamos a biblioteca **Lucide React** como padrão único de ícones. Ela é 
 Importe `LucideIcons` do design-system e acesse o ícone desejado:
 
 ```tsx
-import { LucideIcons, Button } from "@Juscash/design-system";
+import { LucideIcons, Button } from "@juscash/design-system";
 
-export const MeuComponente = () => (
-  <Button icon={<LucideIcons.Search size={16} />}>Buscar</Button>
-);
+export const MeuComponente = () => <Button icon={<LucideIcons.Search size={16} />}>Buscar</Button>;
 ```
 
 ---

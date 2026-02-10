@@ -9,18 +9,10 @@ import { Body2, Caption } from "../Typography";
 import { Tag } from "../Tag";
 import { Button } from "../Button";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash";
 
 type TableStoryProps = React.ComponentProps<typeof Table> & {
   hover?: boolean;
@@ -49,7 +41,7 @@ Componente de tabela baseado no [Ant Design Table](https://ant.design/components
 ### Como usar:
 
 \`\`\`tsx
-import { Table } from "@Juscash/design-system";
+import { Table } from "@juscash/design-system";
 
 function Example() {
   return <Table columns={columns} dataSource={dataSource} />;
@@ -109,16 +101,10 @@ function Example() {
   },
   render: (args) => {
     const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
-    const mergedClassName = [className, pseudoClasses]
-      .filter(Boolean)
-      .join(" ");
+    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
 
     return <Table {...props} className={mergedClassName} />;
   },
@@ -195,11 +181,7 @@ const getStatusLabel = (status?: ProcessoParte["status"]) => {
   const isWarning = status === "A_verificar";
 
   return (
-    <Tag
-      success={isSuccess}
-      warning={isWarning}
-      error={!isSuccess && !isWarning}
-    >
+    <Tag success={isSuccess} warning={isWarning} error={!isSuccess && !isWarning}>
       {status}
     </Tag>
   );
@@ -212,16 +194,13 @@ const productionColumns: ColumnsType<AnaliseMlProcesso> = [
     width: 220,
     key: "created_at",
     ellipsis: true,
-    sorter: (a, b) =>
-      new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
+    sorter: (a, b) => new Date(a.created_at).getTime() - new Date(b.created_at).getTime(),
     render: (_, record) => (
       <Flex vertical gap={2} style={{ minWidth: 0 }}>
         <Tooltip title={record.numero_processo} placement="topLeft">
           <Body2 ellipsis>{record.numero_processo}</Body2>
         </Tooltip>
-        <Caption style={{ color: "#6D6D6E" }}>
-          Analisado em {formatToBrazilianDate(record.created_at)}
-        </Caption>
+        <Caption style={{ color: "#6D6D6E" }}>Analisado em {formatToBrazilianDate(record.created_at)}</Caption>
       </Flex>
     ),
   },
@@ -247,10 +226,7 @@ const productionColumns: ColumnsType<AnaliseMlProcesso> = [
     key: "valor_acao",
     sorter: (a, b) => a.valor_acao - b.valor_acao,
     render: (_, record) => (
-      <Tooltip
-        title={`R$ ${formatCurrency(record.valor_acao)}`}
-        placement="topLeft"
-      >
+      <Tooltip title={`R$ ${formatCurrency(record.valor_acao)}`} placement="topLeft">
         <Body2 ellipsis>{`R$ ${formatCurrency(record.valor_acao)}`}</Body2>
       </Tooltip>
     ),
@@ -325,27 +301,10 @@ const productionColumns: ColumnsType<AnaliseMlProcesso> = [
 ];
 
 const tribunalList = ["TJSP", "TJRJ", "TJMG", "TJRS", "TJPR", "TRF1"];
-const orgaoList = [
-  "2ª Vara Cível",
-  "7ª Vara do Trabalho",
-  "1ª Câmara Cível",
-  "Juizado Especial",
-  "Vara da Fazenda",
-];
-const statusList: AnaliseMlProcesso["classificacao_ml"][] = [
-  "Aprovado",
-  "Reprovado",
-  "A_verificar",
-  "Aprovado IA",
-];
+const orgaoList = ["2ª Vara Cível", "7ª Vara do Trabalho", "1ª Câmara Cível", "Juizado Especial", "Vara da Fazenda"];
+const statusList: AnaliseMlProcesso["classificacao_ml"][] = ["Aprovado", "Reprovado", "A_verificar", "Aprovado IA"];
 
-const parteStatus: ProcessoParte["status"][] = [
-  "Aprovado",
-  "Reprovado",
-  "A_verificar",
-  "Aprovado IA",
-  null,
-];
+const parteStatus: ProcessoParte["status"][] = ["Aprovado", "Reprovado", "A_verificar", "Aprovado IA", null];
 
 const buildProcessData = (count: number): AnaliseMlProcesso[] =>
   Array.from({ length: count }, (_, index) => {

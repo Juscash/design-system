@@ -27,7 +27,7 @@ Nosso sistema é uma camada de design sobre o **Ant Design 6**. As regras de our
 - **Não reinventar a roda**: Use o componente base do `antd` e aplique nossa identidade via `ConfigProvider`.
 - **Extensibilidade**: Sempre exporte e estenda as interfaces de Props do Ant Design. Isso permite que o consumidor use todas as funcionalidades nativas (como `onClick`, `style`, `className`, etc.).
 - **Isolamento de Estilo**: Use o `ConfigProvider` localmente no componente para que o tema Juscash não vaze para outros componentes ou dependa exclusivamente de um Provider global para funcionar (embora o tenhamos).
-- **Client Side**: Adicione `"use client"` no topo de todos os arquivos de componentes interativos.
+- **Client Side**: Adicione `` no topo de todos os arquivos de componentes interativos.
 
 ---
 
@@ -38,7 +38,7 @@ Localização: `packages/design-system/src/components/[NomeDoComponente].tsx`
 ### Exemplo de Implementação Robusta
 
 ```tsx
-"use client";
+;
 
 import React from "react";
 import { ConfigProvider, [NomeAntd] as Antd[Nome] } from "antd";
@@ -117,7 +117,7 @@ Sempre que possível, adicione um **Playground** usando a biblioteca `react-live
 2. No seu `index.tsx` da documentação, passe a string de código para o Playground.
 
 ```tsx
-const codeExample = `import { [Nome] } from '@Juscash/design-system';
+const codeExample = `import { [Nome] } from '@juscash/design-system';
 
 export function Example() {
   return <[Nome] dsVariant="primary" />
@@ -155,7 +155,7 @@ Para que sua página apareça no menu lateral:
 
 Temos fluxos distintos para a publicação da biblioteca e para o deploy do site de documentação.
 
-### 6.1 Publicando a Biblioteca (@Juscash/design-system)
+### 6.1 Publicando a Biblioteca (@juscash/design-system)
 
 A publicação da biblioteca no GitHub Packages é disparada pela criação de uma **Tag Git** (ex: `v0.1.32`). Para facilitar, criamos scripts que automatizam esse processo.
 
@@ -181,7 +181,7 @@ npm run version:major && npm run version:publish
 3. Cria uma tag local (ex: `v0.1.32`).
 4. Faz o `git push` dos commits e das tags para o repositório.
 
-Assim que o push das tags chega ao GitHub, o workflow **Publish Package** entra em ação, builda o projeto e publica no `@Juscash` registry.
+Assim que o push das tags chega ao GitHub, o workflow **Publish Package** entra em ação, builda o projeto e publica no `@juscash` registry.
 
 ### 6.2 Deploy da Documentação (App de Docs)
 
@@ -197,9 +197,9 @@ O deploy do aplicativo de documentação (GitHub Pages) é **automático**.
 ## 7. Checklist Final
 
 - [ ] O componente estende as props do antd?
-- [ ] O componente tem a diretiva `"use client"`?
+- [ ] O componente tem a diretiva ``?
 - [ ] O componente está isolado via `ConfigProvider`?
 - [ ] A documentação mostra exemplos de todas as **props proprietárias**?
 - [ ] Existe um exemplo interativo (Playground) para o componente?
-- [ ] O código de exemplo na documentação usa imports de `@Juscash/design-system`?
+- [ ] O código de exemplo na documentação usa imports de `@juscash/design-system`?
 - [ ] O componente foi registrado na navegação do app de docs?

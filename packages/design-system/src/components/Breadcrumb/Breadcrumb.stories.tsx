@@ -2,18 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Breadcrumb } from "./Breadcrumb";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4080-20126&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4080-20126&m=dev";
 
 type BreadcrumbStoryProps = React.ComponentProps<typeof Breadcrumb> & {
   hover?: boolean;
@@ -43,7 +35,7 @@ Baseado no [Ant Design Breadcrumb](https://ant.design/components/breadcrumb).
 ### Como usar:
 
 \`\`\`tsx
-import { Breadcrumb } from "@Juscash/design-system";
+import { Breadcrumb } from "@juscash/design-system";
 
 function Example() {
   return (
@@ -88,11 +80,7 @@ function Example() {
     },
   },
   args: {
-    items: [
-      { title: "Home" },
-      { title: "Components" },
-      { title: "Breadcrumb" },
-    ],
+    items: [{ title: "Home" }, { title: "Components" }, { title: "Breadcrumb" }],
     hover: false,
     active: false,
     focus: false,
@@ -116,11 +104,7 @@ function Example() {
   },
   render: (args) => {
     const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
@@ -134,11 +118,7 @@ type Story = StoryObj<BreadcrumbStoryProps>;
 
 export const Default: Story = {
   args: {
-    items: [
-      { title: "Home", href: "#" },
-      { title: "Components", href: "#" },
-      { title: "Breadcrumb" },
-    ],
+    items: [{ title: "Home", href: "#" }, { title: "Components", href: "#" }, { title: "Breadcrumb" }],
   },
 };
 
@@ -163,4 +143,3 @@ export const WithEllipsis: Story = {
     />
   ),
 };
-

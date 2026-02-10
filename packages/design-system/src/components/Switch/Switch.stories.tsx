@@ -2,18 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Switch } from "./Switch";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4062-5352&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4062-5352&m=dev";
 
 type SwitchStoryProps = React.ComponentProps<typeof Switch> & {
   hover?: boolean;
@@ -44,7 +36,7 @@ Componente de alternância (Switch) baseado no [Ant Design Switch](https://ant.d
 ### Como usar:
 
 \`\`\`tsx
-import { Switch } from "@Juscash/design-system";
+import { Switch } from "@juscash/design-system";
 
 function Example() {
   return <Switch defaultChecked />;
@@ -120,11 +112,7 @@ function Example() {
   },
   render: (args) => {
     const { hover, active, focus, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
 

@@ -1,14 +1,10 @@
-"use client";
-
 import React from "react";
 import { Collapse as AntdCollapse, ConfigProvider } from "antd";
 import type { CollapseProps as AntdCollapseProps } from "antd";
 import { designSystemColors, radius } from "../../theme";
 
 type CleanAntdProps = {
-  [K in keyof AntdCollapseProps as K extends "size" | "bordered" | "ghost"
-    ? never
-    : K]: AntdCollapseProps[K];
+  [K in keyof AntdCollapseProps as K extends "size" | "bordered" | "ghost" ? never : K]: AntdCollapseProps[K];
 };
 
 export type CollapseProps = CleanAntdProps & {
@@ -43,13 +39,7 @@ export function Collapse(props: CollapseProps): React.ReactElement {
         },
       }}
     >
-      <AntdCollapse
-        bordered={bordered}
-        ghost={ghost}
-        size={size}
-        expandIconPosition="end"
-        {...rest}
-      />
+      <AntdCollapse bordered={bordered} ghost={ghost} size={size} expandIconPosition="end" {...rest} />
     </ConfigProvider>
   );
 }

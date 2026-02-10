@@ -18,7 +18,7 @@
     "@storybook/nextjs-vite": "^10.2.8",
     "@types/react": "^19.0.0",
     "@types/react-dom": "^19.0.0",
-    "@vitejs/plugin-react": "^4.3.0",
+    "@vitejs/plugin-react": "^5.1.4",
     "@vitest/browser": "^4.0.18",
     "@vitest/browser-playwright": "^4.0.18",
     "@vitest/coverage-v8": "^4.0.18",
@@ -27,10 +27,10 @@
     "react-dom": "^19.0.0",
     "storybook": "^10.2.8",
     "storybook-addon-pseudo-states": "^10.2.8",
-    "vite": "^5.4.0",
+    "vite": "^7.3.1",
     "vitest": "^4.0.18"
   },
   "dependencies": {
-    "@Juscash/design-system": "file:../packages/design-system"
+    "@juscash/design-system": "file:../packages/design-system"
   }
 }

@@ -55,7 +55,7 @@ npm run build
 
 ## 🚢 Fluxo de Deploy e Publicação
 
-### Publicação da Biblioteca (@Juscash/design-system)
+### Publicação da Biblioteca (@juscash/design-system)
 
 A biblioteca é publicada no **GitHub Packages**. O deploy é acionado via tags:
 
@@ -80,6 +80,6 @@ O site de documentação é hospedado no **GitHub Pages**.
 - **Build Tool**: Tsup (biblioteca) e Vite (docs)
 - **CI/CD**: GitHub Actions
 - **Icons**: Lucide React
-- **Autenticação de Pacotes**: GitHub Packages (@Juscash scope)
+- **Autenticação de Pacotes**: GitHub Packages (@juscash scope)
 
 ---

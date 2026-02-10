@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Checkbox as AntdCheckbox, ConfigProvider } from "antd";
 import type { CheckboxProps as AntdCheckboxProps } from "antd";
@@ -34,10 +32,7 @@ const errorTokens: Partial<ComponentToken> = {
   colorBorder: designSystemColors.feedback.red[500],
 };
 
-export function Checkbox({
-  error,
-  ...props
-}: CheckboxProps): React.ReactElement {
+export function Checkbox({ error, ...props }: CheckboxProps): React.ReactElement {
   return (
     <ConfigProvider
       theme={{
@@ -51,9 +46,7 @@ export function Checkbox({
   );
 }
 
-export function CheckboxGroup(
-  props: React.ComponentProps<typeof AntdCheckbox.Group>,
-): React.ReactElement {
+export function CheckboxGroup(props: React.ComponentProps<typeof AntdCheckbox.Group>): React.ReactElement {
   return (
     <ConfigProvider
       theme={{

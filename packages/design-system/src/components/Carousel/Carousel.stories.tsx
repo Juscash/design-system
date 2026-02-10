@@ -2,18 +2,10 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import React from "react";
 import { Carousel } from "./Carousel";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4080-20929&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4080-20929&m=dev";
 
 type CarouselStoryProps = React.ComponentProps<typeof Carousel> & {
   hover?: boolean;
@@ -43,7 +35,7 @@ Baseado no [Ant Design Carousel](https://ant.design/components/carousel).
 ### Como usar:
 
 \`\`\`tsx
-import { Carousel } from "@Juscash/design-system";
+import { Carousel } from "@juscash/design-system";
 
 function Example() {
   return <Carousel autoplay showArrows />;
@@ -116,16 +108,10 @@ function Example() {
   },
   render: (args) => {
     const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
-    const mergedClassName = [className, pseudoClasses]
-      .filter(Boolean)
-      .join(" ");
+    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
 
     return (
       <div style={{ width: 600 }}>
@@ -177,25 +163,13 @@ export const WithImages: Story = {
     <div style={{ width: 400 }}>
       <Carousel showArrows dots autoplay>
         <div>
-          <img
-            src="https://picsum.photos/400/200?random=1"
-            style={{ borderRadius: 8, width: "100%" }}
-            alt="1"
-          />
+          <img src="https://picsum.photos/400/200?random=1" style={{ borderRadius: 8, width: "100%" }} alt="1" />
         </div>
         <div>
-          <img
-            src="https://picsum.photos/400/200?random=2"
-            style={{ borderRadius: 8, width: "100%" }}
-            alt="2"
-          />
+          <img src="https://picsum.photos/400/200?random=2" style={{ borderRadius: 8, width: "100%" }} alt="2" />
         </div>
         <div>
-          <img
-            src="https://picsum.photos/400/200?random=3"
-            style={{ borderRadius: 8, width: "100%" }}
-            alt="3"
-          />
+          <img src="https://picsum.photos/400/200?random=3" style={{ borderRadius: 8, width: "100%" }} alt="3" />
         </div>
       </Carousel>
     </div>
@@ -205,13 +179,7 @@ export const WithImages: Story = {
 export const FigmaExample: Story = {
   render: () => (
     <div style={{ width: 600 }}>
-      <Carousel
-        showArrows
-        dots
-        slidesToShow={3}
-        slidesToScroll={1}
-        style={{ textAlign: "center" }}
-      >
+      <Carousel showArrows dots slidesToShow={3} slidesToScroll={1} style={{ textAlign: "center" }}>
         {Array.from({ length: 9 }).map((_, i) => (
           <div key={i} style={{ padding: "0 8px", width: "100%" }}>
             <div

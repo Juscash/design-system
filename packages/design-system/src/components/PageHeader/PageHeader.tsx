@@ -1,5 +1,3 @@
-"use client";
-
 import React, { ReactNode } from "react";
 import { Flex, Space } from "antd";
 import { Card } from "../Card";
@@ -12,11 +10,7 @@ export interface PageHeaderProps {
   action?: ReactNode;
 }
 
-export function PageHeader({
-  title,
-  description,
-  action,
-}: PageHeaderProps): React.ReactElement {
+export function PageHeader({ title, description, action }: PageHeaderProps): React.ReactElement {
   return (
     <Card>
       <Flex justify="space-between" align="center" gap={spacing[1]}>

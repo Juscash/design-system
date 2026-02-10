@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Modal as AntdModal, ConfigProvider } from "antd";
 import type { ModalProps as AntdModalProps } from "antd";
@@ -8,9 +6,7 @@ import { designSystemColors, radius, shadow } from "../../theme";
 type ModalSize = "s" | "m" | "l";
 
 type CleanAntdProps = {
-  [K in keyof AntdModalProps as K extends "width"
-    ? never
-    : K]: AntdModalProps[K];
+  [K in keyof AntdModalProps as K extends "width" ? never : K]: AntdModalProps[K];
 };
 
 export type ModalProps = CleanAntdProps & {

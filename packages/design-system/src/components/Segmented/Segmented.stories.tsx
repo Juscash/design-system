@@ -4,18 +4,10 @@ import { Segmented } from "./Segmented";
 import { Grid, List } from "lucide-react";
 import { designSystemColors } from "../../theme";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4886-14656&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4886-14656&m=dev";
 
 type SegmentedStoryProps = React.ComponentProps<typeof Segmented> & {
   hover?: boolean;
@@ -47,7 +39,7 @@ Componente de controle segmentado baseado no [Ant Design Segmented](https://ant.
 ### Como usar:
 
 \`\`\`tsx
-import { Segmented } from "@Juscash/design-system";
+import { Segmented } from "@juscash/design-system";
 
 function Example() {
   return (
@@ -126,11 +118,7 @@ function Example() {
   },
   render: (args) => {
     const { hover, active, focus, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
 

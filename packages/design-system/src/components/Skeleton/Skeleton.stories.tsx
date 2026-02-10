@@ -2,18 +2,10 @@ import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import React from "react";
 import { Skeleton } from "./Skeleton";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4080-20627&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4080-20627&m=dev";
 
 type SkeletonStoryProps = React.ComponentProps<typeof Skeleton> & {
   hover?: boolean;
@@ -43,7 +35,7 @@ Baseado no [Ant Design Skeleton](https://ant.design/components/skeleton).
 ### Como usar:
 
 \`\`\`tsx
-import { Skeleton } from "@Juscash/design-system";
+import { Skeleton } from "@juscash/design-system";
 
 function Example() {
   return <Skeleton active />;
@@ -108,11 +100,7 @@ function Example() {
   },
   render: (args) => {
     const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
@@ -152,25 +140,13 @@ export const ImagePlaceholder: Story = {
 
 export const FigmaExample: Story = {
   render: (args) => (
-    <div
-      style={{ display: "flex", flexDirection: "column", gap: 32, width: 400 }}
-    >
+    <div style={{ display: "flex", flexDirection: "column", gap: 32, width: 400 }}>
       {/* Avatar */}
       <div style={{ display: "flex", gap: 16 }}>
         <Skeleton.Avatar active={args.active} size={48} shape="circle" />
-        <div
-          style={{ display: "flex", flexDirection: "column", gap: 12, flex: 1 }}
-        >
-          <Skeleton.Input
-            active={args.active}
-            style={{ width: 260, height: 16, borderRadius: 8 }}
-            size="small"
-          />
-          <Skeleton.Button
-            active={args.active}
-            style={{ width: "100%", height: 132, borderRadius: 8 }}
-            block
-          />
+        <div style={{ display: "flex", flexDirection: "column", gap: 12, flex: 1 }}>
+          <Skeleton.Input active={args.active} style={{ width: 260, height: 16, borderRadius: 8 }} size="small" />
+          <Skeleton.Button active={args.active} style={{ width: "100%", height: 132, borderRadius: 8 }} block />
         </div>
       </div>
     </div>

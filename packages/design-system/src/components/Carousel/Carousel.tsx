@@ -1,11 +1,6 @@
-"use client";
-
 import React, { useRef } from "react";
 import { Carousel as AntdCarousel, ConfigProvider } from "antd";
-import type {
-  CarouselProps as AntdCarouselProps,
-  CarouselRef,
-} from "antd/es/carousel";
+import type { CarouselProps as AntdCarouselProps, CarouselRef } from "antd/es/carousel";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { designSystemColors, radius } from "../../theme";
 
@@ -13,12 +8,7 @@ export interface CarouselProps extends AntdCarouselProps {
   showArrows?: boolean;
 }
 
-export const Carousel: React.FC<CarouselProps> = ({
-  children,
-  showArrows = true,
-  dots = true,
-  ...rest
-}) => {
+export const Carousel: React.FC<CarouselProps> = ({ children, showArrows = true, dots = true, ...rest }) => {
   const carouselRef = useRef<CarouselRef>(null);
 
   const handlePrev = () => {
@@ -29,13 +19,7 @@ export const Carousel: React.FC<CarouselProps> = ({
     carouselRef.current?.next();
   };
 
-  const ArrowButton = ({
-    direction,
-    onClick,
-  }: {
-    direction: "left" | "right";
-    onClick: () => void;
-  }) => (
+  const ArrowButton = ({ direction, onClick }: { direction: "left" | "right"; onClick: () => void }) => (
     <button
       onClick={onClick}
       style={{
@@ -57,11 +41,9 @@ export const Carousel: React.FC<CarouselProps> = ({
         color: designSystemColors.neutral[800],
       }}
     >
-      {direction === "left" ? (
+      {direction === "left" ?
         <ChevronLeft size={16} />
-      ) : (
-        <ChevronRight size={16} />
-      )}
+      : <ChevronRight size={16} />}
     </button>
   );
 

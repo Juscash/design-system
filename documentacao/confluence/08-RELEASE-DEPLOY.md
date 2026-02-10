@@ -1,6 +1,6 @@
 # 08. RELEASE E DEPLOY
 
-Este documento descreve o processo de versionamento e publicação do pacote `@Juscash/design-system` e sua documentação.
+Este documento descreve o processo de versionamento e publicação do pacote `@juscash/design-system` e sua documentação.
 
 ---
 
@@ -18,7 +18,7 @@ Seguimos estritamente o [Semantic Versioning 2.0.0](https://semver.org/). O núm
 
 ## 8.2 Fluxo de Publicação (Pacote NPM)
 
-A publicação do pacote `@Juscash/design-system` no **GitHub Packages** é automatizada, mas o disparo é manual via scripts na raiz do projeto.
+A publicação do pacote `@juscash/design-system` no **GitHub Packages** é automatizada, mas o disparo é manual via scripts na raiz do projeto.
 
 ### Passo a Passo
 

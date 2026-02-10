@@ -5,18 +5,10 @@ import { FormItem } from "../FormItem";
 import { Form } from "antd";
 import { shadow } from "../../theme";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4048-10668&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4048-10668&m=dev";
 
 type InputStoryProps = React.ComponentProps<typeof Input> & {
   hover?: boolean;
@@ -48,7 +40,7 @@ Componente de Input baseado no [Ant Design Input](https://ant.design/components/
 ### Como usar:
 
 \`\`\`tsx
-import { Input } from "@Juscash/design-system";
+import { Input } from "@juscash/design-system";
 
 function Example() {
   return <Input placeholder="Digite seu nome" />;
@@ -127,16 +119,10 @@ function Example() {
   ],
   render: (args) => {
     const { focus, hover, active, style, className, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible pseudo-focus",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible pseudo-focus"]
       .filter(Boolean)
       .join(" ");
-    const mergedClassName = [className, pseudoClasses]
-      .filter(Boolean)
-      .join(" ");
+    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
 
     return (
       <FormItem label="Label">
@@ -191,16 +177,10 @@ export const Error: Story = {
   render: (args) => {
     const { focus, hover, active, style, className, ...props } = args;
     const mergedStyle = { ...style };
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
-    const mergedClassName = [className, pseudoClasses]
-      .filter(Boolean)
-      .join(" ");
+    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
     if (focus) {
       mergedStyle.boxShadow = shadow.focusError;
       mergedStyle.borderColor = "transparent";
@@ -223,16 +203,10 @@ export const ErrorFocus: Story = {
   render: (args) => {
     const { focus, hover, active, style, className, ...props } = args;
 
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
-    const mergedClassName = [className, pseudoClasses]
-      .filter(Boolean)
-      .join(" ");
+    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
 
     return (
       <FormItem label="Label" validateStatus="error" help="Error message">

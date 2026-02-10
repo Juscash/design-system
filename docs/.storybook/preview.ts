@@ -1,7 +1,7 @@
 import type { Preview } from "@storybook/nextjs-vite";
 import React, { useEffect } from "react";
-import { JuscashProvider } from "@Juscash/design-system";
-import "@Juscash/design-system/dist/index.css";
+import { JuscashProvider } from "@juscash/design-system";
+import "@juscash/design-system/dist/index.css";
 
 const AppRouterDecorator = ({ Story }: { Story: React.ComponentType }) => {
   useEffect(() => {

@@ -3,18 +3,10 @@ import React from "react";
 import { Loading } from "./Loading";
 import { designSystemColors } from "../../theme";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4076-2037&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4076-2037&m=dev";
 
 type LoadingStoryProps = React.ComponentProps<typeof Loading> & {
   hover?: boolean;
@@ -43,7 +35,7 @@ Componente de carregamento (Spinner) baseado no [Ant Design Spin](https://ant.de
 ### Como usar:
 
 \`\`\`tsx
-import { Loading } from "@Juscash/design-system";
+import { Loading } from "@juscash/design-system";
 
 function Example() {
   return <Loading />;
@@ -117,11 +109,7 @@ function Example() {
   },
   render: (args) => {
     const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
@@ -188,11 +176,7 @@ export const FigmaExample: Story = {
       }}
     >
       <Loading {...args} />
-      <span
-        style={{ fontFamily: "Inter", color: designSystemColors.neutral[600] }}
-      >
-        Loading
-      </span>
+      <span style={{ fontFamily: "Inter", color: designSystemColors.neutral[600] }}>Loading</span>
     </div>
   ),
 };

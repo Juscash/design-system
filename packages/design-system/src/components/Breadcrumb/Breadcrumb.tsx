@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Breadcrumb as AntdBreadcrumb, ConfigProvider } from "antd";
 import type { BreadcrumbProps as AntdBreadcrumbProps } from "antd";
@@ -9,9 +7,7 @@ import { Body2 } from "../../components/Typography/Typography";
 
 // Mapped types explicitly
 type CleanAntdProps = {
-  [K in keyof AntdBreadcrumbProps as K extends "separator"
-    ? never
-    : K]: AntdBreadcrumbProps[K];
+  [K in keyof AntdBreadcrumbProps as K extends "separator" ? never : K]: AntdBreadcrumbProps[K];
 };
 
 export type BreadcrumbProps = CleanAntdProps & {
@@ -58,11 +54,7 @@ export function Breadcrumb(props: BreadcrumbProps): React.ReactElement {
           const isLast = index === (rest.items?.length ?? 0) - 1;
           return {
             ...item,
-            title: (
-              <Body2 color={isLast ? "dark" : "neutral"}>
-                {item.title as React.ReactNode}
-              </Body2>
-            ),
+            title: <Body2 color={isLast ? "dark" : "neutral"}>{item.title as React.ReactNode}</Body2>,
             className: "font-inter", // Ensure Inter font if not set globally
           };
         })}

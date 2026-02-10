@@ -3,18 +3,10 @@ import React, { useState } from "react";
 import { Button } from "../Button";
 import { ConfirmModal } from "./ConfirmModal";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4098-6577&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4098-6577&m=dev";
 
 type ConfirmModalStoryProps = React.ComponentProps<typeof ConfirmModal> & {
   hover?: boolean;
@@ -22,17 +14,8 @@ type ConfirmModalStoryProps = React.ComponentProps<typeof ConfirmModal> & {
   focus?: boolean;
 };
 
-const getPseudoClassName = (args: {
-  hover?: boolean;
-  active?: boolean;
-  focus?: boolean;
-  className?: string;
-}) => {
-  const pseudoClasses = [
-    args.hover && "pseudo-hover",
-    args.active && "pseudo-active",
-    args.focus && "pseudo-focus-visible",
-  ]
+const getPseudoClassName = (args: { hover?: boolean; active?: boolean; focus?: boolean; className?: string }) => {
+  const pseudoClasses = [args.hover && "pseudo-hover", args.active && "pseudo-active", args.focus && "pseudo-focus-visible"]
     .filter(Boolean)
     .join(" ");
 
@@ -63,7 +46,7 @@ Modal de confirmação para ações que requerem aprovação do usuário.
 ### Como usar:
 
 \`\`\`tsx
-import { ConfirmModal, Button } from "@Juscash/design-system";
+import { ConfirmModal, Button } from "@juscash/design-system";
 
 function Example() {
   const [open, setOpen] = useState(false);

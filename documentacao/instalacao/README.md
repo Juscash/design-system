@@ -1,4 +1,4 @@
-# Guia de Instalação e Uso - @Juscash/design-system
+# Guia de Instalação e Uso - @juscash/design-system
 
 Este guia fornece instruções detalhadas sobre como instalar, configurar e utilizar a biblioteca de componentes do Design System da Juscash em uma aplicação Next.js.
 
@@ -36,7 +36,7 @@ Como nossa biblioteca está hospedada no GitHub Packages, você precisa configur
 Na raiz do seu projeto consumidor, crie (ou edite) um arquivo chamado `.npmrc` com o seguinte conteúdo:
 
 ```text
-@Juscash:registry=https://npm.pkg.github.com
+@juscash:registry=https://npm.pkg.github.com
 //npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
@@ -50,10 +50,10 @@ Com o `.npmrc` configurado, execute o comando abaixo no terminal:
 
 ```bash
 # Via npm
-npm install @Juscash/design-system
+npm install @juscash/design-system
 
 # Via yarn
-yarn add @Juscash/design-system
+yarn add @juscash/design-system
 ```
 
 ---
@@ -67,7 +67,7 @@ Para garantir que os estilos e o tema funcionem corretamente, você deve envolve
 No arquivo `app/layout.tsx`:
 
 ```tsx
-import { JuscashProvider } from "@Juscash/design-system";
+import { JuscashProvider } from "@juscash/design-system";
 import { Inter } from "next/font/google";
 
 // Configuração da fonte Inter (recomendada)
@@ -76,11 +76,7 @@ const inter = Inter({
   variable: "--font-primary",
 });
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt-BR" className={inter.variable}>
       <body>
@@ -97,10 +93,10 @@ O `JuscashProvider` já inclui internamente o `AntdRegistry` necessário para o 
 
 ## 5. Uso de Componentes
 
-Você pode importar os componentes diretamente do pacote `@Juscash/design-system`.
+Você pode importar os componentes diretamente do pacote `@juscash/design-system`.
 
 ```tsx
-import { Button, Card, Heading4, Body1 } from "@Juscash/design-system";
+import { Button, Card, Heading4, Body1 } from "@juscash/design-system";
 
 export default function MyPage() {
   return (
@@ -122,7 +118,7 @@ export default function MyPage() {
 Utilizamos exclusivamente a biblioteca `lucide-react`. Para facilitar o uso e manter a consistência, exportamos todos os ícones através do objeto `LucideIcons`.
 
 ```tsx
-import { Button, LucideIcons } from "@Juscash/design-system";
+import { Button, LucideIcons } from "@juscash/design-system";
 
 export default function PageWithIcon() {
   return (
@@ -141,10 +137,10 @@ Sempre que uma nova versão for publicada, você pode atualizar o consumidor usa
 
 ```bash
 # Atualiza para a última versão estável respeitando o range do package.json
-npm update @Juscash/design-system
+npm update @juscash/design-system
 
 # Ou força a instalação da última versão específica
-npm install @Juscash/design-system@latest
+npm install @juscash/design-system@latest
 ```
 
 ---

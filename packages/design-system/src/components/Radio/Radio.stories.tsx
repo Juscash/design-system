@@ -4,18 +4,10 @@ import { Radio, RadioGroup } from "./Radio";
 
 import { designSystemColors } from "../../theme";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4062-4957&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4062-4957&m=dev";
 
 type RadioStoryProps = React.ComponentProps<typeof Radio> & {
   focus?: boolean;
@@ -47,7 +39,7 @@ Componente de seleção única baseado no [Ant Design Radio](https://ant.design/
 ### Como usar:
 
 \`\`\`tsx
-import { Radio } from "@Juscash/design-system";
+import { Radio } from "@juscash/design-system";
 
 function Example() {
   return <Radio>Opcao</Radio>;
@@ -116,11 +108,7 @@ function Example() {
   },
   render: (args) => {
     const { focus, hover, active, style, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
 
@@ -189,9 +177,7 @@ export const ErrorFocus: Story = {
 export const Group: Story = {
   render: (args) => (
     <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-      <label style={{ fontSize: 13, color: designSystemColors.neutral[900] }}>
-        Radio Group
-      </label>
+      <label style={{ fontSize: 13, color: designSystemColors.neutral[900] }}>Radio Group</label>
       <RadioGroup defaultValue="a" {...args}>
         <Radio value="a">Option A</Radio>
         <Radio value="b">Option B</Radio>

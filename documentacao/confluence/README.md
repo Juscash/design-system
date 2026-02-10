@@ -14,7 +14,7 @@ Este documento serve como índice central para a documentação técnica do Desi
     - **Componentes Proprietários**: Como os componentes internos (`src/components`) são expostos.
 
 3.  **[03-GETTING-STARTED.md](./03-GETTING-STARTED.md): Começando (Getting Started)**
-    - Instalação (`@Juscash/design-system`)
+    - Instalação (`@juscash/design-system`)
     - Configuração do Provider
     - Uso Básico
 

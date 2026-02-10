@@ -1,26 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import {
-  Typography,
-  Heading1,
-  Heading2,
-  Heading3,
-  Heading4,
-  Heading5,
-  Heading6,
-  Body1,
-  Body2,
-  Caption,
-} from "./Typography";
+import { Typography, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Body1, Body2, Caption } from "./Typography";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary as DocsPrimary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary as DocsPrimary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
 const FIGMA_URL = "";
@@ -31,17 +13,8 @@ type TypographyStoryProps = React.ComponentProps<typeof Typography> & {
   focus?: boolean;
 };
 
-const getPseudoClassName = (args: {
-  hover?: boolean;
-  active?: boolean;
-  focus?: boolean;
-  className?: string;
-}) => {
-  const pseudoClasses = [
-    args.hover && "pseudo-hover",
-    args.active && "pseudo-active",
-    args.focus && "pseudo-focus-visible",
-  ]
+const getPseudoClassName = (args: { hover?: boolean; active?: boolean; focus?: boolean; className?: string }) => {
+  const pseudoClasses = [args.hover && "pseudo-hover", args.active && "pseudo-active", args.focus && "pseudo-focus-visible"]
     .filter(Boolean)
     .join(" ");
 
@@ -71,7 +44,7 @@ Componente baseado no [Ant Design Typography](https://ant.design/components/typo
 ### Como usar:
 
 \`\`\`tsx
-import { Typography, Heading1, Body1 } from "@Juscash/design-system";
+import { Typography, Heading1, Body1 } from "@juscash/design-system";
 
 function Example() {
   return (
@@ -116,30 +89,11 @@ function Example() {
   argTypes: {
     variant: {
       control: "select",
-      options: [
-        "heading1",
-        "heading2",
-        "heading3",
-        "heading4",
-        "heading5",
-        "heading6",
-        "body1",
-        "body2",
-        "caption",
-      ],
+      options: ["heading1", "heading2", "heading3", "heading4", "heading5", "heading6", "body1", "body2", "caption"],
     },
     color: {
       control: "select",
-      options: [
-        "primary",
-        "secondary",
-        "neutral",
-        "dark",
-        "error",
-        "warning",
-        "success",
-        "disabled",
-      ],
+      options: ["primary", "secondary", "neutral", "dark", "error", "warning", "success", "disabled"],
     },
     hover: {
       control: "boolean",
@@ -190,10 +144,7 @@ export const HeadingVariants: Story = {
     const mergedClassName = getPseudoClassName(args);
 
     return (
-      <div
-        className={mergedClassName}
-        style={{ display: "flex", flexDirection: "column", gap: "16px" }}
-      >
+      <div className={mergedClassName} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
         <Heading1>Heading 1</Heading1>
         <Heading2>Heading 2</Heading2>
         <Heading3>Heading 3</Heading3>
@@ -210,10 +161,7 @@ export const BodyVariants: Story = {
     const mergedClassName = getPseudoClassName(args);
 
     return (
-      <div
-        className={mergedClassName}
-        style={{ display: "flex", flexDirection: "column", gap: "16px" }}
-      >
+      <div className={mergedClassName} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
         <Body1>Body 1 - Texto principal</Body1>
         <Body2>Body 2 - Texto secundário</Body2>
         <Caption>Caption - Legenda</Caption>
@@ -227,10 +175,7 @@ export const ColorVariants: Story = {
     const mergedClassName = getPseudoClassName(args);
 
     return (
-      <div
-        className={mergedClassName}
-        style={{ display: "flex", flexDirection: "column", gap: "8px" }}
-      >
+      <div className={mergedClassName} style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
         <Typography color="primary">Primary Color</Typography>
         <Typography color="secondary">Secondary Color</Typography>
         <Typography color="neutral">Neutral Color</Typography>
@@ -249,10 +194,7 @@ export const InlineStyles: Story = {
     const mergedClassName = getPseudoClassName(args);
 
     return (
-      <div
-        className={mergedClassName}
-        style={{ display: "flex", flexDirection: "column", gap: "8px" }}
-      >
+      <div className={mergedClassName} style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
         <Typography strong>Texto com bold</Typography>
         <Typography italic>Texto com italic</Typography>
         <Typography underline>Texto com underline</Typography>
@@ -270,9 +212,8 @@ export const ParagraphExample: Story = {
     return (
       <div className={mergedClassName} style={{ maxWidth: 520 }}>
         <Typography variant="body1">
-          Este e um exemplo de paragrafo com comprimento maior para avaliar
-          leitura, espacamento e contraste. Use Body1 para textos principais e
-          Body2 para textos secundarios.
+          Este e um exemplo de paragrafo com comprimento maior para avaliar leitura, espacamento e contraste. Use Body1 para
+          textos principais e Body2 para textos secundarios.
         </Typography>
         <Typography variant="body2" color="neutral">
           Texto secundario com cor neutral para reduzir enfase visual.

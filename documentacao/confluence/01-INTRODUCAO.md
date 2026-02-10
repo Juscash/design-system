@@ -2,7 +2,7 @@
 
 ## 1.1 Introdução
 
-O **@Juscash/design-system** é a biblioteca oficial de componentes de interface da Juscash. Este projeto unifica a linguagem visual e técnica, garantindo consistência, acessibilidade e agilidade no desenvolvimento de aplicações frontend.
+O **@juscash/design-system** é a biblioteca oficial de componentes de interface da Juscash. Este projeto unifica a linguagem visual e técnica, garantindo consistência, acessibilidade e agilidade no desenvolvimento de aplicações frontend.
 
 O objetivo principal é fornecer blocos de construção (componentes) prontos para uso, testados e documentados, permitindo que os times de produto foquem em regras de negócio em vez de reinventar a interface.
 
@@ -32,6 +32,6 @@ Para visualizar os componentes, seus estados visual e propriedades (props) dispo
 | :-------------- | :-------------------------- | :-------------------------------------------------------------------------------------------------------- |
 | **Repositório** | Código fonte no GitHub      | [GitHub: design-system](https://github.com/Juscash/design-system)                                         |
 | **Figma**       | Biblioteca de Design (Core) | [Figma: Design System Juscash](https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash) |
-| **Pacote NPM**  | Registro do pacote          | `@Juscash/design-system`                                                                                  |
+| **Pacote NPM**  | Registro do pacote          | `@juscash/design-system`                                                                                  |
 
 ---

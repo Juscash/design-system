@@ -1,5 +1,3 @@
-"use client";
-
 import React, { useState } from "react";
 import { Select as AntdSelect, ConfigProvider, Input as AntdInput } from "antd";
 import { Checkbox } from "../Checkbox";
@@ -13,9 +11,7 @@ import type { DefaultOptionType } from "antd/es/select";
 type SelectSize = "xs" | "s" | "m" | "l";
 
 type CleanAntdProps = {
-  [K in keyof AntdSelectProps as K extends "size"
-    ? never
-    : K]: AntdSelectProps[K];
+  [K in keyof AntdSelectProps as K extends "size" ? never : K]: AntdSelectProps[K];
 };
 
 export type SelectProps = CleanAntdProps & {
@@ -59,7 +55,10 @@ function getSizeTokens(dsSize?: SelectSize): {
     };
   }
 
-  const baseControlHeight = dsSize === "s" ? 32 : dsSize === "m" ? 36 : 40;
+  const baseControlHeight =
+    dsSize === "s" ? 32
+    : dsSize === "m" ? 36
+    : 40;
 
   return {
     componentToken: {},
@@ -97,9 +96,7 @@ export function Select(props: SelectProps): React.ReactElement {
   } = props;
 
   const [searchValue, setSearchValue] = useState("");
-  const [currentValue, setCurrentValue] = useState<
-    SelectProps["value"] | undefined
-  >(value ?? defaultValue);
+  const [currentValue, setCurrentValue] = useState<SelectProps["value"] | undefined>(value ?? defaultValue);
   const resolvedSize = size ? mapToDsSize(size) : dsSize;
   const sizeTokens = getSizeTokens(resolvedSize);
 
@@ -110,17 +107,12 @@ export function Select(props: SelectProps): React.ReactElement {
 
     if (Array.isArray(currentValue)) {
       return currentValue.some((v) => {
-        const val =
-          typeof v === "object" && v !== null
-            ? (v as { value: unknown }).value
-            : v;
+        const val = typeof v === "object" && v !== null ? (v as { value: unknown }).value : v;
         return val === optionValue;
       });
     }
     const singleVal =
-      typeof currentValue === "object" && currentValue !== null
-        ? (currentValue as { value: unknown }).value
-        : currentValue;
+      typeof currentValue === "object" && currentValue !== null ? (currentValue as { value: unknown }).value : currentValue;
     return singleVal === optionValue;
   };
 
@@ -159,11 +151,7 @@ export function Select(props: SelectProps): React.ReactElement {
         maxTagCount={maxTagCount}
         className={className}
         suffixIcon={suffixIcon ?? <ChevronsUpDown size={16} />}
-        menuItemSelectedIcon={
-          isMultiple ? null : (
-            <Check size={16} color={designSystemColors.neutral[800]} />
-          )
-        }
+        menuItemSelectedIcon={isMultiple ? null : <Check size={16} color={designSystemColors.neutral[800]} />}
         showSearch={false}
         searchValue={searchValue}
         style={{
@@ -172,26 +160,16 @@ export function Select(props: SelectProps): React.ReactElement {
           transition: "all 0.2s ease",
           ...style,
         }}
-        onChange={(
-          val: SelectProps["value"],
-          opt: DefaultOptionType | DefaultOptionType[] | undefined,
-        ) => {
+        onChange={(val: SelectProps["value"], opt: DefaultOptionType | DefaultOptionType[] | undefined) => {
           setCurrentValue(val);
           rest.onChange?.(val, opt);
         }}
         optionRender={(option: DefaultOptionType) => {
-          const isSelected = isOptionSelected(
-            option.value as string | number | undefined,
-          );
+          const isSelected = isOptionSelected(option.value as string | number | undefined);
 
           return (
             <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-              {isMultiple && (
-                <Checkbox
-                  checked={isSelected}
-                  style={{ pointerEvents: "none" }}
-                />
-              )}
+              {isMultiple && <Checkbox checked={isSelected} style={{ pointerEvents: "none" }} />}
               <span style={{ flex: 1 }}>{option.label}</span>
             </div>
           );
@@ -208,9 +186,7 @@ export function Select(props: SelectProps): React.ReactElement {
               >
                 <AntdInput
                   placeholder="Procurar"
-                  prefix={
-                    <Search size={15} color={designSystemColors.neutral[500]} />
-                  }
+                  prefix={<Search size={15} color={designSystemColors.neutral[500]} />}
                   value={searchValue}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     const { value } = e.target;

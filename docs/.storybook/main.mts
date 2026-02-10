@@ -11,9 +11,7 @@ const designSystemSrc = resolve(rootDir, "packages/design-system/src");
 const designSystemDist = resolve(rootDir, "packages/design-system/dist");
 
 const config: StorybookConfig = {
-  stories: [
-    "../../packages/design-system/src/**/*.stories.@(js|jsx|mjs|ts|tsx)",
-  ],
+  stories: ["../../packages/design-system/src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
 
   addons: [
     getAbsolutePath("@storybook/addon-links"),
@@ -31,31 +29,37 @@ const config: StorybookConfig = {
 
   async viteFinal(config, { configType }) {
     const { mergeConfig } = await import("vite");
-    const designSystemAlias =
-      configType === "DEVELOPMENT" ? designSystemSrc : designSystemDist;
+    const designSystemAlias = configType === "DEVELOPMENT" ? designSystemSrc : designSystemDist;
     const aliases = [
       {
         find: "@ant-design/nextjs-registry",
         replacement: require.resolve("./AntdRegistryMock.js"),
       },
       {
-        find: /^@Juscash\/design-system$/,
+        find: /^@juscash\/design-system$/,
         replacement: designSystemAlias,
       },
     ];
 
     if (configType === "DEVELOPMENT") {
       aliases.push({
-        find: "@Juscash/design-system/dist/index.css",
-        replacement: resolve(
-          rootDir,
-          "packages/design-system/src/theme/global.css"
-        ),
+        find: "@juscash/design-system/dist/index.css",
+        replacement: resolve(rootDir, "packages/design-system/src/theme/global.css"),
       });
     }
     return mergeConfig(config, {
       resolve: {
         alias: aliases,
+      },
+      build: {
+        rollupOptions: {
+          onwarn(warning: any, warn: any) {
+            if (warning.code === "MODULE_LEVEL_DIRECTIVE") {
+              return;
+            }
+            warn(warning);
+          },
+        },
       },
     });
   },

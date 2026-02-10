@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { ConfigProvider, Radio as AntdRadio } from "antd";
 import type { RadioProps as AntdRadioProps } from "antd";
@@ -42,8 +40,9 @@ export function Radio(props: RadioProps): React.ReactElement {
   const { error, className, ...rest } = props;
 
   const tokens = error ? errorTokens : baseTokens;
-  const tokenOverrides = error
-    ? {
+  const tokenOverrides =
+    error ?
+      {
         borderRadiusSM: radius.md,
         colorPrimary: designSystemColors.feedback.red[500],
         colorPrimaryHover: designSystemColors.feedback.red[900],
@@ -145,9 +144,7 @@ export function RichRadioGroup({
           />
           <div style={{ display: "flex", flexDirection: "column", flex: 1 }}>
             <span style={labelStyle}>{option.label}</span>
-            {option.secondaryText && (
-              <span style={secondaryTextStyle}>{option.secondaryText}</span>
-            )}
+            {option.secondaryText && <span style={secondaryTextStyle}>{option.secondaryText}</span>}
           </div>
         </div>
       ))}

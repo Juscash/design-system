@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Skeleton as AntdSkeleton, ConfigProvider } from "antd";
 import type { SkeletonProps as AntdSkeletonProps } from "antd";

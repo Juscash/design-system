@@ -1,4 +1,3 @@
-"use client";
 import React from "react";
 import { notification as antdNotification, ConfigProvider } from "antd";
 import type { NotificationArgsProps } from "antd";
@@ -27,23 +26,22 @@ export function useNotification() {
   });
 
   const wrappedApi = React.useMemo(() => {
-    const wrap =
-      (type: "success" | "info" | "warning" | "error") =>
-      (args: NotificationArgsProps) => {
-        const isError = type === "error";
+    const wrap = (type: "success" | "info" | "warning" | "error") => (args: NotificationArgsProps) => {
+      const isError = type === "error";
 
-        const customStyle = isError
-          ? {
-              color: designSystemColors.feedback.red[500],
-            }
-          : {};
-        const customClassName = isError ? "ant-notification-error-custom" : "";
-        api[type]({
-          ...args,
-          style: { ...customStyle, ...args.style },
-          className: `${customClassName} ${args.className || ""}`,
-        });
-      };
+      const customStyle =
+        isError ?
+          {
+            color: designSystemColors.feedback.red[500],
+          }
+        : {};
+      const customClassName = isError ? "ant-notification-error-custom" : "";
+      api[type]({
+        ...args,
+        style: { ...customStyle, ...args.style },
+        className: `${customClassName} ${args.className || ""}`,
+      });
+    };
     return {
       success: wrap("success"),
       info: wrap("info"),

@@ -1,29 +1,14 @@
-"use client";
-
 import React from "react";
-import {
-  Button as AntdButton,
-  type ButtonProps as AntdButtonProps,
-  ConfigProvider,
-} from "antd";
+import { Button as AntdButton, type ButtonProps as AntdButtonProps, ConfigProvider } from "antd";
 import type { ButtonToken } from "antd/es/button/style/token";
 import { designSystemColors } from "../../theme";
 import { radius, shadow, spacing } from "../../theme";
 
-type ButtonType =
-  | "primary"
-  | "secondary"
-  | "outline"
-  | "ghost"
-  | "destructive"
-  | "neutral";
+type ButtonType = "primary" | "secondary" | "outline" | "ghost" | "destructive" | "neutral";
 
 type ButtonSize = "xs" | "s" | "m";
 
-type CleanAntdProps = Omit<
-  AntdButtonProps,
-  "type" | "size" | "danger" | "variant"
->;
+type CleanAntdProps = Omit<AntdButtonProps, "type" | "size" | "danger" | "variant">;
 
 export type ButtonProps = CleanAntdProps & {
   type?: ButtonType;
@@ -160,33 +145,24 @@ export function Button(props: ButtonProps): React.ReactElement {
   const resolvedType = variant || type || "primary";
   const isIconOnly = icon !== undefined && !children;
   const className = typeof rest.className === "string" ? rest.className : "";
-  const hasFocusClass =
-    className.includes("pseudo-focus-visible") ||
-    className.includes("pseudo-focus");
+  const hasFocusClass = className.includes("pseudo-focus-visible") || className.includes("pseudo-focus");
   const sizeTokens = getSizeTokens(size);
 
-  const paddingBlockValue = isIconOnly
-    ? 0
-    : size === "xs"
-      ? spacing[1]
-      : size === "s"
-        ? spacing[1]
-        : size === "m"
-          ? spacing[2]
-          : undefined;
-
-  const iconOnlySize = isIconOnly
-    ? size === "xs"
-      ? 24
-      : size === "s"
-        ? 32
-        : 36
+  const paddingBlockValue =
+    isIconOnly ? 0
+    : size === "xs" ? spacing[1]
+    : size === "s" ? spacing[1]
+    : size === "m" ? spacing[2]
     : undefined;
 
-  const applyTheme = (
-    tokens: Partial<ButtonToken>,
-    antdType: "primary" | "default",
-  ) => (
+  const iconOnlySize =
+    isIconOnly ?
+      size === "xs" ? 24
+      : size === "s" ? 32
+      : 36
+    : undefined;
+
+  const applyTheme = (tokens: Partial<ButtonToken>, antdType: "primary" | "default") => (
     <ConfigProvider
       theme={{
         components: { Button: { ...tokens, ...sizeTokens } },
@@ -195,26 +171,26 @@ export function Button(props: ButtonProps): React.ReactElement {
       <AntdButton
         type={antdType}
         style={
-          paddingBlockValue !== undefined || iconOnlySize !== undefined
-            ? {
-                ...(iconOnlySize !== undefined
-                  ? {
-                      width: `${iconOnlySize}px`,
-                      minWidth: `${iconOnlySize}px`,
-                      height: `${iconOnlySize}px`,
-                      paddingLeft: "0px",
-                      paddingRight: "0px",
-                    }
-                  : null),
-                paddingTop: `${paddingBlockValue}px`,
-                paddingBottom: `${paddingBlockValue}px`,
-                boxShadow: hasFocusClass ? shadow.focus : undefined,
-                ...style,
-              }
-            : {
-                boxShadow: hasFocusClass ? shadow.focus : undefined,
-                ...style,
-              }
+          paddingBlockValue !== undefined || iconOnlySize !== undefined ?
+            {
+              ...(iconOnlySize !== undefined ?
+                {
+                  width: `${iconOnlySize}px`,
+                  minWidth: `${iconOnlySize}px`,
+                  height: `${iconOnlySize}px`,
+                  paddingLeft: "0px",
+                  paddingRight: "0px",
+                }
+              : null),
+              paddingTop: `${paddingBlockValue}px`,
+              paddingBottom: `${paddingBlockValue}px`,
+              boxShadow: hasFocusClass ? shadow.focus : undefined,
+              ...style,
+            }
+          : {
+              boxShadow: hasFocusClass ? shadow.focus : undefined,
+              ...style,
+            }
         }
         icon={icon}
         {...(children !== undefined ? { children } : null)}
@@ -253,26 +229,26 @@ export function Button(props: ButtonProps): React.ReactElement {
         <AntdButton
           type="default"
           style={
-            paddingBlockValue !== undefined || iconOnlySize !== undefined
-              ? {
-                  ...(iconOnlySize !== undefined
-                    ? {
-                        width: `${iconOnlySize}px`,
-                        minWidth: `${iconOnlySize}px`,
-                        height: `${iconOnlySize}px`,
-                        paddingLeft: "0px",
-                        paddingRight: "0px",
-                      }
-                    : null),
-                  paddingTop: `${paddingBlockValue}px`,
-                  paddingBottom: `${paddingBlockValue}px`,
-                  boxShadow: hasFocusClass ? shadow.focus : undefined,
-                  ...style,
-                }
-              : {
-                  boxShadow: hasFocusClass ? shadow.focus : undefined,
-                  ...style,
-                }
+            paddingBlockValue !== undefined || iconOnlySize !== undefined ?
+              {
+                ...(iconOnlySize !== undefined ?
+                  {
+                    width: `${iconOnlySize}px`,
+                    minWidth: `${iconOnlySize}px`,
+                    height: `${iconOnlySize}px`,
+                    paddingLeft: "0px",
+                    paddingRight: "0px",
+                  }
+                : null),
+                paddingTop: `${paddingBlockValue}px`,
+                paddingBottom: `${paddingBlockValue}px`,
+                boxShadow: hasFocusClass ? shadow.focus : undefined,
+                ...style,
+              }
+            : {
+                boxShadow: hasFocusClass ? shadow.focus : undefined,
+                ...style,
+              }
           }
           icon={icon}
           {...(children !== undefined ? { children } : null)}

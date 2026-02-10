@@ -1,5 +1,3 @@
-"use client";
-
 import React from "react";
 import { Avatar as AntdAvatar, ConfigProvider } from "antd";
 import type { AvatarProps as AntdAvatarProps } from "antd";
@@ -13,12 +11,7 @@ export interface AvatarProps extends AntdAvatarProps {
   roundness?: AvatarRoundness;
 }
 
-export const Avatar: React.FC<AvatarProps> = ({
-  dsSize = "regular",
-  roundness = "round",
-  style,
-  ...rest
-}) => {
+export const Avatar: React.FC<AvatarProps> = ({ dsSize = "regular", roundness = "round", style, ...rest }) => {
   const sizeMap: Record<AvatarSize, number> = {
     small: 32,
     regular: 40,

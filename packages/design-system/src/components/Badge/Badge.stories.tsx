@@ -3,18 +3,10 @@ import React from "react";
 import { Heart } from "lucide-react";
 import { Badge } from "./Badge";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary as DocsPrimary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary as DocsPrimary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4080-6201&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4080-6201&m=dev";
 
 type BadgeStoryProps = React.ComponentProps<typeof Badge> & {
   hover?: boolean;
@@ -48,7 +40,7 @@ Componente de badge baseado no [Ant Design Badge](https://ant.design/components/
 ### Como usar:
 
 \`\`\`tsx
-import { Badge } from "@Juscash/design-system";
+import { Badge } from "@juscash/design-system";
 
 function Example() {
   return <Badge variant="primary">Label</Badge>;
@@ -92,15 +84,7 @@ function Example() {
   argTypes: {
     variant: {
       control: "select",
-      options: [
-        "primary",
-        "secondary",
-        "tertiary",
-        "outline",
-        "ghost",
-        "destructive",
-        "counter",
-      ],
+      options: ["primary", "secondary", "tertiary", "outline", "ghost", "destructive", "counter"],
     },
     statusColor: {
       control: "select",
@@ -133,11 +117,7 @@ function Example() {
   },
   render: (args) => {
     const { focus, hover, active, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
 

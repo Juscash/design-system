@@ -2,18 +2,10 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Collapse } from "./Collapse";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4069-5252&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4069-5252&m=dev";
 
 type CollapseStoryProps = React.ComponentProps<typeof Collapse> & {
   hover?: boolean;
@@ -41,7 +33,7 @@ Componente Collapse (Accordion) baseado no [Ant Design Collapse](https://ant.des
 ### Como usar:
 
 \`\`\`tsx
-import { Collapse } from "@Juscash/design-system";
+import { Collapse } from "@juscash/design-system";
 
 function Example() {
   return <Collapse items={[{ key: "1", label: "Label", children: "Content" }]} />;
@@ -102,11 +94,7 @@ function Example() {
   },
   render: (args) => {
     const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");

@@ -1,11 +1,5 @@
-"use client";
-
 import React from "react";
-import {
-  DatePicker as AntdDatePicker,
-  ConfigProvider,
-  type TimeRangePickerProps,
-} from "antd";
+import { DatePicker as AntdDatePicker, ConfigProvider, type TimeRangePickerProps } from "antd";
 import type { DatePickerProps as AntdDatePickerProps } from "antd";
 import ptBR from "antd/locale/pt_BR";
 import type { ThemeConfig } from "antd";
@@ -32,24 +26,19 @@ const datePickerTheme: ThemeConfig = {
   },
 };
 
-const datePickerLocale = ptBR.DatePicker
-  ? {
+const datePickerLocale =
+  ptBR.DatePicker ?
+    {
       ...ptBR.DatePicker,
       lang: {
         ...ptBR.DatePicker.lang,
         monthFormat: "MMMM",
       },
-      timePickerLocale:
-        ptBR.DatePicker.timePickerLocale ??
-        ptBR.TimePicker ??
-        ({} as NonNullable<typeof ptBR.TimePicker>),
+      timePickerLocale: ptBR.DatePicker.timePickerLocale ?? ptBR.TimePicker ?? ({} as NonNullable<typeof ptBR.TimePicker>),
     }
   : undefined;
 
-export const DatePicker: React.FC<DatePickerProps> = ({
-  allowClear = false,
-  ...rest
-}) => {
+export const DatePicker: React.FC<DatePickerProps> = ({ allowClear = false, ...rest }) => {
   return (
     <ConfigProvider theme={datePickerTheme}>
       <AntdDatePicker
@@ -57,13 +46,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
         locale={datePickerLocale}
         allowClear={allowClear}
         suffixIcon={null}
-        prefix={
-          <Calendar
-            size={16}
-            color={designSystemColors.neutral[500]}
-            style={{ marginRight: 8, marginLeft: 4 }}
-          />
-        }
+        prefix={<Calendar size={16} color={designSystemColors.neutral[500]} style={{ marginRight: 8, marginLeft: 4 }} />}
         prevIcon={
           <div
             style={{
@@ -103,10 +86,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 
 DatePicker.displayName = "DatePicker";
 
-export const RangePicker: React.FC<RangePickerProps> = ({
-  allowClear = false,
-  ...rest
-}) => {
+export const RangePicker: React.FC<RangePickerProps> = ({ allowClear = false, ...rest }) => {
   return (
     <ConfigProvider theme={datePickerTheme}>
       <AntdRangePicker
@@ -115,13 +95,7 @@ export const RangePicker: React.FC<RangePickerProps> = ({
         allowClear={allowClear}
         locale={datePickerLocale}
         suffixIcon={null}
-        prefix={
-          <Calendar
-            size={16}
-            color={designSystemColors.neutral[500]}
-            style={{ marginRight: 4 }}
-          />
-        }
+        prefix={<Calendar size={16} color={designSystemColors.neutral[500]} style={{ marginRight: 4 }} />}
         prevIcon={
           <div
             style={{

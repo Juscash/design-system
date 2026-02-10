@@ -4,18 +4,10 @@ import { Select } from "./Select";
 import { FormItem } from "../FormItem/FormItem";
 import { Form } from "antd";
 
-import {
-  Title,
-  Subtitle,
-  Description,
-  Primary,
-  Controls,
-  Stories,
-} from "@storybook/addon-docs/blocks";
+import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4122-8572&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4122-8572&m=dev";
 
 type SelectStoryProps = React.ComponentProps<typeof Select> & {
   focus?: boolean;
@@ -46,7 +38,7 @@ Componente de seleção múltipla (MultiSelect) baseado no [Ant Design Select](h
 ### Como usar:
 
 \`\`\`tsx
-import { Select } from "@Juscash/design-system";
+import { Select } from "@juscash/design-system";
 
 function Example() {
   return (
@@ -137,11 +129,7 @@ function Example() {
   ],
   render: (args) => {
     const { focus, hover, active, className, ...props } = args;
-    const pseudoClasses = [
-      hover && "pseudo-hover",
-      active && "pseudo-active",
-      focus && "pseudo-focus-visible",
-    ]
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
       .filter(Boolean)
       .join(" ");
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
@@ -228,51 +216,25 @@ export const ErrorFocus: Story = {
 
 export const SizeVariants: Story = {
   render: () => (
-    <div
-      style={{ display: "flex", flexDirection: "column", gap: 16, width: 300 }}
-    >
+    <div style={{ display: "flex", flexDirection: "column", gap: 16, width: 300 }}>
       {/* XS Size */}
       <FormItem label="Size XS">
-        <Select
-          dsSize="xs"
-          mode="multiple"
-          placeholder="XS Size"
-          options={options}
-          defaultValue={["option1"]}
-        />
+        <Select dsSize="xs" mode="multiple" placeholder="XS Size" options={options} defaultValue={["option1"]} />
       </FormItem>
 
       {/* S Size */}
       <FormItem label="Size S">
-        <Select
-          dsSize="s"
-          mode="multiple"
-          placeholder="S Size"
-          options={options}
-          defaultValue={["option1"]}
-        />
+        <Select dsSize="s" mode="multiple" placeholder="S Size" options={options} defaultValue={["option1"]} />
       </FormItem>
 
       {/* M Size */}
       <FormItem label="Size M (Default)">
-        <Select
-          dsSize="m"
-          mode="multiple"
-          placeholder="M Size"
-          options={options}
-          defaultValue={["option1"]}
-        />
+        <Select dsSize="m" mode="multiple" placeholder="M Size" options={options} defaultValue={["option1"]} />
       </FormItem>
 
       {/* L Size */}
       <FormItem label="Size L">
-        <Select
-          dsSize="l"
-          mode="multiple"
-          placeholder="L Size"
-          options={options}
-          defaultValue={["option1"]}
-        />
+        <Select dsSize="l" mode="multiple" placeholder="L Size" options={options} defaultValue={["option1"]} />
       </FormItem>
     </div>
   ),
