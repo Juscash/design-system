@@ -742,3 +742,11 @@
   line-height: 1.2 !important;
   color: var(--color-neutral-600) !important;
 }
+
+.ant-form-item-label {
+  padding-bottom: 8px !important;
+}
+
+.ant-form-item-row {
+  align-items: flex-start !important;
+}
