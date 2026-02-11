@@ -7,11 +7,7 @@ import { Figma } from "@storybook/addon-designs/blocks";
 
 const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4080-20126&m=dev";
 
-type BreadcrumbStoryProps = React.ComponentProps<typeof Breadcrumb> & {
-  hover?: boolean;
-  active?: boolean;
-  focus?: boolean;
-};
+type BreadcrumbStoryProps = React.ComponentProps<typeof Breadcrumb>;
 
 const meta: Meta<BreadcrumbStoryProps> = {
   title: "Components/Breadcrumb",
@@ -29,6 +25,12 @@ const meta: Meta<BreadcrumbStoryProps> = {
 Componente de Breadcrumb (migalhas de pão) para navegação hierárquica.
 Baseado no [Ant Design Breadcrumb](https://ant.design/components/breadcrumb).
 
+Mostra o caminho de navegação dentro do sistema, indicando a localização atual do usuário.
+
+### Quando usar
+
+Use o breadcrumb em interfaces com múltiplos níveis de navegação (ex.: Categoria → Subcategoria → Página) para indicar ao usuário onde ele está na hierarquia de páginas e permitir retorno rápido a níveis anteriores.
+
 ### Props:
 - **Extended (Ant Design)**: Props padrão do AntD Breadcrumb.
 
@@ -42,6 +44,7 @@ function Example() {
     <Breadcrumb
       items={[
         { title: "Home", href: "#" },
+        { title: "...", href: "#" },
         { title: "Components", href: "#" },
         { title: "Breadcrumb" },
       ]}
@@ -80,66 +83,49 @@ function Example() {
     },
   },
   args: {
-    items: [{ title: "Home" }, { title: "Components" }, { title: "Breadcrumb" }],
-    hover: false,
-    active: false,
-    focus: false,
+    items: [
+      { title: "Home", href: "#" },
+      { title: "...", href: "#" },
+      { title: "Components", href: "#" },
+      { title: "Breadcrumb" },
+    ],
   },
-  argTypes: {
-    hover: {
-      control: "boolean",
-      description: "Força o estado hover",
-      table: { category: "Pseudo States" },
-    },
-    active: {
-      control: "boolean",
-      description: "Força o estado active",
-      table: { category: "Pseudo States" },
-    },
-    focus: {
-      control: "boolean",
-      description: "Força o estado focus",
-      table: { category: "Pseudo States" },
-    },
-  },
+  argTypes: {},
   render: (args) => {
-    const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
-      .filter(Boolean)
-      .join(" ");
-    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
-
-    return <Breadcrumb {...props} className={mergedClassName} />;
+    return <Breadcrumb {...args} />;
   },
 };
 
 export default meta;
 type Story = StoryObj<BreadcrumbStoryProps>;
 
+/** Exemplo padrão do Figma: Home > ... > Components > **Breadcrumb** */
 export const Default: Story = {
+  args: {
+    items: [
+      { title: "Home", href: "#" },
+      { title: "...", href: "#" },
+      { title: "Components", href: "#" },
+      { title: "Breadcrumb" },
+    ],
+  },
+};
+
+/** Breadcrumb simples sem ellipsis */
+export const Simple: Story = {
   args: {
     items: [{ title: "Home", href: "#" }, { title: "Components", href: "#" }, { title: "Breadcrumb" }],
   },
 };
 
-export const WithEllipsis: Story = {
+/** Breadcrumb com múltiplos níveis */
+export const MultiLevel: Story = {
   args: {
     items: [
       { title: "Home", href: "#" },
-      { title: "...", href: "#" }, // Antd treats this as a link if it has href, or just text? Usually we use proper items structure
-      { title: "Components", href: "#" },
-      { title: "Breadcrumb" },
+      { title: "Application Center", href: "#" },
+      { title: "Application List", href: "#" },
+      { title: "An Application" },
     ],
   },
-  render: (args) => (
-    <Breadcrumb
-      {...args}
-      items={[
-        { title: "Home", href: "" },
-        { title: "Application Center", href: "" },
-        { title: "Application List", href: "" },
-        { title: "An Application" },
-      ]}
-    />
-  ),
 };

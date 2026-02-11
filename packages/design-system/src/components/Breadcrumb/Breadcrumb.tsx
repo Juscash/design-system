@@ -3,7 +3,6 @@ import { Breadcrumb as AntdBreadcrumb, ConfigProvider } from "antd";
 import type { BreadcrumbProps as AntdBreadcrumbProps } from "antd";
 import { designSystemColors } from "../../theme/foundations";
 import { ChevronRight } from "lucide-react";
-import { Body2 } from "../../components/Typography/Typography";
 
 // Mapped types explicitly
 type CleanAntdProps = {
@@ -22,40 +21,30 @@ export function Breadcrumb(props: BreadcrumbProps): React.ReactElement {
       theme={{
         components: {
           Breadcrumb: {
-            itemColor: designSystemColors.neutral[500], // var(--color/text/soft)
+            itemColor: designSystemColors.neutral[500],
             linkColor: designSystemColors.neutral[500],
+            linkHoverColor: designSystemColors.neutral[800],
             separatorColor: designSystemColors.neutral[500],
-            lastItemColor: designSystemColors.neutral[900], // Main text color
-            // Checking Figma screenshot:
-            // "Home" (inactive) seems soft.
-            // The last item (current page) usually has a different style.
-            // Figma screenshot text says: "Home > ... > Components > Breadcrumb"
-            // "Breadcrumb" is bold/darker in screenshot?
-            // Let's look at the generated code from Figma again or just stick to standard Antd behavior with our colors.
-            // Text color from Figma code involved: text-[color:var(--color\/text\/soft,#6d6d6e)]
-
-            // Ant Design tokens:
-            // itemColor: Default text color of item
-            // lastItemColor: Text color of last item
-            // separatorColor: Color of separator
-            // linkColor: Color of link
+            lastItemColor: designSystemColors.neutral[800],
+            fontSize: 13,
+            colorBgTextHover: "transparent",
+            lineHeight: 1.2,
           },
         },
         token: {
-          // Overrides if needed
-          fontFamily: "Inter, sans-serif",
+          fontFamily: '"Inter", sans-serif',
         },
       }}
     >
       <AntdBreadcrumb
-        separator={<ChevronRight size={16} />}
+        separator={<ChevronRight size={16} color={designSystemColors.neutral[500]} />}
         {...rest}
+        className={`juscash-breadcrumb ${rest.className || ""}`.trim()}
         items={rest.items?.map((item, index) => {
           const isLast = index === (rest.items?.length ?? 0) - 1;
           return {
             ...item,
-            title: <Body2 color={isLast ? "dark" : "neutral"}>{item.title as React.ReactNode}</Body2>,
-            className: "font-inter", // Ensure Inter font if not set globally
+            title: isLast ? <span style={{ fontWeight: 700 }}>{item.title}</span> : item.title,
           };
         })}
       />

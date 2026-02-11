@@ -445,6 +445,32 @@
 }
 
 /* ============================================
+   BREADCRUMB
+   ============================================ */
+
+
+.juscash-breadcrumb.ant-breadcrumb a:hover {
+  color: var(--color-neutral-800) !important;
+  text-decoration: underline !important;
+}
+
+.juscash-breadcrumb.ant-breadcrumb .ant-breadcrumb-separator {
+  display: inline-flex !important;
+  align-items: center !important;
+  color: var(--color-neutral-500) !important;
+}
+
+.ant-breadcrumb-link {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.ant-breadcrumb-item {
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* ============================================
    DATEPICKER
    ============================================ */
 /* RangePicker - Layout compacto (Figma-matched) */
