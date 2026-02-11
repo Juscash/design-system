@@ -4,6 +4,7 @@ import { Input } from "./Input";
 import { FormItem } from "../FormItem";
 import { Form } from "antd";
 import { shadow } from "../../theme";
+import { Search } from "lucide-react";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
@@ -219,5 +220,54 @@ export const Disabled: Story = {
   args: {
     defaultValue: "Value",
     disabled: true,
+  },
+};
+
+export const WithIcon: Story = {
+  name: "With Icon",
+  args: {
+    placeholder: "Search",
+    prefix: <Search size={16} />,
+  },
+};
+
+export const WithHelperText: Story = {
+  name: "With Helper Text",
+  args: {
+    placeholder: "Type something",
+  },
+  render: (args) => {
+    const { focus, hover, active, style, className, ...props } = args;
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible pseudo-focus"]
+      .filter(Boolean)
+      .join(" ");
+    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
+
+    return (
+      <FormItem label="Label" size={props.size} help="Helper text">
+        <Input {...props} style={style} className={mergedClassName} />
+      </FormItem>
+    );
+  },
+};
+
+export const WithIconAndHelperText: Story = {
+  name: "With Icon and Helper Text",
+  args: {
+    placeholder: "Search by name",
+    prefix: <Search size={16} />,
+  },
+  render: (args) => {
+    const { focus, hover, active, style, className, ...props } = args;
+    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible pseudo-focus"]
+      .filter(Boolean)
+      .join(" ");
+    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
+
+    return (
+      <FormItem label="Label" size={props.size} help="Helper text">
+        <Input {...props} style={style} className={mergedClassName} />
+      </FormItem>
+    );
   },
 };

@@ -1,6 +1,29 @@
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { describe, it, expect, vi } from "vitest";
 import { Avatar } from "./Avatar";
+
+Object.defineProperty(window, "matchMedia", {
+  writable: true,
+  value: vi.fn().mockImplementation((query: string) => ({
+    matches: false,
+    media: query,
+    onchange: null,
+    addListener: vi.fn(),
+    removeListener: vi.fn(),
+    addEventListener: vi.fn(),
+    removeEventListener: vi.fn(),
+    dispatchEvent: vi.fn(),
+  })),
+});
+
+class ResizeObserverMock {
+  observe() {}
+  unobserve() {}
+  disconnect() {}
+}
+
+// @ts-expect-error test environment polyfill
+global.ResizeObserver = ResizeObserverMock;
 
 describe("Avatar", () => {
   it("renders with initials", () => {
@@ -8,12 +31,19 @@ describe("Avatar", () => {
     expect(screen.getByText("CN")).toBeInTheDocument();
   });
 
-  it("renders image when src provided", () => {
-    const { container } = render(<Avatar src="https://example.com/img.jpg" />);
-    // AntD Avatar renders an img tag when src is valid (though loading might affect it, simplified check for structure)
-    // Note: AntD might render text if image load fails or hasn't happened.
-    // Usually easier to check if the component renders without crashing.
-    expect(container.firstChild).toBeInTheDocument();
+  it("renders image with cover fit when src is provided", () => {
+    render(<Avatar src="https://example.com/img.jpg" alt="avatar" />);
+
+    const img = screen.getByRole("img", { name: "avatar" });
+    expect(img).toHaveStyle({ objectFit: "cover" });
+    expect(img).toHaveAttribute("draggable", "false");
+  });
+
+  it("blocks text selection on root avatar", () => {
+    const { container } = render(<Avatar>CN</Avatar>);
+    const root = container.firstChild as HTMLElement;
+
+    expect(root).toHaveStyle({ userSelect: "none" });
   });
 
   it("applies small size styling", () => {

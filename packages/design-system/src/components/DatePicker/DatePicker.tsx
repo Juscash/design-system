@@ -105,8 +105,8 @@ export const RangePicker: React.FC<RangePickerProps> = ({
   return (
     <ConfigProvider theme={datePickerTheme}>
       <AntdRangePicker
-        className="range-picker-compact"
         {...rest}
+        className={`range-picker-compact ${rest.className || ""}`.trim()}
         allowClear={allowClear}
         locale={datePickerLocale}
         placeholder={placeholder}

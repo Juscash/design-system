@@ -447,21 +447,46 @@
 /* ============================================
    DATEPICKER
    ============================================ */
-.range-picker-compact.ant-picker {
+/* RangePicker - Layout compacto (Figma-matched) */
+.range-picker-compact.ant-picker.ant-picker-range {
   width: auto !important;
 }
 
-.range-picker-compact .ant-picker-input {
-  width: auto !important;
+.range-picker-compact.ant-picker.ant-picker-range .ant-picker-input {
+  width: 72px !important;
+  max-width: 72px !important;
+  flex: 0 0 72px !important;
 }
 
-.range-picker-compact .ant-picker-input>input {
-  width: 10ch !important;
+.range-picker-compact.ant-picker.ant-picker-range .ant-picker-input>input {
+  width: 100% !important;
+  max-width: 72px !important;
+  text-align: left !important;
 }
 
-.ant-picker-range-separator {
+/* Separador - hífen centralizado */
+.range-picker-compact.ant-picker.ant-picker-range .ant-picker-range-separator {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 0 !important;
   margin: 0 !important;
-  margin-right: 5px !important;
+  flex: 0 0 auto !important;
+  width: auto !important;
+}
+
+.range-picker-compact.ant-picker.ant-picker-range .ant-picker-range-separator .ant-picker-separator {
+  display: none !important;
+}
+
+.range-picker-compact.ant-picker.ant-picker-range .ant-picker-range-separator::after {
+  content: " - " !important;
+  color: var(--color-neutral-800) !important;
+  font-family: var(--font-primary) !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  line-height: 1.2 !important;
+  white-space: pre !important;
 }
 
 .ant-picker-month-btn {

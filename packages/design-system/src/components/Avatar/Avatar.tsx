@@ -11,15 +11,13 @@ export interface AvatarProps extends AntdAvatarProps {
   roundness?: AvatarRoundness;
 }
 
-export const Avatar: React.FC<AvatarProps> = ({ dsSize = "regular", roundness = "round", style, ...rest }) => {
+export const Avatar: React.FC<AvatarProps> = ({ dsSize = "regular", roundness = "round", style, src, alt, ...rest }) => {
   const sizeMap: Record<AvatarSize, number> = {
     small: 32,
     regular: 40,
   };
 
   const currentSize = sizeMap[dsSize];
-
-  const borderRadius = roundness === "round" ? "50%" : radius.md;
 
   const customStyle: React.CSSProperties = {
     ...style,
@@ -29,7 +27,31 @@ export const Avatar: React.FC<AvatarProps> = ({ dsSize = "regular", roundness = 
     backgroundColor: designSystemColors.neutral[200],
     color: designSystemColors.neutral[800],
     border: `1px solid ${designSystemColors.neutral[100]}`,
+    userSelect: "none",
+    WebkitUserSelect: "none",
+    MozUserSelect: "none",
+    msUserSelect: "none",
+    overflow: "hidden",
   };
+
+  const resolvedSrc =
+    typeof src === "string"
+      ? (
+        <img
+          src={src}
+          alt={alt}
+          draggable={false}
+          style={{
+            width: "100%",
+            height: "100%",
+            objectFit: "cover",
+            userSelect: "none",
+            WebkitUserSelect: "none",
+            pointerEvents: "none",
+          }}
+        />
+      )
+      : src;
 
   return (
     <ConfigProvider
@@ -49,7 +71,7 @@ export const Avatar: React.FC<AvatarProps> = ({ dsSize = "regular", roundness = 
         },
       }}
     >
-      <AntdAvatar size={currentSize} style={customStyle} {...rest} />
+      <AntdAvatar size={currentSize} style={customStyle} src={resolvedSrc} alt={alt} {...rest} />
     </ConfigProvider>
   );
 };
