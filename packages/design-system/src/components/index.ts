@@ -27,5 +27,6 @@ export * from "./Avatar";
 export * from "./Tooltip";
 export * from "./Carousel";
 export * from "./Drawer";
+export * from "./EmptyState";
 export * from "./Loading";
 export * from "./Skeleton";
