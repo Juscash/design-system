@@ -60,7 +60,7 @@ export function useNotification() {
       }}
     >
       <style>{`
-        /* ─── Base ─── */
+        /* ─── Base (Figma: p-16px, border neutral-300, radius-xl 8px) ─── */
         .ds-notification {
           padding: 16px !important;
           border: 1px solid ${designSystemColors.neutral[300]} !important;
@@ -72,57 +72,55 @@ export function useNotification() {
           content: none !important;
         }
 
-        /* ─── Layout: flex row com wrap ─── */
-        /* Ordem DOM: icon → title → description → actions             */
-        /* Reordenamos via CSS order para: icon | title | actions / description */
+        /* ─── Layout: CSS Grid para icon centralizar com ambas linhas de texto ─── */
+        /* Figma: [icon 20px center] [text-col: title+desc] [actions] ... [close 12px] */
         .ds-notification .ant-notification-notice-with-icon {
-          display: flex !important;
-          flex-direction: row !important;
-          flex-wrap: wrap !important;
-          align-items: center !important;
+          display: grid !important;
+          grid-template-columns: 20px 1fr auto !important;
+          grid-template-rows: auto auto !important;
+          column-gap: 12px !important;
+          row-gap: 0px !important;
+          align-items: start !important;
+          padding: 0 !important;
+          margin: 0 !important;
           padding-inline-end: 24px !important;
         }
 
-        /* ─── Ícone: static, row 1 ─── */
+        /* ─── Ícone: coluna 1, span 2 rows, centralizado verticalmente (Figma: 20px, items-center) ─── */
         .ds-notification .ant-notification-notice-with-icon .ant-notification-notice-icon {
           position: static !important;
-          order: 1 !important;
-          flex-shrink: 0 !important;
+          grid-column: 1 !important;
+          grid-row: 1 / 3 !important;
+          align-self: center !important;
           font-size: 20px !important;
           line-height: 1 !important;
+          width: 20px !important;
+          height: 20px !important;
           margin: 0 !important;
-          margin-inline-end: 12px !important;
+          padding: 0 !important;
           display: flex !important;
           align-items: center !important;
+          justify-content: center !important;
         }
 
-        /* ─── Título: row 1, expande ─── */
+        /* ─── Título: coluna 2, row 1 (Figma: 16px Inter Regular 400, line-height 1.2, #262626) ─── */
         .ds-notification .ant-notification-notice-with-icon .ant-notification-notice-title,
         .ds-notification .ant-notification-notice-with-icon .ant-notification-notice-message {
-          order: 2 !important;
-          flex: 1 !important;
-          min-width: 0 !important;
+          grid-column: 2 !important;
+          grid-row: 1 !important;
           font-size: 16px !important;
           font-weight: 400 !important;
           line-height: 1.2 !important;
           color: ${designSystemColors.neutral[800]} !important;
           margin: 0 !important;
           padding: 0 !important;
+          min-width: 0 !important;
         }
 
-        /* ─── Ações: row 1, direita (reordenado antes da description) ─── */
-        .ds-notification .ant-notification-notice-with-icon .ant-notification-notice-actions {
-          order: 3 !important;
-          flex-shrink: 0 !important;
-          margin: 0 !important;
-          margin-inline-start: 8px !important;
-          padding: 0 !important;
-        }
-
-        /* ─── Descrição: row 2, indentada (order 4 → vai para próxima linha) ─── */
+        /* ─── Descrição: coluna 2, row 2 (Figma: 13px Inter Regular 400, line-height 1.2, #6d6d6e, gap 4px) ─── */
         .ds-notification .ant-notification-notice-with-icon .ant-notification-notice-description {
-          order: 4 !important;
-          flex-basis: 100% !important;
+          grid-column: 2 !important;
+          grid-row: 2 !important;
           font-size: 13px !important;
           font-weight: 400 !important;
           line-height: 1.2 !important;
@@ -130,7 +128,15 @@ export function useNotification() {
           margin: 0 !important;
           margin-top: 4px !important;
           padding: 0 !important;
-          padding-inline-start: 32px !important;
+        }
+
+        /* ─── Ações: coluna 3, span 2 rows, centralizado verticalmente (Figma: items-center na row) ─── */
+        .ds-notification .ant-notification-notice-with-icon .ant-notification-notice-actions {
+          grid-column: 3 !important;
+          grid-row: 1 / 3 !important;
+          align-self: center !important;
+          margin: 0 !important;
+          padding: 0 !important;
         }
 
         /* ─── Sem ícone: título e descrição diretos ─── */
@@ -153,18 +159,48 @@ export function useNotification() {
           padding: 0 !important;
         }
 
-        /* ─── Botão fechar ─── */
+        /* ─── Botão fechar (Figma: 12px, centralizado verticalmente, right 16px) ─── */
         .ds-notification .ant-notification-notice-close {
-          top: 16px !important;
+          top: 50% !important;
+          transform: translateY(-50%) !important;
           inset-inline-end: 16px !important;
+          width: 12px !important;
+          height: 12px !important;
           color: ${designSystemColors.neutral[400]} !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+        }
+        .ds-notification .ant-notification-notice-close .ant-notification-notice-close-x {
+          font-size: 12px !important;
+          width: 12px !important;
+          height: 12px !important;
+          line-height: 12px !important;
+          display: flex !important;
+          align-items: center !important;
+          justify-content: center !important;
+        }
+        .ds-notification .ant-notification-notice-close svg {
+          width: 12px !important;
+          height: 12px !important;
         }
 
-        /* ─── Variante Error: bg levemente rosa, só o ícone em vermelho ─── */
-        .ds-notification-error {
-          background-color: ${designSystemColors.feedback.red[50]} !important;
+        /* ─── Variante Error (Figma: mesmo bg neutral-50, texto e ícone red-500) ─── */
+        .ds-notification.ds-notification-error .ant-notification-notice-with-icon .ant-notification-notice-icon {
+          color: ${designSystemColors.feedback.red[500]} !important;
         }
-        .ds-notification-error .ant-notification-notice-icon {
+        .ds-notification.ds-notification-error .ant-notification-notice-with-icon .ant-notification-notice-title,
+        .ds-notification.ds-notification-error .ant-notification-notice-with-icon .ant-notification-notice-message {
+          color: ${designSystemColors.feedback.red[500]} !important;
+        }
+        .ds-notification.ds-notification-error .ant-notification-notice-with-icon .ant-notification-notice-description {
+          color: ${designSystemColors.feedback.red[500]} !important;
+        }
+        .ds-notification.ds-notification-error .ant-notification-notice-title,
+        .ds-notification.ds-notification-error .ant-notification-notice-message {
+          color: ${designSystemColors.feedback.red[500]} !important;
+        }
+        .ds-notification.ds-notification-error .ant-notification-notice-description {
           color: ${designSystemColors.feedback.red[500]} !important;
         }
       `}</style>
