@@ -97,12 +97,14 @@ function getSizeTokens(size?: InputSize): {
 }
 
 const baseTokens: Partial<ComponentToken> = {
-  activeBorderColor: "transparent",
-  hoverBorderColor: "transparent",
+  // Figma: hover e focus mantêm borda neutral[300] (sem mudar cor)
+  activeBorderColor: designSystemColors.neutral[300],
+  hoverBorderColor: designSystemColors.neutral[300],
   activeShadow: shadow.focus,
   errorActiveShadow: shadow.focusError,
   warningActiveShadow: `0 0 0 3px rgba(134, 116, 0, 0.1)`,
-  activeBg: "white",
+  // Figma: background neutral[50] em todos os estados
+  activeBg: designSystemColors.neutral[50],
 };
 
 const InputComponent = (props: InputProps): ReturnType<React.FC<InputProps>> => {
@@ -123,7 +125,10 @@ const InputComponent = (props: InputProps): ReturnType<React.FC<InputProps>> => 
           colorError: designSystemColors.feedback.red[500],
           colorTextDisabled: designSystemColors.neutral[400],
           colorBgContainerDisabled: designSystemColors.neutral[50],
+          // Figma: background neutral[50] no estado padrão/focus
+          colorBgContainer: designSystemColors.neutral[50],
           colorTextPlaceholder: designSystemColors.neutral[500],
+          colorText: designSystemColors.neutral[800],
         },
       }}
     >

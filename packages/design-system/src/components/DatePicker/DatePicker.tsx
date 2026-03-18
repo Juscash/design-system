@@ -62,6 +62,8 @@ const DS_DATEPICKER_STYLE = `
     height: 32px !important;
     line-height: 32px !important;
     font-size: 13px !important;
+    font-weight: 400 !important;
+    color: ${designSystemColors.neutral[800]} !important;
     border-radius: 5px !important;
     display: flex !important;
     align-items: center !important;
@@ -85,11 +87,19 @@ const DS_DATEPICKER_STYLE = `
     font-weight: 600 !important;
   }
 
-  /* ── Header: mês primeiro, ano segundo (Figma: "Março 2026") ── */
+  /* ── Header: justify-between (Figma: [<] [Mês Ano] [>]) ── */
+  .ds-datepicker-popup .ant-picker-header {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+  }
+
+  /* ── Header view: mês primeiro, centralizado (Figma: "Março 2026") ── */
   .ds-datepicker-popup .ant-picker-header-view {
     display: flex !important;
     gap: 4px !important;
     align-items: center !important;
+    justify-content: center !important;
   }
   .ds-datepicker-popup .ant-picker-year-btn {
     order: 2 !important;
@@ -116,23 +126,73 @@ const DS_DATEPICKER_STYLE = `
     background: ${designSystemColors.neutral[200]} !important;
   }
 
-  /* ── Input focus/hover: neutral em vez de verde ── */
-  .ds-datepicker.ant-picker:hover {
-    border-color: ${designSystemColors.neutral[700]} !important;
+  /* ── Input base: 32px height, 8px radius, neutral[50] bg (Figma) ── */
+  .ds-datepicker.ant-picker {
+    height: 32px !important;
+    min-height: 32px !important;
+    border-radius: ${radius.xl}px !important;
+    background: ${designSystemColors.neutral[50]} !important;
+    border-color: ${designSystemColors.neutral[300]} !important;
+    padding: 0 12px !important;
   }
-  .ds-datepicker.ant-picker-focused {
-    border-color: ${designSystemColors.neutral[700]} !important;
+  .ds-datepicker.ant-picker .ant-picker-input > input {
+    font-family: "Inter", sans-serif !important;
+    font-size: 13px !important;
+    font-weight: 400 !important;
+    color: ${designSystemColors.neutral[800]} !important;
+    line-height: 1.2 !important;
+  }
+  .ds-datepicker.ant-picker .ant-picker-input > input::placeholder {
+    color: ${designSystemColors.neutral[500]} !important;
+  }
+
+  /* ── Input hover: borda NÃO muda (Figma: stays neutral[300]) ── */
+  .ds-datepicker.ant-picker:hover {
+    border-color: ${designSystemColors.neutral[300]} !important;
+  }
+
+  /* ── Input focus: shadow ring neutral[300], borda NÃO muda (Figma) ── */
+  .ds-datepicker.ant-picker-focused,
+  .ds-datepicker.ant-picker:focus-within {
+    border-color: ${designSystemColors.neutral[300]} !important;
     box-shadow: ${shadow.focus} !important;
+  }
+
+  /* ── Esconder link "Hoje" no footer (Figma: não existe) ── */
+  .ds-datepicker-popup .ant-picker-today-btn {
+    display: none !important;
+  }
+
+  /* ── Esconder active bar do RangePicker (Figma: não existe) ── */
+  .ds-datepicker.ant-picker .ant-picker-active-bar {
+    display: none !important;
+  }
+
+  /* ── Popup: gap 16px entre header e grid (Figma: gap var(--4, 16px)) ── */
+  .ds-datepicker-popup .ant-picker-body {
+    padding: 0 16px 16px !important;
+  }
+  .ds-datepicker-popup .ant-picker-header {
+    padding: 16px 16px 0 !important;
+    border-bottom: none !important;
+  }
+
+  /* ── Dias disabled (mês anterior/próximo): neutral[400] (Figma: #a3a3a3) ── */
+  .ds-datepicker-popup .ant-picker-cell-disabled .ant-picker-cell-inner {
+    color: ${designSystemColors.neutral[400]} !important;
+    opacity: 1 !important;
   }
 `;
 
 function injectDatePickerStyle() {
   if (typeof document === "undefined") return;
-  if (document.getElementById("ds-datepicker-style")) return;
-  const style = document.createElement("style");
-  style.id = "ds-datepicker-style";
+  let style = document.getElementById("ds-datepicker-style") as HTMLStyleElement | null;
+  if (!style) {
+    style = document.createElement("style");
+    style.id = "ds-datepicker-style";
+    document.head.appendChild(style);
+  }
   style.textContent = DS_DATEPICKER_STYLE;
-  document.head.appendChild(style);
 }
 
 const navButtonStyle = {
@@ -160,7 +220,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
       <AntdDatePicker
         {...rest}
         className={`ds-datepicker ${className || ""}`.trim()}
-        popupClassName="ds-datepicker-popup"
+        classNames={{ popup: { root: "ds-datepicker-popup" } }}
         locale={datePickerLocale}
         allowClear={allowClear}
         placeholder={placeholder}
@@ -193,7 +253,7 @@ export const RangePicker: React.FC<RangePickerProps> = ({
       <AntdRangePicker
         {...rest}
         className={`ds-datepicker ${className || ""}`.trim()}
-        popupClassName="ds-datepicker-popup"
+        classNames={{ popup: { root: "ds-datepicker-popup" } }}
         locale={datePickerLocale}
         allowClear={allowClear}
         placeholder={placeholder}

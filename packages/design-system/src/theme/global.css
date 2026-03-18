@@ -866,6 +866,18 @@
   border-color: var(--color-feedback-red-500) !important;
 }
 
+/* Disabled: borda neutral[200] (Figma: border/disabled = #e5e5e5) */
+.ant-input-outlined.ant-input-disabled,
+.ant-input-outlined[disabled] {
+  border-color: var(--color-neutral-200) !important;
+}
+
+/* Disabled: label também fica neutral[400] (Figma: text/disabled) */
+.ant-form-item:has(.ant-input-disabled) .ant-form-item-label label,
+.ant-form-item:has([disabled]) .ant-form-item-label label {
+  color: var(--color-neutral-400) !important;
+}
+
 /* ============================================
    CARD
    ============================================ */
