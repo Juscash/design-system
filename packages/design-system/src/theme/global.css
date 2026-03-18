@@ -920,13 +920,12 @@
    MULTISELECT / SELECT
    ============================================ */
 
-/* Chips: bg transparente, border neutral[300], radius 8px */
-.ant-select-multiple .ant-select-selection-item,
-.ant-select-multiple .ant-select-content-item {
+/* Chips (inner span): bg transparente, border neutral[300], radius 8px */
+.ant-select-multiple .ant-select-selection-item {
   background: transparent !important;
   border: 1px solid var(--color-neutral-300) !important;
   border-radius: 8px !important;
-  min-height: 24px !important;
+  height: 24px !important;
   padding: 2px 8px !important;
   font-size: 13px !important;
   color: var(--color-neutral-800) !important;
@@ -936,21 +935,37 @@
   gap: 4px !important;
 }
 
-/* Chip close icon */
-.ant-select-multiple .ant-select-selection-item-remove,
+/* Wrapper (v6 ant-select-content-item): remove border, keep transparent */
+.ant-select-multiple .ant-select-content-item {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+/* Input/suffix wrapper: no border */
 .ant-select-multiple .ant-select-content-item-suffix {
+  border: none !important;
+  background: transparent !important;
+}
+
+/* Chip close icon */
+.ant-select-multiple .ant-select-selection-item-remove {
   font-size: 12px !important;
   color: var(--color-neutral-800) !important;
   display: flex !important;
   align-items: center !important;
 }
 
-/* Chip counter (+N) */
-.ant-select-multiple .ant-select-selection-item.ant-select-selection-item-disabled {
+/* Rest counter (+N): hide when 0 */
+.ant-select-multiple .ant-select-content-item-rest .ant-select-selection-item {
   background: transparent !important;
   border: 1px solid var(--color-neutral-300) !important;
   color: var(--color-neutral-800) !important;
-  opacity: 1 !important;
+}
+
+/* Hide "+0" rest counter */
+.ant-select-multiple .ant-select-content-item-rest:has(.ant-select-selection-item-content:empty) {
+  display: none !important;
 }
 
 /* Dropdown: border + shadow.m conforme Figma */
@@ -961,13 +976,15 @@
 }
 
 /* Focus state: shadow.focus */
-.ant-select-focused:not(.ant-select-disabled):not(.ant-select-status-error) .ant-select-selector {
+.ant-select.ant-select-focused:not(.ant-select-disabled):not(.ant-select-status-error) .ant-select-selector,
+.ant-select.ant-select-outlined.ant-select-focused:not(.ant-select-disabled):not(.ant-select-status-error) .ant-select-selector {
   box-shadow: var(--shadow-focus) !important;
   border-color: transparent !important;
 }
 
 /* Error focus state: shadow.focus-error */
-.ant-select-focused.ant-select-status-error:not(.ant-select-disabled) .ant-select-selector {
+.ant-select.ant-select-focused.ant-select-status-error:not(.ant-select-disabled) .ant-select-selector,
+.ant-select.ant-select-outlined.ant-select-focused.ant-select-status-error:not(.ant-select-disabled) .ant-select-selector {
   box-shadow: var(--shadow-focus-error) !important;
   border-color: transparent !important;
 }
