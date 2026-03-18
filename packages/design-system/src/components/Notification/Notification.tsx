@@ -6,14 +6,14 @@ import { designSystemColors, radius, spacing, shadow } from "../../theme";
 function getNotificationTokens() {
   return {
     zIndexPopup: 1050,
-    width: 384,
+    width: 356,
     paddingContentHorizontalLG: spacing[4], // 16px
     colorBgElevated: designSystemColors.neutral[50],
-    colorTextHeading: designSystemColors.neutral[900],
-    colorText: designSystemColors.neutral[600],
-    borderRadiusLG: radius["2xl"], // 12px
-    boxShadow: shadow.l,
-    marginXS: spacing[2],
+    colorTextHeading: designSystemColors.neutral[800],
+    colorText: designSystemColors.neutral[500],
+    borderRadiusLG: radius.xl, // 8px
+    boxShadow: shadow.m,
+    marginXS: spacing[1], // 4px gap between title/desc
   };
 }
 
@@ -35,11 +35,11 @@ export function useNotification() {
             color: designSystemColors.feedback.red[500],
           }
         : {};
-      const customClassName = isError ? "ant-notification-error-custom" : "";
+      const customClassName = isError ? "ds-notification-error" : "";
       api[type]({
         ...args,
         style: { ...customStyle, ...args.style },
-        className: `${customClassName} ${args.className || ""}`,
+        className: `ds-notification ${customClassName} ${args.className || ""}`.trim(),
       });
     };
     return {
@@ -57,28 +57,55 @@ export function useNotification() {
         components: {
           Notification: {
             ...getNotificationTokens(),
-            // Ensure icon sizes if token available, or handle via CSS
           },
         },
       }}
     >
-      {/* Global styles for specific overrides not covered by tokens */}
       <style>{`
-        .ant-notification-notice-icon {
-            font-size: 20px !important;
-            margin-top: 4px; /* Minimal adjustment similar to original request */
+        /* Notification: border, icon alignment, font sizes conforme Figma */
+        .ds-notification {
+          border: 1px solid ${designSystemColors.neutral[300]} !important;
+          border-radius: ${radius.xl}px !important;
+          padding: ${spacing[4]}px !important;
         }
-        
 
-        .ant-notification-error-custom .ant-notification-notice-message, 
-        .ant-notification-error-custom .ant-notification-notice-title { 
-            color: ${designSystemColors.feedback.red[900]} !important;
+        .ds-notification .ant-notification-notice-icon {
+          font-size: 20px !important;
+          margin-top: 0 !important;
+          display: flex !important;
+          align-items: center !important;
         }
-        .ant-notification-error-custom .ant-notification-notice-description {
-            color: ${designSystemColors.feedback.red[900]} !important;
+
+        .ds-notification .ant-notification-notice-message,
+        .ds-notification .ant-notification-notice-title {
+          font-size: 16px !important;
+          color: ${designSystemColors.neutral[800]} !important;
+          line-height: 1.2 !important;
+          margin: 0 !important;
         }
-        .ant-notification-error-custom .ant-notification-notice-icon {
-             color: ${designSystemColors.feedback.red[500]} !important;
+
+        .ds-notification .ant-notification-notice-description {
+          font-size: 13px !important;
+          color: ${designSystemColors.neutral[500]} !important;
+          line-height: 1.2 !important;
+          margin-top: 4px !important;
+        }
+
+        .ds-notification .ant-notification-notice-close {
+          font-size: 12px !important;
+          color: ${designSystemColors.neutral[800]} !important;
+        }
+
+        /* Error variant */
+        .ds-notification-error .ant-notification-notice-message,
+        .ds-notification-error .ant-notification-notice-title {
+          color: ${designSystemColors.feedback.red[900]} !important;
+        }
+        .ds-notification-error .ant-notification-notice-description {
+          color: ${designSystemColors.feedback.red[900]} !important;
+        }
+        .ds-notification-error .ant-notification-notice-icon {
+          color: ${designSystemColors.feedback.red[500]} !important;
         }
       `}</style>
       {contextHolder}
