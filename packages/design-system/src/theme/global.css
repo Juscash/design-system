@@ -915,3 +915,59 @@
 .ant-collapse-header:focus-visible .ant-collapse-header-text {
   color: var(--color-neutral-50) !important;
 }
+
+/* ============================================
+   MULTISELECT / SELECT
+   ============================================ */
+
+/* Chips: bg transparente, border neutral[300], radius 8px */
+.ant-select-multiple .ant-select-selection-item,
+.ant-select-multiple .ant-select-content-item {
+  background: transparent !important;
+  border: 1px solid var(--color-neutral-300) !important;
+  border-radius: 8px !important;
+  min-height: 24px !important;
+  padding: 2px 8px !important;
+  font-size: 13px !important;
+  color: var(--color-neutral-800) !important;
+  line-height: 1.2 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+/* Chip close icon */
+.ant-select-multiple .ant-select-selection-item-remove,
+.ant-select-multiple .ant-select-content-item-suffix {
+  font-size: 12px !important;
+  color: var(--color-neutral-800) !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* Chip counter (+N) */
+.ant-select-multiple .ant-select-selection-item.ant-select-selection-item-disabled {
+  background: transparent !important;
+  border: 1px solid var(--color-neutral-300) !important;
+  color: var(--color-neutral-800) !important;
+  opacity: 1 !important;
+}
+
+/* Dropdown: border + shadow.m conforme Figma */
+.ant-select-dropdown {
+  border: 1px solid var(--color-neutral-300) !important;
+  box-shadow: var(--shadow-m) !important;
+  border-radius: 8px !important;
+}
+
+/* Focus state: shadow.focus */
+.ant-select-focused:not(.ant-select-disabled):not(.ant-select-status-error) .ant-select-selector {
+  box-shadow: var(--shadow-focus) !important;
+  border-color: transparent !important;
+}
+
+/* Error focus state: shadow.focus-error */
+.ant-select-focused.ant-select-status-error:not(.ant-select-disabled) .ant-select-selector {
+  box-shadow: var(--shadow-focus-error) !important;
+  border-color: transparent !important;
+}

@@ -150,6 +150,7 @@ export function Select(props: SelectProps): React.ReactElement {
         status={status}
         maxTagCount={maxTagCount}
         className={className}
+        defaultValue={defaultValue}
         suffixIcon={suffixIcon ?? <ChevronsUpDown size={16} />}
         menuItemSelectedIcon={isMultiple ? null : <Check size={16} color={designSystemColors.neutral[800]} />}
         showSearch={false}
