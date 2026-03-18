@@ -25,25 +25,25 @@ export const Carousel: React.FC<CarouselProps> = ({ children, showArrows = true,
       style={{
         position: "absolute",
         top: "50%",
-        transform: "translateY(-50%)",
-        [direction]: -40,
+        transform: "translateY(calc(-50% - 15px))",
+        [direction]: -32,
         zIndex: 10,
-        backgroundColor: designSystemColors.neutral[50],
-        border: `1px solid ${designSystemColors.neutral[200]}`,
+        backgroundColor: "transparent",
+        border: `1px solid ${designSystemColors.neutral[300]}`,
         borderRadius: radius.md,
-        width: 32,
-        height: 32,
+        width: 24,
+        height: 24,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
         cursor: "pointer",
-        boxShadow: "0px 1px 2px 0px rgba(0, 0, 0, 0.05)",
+        padding: "4px 8px",
         color: designSystemColors.neutral[800],
       }}
     >
       {direction === "left" ?
-        <ChevronLeft size={16} />
-      : <ChevronRight size={16} />}
+        <ChevronLeft size={14} />
+      : <ChevronRight size={14} />}
     </button>
   );
 
@@ -62,7 +62,7 @@ export const Carousel: React.FC<CarouselProps> = ({ children, showArrows = true,
       <div
         style={{
           position: "relative",
-          margin: "0 50px",
+          margin: "0 40px",
           paddingBottom: "30px",
         }}
       >
@@ -80,7 +80,11 @@ export const Carousel: React.FC<CarouselProps> = ({ children, showArrows = true,
           background: transparent;
           overflow: hidden;
         }
-        
+
+        .ant-carousel .slick-slide > div {
+          padding: 0 8px;
+        }
+
         .ant-carousel .slick-dots {
           position: absolute;
           bottom: -25px !important;
@@ -89,18 +93,22 @@ export const Carousel: React.FC<CarouselProps> = ({ children, showArrows = true,
           display: flex !important;
           justify-content: center;
           align-items: center;
-          padding: 0;
-          margin: 0;
+          padding: 4px;
+          margin: 0 auto;
           list-style: none;
+          background: rgba(255, 255, 255, 0.5);
+          border-radius: ${radius.xl}px;
+          width: fit-content;
+          gap: 4px;
         }
 
         .ant-carousel .slick-dots li {
           width: 6px;
           height: 6px;
-          margin: 0 4px;
+          margin: 0;
           display: inline-block;
         }
-        
+
         .ant-carousel .slick-dots li button {
           width: 6px;
           height: 6px;
@@ -110,11 +118,11 @@ export const Carousel: React.FC<CarouselProps> = ({ children, showArrows = true,
           transition: all 0.3s;
           border: none;
         }
-        
+
         .ant-carousel .slick-dots li.slick-active {
           width: 24px;
         }
-        
+
         .ant-carousel .slick-dots li.slick-active button {
           width: 24px;
           border-radius: 4px;
