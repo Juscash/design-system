@@ -2,6 +2,7 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Alert } from "./Alert";
 import { Button } from "../Button";
+import { CircleCheck, AlertCircle } from "lucide-react";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
@@ -137,36 +138,49 @@ export const Default: Story = {
   },
 };
 
-export const SuccessExample: Story = {
+// Figma Example 1: neutral + check icon + closable (X)
+export const NeutralWithClose: Story = {
+  name: "Neutral com ícone e fechar",
   args: {
     message: "Configurações salvas com sucesso.",
-    type: "success",
+    type: "neutral",
     showIcon: true,
+    icon: <CircleCheck size={16} />,
+    closable: true,
   },
 };
 
-export const InfoExample: Story = {
+// Figma Example 2: neutral + circle-alert icon
+export const NeutralWithAlert: Story = {
+  name: "Neutral com ícone alerta",
   args: {
     message: "Seu plano expirará em 3 dias. Considere renová-lo para evitar interrupções.",
-    type: "info",
+    type: "neutral",
     showIcon: true,
+    icon: <AlertCircle size={16} />,
   },
 };
 
-export const ErrorExample: Story = {
+// Figma Example 3: error + circle-alert + title + description
+export const ErrorWithDescription: Story = {
+  name: "Error com descrição",
   args: {
     message: "Falha ao salvar os dados.",
     description: "Tente novamente mais tarde.",
     type: "error",
     showIcon: true,
+    icon: <AlertCircle size={16} />,
   },
 };
 
-export const WithActionExample: Story = {
+// Figma Example 4: neutral + check icon + button action
+export const NeutralWithAction: Story = {
+  name: "Neutral com ação",
   args: {
     message: "Arquivo excluído com sucesso.",
     type: "neutral",
-    action: <Button size="small">Desfazer</Button>,
     showIcon: true,
+    icon: <CircleCheck size={16} />,
+    action: <Button size="m" type="outline" style={{ backgroundColor: "transparent" }}>Desfazer</Button>,
   },
 };

@@ -26,7 +26,8 @@ function getNeutralTokens(): Record<string, any> {
     colorTextCount: designSystemColors.neutral[500],
     colorTextHeading: designSystemColors.neutral[800],
     colorText: designSystemColors.neutral[500],
-    colorIcon: designSystemColors.neutral[800], // Explicit icon color if needed
+    colorIcon: designSystemColors.neutral[800],
+    colorInfo: designSystemColors.neutral[800],
   };
 }
 
@@ -95,11 +96,14 @@ export function Alert(props: AlertProps): React.ReactElement {
 
   const resolvedIcon = rest.icon || (finalShowIcon ? getDefaultIcon() : null);
 
+  const iconColorStyle = type === "neutral" ? { color: designSystemColors.neutral[800] } : {};
+
   const iconNode =
-    hasDescription && resolvedIcon && React.isValidElement(resolvedIcon) ?
+    resolvedIcon && React.isValidElement(resolvedIcon) ?
       React.cloneElement(resolvedIcon as React.ReactElement<any>, {
         style: {
-          marginTop: 4,
+          ...(hasDescription ? { marginTop: 4 } : {}),
+          ...iconColorStyle,
           ...((resolvedIcon as React.ReactElement<any>).props?.style || {}),
         },
       })
@@ -130,11 +134,12 @@ export function Alert(props: AlertProps): React.ReactElement {
         components: {
           Alert: {
             ...getVariantTokens(),
-            paddingContentVertical: spacing[2],
+            paddingContentVertical: spacing[4],
             paddingContentHorizontal: spacing[4],
             borderRadiusLG: radius.xl,
             withDescriptionIconSize: 16,
-            defaultPadding: `${spacing[2]}px ${spacing[4]}px`,
+            defaultPadding: `${spacing[4]}px ${spacing[4]}px`,
+            withDescriptionPadding: `${spacing[4]}px ${spacing[4]}px`,
           },
         },
       }}
