@@ -14,8 +14,6 @@ type DatePickerStoryProps = React.ComponentProps<typeof DatePicker> & {
 };
 
 type RangePickerStoryProps = React.ComponentProps<typeof RangePicker> & {
-  hover?: boolean;
-  active?: boolean;
   focus?: boolean;
 };
 
@@ -82,21 +80,9 @@ function Example() {
     },
   },
   args: {
-    hover: false,
-    active: false,
     focus: false,
   },
   argTypes: {
-    hover: {
-      control: "boolean",
-      description: "Força o estado hover",
-      table: { category: "Pseudo States" },
-    },
-    active: {
-      control: "boolean",
-      description: "Força o estado active",
-      table: { category: "Pseudo States" },
-    },
     focus: {
       control: "boolean",
       description: "Força o estado focus",
@@ -104,10 +90,8 @@ function Example() {
     },
   },
   render: (args) => {
-    const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
-      .filter(Boolean)
-      .join(" ");
+    const { focus, className, ...props } = args;
+    const pseudoClasses = [focus && "pseudo-focus pseudo-focus-all"].filter(Boolean).join(" ");
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
 
     return <DatePicker {...props} className={mergedClassName} />;
@@ -121,10 +105,8 @@ type RangePickerStory = StoryObj<RangePickerStoryProps>;
 
 export const Default: DatePickerStory = {
   render: (args) => {
-    const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
-      .filter(Boolean)
-      .join(" ");
+    const { focus, className, ...props } = args;
+    const pseudoClasses = [focus && "pseudo-focus"].filter(Boolean).join(" ");
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
 
     return <DatePicker {...props} className={mergedClassName} />;
@@ -136,10 +118,8 @@ export const WithPlaceholder: DatePickerStory = {
     placeholder: "Selecione uma data",
   },
   render: (args) => {
-    const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
-      .filter(Boolean)
-      .join(" ");
+    const { focus, className, ...props } = args;
+    const pseudoClasses = [focus && "pseudo-focus"].filter(Boolean).join(" ");
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
 
     return <DatePicker {...props} className={mergedClassName} />;
@@ -148,15 +128,11 @@ export const WithPlaceholder: DatePickerStory = {
 
 export const Range: RangePickerStory = {
   args: {
-    hover: false,
-    active: false,
     focus: false,
   },
   render: (args) => {
-    const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
-      .filter(Boolean)
-      .join(" ");
+    const { focus, className, ...props } = args;
+    const pseudoClasses = [focus && "pseudo-focus"].filter(Boolean).join(" ");
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
 
     return <RangePicker {...props} className={mergedClassName} />;
@@ -166,15 +142,11 @@ export const Range: RangePickerStory = {
 export const RangeWithPlaceholder: RangePickerStory = {
   args: {
     placeholder: ["Data inicial", "Data final"],
-    hover: false,
-    active: false,
     focus: false,
   },
   render: (args) => {
-    const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
-      .filter(Boolean)
-      .join(" ");
+    const { focus, className, ...props } = args;
+    const pseudoClasses = [focus && "pseudo-focus"].filter(Boolean).join(" ");
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
 
     return <RangePicker {...props} className={mergedClassName} />;

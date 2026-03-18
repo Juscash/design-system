@@ -97,7 +97,7 @@ DatePicker.displayName = "DatePicker";
 
 export const RangePicker: React.FC<RangePickerProps> = ({
   allowClear = false,
-  placeholder = ["__/__/____", "__/__/____"],
+  placeholder = ["Data inicial", "Data final"],
   format = "DD/MM/YYYY",
   inputReadOnly = true,
   ...rest
