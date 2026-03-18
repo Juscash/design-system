@@ -12,6 +12,9 @@ type CleanAntdProps = {
 export type ModalProps = CleanAntdProps & {
   /**
    * Tamanho do modal seguindo o Design System JusCash
+   * - s: 400px
+   * - m: 640px (padrão desktop scrollable)
+   * - l: 900px (desktop large)
    * @default "m"
    */
   dsSize?: ModalSize;
@@ -23,8 +26,8 @@ export type ModalProps = CleanAntdProps & {
 
 const SIZE_MAP: Record<ModalSize, number> = {
   s: 400,
-  m: 520,
-  l: 720,
+  m: 640,
+  l: 900,
 };
 
 function getModalTokens(): Record<string, unknown> {
@@ -33,15 +36,15 @@ function getModalTokens(): Record<string, unknown> {
     headerBg: designSystemColors.neutral[50],
     footerBg: designSystemColors.neutral[50],
 
-    borderRadiusLG: radius.xl,
+    borderRadiusLG: radius["3xl"],
 
     paddingLG: 24,
-    paddingMD: 16,
+    paddingMD: 24,
     paddingContentHorizontalLG: 24,
 
-    titleFontSize: 16,
-    titleLineHeight: 1.5,
-    titleColor: designSystemColors.neutral[900],
+    titleFontSize: 20,
+    titleLineHeight: 1.2,
+    titleColor: designSystemColors.neutral[800],
 
     closeBtnHoverBg: designSystemColors.neutral[100],
     closeBtnActiveBg: designSystemColors.neutral[200],
@@ -60,25 +63,28 @@ export function Modal(props: ModalProps): React.ReactElement {
   const customStyles: any = {
     ...safeStyles,
     content: {
-      boxShadow: shadow.xl,
-      borderRadius: radius.xl,
+      boxShadow: shadow.l,
+      border: `1px solid ${designSystemColors.neutral[300]}`,
+      borderRadius: radius["3xl"],
       ...safeStyles?.content,
     },
     header: {
-      borderBottom: `1px solid ${designSystemColors.neutral[200]}`,
-      paddingBottom: 16,
+      paddingBottom: 0,
       marginBottom: 0,
       ...safeStyles?.header,
     },
     body: {
-      padding: 24,
+      padding: 0,
       ...safeStyles?.body,
     },
     footer: {
-      borderTop: `1px solid ${designSystemColors.neutral[200]}`,
-      paddingTop: 16,
+      paddingTop: 0,
       marginTop: 0,
       ...safeStyles?.footer,
+    },
+    mask: {
+      backgroundColor: "rgba(0, 0, 0, 0.45)",
+      ...safeStyles?.mask,
     },
   };
 
@@ -90,7 +96,12 @@ export function Modal(props: ModalProps): React.ReactElement {
         },
       }}
     >
-      <AntdModal {...rest} width={resolvedWidth} styles={customStyles} />
+      <AntdModal
+        {...rest}
+        width={resolvedWidth}
+        styles={customStyles}
+        className={`ds-modal ${rest.className || ""}`}
+      />
     </ConfigProvider>
   );
 }
