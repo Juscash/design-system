@@ -1,11 +1,22 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
-import { Avatar, AvatarGroup } from "./Avatar";
+import type { Meta, StoryObj } from "@storybook/react-vite";
+import React from "react";
+import { Avatar, AvatarGroup, AvatarMenu } from "./Avatar";
+import { User } from "lucide-react";
+
+const FIGMA_URL =
+  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4080-9746&m=dev";
+
+const SAMPLE_IMAGE = "https://i.pravatar.cc/150?u=a042581f4e29026024d";
 
 const meta: Meta<typeof Avatar> = {
   title: "Components/Avatar",
   component: Avatar,
   parameters: {
     layout: "centered",
+    design: {
+      type: "figma",
+      url: FIGMA_URL,
+    },
     docs: {
       description: {
         component:
@@ -47,78 +58,96 @@ export const Default: Story = {
   },
 };
 
-export const Picture: Story = {
-  args: {
-    src: "https://i.pravatar.cc/150?u=a042581f4e29026024d",
-    dsSize: "regular",
-    roundness: "round",
-  },
+// ─── Figma: grid de variantes ────────────────────────────────────────────────
+
+export const VariantsGrid: Story = {
+  name: "Variantes (Figma)",
+  render: () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      {/* Regular round */}
+      <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+        <Avatar dsSize="regular" roundness="round">CN</Avatar>
+        <Avatar dsSize="regular" roundness="round" icon={<User size={20} />} />
+        <Avatar dsSize="regular" roundness="round" src={SAMPLE_IMAGE} />
+      </div>
+      {/* Small round */}
+      <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+        <Avatar dsSize="small" roundness="round">CN</Avatar>
+        <Avatar dsSize="small" roundness="round" icon={<User size={16} />} />
+        <Avatar dsSize="small" roundness="round" src={SAMPLE_IMAGE} />
+      </div>
+      {/* Regular roundrect */}
+      <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+        <Avatar dsSize="regular" roundness="roundrect">CN</Avatar>
+        <Avatar dsSize="regular" roundness="roundrect" icon={<User size={20} />} />
+        <Avatar dsSize="regular" roundness="roundrect" src={SAMPLE_IMAGE} />
+      </div>
+      {/* Small roundrect */}
+      <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
+        <Avatar dsSize="small" roundness="roundrect">CN</Avatar>
+        <Avatar dsSize="small" roundness="roundrect" icon={<User size={16} />} />
+        <Avatar dsSize="small" roundness="roundrect" src={SAMPLE_IMAGE} />
+      </div>
+    </div>
+  ),
 };
 
-export const Small: Story = {
-  args: {
-    children: "CN",
-    dsSize: "small",
-    roundness: "round",
-  },
-};
+// ─── Figma: Avatar stack ──────────────────────────────────────────────────────
 
-export const RoundRect: Story = {
-  args: {
-    children: "CN",
-    dsSize: "regular",
-    roundness: "roundrect",
-  },
-};
-
-export const Group: Story = {
+export const StackSmall: Story = {
+  name: "Stack — Small",
   render: () => (
     <AvatarGroup>
-      <Avatar>CN</Avatar>
-      <Avatar>JS</Avatar>
-      <Avatar>KT</Avatar>
-      <Avatar style={{ backgroundColor: "#f56a00" }}>K</Avatar>
+      <Avatar dsSize="small" roundness="round">CN</Avatar>
+      <Avatar dsSize="small" roundness="round">JS</Avatar>
+      <Avatar dsSize="small" roundness="round">KT</Avatar>
     </AvatarGroup>
   ),
 };
 
-export const FigmaExample: Story = {
+export const StackRegular: Story = {
+  name: "Stack — Regular",
   render: () => (
-    <div style={{ display: "flex", gap: 40 }}>
-      {/* Small Round */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-        <Avatar dsSize="small" roundness="round">
-          CN
-        </Avatar>
-        <Avatar
-          dsSize="small"
-          roundness="round"
-          src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
-        />
-      </div>
+    <AvatarGroup>
+      <Avatar dsSize="regular" roundness="round">CN</Avatar>
+      <Avatar dsSize="regular" roundness="round">JS</Avatar>
+      <Avatar dsSize="regular" roundness="round">KT</Avatar>
+    </AvatarGroup>
+  ),
+};
 
-      {/* Regular Round */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-        <Avatar dsSize="regular" roundness="round">
-          CN
-        </Avatar>
-        <Avatar
-          dsSize="regular"
-          roundness="round"
-          src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
-        />
-      </div>
+// ─── Figma: Avatar menu (dropdown trigger) ────────────────────────────────────
 
-      {/* Regular RoundRect */}
-      <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-        <Avatar dsSize="regular" roundness="roundrect">
-          CN
-        </Avatar>
-        <Avatar
-          dsSize="regular"
-          roundness="roundrect"
-          src="https://i.pravatar.cc/150?u=a042581f4e29026024d"
-        />
+export const MenuDefault: Story = {
+  name: "Menu — Default",
+  render: () => <AvatarMenu state="default">CN</AvatarMenu>,
+};
+
+export const MenuFocus: Story = {
+  name: "Menu — Focus",
+  render: () => <AvatarMenu state="focus">CN</AvatarMenu>,
+};
+
+export const MenuActive: Story = {
+  name: "Menu — Active",
+  render: () => <AvatarMenu state="active">CN</AvatarMenu>,
+};
+
+export const MenuAllStates: Story = {
+  name: "Menu — Todos os estados (Figma)",
+  render: () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+        <span style={{ width: 60, fontSize: 12, color: "#6d6d6e" }}>Default</span>
+        <AvatarMenu state="default">CN</AvatarMenu>
+      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+        <span style={{ width: 60, fontSize: 12, color: "#6d6d6e" }}>Focus</span>
+        <AvatarMenu state="focus">CN</AvatarMenu>
+      </div>
+      <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
+        <span style={{ width: 60, fontSize: 12, color: "#6d6d6e" }}>Active</span>
+        <AvatarMenu state="active">CN</AvatarMenu>
       </div>
     </div>
   ),
