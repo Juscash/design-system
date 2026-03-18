@@ -7,13 +7,7 @@ import { Figma } from "@storybook/addon-designs/blocks";
 
 const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4069-6522&m=dev";
 
-type CardStoryProps = React.ComponentProps<typeof Card> & {
-  hover?: boolean;
-  active?: boolean;
-  focus?: boolean;
-};
-
-const meta: Meta<CardStoryProps> = {
+const meta: Meta<typeof Card> = {
   title: "Components/Card",
   component: Card,
   parameters: {
@@ -30,17 +24,12 @@ Componente Card baseado no [Ant Design Card](https://ant.design/components/card)
 ### Props:
 - **Extended (Ant Design)**: Suporta as propriedades padrão do AntD Card.
 - **Custom (Juscash)**:
-  - \`clickable\`: Quando verdadeiro, habilita o efeito de hover e altera o cursor para pointer, indicando interatividade.
+  - \`clickable\`: Quando verdadeiro, habilita efeito de hover (shadow.m), cursor pointer e estado de focus (focus ring).
 
-### Como usar:
-
-\`\`\`tsx
-import { Card } from "@juscash/design-system";
-
-function Example() {
-  return <Card title="Card Title">Card content</Card>;
-}
-\`\`\`
+### Estados (apenas para cards clicáveis):
+- **Default**: shadow.xs (sutil)
+- **Hover**: shadow.m (elevação média)
+- **Focus**: focus ring (3px neutral[300])
 `,
       },
       page: () => (
@@ -61,7 +50,7 @@ function Example() {
                 fontWeight: "bold",
               }}
             >
-              🎨 Figma Spec
+              Figma Spec
             </h3>
             <Figma showLink url={FIGMA_URL} height="400px" />
           </div>
@@ -72,45 +61,18 @@ function Example() {
     },
   },
   tags: ["autodocs"],
-  args: {
-    hover: false,
-    active: false,
-    focus: false,
-  },
   argTypes: {
     clickable: {
       control: "boolean",
-      description: "Habilita estado de hover e cursor pointer",
+      description: "Habilita estados hover/focus e cursor pointer",
     },
-    hover: {
-      control: "boolean",
-      description: "Força o estado hover",
-      table: { category: "Pseudo States" },
-    },
-    active: {
-      control: "boolean",
-      description: "Força o estado active",
-      table: { category: "Pseudo States" },
-    },
-    focus: {
-      control: "boolean",
-      description: "Força o estado focus",
-      table: { category: "Pseudo States" },
-    },
-  },
-  render: (args) => {
-    const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
-      .filter(Boolean)
-      .join(" ");
-    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
-
-    return <Card {...props} className={mergedClassName} />;
   },
 };
 
 export default meta;
-type Story = StoryObj<CardStoryProps>;
+type Story = StoryObj<typeof Card>;
+
+// ─── Default (apenas conteúdo) ───────────────────────────────────────────────
 
 export const Default: Story = {
   args: {
@@ -118,27 +80,240 @@ export const Default: Story = {
   },
 };
 
+// ─── Com título ──────────────────────────────────────────────────────────────
+
 export const WithTitle: Story = {
+  name: "Com título",
   args: {
     title: "Card Title",
     children: "Card content with a title",
   },
 };
 
-export const Clickable: Story = {
-  args: {
-    title: "Clickable Card",
-    children: "Click me to trigger an action",
-    clickable: true,
+// ─── Clicável ────────────────────────────────────────────────────────────────
 
+export const Clickable: Story = {
+  name: "Clicável",
+  args: {
+    children: "Passe o mouse para ver hover e use Tab para focus.",
+    clickable: true,
     onClick: () => alert("Card clicked!"),
   },
 };
 
+// ─── Não clicável ────────────────────────────────────────────────────────────
+
 export const NonClickable: Story = {
+  name: "Não clicável (container)",
   args: {
     title: "Non-Clickable Card",
     children: "This card behaves like a static container.",
     clickable: false,
   },
+};
+
+// ─── Figma: grid de variantes (default / hover / focus × 1–3 slots) ─────────
+
+const SlotBox = ({ height = 40 }: { height?: number }) => (
+  <div
+    style={{
+      border: "1px dashed #9747ff",
+      borderRadius: 8,
+      height,
+      display: "flex",
+      alignItems: "center",
+      justifyContent: "center",
+      color: "#c89dff",
+      fontSize: 14,
+      fontWeight: 500,
+    }}
+  >
+    Slot
+  </div>
+);
+
+export const VariantsGrid: Story = {
+  name: "Variantes — Figma (default / hover / focus)",
+  render: () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
+      {/* Labels */}
+      <div style={{ display: "flex", gap: 24 }}>
+        <div style={{ width: 60 }} />
+        {["default", "hover", "focus"].map((label) => (
+          <div
+            key={label}
+            style={{
+              width: 280,
+              textAlign: "center",
+              fontSize: 11,
+              fontFamily: "monospace",
+              color: "#9747ff",
+              textTransform: "uppercase",
+            }}
+          >
+            {label}
+          </div>
+        ))}
+      </div>
+
+      {/* 1 slot */}
+      <div style={{ display: "flex", gap: 24, alignItems: "flex-start" }}>
+        <div style={{ width: 60, fontSize: 11, fontFamily: "monospace", color: "#9747ff", paddingTop: 12 }}>1 slot</div>
+        <Card style={{ width: 280 }}><SlotBox /></Card>
+        <Card clickable style={{ width: 280 }} className="pseudo-hover"><SlotBox /></Card>
+        <Card clickable style={{ width: 280 }} className="pseudo-focus-visible"><SlotBox /></Card>
+      </div>
+
+      {/* 2 slots */}
+      <div style={{ display: "flex", gap: 24, alignItems: "flex-start" }}>
+        <div style={{ width: 60, fontSize: 11, fontFamily: "monospace", color: "#9747ff", paddingTop: 12 }}>2 slots</div>
+        <Card style={{ width: 280 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <SlotBox />
+            <SlotBox />
+          </div>
+        </Card>
+        <Card clickable style={{ width: 280 }} className="pseudo-hover">
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <SlotBox />
+            <SlotBox />
+          </div>
+        </Card>
+        <Card clickable style={{ width: 280 }} className="pseudo-focus-visible">
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <SlotBox />
+            <SlotBox />
+          </div>
+        </Card>
+      </div>
+
+      {/* 3 slots */}
+      <div style={{ display: "flex", gap: 24, alignItems: "flex-start" }}>
+        <div style={{ width: 60, fontSize: 11, fontFamily: "monospace", color: "#9747ff", paddingTop: 12 }}>3 slots</div>
+        <Card style={{ width: 280 }}>
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <SlotBox />
+            <SlotBox />
+            <SlotBox />
+          </div>
+        </Card>
+        <Card clickable style={{ width: 280 }} className="pseudo-hover">
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <SlotBox />
+            <SlotBox />
+            <SlotBox />
+          </div>
+        </Card>
+        <Card clickable style={{ width: 280 }} className="pseudo-focus-visible">
+          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+            <SlotBox />
+            <SlotBox />
+            <SlotBox />
+          </div>
+        </Card>
+      </div>
+    </div>
+  ),
+};
+
+// ─── Figma: Exemplo Login ────────────────────────────────────────────────────
+
+export const ExampleLogin: Story = {
+  name: "Exemplo — Login (Figma)",
+  render: () => (
+    <Card style={{ width: 368 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+        <div>
+          <h2 style={{ fontSize: 31, fontWeight: 700, margin: 0, lineHeight: 1.2 }}>Boas-vindas!</h2>
+          <p style={{ fontSize: 16, color: "#6d6d6e", margin: "8px 0 0", lineHeight: 1.2 }}>
+            Bem-vindo ao Programa de Benefícios JusCash! Por favor, insira seus dados abaixo para realizar o login.
+          </p>
+        </div>
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <div>
+            <label style={{ fontSize: 16, display: "block", marginBottom: 8 }}>E-mail</label>
+            <input
+              placeholder="seu@email.com"
+              style={{
+                width: "100%",
+                height: 36,
+                border: "1px solid #d4d4d4",
+                borderRadius: 8,
+                padding: "0 12px",
+                fontSize: 13,
+                background: "#fafafa",
+                boxSizing: "border-box",
+              }}
+            />
+          </div>
+          <div>
+            <label style={{ fontSize: 16, display: "block", marginBottom: 8 }}>Senha</label>
+            <input
+              type="password"
+              placeholder="Digite sua senha"
+              style={{
+                width: "100%",
+                height: 40,
+                border: "1px solid #d4d4d4",
+                borderRadius: 8,
+                padding: "0 12px",
+                fontSize: 13,
+                background: "#fafafa",
+                boxSizing: "border-box",
+              }}
+            />
+          </div>
+          <button
+            style={{
+              width: "100%",
+              height: 36,
+              backgroundColor: "#008633",
+              color: "#fafafa",
+              border: "none",
+              borderRadius: 8,
+              fontSize: 13,
+              cursor: "pointer",
+            }}
+          >
+            Entrar
+          </button>
+          <p style={{ fontSize: 13, textAlign: "center", textDecoration: "underline", cursor: "pointer" }}>
+            Esqueci minha senha
+          </p>
+        </div>
+      </div>
+    </Card>
+  ),
+};
+
+// ─── Figma: Exemplo Feedback ─────────────────────────────────────────────────
+
+export const ExampleFeedback: Story = {
+  name: "Exemplo — Feedback (Figma)",
+  render: () => (
+    <Card style={{ width: 368 }}>
+      <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+        <div>
+          <h3 style={{ fontSize: 20, fontWeight: 700, margin: 0, lineHeight: 1.2 }}>Queremos ouvir você!</h3>
+          <p style={{ fontSize: 16, color: "#6d6d6e", margin: "8px 0 0", lineHeight: 1.2 }}>
+            Sua experiência no nosso Programa de Benefícios é muito importante para a gente. O seu feedback pode fazer toda a diferença para construirmos um programa ainda mais completo e vantajoso para você.
+          </p>
+        </div>
+        <button
+          style={{
+            width: "100%",
+            height: 36,
+            backgroundColor: "#008633",
+            color: "#fafafa",
+            border: "none",
+            borderRadius: 8,
+            fontSize: 13,
+            cursor: "pointer",
+          }}
+        >
+          Enviar feedback
+        </button>
+      </div>
+    </Card>
+  ),
 };

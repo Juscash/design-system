@@ -13,10 +13,19 @@ const baseTokens: Partial<ComponentToken> = {
   headerBg: designSystemColors.neutral[50],
 };
 
-export function Card({ clickable, style, ...props }: CardProps): React.ReactElement {
+export function Card({ clickable, style, className, ...props }: CardProps): React.ReactElement {
   const AntdCardComponent = AntdCard as unknown as React.ComponentType<CardProps>;
 
-  const mergedStyle = clickable ? { cursor: "pointer", ...style } : style;
+  const clickableStyle: React.CSSProperties = clickable
+    ? {
+        cursor: "pointer",
+        ...style,
+      }
+    : { ...style };
+
+  const mergedClassName = [className, clickable ? "ds-card-clickable" : undefined]
+    .filter(Boolean)
+    .join(" ");
 
   return (
     <ConfigProvider
@@ -26,14 +35,23 @@ export function Card({ clickable, style, ...props }: CardProps): React.ReactElem
         },
         token: {
           borderRadius: radius.xl,
+          borderRadiusLG: radius.xl,
           colorBorder: designSystemColors.neutral[300],
           colorBorderSecondary: designSystemColors.neutral[300],
           colorBgContainer: designSystemColors.neutral[50],
-          boxShadowTertiary: shadow.m,
+          boxShadow: shadow.xs,
+          boxShadowTertiary: shadow.xs,
+          boxShadowSecondary: shadow.m,
         },
       }}
     >
-      <AntdCardComponent hoverable={clickable} style={mergedStyle} {...props} />
+      <AntdCardComponent
+        hoverable={clickable}
+        tabIndex={clickable ? 0 : undefined}
+        style={clickableStyle}
+        className={mergedClassName}
+        {...props}
+      />
     </ConfigProvider>
   );
 }
