@@ -17,6 +17,8 @@ export const Tooltip: React.FC<TooltipProps> = ({ children, ...rest }) => {
             fontFamily: '"Inter", sans-serif',
             fontSize: 13,
             lineHeight: 1.2,
+            // Figma: borda invisível (cor = bg, sem contraste)
+            colorBorder: designSystemColors.neutral[800],
           },
         },
         token: {

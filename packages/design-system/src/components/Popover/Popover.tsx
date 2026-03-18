@@ -22,7 +22,8 @@ export type PopoverProps = AntdPopoverProps & {
 function getPopoverTokens(): Record<string, any> {
   return {
     colorBgElevated: designSystemColors.neutral[50],
-    colorBorder: designSystemColors.neutral[200],
+    // Figma: borda neutral[300] (igual aos outros componentes)
+    colorBorder: designSystemColors.neutral[300],
 
     borderRadiusLG: radius.xl,
 
@@ -30,7 +31,7 @@ function getPopoverTokens(): Record<string, any> {
 
     arrowBg: designSystemColors.neutral[50],
 
-    boxShadowSecondary: shadow.l,
+    boxShadowSecondary: shadow.m,
   };
 }
 
@@ -47,8 +48,6 @@ export function Popover(props: PopoverProps): React.ReactElement {
                 display: "flex",
                 alignItems: "center",
                 gap: 8,
-                paddingBottom: footer || content ? 12 : 0,
-                borderBottom: footer || content ? `1px solid ${designSystemColors.neutral[200]}` : "none",
               }}
             >
               {icon && (
@@ -73,12 +72,7 @@ export function Popover(props: PopoverProps): React.ReactElement {
             </div>
           )}
           {footer && (
-            <div
-              style={{
-                paddingTop: 12,
-                borderTop: `1px solid ${designSystemColors.neutral[200]}`,
-              }}
-            >
+            <div>
               <Body2 color="neutral">{footer}</Body2>
             </div>
           )}

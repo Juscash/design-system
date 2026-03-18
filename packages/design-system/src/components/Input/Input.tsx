@@ -169,6 +169,9 @@ export function TextArea(props: TextAreaProps): ReturnType<React.FC<TextAreaProp
           colorTextDisabled: designSystemColors.neutral[400],
           colorTextPlaceholder: designSystemColors.neutral[500],
           colorBgContainerDisabled: designSystemColors.neutral[50],
+          // Figma: background neutral[50] e texto neutral[800]
+          colorBgContainer: designSystemColors.neutral[50],
+          colorText: designSystemColors.neutral[800],
           borderRadius: radius.xl,
         },
       }}
