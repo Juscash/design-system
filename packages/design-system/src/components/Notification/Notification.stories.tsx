@@ -28,10 +28,11 @@ Componente baseado no [Ant Design Notification](https://ant.design/components/no
 - **Border**: 1px solid neutral[300]
 - **Radius**: 8px (radius.xl)
 - **Shadow**: shadow.m
-- **Titulo**: 16px / neutral[800]
+- **Titulo**: 16px / neutral[800] / weight 400
 - **Descricao**: 13px / neutral[500]
-- **Icone**: 20px centralizado
+- **Icone**: 20px alinhado ao titulo
 - **Stack**: max 3, placement top, duracao 4s
+- **Error**: background red[50], icone red[500]
 
 ### Como usar:
 
@@ -45,7 +46,7 @@ const MyComponent = () => {
     <>
       {contextHolder}
       <Button onClick={() => api.success({
-        message: 'Sucesso',
+        title: 'Sucesso',
         description: 'Operacao realizada.',
       })}>
         Disparar
@@ -91,10 +92,10 @@ export const Default: Story = {
         <Button
           onClick={() =>
             api.success({
-              message: "Line 1",
+              title: "Line 1",
               description: "Line 2",
               icon: <Heart size={20} />,
-              btn: (
+              actions: (
                 <Button type="neutral" size="xs" onClick={() => api.destroy()}>
                   Label
                 </Button>
@@ -107,7 +108,7 @@ export const Default: Story = {
         <Button
           onClick={() =>
             api.success({
-              message: "Line 1",
+              title: "Line 1",
               description: "Line 2",
               icon: <Heart size={20} />,
             })
@@ -133,10 +134,10 @@ export const Error: Story = {
           type="destructive"
           onClick={() =>
             api.error({
-              message: "Line 1",
+              title: "Line 1",
               description: "Line 2",
               icon: <AlertCircle size={20} />,
-              btn: (
+              actions: (
                 <Button type="neutral" size="xs" onClick={() => api.destroy()}>
                   Label
                 </Button>
@@ -150,7 +151,7 @@ export const Error: Story = {
           type="destructive"
           onClick={() =>
             api.error({
-              message: "Line 1",
+              title: "Line 1",
               description: "Line 2",
               icon: <AlertCircle size={20} />,
             })
@@ -175,8 +176,8 @@ export const Loading: Story = {
         <Button
           onClick={() =>
             api.open({
-              message: "Carregando...",
-              icon: <Loader size={20} className="animate-spin" style={{ animation: "spin 1s linear infinite" }} />,
+              title: "Carregando...",
+              icon: <Loader size={20} style={{ animation: "spin 1s linear infinite" }} />,
               duration: 0,
               closeIcon: false,
             })
@@ -197,9 +198,9 @@ export const Stacking: Story = {
     const [api, contextHolder] = Notification.useNotification();
 
     const triggerMultiple = () => {
-      api.info({ message: "Notification 1", description: "Primeira", icon: <Heart size={20} /> });
-      setTimeout(() => api.success({ message: "Notification 2", description: "Segunda", icon: <Heart size={20} /> }), 200);
-      setTimeout(() => api.warning({ message: "Notification 3", description: "Terceira", icon: <Heart size={20} /> }), 400);
+      api.info({ title: "Notification 1", description: "Primeira", icon: <Heart size={20} /> });
+      setTimeout(() => api.success({ title: "Notification 2", description: "Segunda", icon: <Heart size={20} /> }), 200);
+      setTimeout(() => api.warning({ title: "Notification 3", description: "Terceira", icon: <Heart size={20} /> }), 400);
     };
 
     return (
@@ -220,16 +221,16 @@ export const AllTypes: Story = {
     return (
       <div style={{ display: "flex", gap: 16, padding: 20 }}>
         {contextHolder}
-        <Button onClick={() => api.success({ message: "Success", description: "Operacao realizada com sucesso.", icon: <Heart size={20} /> })}>
+        <Button onClick={() => api.success({ title: "Success", description: "Operacao realizada com sucesso.", icon: <Heart size={20} /> })}>
           Success
         </Button>
-        <Button onClick={() => api.error({ message: "Error", description: "Algo deu errado.", icon: <AlertCircle size={20} /> })}>
+        <Button onClick={() => api.error({ title: "Error", description: "Algo deu errado.", icon: <AlertCircle size={20} /> })}>
           Error
         </Button>
-        <Button onClick={() => api.info({ message: "Info", description: "Informacao importante.", icon: <Heart size={20} /> })}>
+        <Button onClick={() => api.info({ title: "Info", description: "Informacao importante.", icon: <Heart size={20} /> })}>
           Info
         </Button>
-        <Button onClick={() => api.warning({ message: "Warning", description: "Atencao com esta acao.", icon: <AlertCircle size={20} /> })}>
+        <Button onClick={() => api.warning({ title: "Warning", description: "Atencao com esta acao.", icon: <AlertCircle size={20} /> })}>
           Warning
         </Button>
       </div>

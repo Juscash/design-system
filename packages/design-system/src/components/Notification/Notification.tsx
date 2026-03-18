@@ -13,7 +13,7 @@ function getNotificationTokens() {
     colorText: designSystemColors.neutral[500],
     borderRadiusLG: radius.xl, // 8px
     boxShadow: shadow.m,
-    marginXS: spacing[1], // 4px gap between title/desc
+    marginXS: spacing[1], // 4px
   };
 }
 
@@ -26,31 +26,29 @@ export function useNotification() {
   });
 
   const wrappedApi = React.useMemo(() => {
-    const wrap = (type: "success" | "info" | "warning" | "error") => (args: NotificationArgsProps) => {
-      const isError = type === "error";
-
-      const customStyle =
-        isError ?
-          {
-            color: designSystemColors.feedback.red[500],
-          }
-        : {};
-      const customClassName = isError ? "ds-notification-error" : "";
-      api[type]({
-        ...args,
-        style: { ...customStyle, ...args.style },
-        className: `ds-notification ${customClassName} ${args.className || ""}`.trim(),
-      });
-    };
+    const wrapType =
+      (type: "success" | "info" | "warning" | "error") =>
+      (args: NotificationArgsProps) => {
+        const extraClass = type === "error" ? "ds-notification-error" : "";
+        api[type]({
+          ...args,
+          className: `ds-notification ${extraClass} ${args.className ?? ""}`.trim(),
+        });
+      };
     return {
-      success: wrap("success"),
-      info: wrap("info"),
-      warning: wrap("warning"),
-      error: wrap("error"),
-      open: api.open,
+      success: wrapType("success"),
+      info: wrapType("info"),
+      warning: wrapType("warning"),
+      error: wrapType("error"),
+      open: (args: NotificationArgsProps) =>
+        api.open({
+          ...args,
+          className: `ds-notification ${args.className ?? ""}`.trim(),
+        }),
       destroy: api.destroy,
     };
   }, [api]);
+
   const wrappedContextHolder = (
     <ConfigProvider
       theme={{
@@ -62,64 +60,109 @@ export function useNotification() {
       }}
     >
       <style>{`
-        /* Notification: border, radius conforme Figma */
+        /* ─── Base ─── */
         .ds-notification {
+          padding: 16px !important;
           border: 1px solid ${designSystemColors.neutral[300]} !important;
           border-radius: ${radius.xl}px !important;
         }
+        .ds-notification::before,
+        .ds-notification::after {
+          display: none !important;
+          content: none !important;
+        }
 
-        /* Icon: 20px, centralizado verticalmente com o conteúdo */
-        .ds-notification .ant-notification-notice-icon {
+        /* ─── Layout: flex row com wrap ─── */
+        /* Ordem DOM: icon → title → description → actions             */
+        /* Reordenamos via CSS order para: icon | title | actions / description */
+        .ds-notification .ant-notification-notice-with-icon {
+          display: flex !important;
+          flex-direction: row !important;
+          flex-wrap: wrap !important;
+          align-items: center !important;
+          padding-inline-end: 24px !important;
+        }
+
+        /* ─── Ícone: static, row 1 ─── */
+        .ds-notification .ant-notification-notice-with-icon .ant-notification-notice-icon {
+          position: static !important;
+          order: 1 !important;
+          flex-shrink: 0 !important;
           font-size: 20px !important;
-          line-height: 20px !important;
+          line-height: 1 !important;
+          margin: 0 !important;
+          margin-inline-end: 12px !important;
+          display: flex !important;
+          align-items: center !important;
         }
 
-        /* Layout com ícone: gap 12px entre ícone e texto */
-        .ds-notification .ant-notification-notice-with-icon .ant-notification-notice-message,
-        .ds-notification .ant-notification-notice-with-icon .ant-notification-notice-title {
+        /* ─── Título: row 1, expande ─── */
+        .ds-notification .ant-notification-notice-with-icon .ant-notification-notice-title,
+        .ds-notification .ant-notification-notice-with-icon .ant-notification-notice-message {
+          order: 2 !important;
+          flex: 1 !important;
+          min-width: 0 !important;
           font-size: 16px !important;
-          color: ${designSystemColors.neutral[800]} !important;
+          font-weight: 400 !important;
           line-height: 1.2 !important;
-          margin-bottom: 0 !important;
-          padding-inline-start: 32px !important;
+          color: ${designSystemColors.neutral[800]} !important;
+          margin: 0 !important;
+          padding: 0 !important;
         }
 
+        /* ─── Ações: row 1, direita (reordenado antes da description) ─── */
+        .ds-notification .ant-notification-notice-with-icon .ant-notification-notice-actions {
+          order: 3 !important;
+          flex-shrink: 0 !important;
+          margin: 0 !important;
+          margin-inline-start: 8px !important;
+          padding: 0 !important;
+        }
+
+        /* ─── Descrição: row 2, indentada (order 4 → vai para próxima linha) ─── */
         .ds-notification .ant-notification-notice-with-icon .ant-notification-notice-description {
+          order: 4 !important;
+          flex-basis: 100% !important;
           font-size: 13px !important;
-          color: ${designSystemColors.neutral[500]} !important;
+          font-weight: 400 !important;
           line-height: 1.2 !important;
+          color: ${designSystemColors.neutral[500]} !important;
+          margin: 0 !important;
           margin-top: 4px !important;
+          padding: 0 !important;
           padding-inline-start: 32px !important;
         }
 
-        /* Sem ícone */
-        .ds-notification .ant-notification-notice-message,
-        .ds-notification .ant-notification-notice-title {
+        /* ─── Sem ícone: título e descrição diretos ─── */
+        .ds-notification .ant-notification-notice-title,
+        .ds-notification .ant-notification-notice-message {
           font-size: 16px !important;
-          color: ${designSystemColors.neutral[800]} !important;
+          font-weight: 400 !important;
           line-height: 1.2 !important;
+          color: ${designSystemColors.neutral[800]} !important;
+          margin: 0 !important;
+          padding: 0 !important;
         }
 
         .ds-notification .ant-notification-notice-description {
           font-size: 13px !important;
-          color: ${designSystemColors.neutral[500]} !important;
+          font-weight: 400 !important;
           line-height: 1.2 !important;
+          color: ${designSystemColors.neutral[500]} !important;
+          margin: 0 !important;
+          padding: 0 !important;
         }
 
+        /* ─── Botão fechar ─── */
         .ds-notification .ant-notification-notice-close {
-          font-size: 12px !important;
-          color: ${designSystemColors.neutral[800]} !important;
           top: 16px !important;
           inset-inline-end: 16px !important;
+          color: ${designSystemColors.neutral[400]} !important;
         }
 
-        /* Error variant */
-        .ds-notification-error .ant-notification-notice-message,
-        .ds-notification-error .ant-notification-notice-title {
-          color: ${designSystemColors.feedback.red[900]} !important;
-        }
-        .ds-notification-error .ant-notification-notice-description {
-          color: ${designSystemColors.feedback.red[900]} !important;
+        /* ─── Variante Error: bg levemente rosa, só o ícone em vermelho ─── */
+        .ds-notification-error {
+          background-color: ${designSystemColors.feedback.red[50]} !important;
         }
         .ds-notification-error .ant-notification-notice-icon {
           color: ${designSystemColors.feedback.red[500]} !important;
@@ -128,13 +171,12 @@ export function useNotification() {
       {contextHolder}
     </ConfigProvider>
   );
+
   return [wrappedApi, wrappedContextHolder] as const;
 }
 
 /**
  * Notification component
- *
- * NOTE: This component is primarily used via the `useNotification` hook.
  *
  * @example
  * const [api, contextHolder] = Notification.useNotification();
@@ -142,8 +184,8 @@ export function useNotification() {
  * return (
  *   <>
  *     {contextHolder}
- *     <Button onClick={() => api.success({ message: 'Success' })}>
- *       Show Notification
+ *     <Button onClick={() => api.success({ message: 'Sucesso', description: 'Operação concluída.' })}>
+ *       Mostrar
  *     </Button>
  *   </>
  * )
