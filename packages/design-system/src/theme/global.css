@@ -889,3 +889,29 @@
   border-color: var(--color-neutral-300) !important;
   outline: none !important;
 }
+
+/* ============================================
+   COLLAPSE
+   ============================================ */
+
+/* Hover: header com fundo levemente diferente */
+.ant-collapse-header:hover {
+  background-color: var(--color-neutral-100) !important;
+  border-radius: inherit !important;
+}
+
+/* Focus: header com fundo escuro e texto branco (conforme Figma) */
+.ant-collapse-header:focus-visible {
+  background-color: var(--color-neutral-800) !important;
+  color: var(--color-neutral-50) !important;
+  border-radius: inherit !important;
+  outline: none !important;
+}
+
+.ant-collapse-header:focus-visible .ant-collapse-expand-icon {
+  color: var(--color-neutral-50) !important;
+}
+
+.ant-collapse-header:focus-visible .ant-collapse-header-text {
+  color: var(--color-neutral-50) !important;
+}
