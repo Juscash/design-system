@@ -36,11 +36,17 @@ const meta: Meta<DrawerStoryProps> = {
       codePanel: true,
       description: {
         component: `
-Drawer é um painel deslizante usado para exibir detalhes ou ações secundárias.
+Bottom Sheet / Drawer — painel que desliza a partir da borda inferior (ou lateral) para exibir conteúdo complementar.
 Baseado no [Ant Design Drawer](https://ant.design/components/drawer).
 
-### Props:
-- **Extended (Ant Design)**: Props padrão do AntD Drawer.
+### Specs (Figma):
+- **Placement default**: bottom (bottom sheet)
+- **Background**: neutral[50]
+- **Overlay**: rgba(23,23,23,0.25)
+- **Handle bar**: 50×3px, neutral[200], 8px do topo
+- **Border-radius (bottom)**: 10px top-left/right
+- **Header padding**: 24px
+- **Título**: neutral[800]
 
 ### Como usar:
 
@@ -48,7 +54,7 @@ Baseado no [Ant Design Drawer](https://ant.design/components/drawer).
 import { Drawer, Button } from "@juscash/design-system";
 
 function Example() {
-  return <Drawer title="Titulo" open={false} />;
+  return <Drawer open={false} height={300}>Conteúdo</Drawer>;
 }
 \`\`\`
 `,
@@ -151,10 +157,38 @@ const DrawerWrapper = (props: DrawerStoryProps) => {
   );
 };
 
+export const BottomSheet: Story = {
+  name: "Bottom Sheet (Figma)",
+  render: (args) => <DrawerWrapper {...args} />,
+  args: {
+    placement: "bottom",
+    height: 300,
+    closable: false,
+    children: (
+      <div
+        style={{
+          height: "100%",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          border: `1px dashed #9747ff`,
+          borderRadius: 8,
+          color: "#c89dff",
+          fontWeight: 500,
+          fontSize: 14,
+        }}
+      >
+        Slot
+      </div>
+    ),
+  },
+};
+
 export const Default: Story = {
   render: (args) => <DrawerWrapper {...args} />,
   args: {
     title: "Título do Drawer",
+    placement: "right",
     children: <p>Conteúdo do Drawer...</p>,
     width: 400,
   },
