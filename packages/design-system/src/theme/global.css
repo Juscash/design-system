@@ -988,3 +988,31 @@
   box-shadow: var(--shadow-focus-error) !important;
   border-color: transparent !important;
 }
+
+/* ============================================
+   CONFIRM MODAL
+   ============================================ */
+
+/* Container: border, shadow, padding, radius conforme Figma */
+.ds-confirm-modal .ant-modal-container {
+  border: 1px solid var(--color-neutral-300) !important;
+  box-shadow: var(--shadow-l) !important;
+  border-radius: 16px !important;
+  padding: 24px !important;
+  background: var(--color-neutral-50) !important;
+}
+
+/* Remove header/footer padding and margins */
+.ds-confirm-modal .ant-modal-header,
+.ds-confirm-modal .ant-modal-footer {
+  display: none !important;
+}
+
+.ds-confirm-modal .ant-modal-body {
+  padding: 0 !important;
+}
+
+/* Outline button: transparent bg */
+.ds-confirm-modal button[class*="outline"] {
+  background-color: transparent !important;
+}

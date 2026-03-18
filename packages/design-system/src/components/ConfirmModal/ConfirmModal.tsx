@@ -17,6 +17,9 @@ export type ConfirmModalProps = Omit<AntdModalProps, "footer" | "closable" | "ti
   description?: React.ReactNode;
   /**
    * Tipo de confirmação (afeta cor do botão principal)
+   * - info: botão verde (primary)
+   * - warning: botão amarelo/laranja (primary) — mesmo visual que info
+   * - danger: botão vermelho (destructive)
    * @default "info"
    */
   type?: ConfirmType;
@@ -46,9 +49,7 @@ export type ConfirmModalProps = Omit<AntdModalProps, "footer" | "closable" | "ti
 function getConfirmModalTokens(): Record<string, unknown> {
   return {
     contentBg: designSystemColors.neutral[50],
-
-    borderRadiusLG: radius.xl,
-
+    borderRadiusLG: radius["3xl"],
     paddingLG: spacing[6],
     paddingMD: spacing[4],
   };
@@ -100,20 +101,23 @@ export function ConfirmModal(props: ConfirmModalProps): React.ReactElement {
   const customStyles: any = {
     content: {
       boxShadow: shadow.l,
-      borderRadius: radius.xl,
+      border: `1px solid ${designSystemColors.neutral[300]}`,
+      borderRadius: radius["3xl"],
       padding: spacing[6],
     },
+    mask: {
+      backgroundColor: "rgba(0, 0, 0, 0.45)",
+    },
     header: {
-      marginBottom: spacing[2],
+      marginBottom: 0,
       padding: 0,
     },
     body: {
       padding: 0,
-      marginBottom: spacing[4],
     },
     footer: {
       padding: 0,
-      marginTop: spacing[4],
+      marginTop: 0,
     },
   };
 
@@ -127,37 +131,42 @@ export function ConfirmModal(props: ConfirmModalProps): React.ReactElement {
     >
       <AntdModal
         {...rest}
-        title={
+        title={null}
+        closable={false}
+        footer={null}
+        styles={customStyles}
+        width={480}
+        centered
+        onCancel={onCancel}
+        className="ds-confirm-modal"
+      >
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
           <span
             style={{
-              fontSize: 16,
-              fontWeight: 600,
-              color: designSystemColors.neutral[900],
+              fontSize: 20,
+              fontWeight: 400,
+              color: designSystemColors.neutral[800],
+              lineHeight: 1.2,
             }}
           >
             {title}
           </span>
-        }
-        closable={false}
-        footer={renderFooter()}
-        styles={customStyles}
-        width={360}
-        centered
-        onCancel={onCancel}
-      >
-        {description && (
-          <p
-            style={{
-              margin: 0,
-              fontSize: 14,
-              color: designSystemColors.neutral[600],
-              lineHeight: 1.5,
-            }}
-          >
-            {description}
-          </p>
-        )}
-        {children}
+          {description && (
+            <p
+              style={{
+                margin: 0,
+                fontSize: 16,
+                fontWeight: 400,
+                color: designSystemColors.neutral[500],
+                lineHeight: 1.2,
+              }}
+            >
+              {description}
+            </p>
+          )}
+          {children}
+          {renderFooter()}
+        </div>
       </AntdModal>
     </ConfigProvider>
   );
