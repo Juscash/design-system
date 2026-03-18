@@ -62,38 +62,55 @@ export function useNotification() {
       }}
     >
       <style>{`
-        /* Notification: border, icon alignment, font sizes conforme Figma */
+        /* Notification: border, radius conforme Figma */
         .ds-notification {
           border: 1px solid ${designSystemColors.neutral[300]} !important;
           border-radius: ${radius.xl}px !important;
-          padding: ${spacing[4]}px !important;
         }
 
+        /* Icon: 20px, centralizado verticalmente com o conteúdo */
         .ds-notification .ant-notification-notice-icon {
           font-size: 20px !important;
-          margin-top: 0 !important;
-          display: flex !important;
-          align-items: center !important;
+          line-height: 20px !important;
         }
 
+        /* Layout com ícone: gap 12px entre ícone e texto */
+        .ds-notification .ant-notification-notice-with-icon .ant-notification-notice-message,
+        .ds-notification .ant-notification-notice-with-icon .ant-notification-notice-title {
+          font-size: 16px !important;
+          color: ${designSystemColors.neutral[800]} !important;
+          line-height: 1.2 !important;
+          margin-bottom: 0 !important;
+          padding-inline-start: 32px !important;
+        }
+
+        .ds-notification .ant-notification-notice-with-icon .ant-notification-notice-description {
+          font-size: 13px !important;
+          color: ${designSystemColors.neutral[500]} !important;
+          line-height: 1.2 !important;
+          margin-top: 4px !important;
+          padding-inline-start: 32px !important;
+        }
+
+        /* Sem ícone */
         .ds-notification .ant-notification-notice-message,
         .ds-notification .ant-notification-notice-title {
           font-size: 16px !important;
           color: ${designSystemColors.neutral[800]} !important;
           line-height: 1.2 !important;
-          margin: 0 !important;
         }
 
         .ds-notification .ant-notification-notice-description {
           font-size: 13px !important;
           color: ${designSystemColors.neutral[500]} !important;
           line-height: 1.2 !important;
-          margin-top: 4px !important;
         }
 
         .ds-notification .ant-notification-notice-close {
           font-size: 12px !important;
           color: ${designSystemColors.neutral[800]} !important;
+          top: 16px !important;
+          inset-inline-end: 16px !important;
         }
 
         /* Error variant */
