@@ -88,7 +88,7 @@ function Example() {
     },
     statusColor: {
       control: "select",
-      options: ["success", "error", "warning"],
+      options: ["success", "error", "warning", "caution", "info"],
     },
     count: {
       control: "number",
@@ -199,6 +199,37 @@ export const SecondaryWarning: Story = {
     statusColor: "warning",
     children: "Label",
   },
+};
+
+export const SecondaryCaution: Story = {
+  name: "Secondary — Caution (Yellow)",
+  args: {
+    variant: "secondary",
+    statusColor: "caution",
+    children: "Label",
+  },
+};
+
+export const SecondaryInfo: Story = {
+  name: "Secondary — Info (Blue)",
+  args: {
+    variant: "secondary",
+    statusColor: "info",
+    children: "Label",
+  },
+};
+
+export const SecondaryAllColors: Story = {
+  name: "Secondary — Todas as cores (Figma)",
+  render: () => (
+    <div style={{ display: "flex", gap: 16, alignItems: "center", flexWrap: "wrap" }}>
+      <Badge variant="secondary" statusColor="success">Label</Badge>
+      <Badge variant="secondary" statusColor="error">Label</Badge>
+      <Badge variant="secondary" statusColor="warning">Label</Badge>
+      <Badge variant="secondary" statusColor="caution">Label</Badge>
+      <Badge variant="secondary" statusColor="info">Label</Badge>
+    </div>
+  ),
 };
 
 export const WithIcons: Story = {

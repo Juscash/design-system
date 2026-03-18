@@ -6,7 +6,7 @@ import { designSystemColors, radius, shadow, spacing } from "../../theme";
 
 type BadgeVariant = "primary" | "secondary" | "tertiary" | "outline" | "ghost" | "destructive" | "counter";
 
-type BadgeStatusColor = "success" | "error" | "warning";
+type BadgeStatusColor = "success" | "error" | "warning" | "info" | "caution";
 
 type CleanAntdProps = {
   [K in keyof AntdBadgeProps as K extends "count" | "color" | "status" | "text" | "size" ? never : K]: AntdBadgeProps[K];
@@ -197,6 +197,16 @@ function getSecondaryStatusStyles(statusColor: BadgeStatusColor): React.CSSPrope
       return {
         backgroundColor: designSystemColors.feedback.orange[50],
         color: designSystemColors.feedback.orange[900],
+      };
+    case "caution":
+      return {
+        backgroundColor: designSystemColors.feedback.yellow[50],
+        color: designSystemColors.feedback.yellow[900],
+      };
+    case "info":
+      return {
+        backgroundColor: designSystemColors.feedback.blue[50],
+        color: designSystemColors.feedback.blue[900],
       };
     case "success":
     default:
