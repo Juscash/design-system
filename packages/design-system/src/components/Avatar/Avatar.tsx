@@ -12,7 +12,7 @@ export interface AvatarProps extends AntdAvatarProps {
   roundness?: AvatarRoundness;
 }
 
-export const Avatar: React.FC<AvatarProps> = ({ dsSize = "regular", roundness = "round", style, src, alt, ...rest }) => {
+export const Avatar: React.FC<AvatarProps> = ({ dsSize = "regular", roundness = "round", style, src, alt, size: _sizeIgnored, ...rest }) => {
   const sizeMap: Record<AvatarSize, number> = {
     small: 32,
     regular: 40,
