@@ -3,7 +3,7 @@ import { Select as AntdSelect, ConfigProvider, Input as AntdInput } from "antd";
 import { Checkbox } from "../Checkbox";
 import type { SelectProps as AntdSelectProps } from "antd";
 import type { ComponentToken } from "antd/es/select/style/token";
-import { designSystemColors, radius } from "../../theme";
+import { designSystemColors, radius, spacing } from "../../theme";
 import { AliasToken } from "antd/es/theme/interface";
 import { ChevronsUpDown, Search, Check } from "lucide-react";
 import type { DefaultOptionType } from "antd/es/select";
@@ -40,7 +40,7 @@ function getSizeTokens(dsSize?: SelectSize): {
       componentToken: {},
       globalToken: {
         colorText: designSystemColors.neutral[800],
-        borderRadius: radius.md,
+        borderRadius: radius.xl,
         controlHeight: 24,
         fontSize: 13,
       },
@@ -159,6 +159,19 @@ export function Select(props: SelectProps): React.ReactElement {
         menuItemSelectedIcon={isMultiple ? null : <Check size={16} color={designSystemColors.neutral[800]} />}
         showSearch={false}
         searchValue={searchValue}
+        styles={{
+          prefix: {
+            marginRight: spacing[2],
+            color: designSystemColors.neutral[800],
+            display: "flex",
+            alignItems: "center",
+          },
+          suffix: {
+            color: designSystemColors.neutral[800],
+            display: "flex",
+            alignItems: "center",
+          },
+        }}
         style={{
           ["--select-multi-item-border-color" as any]: "#D4D4D4",
           ["--ds-select-height" as any]: `${sizeTokens.height}px`,
@@ -182,14 +195,9 @@ export function Select(props: SelectProps): React.ReactElement {
         popupRender={(menu: React.ReactNode) => (
           <>
             {showSearch && (
-              <div
-                style={{
-                  padding: "4px 8px",
-                  borderBottom: "1px solid #D4D4D4",
-                  marginBottom: "0px",
-                }}
-              >
+              <div className="ds-select-search-container">
                 <AntdInput
+                  className="ds-select-search-input"
                   placeholder="Procurar"
                   prefix={<Search size={15} color={designSystemColors.neutral[500]} />}
                   value={searchValue}
@@ -202,12 +210,12 @@ export function Select(props: SelectProps): React.ReactElement {
                     fontSize: "13px",
                     color: designSystemColors.neutral[800],
                     padding: 0,
-                    gap: 4,
+                    gap: 8,
                   }}
                 />
               </div>
             )}
-            <div style={{ padding: "4px 0" }}>{menu}</div>
+            <div className="ds-select-popup-menu">{menu}</div>
           </>
         )}
       />
