@@ -1,7 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import React from "react";
+import { Ellipsis, Heart } from "lucide-react";
 import { Tabs } from "./Tabs";
 import type { TabsProps } from "antd";
+import { designSystemColors } from "../../theme";
 
 import { Title, Subtitle, Description, Primary as DocsPrimary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
@@ -14,23 +16,51 @@ type TabsStoryProps = React.ComponentProps<typeof Tabs> & {
   focus?: boolean;
 };
 
-const items: TabsProps["items"] = [
-  {
-    key: "1",
-    label: "Tab 1",
-    children: "Content of Tab Pane 1",
-  },
-  {
-    key: "2",
-    label: "Tab 2",
-    children: "Content of Tab Pane 2",
-  },
-  {
-    key: "3",
-    label: "Tab 3",
-    children: "Content of Tab Pane 3",
-  },
-];
+type TabsSize = "s" | "m" | "l";
+
+function TabLabel({ size, children = "Label" }: { size: TabsSize; children?: React.ReactNode }) {
+  const iconSize = size === "m" ? 16 : 12;
+
+  return (
+    <span style={{ display: "inline-flex", alignItems: "center", gap: size === "l" ? 8 : 4 }}>
+      <Heart size={iconSize} color="currentColor" />
+      <span>{children}</span>
+    </span>
+  );
+}
+
+function buildItems(size: TabsSize, count = 3): TabsProps["items"] {
+  return Array.from({ length: count }, (_, index) => ({
+    key: String(index + 1),
+    label: <TabLabel size={size}>Label</TabLabel>,
+    children: `Content ${index + 1}`,
+  }));
+}
+
+function buildNamedItems(size: TabsSize, count = 3): TabsProps["items"] {
+  return Array.from({ length: count }, (_, index) => ({
+    key: String(index + 1),
+    label: <TabLabel size={size}>Label</TabLabel>,
+    children: `Content ${index + 1}`,
+  }));
+}
+
+function CollapsedPreview({ size = "l" }: { size?: TabsSize }) {
+  return (
+    <div
+      className={`ds-tabs ds-tabs-${size} ds-tabs-primary`}
+      style={{
+        display: "inline-flex",
+        borderBottom: `1px solid ${designSystemColors.neutral[300]}`,
+        width: "fit-content",
+      }}
+    >
+      <button type="button" className="ant-tabs-nav-more" aria-label="More tabs">
+        <Ellipsis size={12} />
+      </button>
+    </div>
+  );
+}
 
 const meta: Meta<TabsStoryProps> = {
   title: "Components/Tabs",
@@ -48,33 +78,10 @@ const meta: Meta<TabsStoryProps> = {
 Componente baseado no [Ant Design Tabs](https://ant.design/components/tabs).
 
 ### Features Juscash:
-- **Variantes**: Suporte a \`primary\` (padrão) e \`secondary\`.
-- **Tamanhos**: \`s\` (Small), \`m\` (Medium/Default), \`l\` (Large), ajustando fontes e espaçamentos.
-- **Tokens**: Cores de texto, bordas e estados (hover, active) mapeados do Design System.
-- **Acessibilidade**: Mantém toda a acessibilidade teclado/leitor de tela do Ant Design.
-
-### Como usar:
-
-\`\`\`tsx
-import { Tabs } from "@juscash/design-system";
-
-const items = [
-  {
-    key: '1',
-    label: 'Tab 1',
-    children: 'Content of Tab Pane 1',
-  },
-  {
-    key: '2',
-    label: 'Tab 2',
-    children: 'Content of Tab Pane 2',
-  },
-];
-
-const MyComponent = () => (
-  <Tabs defaultActiveKey="1" items={items} variant="primary" dsSize="m" />
-);
-\`\`\`
+- **Variantes**: Suporte a \`primary\` e \`secondary\`.
+- **Tamanhos**: \`s\`, \`m\` e \`l\`, seguindo o Figma com altura, fonte e espaçamento ajustados.
+- **Estados**: Hover, ativo, foco e disabled alinhados ao Design System.
+- **Overflow**: suporte ao estado collapsed com botão de overflow.
 `,
       },
       page: () => (
@@ -95,7 +102,7 @@ const MyComponent = () => (
                 fontWeight: "bold",
               }}
             >
-              🎨 Figma Spec
+              Figma Spec
             </h3>
             <Figma showLink url={FIGMA_URL} height="400px" />
           </div>
@@ -115,37 +122,25 @@ const MyComponent = () => (
     variant: {
       control: "radio",
       options: ["primary", "secondary"],
-      description: "Variante visual das abas",
-      table: {
-        defaultValue: { summary: "primary" },
-      },
     },
     dsSize: {
       control: "radio",
       options: ["s", "m", "l"],
-      description: "Tamanho das abas (altura, fonte, padding)",
-      table: {
-        defaultValue: { summary: "m" },
-      },
     },
     defaultActiveKey: {
       control: "text",
-      description: "Chave da aba ativa inicial",
     },
     onChange: { action: "changed" },
     hover: {
       control: "boolean",
-      description: "Força o estado hover",
       table: { category: "Pseudo States" },
     },
     active: {
       control: "boolean",
-      description: "Força o estado active",
       table: { category: "Pseudo States" },
     },
     focus: {
       control: "boolean",
-      description: "Força o estado focus",
       table: { category: "Pseudo States" },
     },
   },
@@ -166,89 +161,84 @@ type Story = StoryObj<TabsStoryProps>;
 export const Default: Story = {
   args: {
     defaultActiveKey: "1",
-    items: items,
+    items: buildItems("m"),
+    dsSize: "m",
   },
 };
 
 export const Primary: Story = {
   args: {
     variant: "primary",
-    items: items,
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: "Variante principal do sistema, utilizando a cor primária da marca.",
-      },
-    },
+    defaultActiveKey: "1",
+    items: buildItems("m"),
   },
 };
 
 export const Secondary: Story = {
   args: {
     variant: "secondary",
-    items: items,
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: "Variante secundária, utilizando a cor secundária (azul) da marca.",
-      },
-    },
+    defaultActiveKey: "1",
+    items: buildItems("m"),
   },
 };
 
 export const Small: Story = {
   args: {
     dsSize: "s",
-    items: items,
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: "Tamanho compacto (Small) para interfaces densas.",
-      },
-    },
+    defaultActiveKey: "1",
+    items: buildItems("s"),
   },
 };
 
 export const Medium: Story = {
   args: {
     dsSize: "m",
-    items: items,
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: "Tamanho padrão (Medium).",
-      },
-    },
+    defaultActiveKey: "1",
+    items: buildItems("m"),
   },
 };
 
 export const Large: Story = {
   args: {
     dsSize: "l",
-    items: items,
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: "Tamanho expandido (Large) para maior destaque.",
-      },
-    },
+    defaultActiveKey: "1",
+    items: buildItems("l"),
   },
 };
 
 export const Disabled: Story = {
   args: {
-    items: items.map((item) => ({ ...item, disabled: item.key === "2" })),
+    defaultActiveKey: "1",
+    items: buildItems("m").map((item, index) => ({ ...item, disabled: index === 1 })),
   },
-  parameters: {
-    docs: {
-      description: {
-        story: "Demonstração de abas desabilitadas.",
-      },
-    },
-  },
+};
+
+export const FigmaExamples: Story = {
+  name: "Figma — Examples",
+  render: () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 32, width: "fit-content", padding: 24 }}>
+      <div style={{ width: 469 }}>
+        <Tabs
+          dsSize="l"
+          defaultActiveKey="3"
+          items={buildNamedItems("l", 7)}
+          moreIcon={<Ellipsis size={12} color={designSystemColors.neutral[500]} />}
+        />
+      </div>
+
+      <div style={{ width: "fit-content" }}>
+        <Tabs dsSize="m" defaultActiveKey="3" items={buildNamedItems("m", 5)} style={{ width: "fit-content" }} />
+      </div>
+
+      <div style={{ width: "fit-content" }}>
+        <Tabs dsSize="s" defaultActiveKey="3" items={buildNamedItems("s", 5)} style={{ width: "fit-content" }} />
+      </div>
+    </div>
+  ),
+};
+
+export const FigmaCollapsed: Story = {
+  name: "Figma — Collapsed",
+  render: () => <CollapsedPreview size="l" />,
+  decorators: [(StoryComponent) => <div style={{ padding: 24 }}><StoryComponent /></div>],
 };

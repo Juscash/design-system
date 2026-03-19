@@ -23,6 +23,8 @@ function getPrimaryTokens(): Record<string, any> {
     itemHoverColor: designSystemColors.brand.primary[600],
     itemSelectedColor: designSystemColors.brand.primary[600],
     inkBarColor: designSystemColors.brand.primary[600],
+    horizontalItemGutter: 0,
+    horizontalItemMargin: "0",
   };
 }
 
@@ -33,6 +35,8 @@ function getSecondaryTokens(): Record<string, any> {
     itemHoverColor: designSystemColors.brand.secondary[600],
     itemSelectedColor: designSystemColors.brand.secondary[600],
     inkBarColor: designSystemColors.brand.secondary[600],
+    horizontalItemGutter: 0,
+    horizontalItemMargin: "0",
   };
 }
 
@@ -40,31 +44,32 @@ function getSizeTokens(dsSize?: TabsSize): Record<string, any> {
   switch (dsSize) {
     case "s":
       return {
-        titleFontSize: 13,
-        horizontalItemPadding: `${spacing[2]}px 0`,
-        horizontalMargin: `0 0 0 ${spacing[4]}px`,
+        titleFontSize: 10,
+        horizontalItemPadding: `1px ${spacing[1]}px`,
+        horizontalMargin: "0",
       };
     case "l":
       return {
-        titleFontSize: 16,
-        horizontalItemPadding: `${spacing[4]}px 0`,
-        horizontalMargin: `0 0 0 ${spacing[6]}px`,
+        titleFontSize: 13,
+        horizontalItemPadding: `${spacing[1]}px ${spacing[3]}px`,
+        horizontalMargin: "0",
       };
     case "m":
     default:
       return {
-        titleFontSize: 14,
-        horizontalItemPadding: `${spacing[3]}px 0`,
-        horizontalMargin: `0 0 0 ${spacing[5]}px`,
+        titleFontSize: 13,
+        horizontalItemPadding: `${spacing[1]}px ${spacing[2]}px`,
+        horizontalMargin: "0",
       };
   }
 }
 
 export function Tabs(props: TabsProps): React.ReactElement {
-  const { variant = "primary", dsSize = "m", size, ...rest } = props;
+  const { variant = "primary", dsSize = "m", size, className, ...rest } = props;
 
   const resolvedSize = size ? mapAntdSize(size) : dsSize;
   const sizeTokens = getSizeTokens(resolvedSize);
+  const mergedClassName = ["ds-tabs", `ds-tabs-${resolvedSize}`, `ds-tabs-${variant}`, className].filter(Boolean).join(" ");
 
   const getVariantTokens = () => {
     switch (variant) {
@@ -84,7 +89,7 @@ export function Tabs(props: TabsProps): React.ReactElement {
         },
       }}
     >
-      <AntdTabs {...rest} />
+      <AntdTabs {...rest} className={mergedClassName} />
     </ConfigProvider>
   );
 }
