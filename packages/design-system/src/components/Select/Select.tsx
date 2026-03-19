@@ -32,14 +32,8 @@ function getSizeTokens(dsSize?: SelectSize): {
   height: number;
   menuItemHeight: number;
 } {
-  const itemHeights: Record<SelectSize, number> = {
-    xs: 24,
-    s: 28,
-    m: 32,
-    l: 36,
-  };
-
-  const menuItemHeight = itemHeights[dsSize || "m"];
+  // Figma: option items são sempre 32px em todos os tamanhos
+  const menuItemHeight = 32;
 
   if (dsSize === "xs") {
     return {
@@ -66,6 +60,7 @@ function getSizeTokens(dsSize?: SelectSize): {
       borderRadius: radius.xl,
       controlHeight: baseControlHeight,
       colorError: designSystemColors.feedback.red[500],
+      fontSize: 13,
     },
     height: baseControlHeight,
     menuItemHeight,
@@ -82,7 +77,7 @@ const baseTokens: Partial<ComponentToken> = {
 
 export function Select(props: SelectProps): React.ReactElement {
   const {
-    dsSize = "m",
+    dsSize: dsSizeProp,
     size,
     style,
     className,
@@ -97,7 +92,8 @@ export function Select(props: SelectProps): React.ReactElement {
 
   const [searchValue, setSearchValue] = useState("");
   const [currentValue, setCurrentValue] = useState<SelectProps["value"] | undefined>(value ?? defaultValue);
-  const resolvedSize = size ? mapToDsSize(size) : dsSize;
+  // dsSize tem prioridade absoluta; size é apenas fallback para compatibilidade com AntD
+  const resolvedSize: SelectSize = dsSizeProp ?? (size ? mapToDsSize(size) : "m");
   const sizeTokens = getSizeTokens(resolvedSize);
 
   const isMultiple = rest.mode === "multiple" || rest.mode === "tags";
@@ -157,15 +153,15 @@ export function Select(props: SelectProps): React.ReactElement {
         {...rest}
         status={status}
         maxTagCount={maxTagCount}
-        className={className}
+        className={[`ds-select`, `ds-select-${resolvedSize}`, className].filter(Boolean).join(" ")}
         defaultValue={defaultValue}
         suffixIcon={suffixIcon ?? <ChevronsUpDown size={16} color={designSystemColors.neutral[800]} />}
         menuItemSelectedIcon={isMultiple ? null : <Check size={16} color={designSystemColors.neutral[800]} />}
         showSearch={false}
         searchValue={searchValue}
         style={{
-          height: `${sizeTokens.height}px`,
           ["--select-multi-item-border-color" as any]: "#D4D4D4",
+          ["--ds-select-height" as any]: `${sizeTokens.height}px`,
           transition: "all 0.2s ease",
           ...style,
         }}
@@ -183,7 +179,7 @@ export function Select(props: SelectProps): React.ReactElement {
             </div>
           );
         }}
-        dropdownRender={(menu: React.ReactNode) => (
+        popupRender={(menu: React.ReactNode) => (
           <>
             {showSearch && (
               <div

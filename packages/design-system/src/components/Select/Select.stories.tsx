@@ -248,8 +248,7 @@ const sizes: Array<{ label: string; dsSize: "m" | "l" | "s" | "xs" }> = [
 export const FigmaGrid: Story = {
   name: "Figma — Grid (estados × tamanhos)",
   render: () => (
-    <Form layout="vertical">
-      <div style={{ display: "grid", gridTemplateColumns: "100px repeat(4, 220px)", gap: "8px 16px", alignItems: "center" }}>
+    <div style={{ display: "grid", gridTemplateColumns: "100px repeat(4, 220px)", gap: "8px 16px", alignItems: "center" }}>
         {/* Header */}
         <div />
         {sizes.map((s) => (
@@ -303,8 +302,7 @@ export const FigmaGrid: Story = {
             <Select dsSize={s.dsSize} placeholder="Selecione um item" disabled options={options} />
           </FormItem>
         ))}
-      </div>
-    </Form>
+    </div>
   ),
   decorators: [(Story) => <div style={{ padding: 32 }}><Story /></div>],
 };
@@ -322,29 +320,27 @@ const optionsWithGroups = [
 export const FigmaExamples: Story = {
   name: "Figma — Exemplos",
   render: () => (
-    <Form layout="vertical">
-      <div style={{ display: "flex", gap: 48, alignItems: "flex-start", padding: 32 }}>
-        {/* Exemplo 1: dropdown aberto com search + group label */}
-        <div style={{ width: 240 }}>
-          <FormItem label="Label" style={{ marginBottom: 0 }}>
-            <Select
-              placeholder="Selecione um item"
-              showSearch
-              open
-              options={optionsWithGroups}
-              getPopupContainer={(trigger) => trigger.parentElement!}
-            />
-          </FormItem>
-        </div>
-
-        {/* Exemplo 2: com valor selecionado + helper text */}
-        <div style={{ width: 240 }}>
-          <FormItem label="Label" extra="Helper text" style={{ marginBottom: 0 }}>
-            <Select defaultValue="option1" options={options} />
-          </FormItem>
-        </div>
+    <div style={{ display: "flex", gap: 48, alignItems: "flex-start", padding: 32 }}>
+      {/* Exemplo 1: dropdown aberto com search + group label */}
+      <div style={{ width: 240 }}>
+        <FormItem label="Label" style={{ marginBottom: 0 }}>
+          <Select
+            placeholder="Selecione um item"
+            showSearch
+            open
+            options={optionsWithGroups}
+            getPopupContainer={(trigger) => trigger.parentElement!}
+          />
+        </FormItem>
       </div>
-    </Form>
+
+      {/* Exemplo 2: com valor selecionado + helper text */}
+      <div style={{ width: 240 }}>
+        <FormItem label="Label" extra="Helper text" style={{ marginBottom: 0 }}>
+          <Select defaultValue="option1" options={options} />
+        </FormItem>
+      </div>
+    </div>
   ),
   decorators: [(Story) => <Story />],
 };

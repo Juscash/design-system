@@ -1096,6 +1096,30 @@
 }
 
 /* ============================================
+   SELECT — Tamanhos via CSS variable (Figma: xs=24, s=32, m=36, l=40)
+   --ds-select-height é definido como inline style no .ant-select wrapper
+   e cascateia para filhos via CSS custom property
+   ============================================ */
+
+/* Wrapper */
+.ds-select {
+  height: var(--ds-select-height, 36px) !important;
+  min-height: var(--ds-select-height, 36px) !important;
+}
+
+/* Conteúdo interno — AntD v6 usa .ant-select-content (ou .ant-select-selector em versões antigas) */
+.ds-select .ant-select-content,
+.ds-select .ant-select-selector {
+  min-height: var(--ds-select-height, 36px) !important;
+}
+
+/* height fixo apenas no select simples (não multiple) */
+.ds-select:not(.ant-select-multiple) .ant-select-content,
+.ds-select:not(.ant-select-multiple) .ant-select-selector {
+  height: var(--ds-select-height, 36px) !important;
+}
+
+/* ============================================
    SELECT — Group label: 10px, neutral/soft (Figma)
    ============================================ */
 .ant-select-item-group {
