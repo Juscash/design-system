@@ -1096,6 +1096,15 @@
 }
 
 /* ============================================
+   SELECT — Group label: 10px, neutral/soft (Figma)
+   ============================================ */
+.ant-select-item-group {
+  font-size: 10px !important;
+  color: var(--color-neutral-500) !important;
+  font-family: 'Inter', sans-serif !important;
+}
+
+/* ============================================
    POPOVER — Borda neutral[300] (Figma)
    ============================================ */
 .ant-popover-container {

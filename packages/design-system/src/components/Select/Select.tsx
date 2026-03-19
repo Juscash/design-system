@@ -146,6 +146,9 @@ export function Select(props: SelectProps): React.ReactElement {
           colorTextDisabled: designSystemColors.neutral[400],
           colorBgContainerDisabled: designSystemColors.neutral[50],
           colorTextPlaceholder: designSystemColors.neutral[500],
+          // Figma: background neutral[50] e texto neutral[800]
+          colorBgContainer: designSystemColors.neutral[50],
+          colorText: designSystemColors.neutral[800],
           borderRadiusLG: 8,
         },
       }}

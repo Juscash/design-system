@@ -200,29 +200,151 @@ export const ErrorFocus: Story = {
   },
 };
 
+export const Filled: Story = {
+  args: {
+    defaultValue: "option1",
+    options,
+  },
+  name: "Filled (Value)",
+};
+
+export const WithHelperText: Story = {
+  render: () => (
+    <FormItem label="Label" extra="Helper text">
+      <Select placeholder="Selecione um item" options={options} />
+    </FormItem>
+  ),
+  decorators: [(Story) => <Story />],
+};
+
 export const SizeVariants: Story = {
   render: () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 16, width: 300 }}>
-      {/* XS Size */}
       <FormItem label="Size XS">
         <Select dsSize="xs" placeholder="XS Size" options={options} />
       </FormItem>
-
-      {/* S Size */}
       <FormItem label="Size S">
         <Select dsSize="s" placeholder="S Size" options={options} />
       </FormItem>
-
-      {/* M Size */}
       <FormItem label="Size M (Default)">
         <Select dsSize="m" placeholder="M Size" options={options} />
       </FormItem>
-
-      {/* L Size */}
       <FormItem label="Size L">
         <Select dsSize="l" placeholder="L Size" options={options} />
       </FormItem>
     </div>
   ),
-  decorators: [(Story) => <Story />], // Remove default layout decorator for this custom render
+  decorators: [(Story) => <Story />],
+};
+
+// Grid completo: todos estados × todos tamanhos (espelho do Figma)
+const sizes: Array<{ label: string; dsSize: "m" | "l" | "s" | "xs" }> = [
+  { label: "Regular (m)", dsSize: "m" },
+  { label: "Large (l)", dsSize: "l" },
+  { label: "Small (s)", dsSize: "s" },
+  { label: "Mini (xs)", dsSize: "xs" },
+];
+
+export const FigmaGrid: Story = {
+  name: "Figma — Grid (estados × tamanhos)",
+  render: () => (
+    <Form layout="vertical">
+      <div style={{ display: "grid", gridTemplateColumns: "100px repeat(4, 220px)", gap: "8px 16px", alignItems: "center" }}>
+        {/* Header */}
+        <div />
+        {sizes.map((s) => (
+          <div key={s.dsSize} style={{ fontSize: 11, color: "#9747ff", textAlign: "center", fontFamily: "monospace" }}>{s.label}</div>
+        ))}
+
+        {/* Placeholder */}
+        <div style={{ fontSize: 11, color: "#9747ff", fontFamily: "monospace", textAlign: "right" }}>Placeholder</div>
+        {sizes.map((s) => (
+          <FormItem key={s.dsSize} label="Label" style={{ marginBottom: 0 }}>
+            <Select dsSize={s.dsSize} placeholder="Selecione um item" options={options} />
+          </FormItem>
+        ))}
+
+        {/* Value */}
+        <div style={{ fontSize: 11, color: "#9747ff", fontFamily: "monospace", textAlign: "right" }}>Value</div>
+        {sizes.map((s) => (
+          <FormItem key={s.dsSize} label="Label" style={{ marginBottom: 0 }}>
+            <Select dsSize={s.dsSize} defaultValue="option1" options={options} />
+          </FormItem>
+        ))}
+
+        {/* Focus */}
+        <div style={{ fontSize: 11, color: "#9747ff", fontFamily: "monospace", textAlign: "right" }}>Focus</div>
+        {sizes.map((s) => (
+          <FormItem key={s.dsSize} label="Label" style={{ marginBottom: 0 }}>
+            <Select dsSize={s.dsSize} placeholder="Selecione um item" className="pseudo-focus-visible" options={options} />
+          </FormItem>
+        ))}
+
+        {/* Error */}
+        <div style={{ fontSize: 11, color: "#9747ff", fontFamily: "monospace", textAlign: "right" }}>Error</div>
+        {sizes.map((s) => (
+          <FormItem key={s.dsSize} label="Label" style={{ marginBottom: 0 }}>
+            <Select dsSize={s.dsSize} placeholder="Selecione um item" status="error" options={options} />
+          </FormItem>
+        ))}
+
+        {/* Error Focus */}
+        <div style={{ fontSize: 11, color: "#9747ff", fontFamily: "monospace", textAlign: "right" }}>Error Focus</div>
+        {sizes.map((s) => (
+          <FormItem key={s.dsSize} label="Label" style={{ marginBottom: 0 }}>
+            <Select dsSize={s.dsSize} placeholder="Selecione um item" status="error" className="pseudo-focus-visible" options={options} />
+          </FormItem>
+        ))}
+
+        {/* Disabled */}
+        <div style={{ fontSize: 11, color: "#9747ff", fontFamily: "monospace", textAlign: "right" }}>Disabled</div>
+        {sizes.map((s) => (
+          <FormItem key={s.dsSize} label="Label" style={{ marginBottom: 0 }}>
+            <Select dsSize={s.dsSize} placeholder="Selecione um item" disabled options={options} />
+          </FormItem>
+        ))}
+      </div>
+    </Form>
+  ),
+  decorators: [(Story) => <div style={{ padding: 32 }}><Story /></div>],
+};
+
+// Exemplos do Figma: dropdown aberto com search + group label, e select com helper text
+const optionsWithGroups = [
+  { label: "Group label", options: [
+    { value: "option1", label: "Option 1" },
+    { value: "option2", label: "Option 2" },
+    { value: "option3", label: "Option 3" },
+    { value: "option4", label: "Option 4" },
+  ]},
+];
+
+export const FigmaExamples: Story = {
+  name: "Figma — Exemplos",
+  render: () => (
+    <Form layout="vertical">
+      <div style={{ display: "flex", gap: 48, alignItems: "flex-start", padding: 32 }}>
+        {/* Exemplo 1: dropdown aberto com search + group label */}
+        <div style={{ width: 240 }}>
+          <FormItem label="Label" style={{ marginBottom: 0 }}>
+            <Select
+              placeholder="Selecione um item"
+              showSearch
+              open
+              options={optionsWithGroups}
+              getPopupContainer={(trigger) => trigger.parentElement!}
+            />
+          </FormItem>
+        </div>
+
+        {/* Exemplo 2: com valor selecionado + helper text */}
+        <div style={{ width: 240 }}>
+          <FormItem label="Label" extra="Helper text" style={{ marginBottom: 0 }}>
+            <Select defaultValue="option1" options={options} />
+          </FormItem>
+        </div>
+      </div>
+    </Form>
+  ),
+  decorators: [(Story) => <Story />],
 };
