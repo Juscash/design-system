@@ -226,86 +226,225 @@
 /* ============================================
    UPLOAD
    ============================================ */
-.juscash-upload-horizontal {
+.juscash-upload-root {
+  width: 100% !important;
+}
+
+.juscash-upload-root .ant-upload {
+  width: 100% !important;
+  display: block !important;
+}
+
+.juscash-upload-root.juscash-upload-layout-horizontal {
   display: flex !important;
-  flex-direction: row !important;
   align-items: center !important;
-  gap: var(--spacing-2) !important;
-  width: 100% !important;
-  max-width: 100% !important;
+  gap: 8px !important;
 }
 
-.juscash-upload-horizontal .ant-upload {
-  width: 100% !important;
-  transition: all 0.3s ease;
-}
-
-.juscash-upload-horizontal.juscash-upload-has-files .ant-upload {
-  width: 50% !important;
-  flex: 0 0 50% !important;
+.juscash-upload-root.juscash-upload-layout-horizontal .ant-upload {
+  flex: 1 1 0 !important;
   min-width: 0 !important;
 }
 
-.juscash-upload-horizontal .ant-upload-list-item-container {
+.juscash-upload-root.juscash-upload-layout-horizontal.juscash-upload-has-files .ant-upload-list {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+}
+
+.juscash-upload-root.juscash-upload-files-only .ant-upload {
+  display: none !important;
+}
+
+.juscash-upload-trigger {
   width: 100% !important;
-}
-
-.juscash-upload-horizontal .ant-upload-list-item {
-  margin-top: 0 !important;
   display: flex !important;
-  align-items: center;
-}
-
-.juscash-upload-horizontal .ant-upload-list-item-name {
-  white-space: nowrap !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 0 12px !important;
+  margin: 0 !important;
+  border: 1px solid var(--color-neutral-300) !important;
+  border-radius: 8px !important;
+  background: var(--color-neutral-50) !important;
+  box-shadow: none !important;
+  color: var(--color-neutral-800) !important;
+  cursor: pointer !important;
   overflow: hidden !important;
-  text-overflow: ellipsis !important;
-  flex: 1;
+  text-align: left !important;
+  font-family: "Inter", sans-serif !important;
+  transition: none !important;
 }
 
-.juscash-upload-horizontal.juscash-upload-has-files .ant-upload-list {
-  width: 50% !important;
-}
-
-.juscash-upload-horizontal .ant-upload-list {
-  line-height: 1;
-}
-
-.ant-upload-icon {
-  display: flex !important;
-}
-
-.ant-upload {
-  width: 100% !important;
-}
-
-.juscash-upload-button {
-  transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
-}
-
-.juscash-upload-button:hover {
-  background-color: var(--color-neutral-100) !important;
-  background-color: transparent !important;
-  color: inherit !important;
+.juscash-upload-trigger:hover,
+.juscash-upload-trigger:focus,
+.juscash-upload-trigger:active {
   border-color: var(--color-neutral-300) !important;
+  background: var(--color-neutral-50) !important;
+  box-shadow: none !important;
+  color: var(--color-neutral-800) !important;
+  outline: none !important;
+}
+
+.juscash-upload-size-xs .juscash-upload-trigger {
+  min-height: 24px !important;
+  height: 24px !important;
+}
+
+.juscash-upload-size-s .juscash-upload-trigger {
+  min-height: 32px !important;
+  height: 32px !important;
+}
+
+.juscash-upload-size-m .juscash-upload-trigger {
+  min-height: 36px !important;
+  height: 36px !important;
+}
+
+.juscash-upload-size-l .juscash-upload-trigger {
+  min-height: 40px !important;
+  height: 40px !important;
+}
+
+.juscash-upload-root.pseudo-focus-visible .juscash-upload-trigger {
   box-shadow: var(--shadow-focus) !important;
 }
 
-.upload-error-state {
+.juscash-upload-root.juscash-upload-error .juscash-upload-trigger {
   border-color: var(--color-feedback-red-500) !important;
-  outline: 1px solid var(--color-feedback-red-500) !important;
 }
 
-.upload-error-state:focus {
-  border-color: var(--color-feedback-red-500) !important;
-  outline: 1px solid var(--color-feedback-red-500) !important;
+.juscash-upload-root.juscash-upload-error.pseudo-focus-visible .juscash-upload-trigger {
   box-shadow: var(--shadow-focus-error) !important;
 }
 
-.upload-error-state:hover {
-  border-color: var(--color-feedback-red-500) !important;
-  outline: 1px solid var(--color-feedback-red-500) !important;
-  box-shadow: var(--shadow-focus-error) !important;
+.juscash-upload-root.juscash-upload-disabled .juscash-upload-trigger {
+  border-color: var(--color-neutral-200) !important;
+  background: var(--color-neutral-50) !important;
+  color: var(--color-neutral-400) !important;
+  cursor: not-allowed !important;
+}
+
+.juscash-upload-trigger-icon,
+.juscash-upload-file-icon {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: none !important;
+  color: currentColor !important;
+}
+
+.juscash-upload-trigger-text {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+  font-weight: 700 !important;
+}
+
+.juscash-upload-root.juscash-upload-disabled .juscash-upload-trigger-icon,
+.juscash-upload-root.juscash-upload-disabled .juscash-upload-trigger-text {
+  color: var(--color-neutral-400) !important;
+}
+
+.juscash-upload-root .ant-upload-list {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  margin-top: 8px !important;
+}
+
+.juscash-upload-root.juscash-upload-layout-horizontal .ant-upload-list,
+.juscash-upload-root.juscash-upload-files-only .ant-upload-list {
+  margin-top: 0 !important;
+}
+
+.juscash-upload-root .ant-upload-list-item-container {
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+.juscash-upload-root .ant-upload-list-item {
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+.juscash-upload-root .ant-upload-list-item::before {
+  display: none !important;
+}
+
+.juscash-upload-root .ant-upload-list-item-name,
+.juscash-upload-root .ant-upload-list-item-actions {
+  display: none !important;
+}
+
+.juscash-upload-file-row {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  min-height: 24px !important;
+  color: var(--color-neutral-800) !important;
+}
+
+.juscash-upload-file-name {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+  font-weight: 400 !important;
+  color: currentColor !important;
+}
+
+.juscash-upload-file-error {
+  color: var(--color-feedback-red-500) !important;
+}
+
+.juscash-upload-file-loading,
+.juscash-upload-file-disabled {
+  color: var(--color-neutral-400) !important;
+}
+
+.juscash-upload-file-spinner {
+  animation: spin 1s linear infinite;
+}
+
+.juscash-upload-remove-button {
+  width: 24px !important;
+  height: 24px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 4px !important;
+  border: none !important;
+  border-radius: 4px !important;
+  background: transparent !important;
+  color: var(--color-neutral-800) !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  transition: none !important;
+}
+
+.juscash-upload-remove-button:hover {
+  background: var(--color-neutral-100) !important;
+}
+
+.juscash-upload-remove-button:focus,
+.juscash-upload-remove-button:active {
+  outline: none !important;
+}
+
+.juscash-upload-root.pseudo-focus-visible .juscash-upload-remove-button {
+  box-shadow: var(--shadow-focus) !important;
+}
+
+.juscash-upload-root.juscash-upload-disabled .juscash-upload-remove-button,
+.juscash-upload-file-disabled .juscash-upload-remove-button {
+  color: var(--color-neutral-400) !important;
+  cursor: not-allowed !important;
 }
 
 /* ============================================
@@ -1433,4 +1572,14 @@
 .ds-tabs .ant-tabs-content-holder {
   margin-top: 8px !important;
   background: transparent !important;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
