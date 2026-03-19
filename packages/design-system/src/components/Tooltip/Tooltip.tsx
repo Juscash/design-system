@@ -5,7 +5,17 @@ import { designSystemColors, radius } from "../../theme";
 
 export type TooltipProps = AntdTooltipProps;
 
-export const Tooltip: React.FC<TooltipProps> = ({ children, ...rest }) => {
+export const Tooltip: React.FC<TooltipProps> = ({
+  children,
+  classNames,
+  styles,
+  overlayClassName,
+  overlayStyle,
+  overlayInnerStyle,
+  ...rest
+}) => {
+  const rootClassName = ["ds-tooltip", overlayClassName, classNames?.root].filter(Boolean).join(" ");
+
   return (
     <ConfigProvider
       theme={{
@@ -13,11 +23,10 @@ export const Tooltip: React.FC<TooltipProps> = ({ children, ...rest }) => {
           Tooltip: {
             colorBgSpotlight: designSystemColors.neutral[800], // Dark background (#262626)
             colorTextLightSolid: designSystemColors.neutral[50], // Light text (#FAFAFA)
-            borderRadius: radius.md, // 4px
+            borderRadius: radius.xl, // 8px
             fontFamily: '"Inter", sans-serif',
             fontSize: 13,
             lineHeight: 1.2,
-            // Figma: borda invisível (cor = bg, sem contraste)
             colorBorder: designSystemColors.neutral[800],
           },
         },
@@ -26,7 +35,27 @@ export const Tooltip: React.FC<TooltipProps> = ({ children, ...rest }) => {
         },
       }}
     >
-      <AntdTooltip {...rest}>{children}</AntdTooltip>
+      <AntdTooltip
+        classNames={{
+          ...classNames,
+          root: rootClassName,
+        }}
+        styles={{
+          ...styles,
+          root: {
+            maxWidth: 200,
+            ...overlayStyle,
+            ...styles?.root,
+          },
+          container: {
+            ...overlayInnerStyle,
+            ...styles?.container,
+          },
+        }}
+        {...rest}
+      >
+        {children}
+      </AntdTooltip>
     </ConfigProvider>
   );
 };

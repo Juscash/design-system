@@ -1,13 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import React from "react";
-import { Tooltip } from "./Tooltip";
+import { Badge } from "../Badge";
 import { Button } from "../Button";
-import { Info } from "lucide-react";
+import { Tooltip } from "./Tooltip";
+import { CircleAlert, Info, Pencil } from "lucide-react";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4125-11510&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4041-11954&m=dev";
+const LONG_TOOLTIP_TEXT = "Estamos analisando seu processo, em breve entraremos em contato.";
 
 type TooltipStoryProps = React.ComponentProps<typeof Tooltip> & {
   hover?: boolean;
@@ -21,6 +23,16 @@ const getPseudoClassName = (args: { hover?: boolean; active?: boolean; focus?: b
     .join(" ");
 
   return [args.className, pseudoClasses].filter(Boolean).join(" ");
+};
+
+const storyCardStyle: React.CSSProperties = {
+  display: "flex",
+  flexDirection: "column",
+  gap: 16,
+  padding: 24,
+  border: "1px solid var(--color-neutral-200)",
+  borderRadius: 12,
+  background: "white",
 };
 
 const meta: Meta<TooltipStoryProps> = {
@@ -75,7 +87,7 @@ function Example() {
                 fontWeight: "bold",
               }}
             >
-              🎨 Figma Spec
+              Figma Spec
             </h3>
             <Figma showLink url={FIGMA_URL} height="400px" />
           </div>
@@ -132,10 +144,12 @@ function Example() {
   },
   render: (args) => {
     const { hover, active, focus, className, ...props } = args;
-    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
-      .filter(Boolean)
-      .join(" ");
-    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
+    const mergedClassName = getPseudoClassName({
+      hover,
+      active,
+      focus,
+      className,
+    });
 
     return <Tooltip {...props} className={mergedClassName} />;
   },
@@ -168,8 +182,8 @@ export const Default: Story = {
 
 export const IconTooltip: Story = {
   args: {
-    title: "Informação adicional",
-    children: <Info size={20} color="#6D6D6E" />,
+    title: "Tooltip text",
+    children: <Info size={16} color="#737373" />,
   },
   render: (args) => {
     const { hover, active, focus, className, ...props } = args;
@@ -253,22 +267,112 @@ export const Placements: Story = {
   },
 };
 
-export const FigmaExample: Story = {
-  render: (args) => {
-    const mergedClassName = getPseudoClassName(args);
-
-    return (
-      <div className={mergedClassName} style={{ display: "flex", gap: 40, alignItems: "center" }}>
-        <Tooltip title="Tooltip text" defaultOpen>
-          <Button type="primary" style={{ backgroundColor: "#262626" }}>
-            Tooltip text
+export const FigmaSides: Story = {
+  name: "Figma — Sides",
+  render: () => (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "repeat(2, minmax(180px, 1fr))",
+        gap: 40,
+        padding: 24,
+        border: "1px dashed var(--color-neutral-300)",
+        borderRadius: 12,
+        background: "white",
+      }}
+    >
+      <div style={{ display: "flex", justifyContent: "center", paddingTop: 44 }}>
+        <Tooltip title="Tooltip text" placement="bottom" defaultOpen>
+          <Button type="ghost" size="xs">
+            Bottom
           </Button>
         </Tooltip>
-
-        <Tooltip title="Tooltip text" defaultOpen placement="top">
-          <Info size={20} color="#6D6D6E" />
+      </div>
+      <div style={{ display: "flex", justifyContent: "center", paddingBottom: 44 }}>
+        <Tooltip title="Tooltip text" placement="top" defaultOpen>
+          <Button type="ghost" size="xs">
+            Top
+          </Button>
         </Tooltip>
       </div>
-    );
-  },
+      <div style={{ display: "flex", justifyContent: "flex-end", paddingRight: 60 }}>
+        <Tooltip title="Tooltip text" placement="left" defaultOpen>
+          <Button type="ghost" size="xs">
+            Left
+          </Button>
+        </Tooltip>
+      </div>
+      <div style={{ display: "flex", justifyContent: "flex-start", paddingLeft: 60 }}>
+        <Tooltip title="Tooltip text" placement="right" defaultOpen>
+          <Button type="ghost" size="xs">
+            Right
+          </Button>
+        </Tooltip>
+      </div>
+    </div>
+  ),
+};
+
+export const FigmaIcon: Story = {
+  name: "Figma — Icon",
+  render: () => (
+    <div style={storyCardStyle}>
+      <span style={{ fontSize: 13, color: "var(--color-neutral-500)" }}>Icon tooltip</span>
+      <div style={{ display: "flex", alignItems: "center", justifyContent: "center", minHeight: 52 }}>
+        <Tooltip title="Tooltip text" placement="top" defaultOpen>
+          <Info size={16} color="#737373" />
+        </Tooltip>
+      </div>
+    </div>
+  ),
+};
+
+export const FigmaExamples: Story = {
+  name: "Figma — Examples",
+  render: () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      <div style={storyCardStyle}>
+        <span style={{ fontSize: 13, color: "var(--color-neutral-500)" }}>Tooltip examples</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 20, flexWrap: "wrap", paddingTop: 52 }}>
+          <Tooltip title="Tooltip text" placement="top" defaultOpen>
+            <Button type="outline" size="xs">
+              Editar
+            </Button>
+          </Tooltip>
+
+          <Tooltip title="Tooltip text" placement="top" defaultOpen>
+            <Button
+              type="outline"
+              size="xs"
+              icon={<Pencil size={12} />}
+              aria-label="Editar"
+            />
+          </Tooltip>
+
+          <Tooltip
+            title={<p>{LONG_TOOLTIP_TEXT}</p>}
+            placement="right"
+            defaultOpen
+          >
+            <Badge variant="secondary" statusColor="info">
+              Análise em andamento
+            </Badge>
+          </Tooltip>
+        </div>
+      </div>
+
+      <div style={storyCardStyle}>
+        <span style={{ fontSize: 13, color: "var(--color-neutral-500)" }}>Long tooltip</span>
+        <div style={{ display: "flex", alignItems: "center", gap: 16, minHeight: 84 }}>
+          <Tooltip
+            title={<p>{LONG_TOOLTIP_TEXT}</p>}
+            placement="right"
+            defaultOpen
+          >
+            <CircleAlert size={16} color="#737373" />
+          </Tooltip>
+        </div>
+      </div>
+    </div>
+  ),
 };
