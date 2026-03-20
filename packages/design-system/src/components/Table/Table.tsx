@@ -1,15 +1,15 @@
 import React, { useMemo } from "react";
-import { ConfigProvider, Table as AntdTable, Tooltip } from "antd";
+import { ConfigProvider, Table as AntdTable } from "antd";
 import type { TableProps as AntdTableProps, ColumnsType } from "antd/es/table";
-import { Body2 } from "../Typography";
+import { Tooltip } from "../Tooltip";
 import { designSystemColors, spacing } from "../../theme";
 import { radius } from "../../theme";
-import { ArrowUp, ArrowDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { ChevronLeft, ChevronRight, ChevronsUpDown } from "lucide-react";
 
 export type TableProps<T> = AntdTableProps<T>;
 
 export function Table<T>(props: TableProps<T>): React.ReactElement {
-  const { columns, bordered = true, tableLayout = "fixed", scroll = undefined, pagination, ...rest } = props;
+  const { columns, bordered = false, className, tableLayout = "fixed", scroll = undefined, pagination, ...rest } = props;
 
   const mergedPagination = useMemo(() => {
     if (pagination === false) return false;
@@ -29,23 +29,57 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
       }),
 
       ...(!pagination?.showTotal && {
-        showTotal: (total: number) => <Body2 color="dark">{total} registros</Body2>,
+        showTotal: (total: number) => (
+          <span
+            style={{
+              fontFamily: "Inter, sans-serif",
+              fontSize: 13,
+              lineHeight: "1.2",
+              fontWeight: 400,
+              color: designSystemColors.neutral[800],
+            }}
+          >
+            {total} registros
+          </span>
+        ),
       }),
 
       ...(!pagination?.itemRender && {
         itemRender: (_current: number, type: string, originalElement: React.ReactNode) => {
           if (type === "prev") {
             return (
-              <Body2 style={{ display: "flex", alignItems: "center", gap: 0 }} color="dark">
-                <ChevronLeft size={12} style={{ marginRight: 4 }} /> Anterior
-              </Body2>
+              <span
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 4,
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: 13,
+                  lineHeight: "1.2",
+                  fontWeight: 400,
+                  color: designSystemColors.neutral[800],
+                }}
+              >
+                <ChevronLeft size={12} /> Anterior
+              </span>
             );
           }
           if (type === "next") {
             return (
-              <Body2 style={{ display: "flex", alignItems: "center", gap: 0 }} color="dark">
-                Próximo <ChevronRight size={12} style={{ marginLeft: 4 }} />
-              </Body2>
+              <span
+                style={{
+                  display: "inline-flex",
+                  alignItems: "center",
+                  gap: 4,
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: 13,
+                  lineHeight: "1.2",
+                  fontWeight: 400,
+                  color: designSystemColors.neutral[800],
+                }}
+              >
+                Próximo <ChevronRight size={12} />
+              </span>
             );
           }
           return originalElement;
@@ -64,19 +98,13 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
       }),
       ...(col.sorter
         && !col.sortIcon && {
-          sortIcon: ({ sortOrder }: { sortOrder?: "ascend" | "descend" | null }) => {
+          sortIcon: () => {
             return (
-              <span style={{ display: "flex", alignItems: "center", gap: 0 }}>
-                <ArrowUp
-                  size={16}
-                  color={sortOrder === "ascend" ? designSystemColors.brand.secondary[600] : designSystemColors.neutral[400]}
-                  style={{ margin: 0, padding: 0 }}
-                />
-                <ArrowDown
-                  style={{ margin: 0, padding: 0 }}
-                  size={16}
-                  color={sortOrder === "descend" ? designSystemColors.brand.secondary[600] : designSystemColors.neutral[400]}
-                />
+              <span
+                className="ds-table-sort-icon"
+                style={{ display: "inline-flex", alignItems: "center", justifyContent: "center" }}
+              >
+                <ChevronsUpDown size={16} strokeWidth={1.75} />
               </span>
             );
           },
@@ -84,9 +112,11 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
       title:
         typeof col.title === "string" ?
           <Tooltip title={col.title}>
-            <Body2 color="dark" strong ellipsis>
+            <span
+              style={{ margin: 0, fontSize: 13, lineHeight: "1.2", fontWeight: 700 }}
+            >
               {col.title}
-            </Body2>
+            </span>
           </Tooltip>
         : col.title,
 
@@ -98,9 +128,22 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
         if (typeof value === "string" || typeof value === "number") {
           return (
             <Tooltip title={value}>
-              <Body2 color="dark" ellipsis>
+              <span
+                style={{
+                  display: "block",
+                  margin: 0,
+                  overflow: "hidden",
+                  textOverflow: "ellipsis",
+                  whiteSpace: "nowrap",
+                  fontFamily: "Inter, sans-serif",
+                  fontSize: 13,
+                  lineHeight: "15.6px",
+                  fontWeight: 400,
+                  color: designSystemColors.neutral[800],
+                }}
+              >
                 {value}
-              </Body2>
+              </span>
             </Tooltip>
           );
         }
@@ -110,14 +153,18 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
     }));
   }, [columns]);
 
+  const mergedClassName = ["ds-table", className].filter(Boolean).join(" ");
+
   return (
     <ConfigProvider
       theme={{
         token: {
           fontSize: 13,
           colorText: designSystemColors.neutral[800],
-          fontWeightStrong: 400,
+          fontWeightStrong: 700,
           colorPrimary: designSystemColors.neutral[300],
+          borderRadius: radius.xl,
+          borderRadiusLG: radius.xl,
         },
         components: {
           Select: {
@@ -142,9 +189,12 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
             itemActiveColor: designSystemColors.neutral[800],
             itemActiveColorHover: designSystemColors.neutral[800],
             itemBg: "rgba(255, 255, 255, 0)",
-            itemInputBg: "red",
-            itemLinkBg: "red",
             itemSize: 32,
+            colorPrimary: designSystemColors.neutral[800],
+            colorText: designSystemColors.neutral[800],
+            colorTextDisabled: designSystemColors.neutral[400],
+            colorBgTextHover: "transparent",
+            borderRadius: radius.xl,
           },
           Checkbox: {
             colorPrimary: designSystemColors.brand.primary[600],
@@ -162,15 +212,18 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
           },
           Table: {
             cellPaddingBlock: 8,
+            cellPaddingInline: 8,
             headerBg: designSystemColors.neutral[50],
+            headerColor: designSystemColors.neutral[800],
             colorBgContainer: designSystemColors.neutral[50],
             colorBorderSecondary: designSystemColors.neutral[300],
             borderRadius: radius.xl,
             rowSelectedBg: designSystemColors.neutral[200],
             rowSelectedHoverBg: designSystemColors.neutral[200],
-            headerSortActiveBg: designSystemColors.neutral[50],
-            headerSortHoverBg: designSystemColors.neutral[50],
+            headerSortActiveBg: designSystemColors.neutral[100],
+            headerSortHoverBg: designSystemColors.neutral[100],
             bodySortBg: designSystemColors.neutral[50],
+            headerSplitColor: "transparent",
           },
         },
       }}
@@ -182,6 +235,7 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
         scroll={scroll}
         bordered={bordered}
         columns={customColumns}
+        className={mergedClassName}
       />
     </ConfigProvider>
   );
