@@ -9,6 +9,8 @@ const require = createRequire(import.meta.url);
 const rootDir = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
 const designSystemSrc = resolve(rootDir, "packages/design-system/src");
 const designSystemDist = resolve(rootDir, "packages/design-system/dist");
+const designSystemCssSrc = resolve(rootDir, "packages/design-system/src/theme/global.css");
+const designSystemCssDist = resolve(rootDir, "packages/design-system/dist/index.css");
 
 const config: StorybookConfig = {
   stories: ["../../packages/design-system/src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
@@ -30,6 +32,7 @@ const config: StorybookConfig = {
   async viteFinal(config, { configType }) {
     const { mergeConfig } = await import("vite");
     const designSystemAlias = configType === "DEVELOPMENT" ? designSystemSrc : designSystemDist;
+    const designSystemCssAlias = configType === "DEVELOPMENT" ? designSystemCssSrc : designSystemCssDist;
     const aliases = [
       {
         find: "@ant-design/nextjs-registry",
@@ -39,14 +42,12 @@ const config: StorybookConfig = {
         find: /^@juscash\/design-system$/,
         replacement: designSystemAlias,
       },
+      {
+        find: /^@juscash\/design-system\/dist\/index\.css$/,
+        replacement: designSystemCssAlias,
+      },
     ];
 
-    if (configType === "DEVELOPMENT") {
-      aliases.push({
-        find: "@juscash/design-system/dist/index.css",
-        replacement: resolve(rootDir, "packages/design-system/src/theme/global.css"),
-      });
-    }
     return mergeConfig(config, {
       resolve: {
         alias: aliases,

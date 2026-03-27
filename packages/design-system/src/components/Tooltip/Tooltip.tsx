@@ -5,6 +5,29 @@ import { designSystemColors, radius } from "../../theme";
 
 export type TooltipProps = AntdTooltipProps;
 
+type TooltipSemanticClassNames = {
+  root?: string;
+  container?: string;
+  arrow?: string;
+};
+
+type TooltipSemanticStyles = {
+  root?: React.CSSProperties;
+  container?: React.CSSProperties;
+  arrow?: React.CSSProperties;
+};
+
+function resolveSemanticValue<T extends object>(
+  value: T | ((info: { props: TooltipProps }) => T) | undefined,
+  props: TooltipProps,
+) {
+  if (typeof value === "function") {
+    return value({ props });
+  }
+
+  return value;
+}
+
 export const Tooltip: React.FC<TooltipProps> = ({
   children,
   classNames,
@@ -14,7 +37,20 @@ export const Tooltip: React.FC<TooltipProps> = ({
   overlayInnerStyle,
   ...rest
 }) => {
-  const rootClassName = ["ds-tooltip", overlayClassName, classNames?.root].filter(Boolean).join(" ");
+  const tooltipProps: TooltipProps = {
+    children,
+    classNames,
+    styles,
+    overlayClassName,
+    overlayStyle,
+    overlayInnerStyle,
+    ...rest,
+  };
+
+  const resolvedClassNames = resolveSemanticValue<TooltipSemanticClassNames>(classNames, tooltipProps) ?? {};
+  const resolvedStyles = resolveSemanticValue<TooltipSemanticStyles>(styles, tooltipProps) ?? {};
+
+  const rootClassName = ["ds-tooltip", overlayClassName, resolvedClassNames.root].filter(Boolean).join(" ");
 
   return (
     <ConfigProvider
@@ -37,19 +73,19 @@ export const Tooltip: React.FC<TooltipProps> = ({
     >
       <AntdTooltip
         classNames={{
-          ...classNames,
+          ...resolvedClassNames,
           root: rootClassName,
         }}
         styles={{
-          ...styles,
+          ...resolvedStyles,
           root: {
             maxWidth: 200,
             ...overlayStyle,
-            ...styles?.root,
+            ...resolvedStyles.root,
           },
           container: {
             ...overlayInnerStyle,
-            ...styles?.container,
+            ...resolvedStyles.container,
           },
         }}
         {...rest}
