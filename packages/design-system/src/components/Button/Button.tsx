@@ -63,6 +63,7 @@ function getOutlinedTokens(): Partial<ButtonToken> {
 
     colorBorderDisabled: designSystemColors.neutral[200],
 
+    defaultBg: "transparent",
     defaultBgDisabled: "transparent",
     colorBgContainerDisabled: "transparent",
     primaryShadow: "none",
