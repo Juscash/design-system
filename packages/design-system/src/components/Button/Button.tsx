@@ -44,7 +44,7 @@ function getOutlinedTokens(): Partial<ButtonToken> {
   return {
     colorSuccessTextHover: designSystemColors.neutral[800],
 
-    defaultColor: designSystemColors.neutral[50],
+    defaultColor: designSystemColors.neutral[800],
     defaultBorderColor: designSystemColors.neutral[300],
 
     colorText: designSystemColors.neutral[800],
