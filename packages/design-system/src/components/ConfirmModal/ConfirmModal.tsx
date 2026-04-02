@@ -4,7 +4,7 @@ import type { ModalProps as AntdModalProps } from "antd";
 import { designSystemColors, radius, shadow, spacing } from "../../theme";
 import { Button } from "../Button";
 
-type ConfirmType = "info" | "warning" | "danger";
+type ConfirmType = "info" | "warning" | "danger" | "secondary";
 
 export type ConfirmModalProps = Omit<AntdModalProps, "footer" | "closable" | "title"> & {
   /**
@@ -20,6 +20,7 @@ export type ConfirmModalProps = Omit<AntdModalProps, "footer" | "closable" | "ti
    * - info: botão verde (primary)
    * - warning: botão amarelo/laranja (primary) — mesmo visual que info
    * - danger: botão vermelho (destructive)
+   * - secondary: botão azul secundário (primary)
    * @default "info"
    */
   type?: ConfirmType;
@@ -92,6 +93,7 @@ export function ConfirmModal(props: ConfirmModalProps): React.ReactElement {
         onClick={onConfirm}
         loading={confirmLoading}
         style={!cancelText ? { width: "100%" } : undefined}
+        variant={type === "secondary" ? "secondary" : undefined}
       >
         {confirmText}
       </Button>

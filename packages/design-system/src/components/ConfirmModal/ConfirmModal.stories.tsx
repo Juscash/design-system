@@ -106,7 +106,7 @@ function Example() {
   argTypes: {
     type: {
       control: "select",
-      options: ["info", "warning", "danger"],
+      options: ["info", "warning", "danger", "secondary"],
       description: "Tipo de confirmação (afeta cor do botão)",
       table: {
         type: { summary: '"info" | "warning" | "danger"' },
@@ -227,7 +227,46 @@ export const Default: Story = {
   },
 };
 
-// Story 2: Danger (Excluir)
+// Story 2: Secondary
+export const Secondary: Story = {
+  parameters: {
+    docs: {
+      description: {
+        story: "Modal de confirmação com botão secundário (azul).",
+      },
+    },
+  },
+  render: function SecondaryStory(args) {
+    const [open, setOpen] = useState(false);
+    const { hover, active, focus, className, ...props } = args;
+    const mergedClassName = getPseudoClassName({
+      hover,
+      active,
+      focus,
+      className,
+    });
+
+    return (
+      <div style={{ padding: 40 }}>
+        <Button onClick={() => setOpen(true)}>Abrir Confirmação</Button>
+        <ConfirmModal
+          {...props}
+          open={open}
+          title="Tem certeza que deseja sair desta página?"
+          description="Suas alterações podem ser perdidas."
+          type="secondary"
+          confirmText="Confirmar"
+          cancelText="Não, ficar na página"
+          onConfirm={() => setOpen(false)}
+          onCancel={() => setOpen(false)}
+          className={mergedClassName}
+        />
+      </div>
+    );
+  },
+};
+
+// Story 3: Danger (Excluir)
 export const Danger: Story = {
   parameters: {
     docs: {
