@@ -1,16 +1,38 @@
+# Dependencies
 node_modules
+
+# Build output
 dist
-*.log
-.DS_Store
-coverage
 .turbo
 .vite
 .storybook-static
 docs/storybook-static
+*.tsbuildinfo
+
+# Test output
+coverage
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*
+
+# Env files
+.env
+.env.*
+!.env.example
+
+# Editor / IDE
+.vscode
+.idea
+*.swp
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Agent / tooling
+.claude
 .agent
 .context
-
-
-
-
-docs/storybook-static
