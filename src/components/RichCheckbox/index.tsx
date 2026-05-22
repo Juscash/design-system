@@ -8,7 +8,7 @@ import "./index.module.css";
  * Versão rica do checkbox: agrupa o componente base com um wrapper visual que
  * mostra `label` e `secondaryText` ao lado, com hover/checked aplicados ao
  * container inteiro. As classes `.rich-checkbox-*` são definidas em
- * `global.css`.
+ * `index.module.css`.
  */
 export function RichCheckbox({
   label,

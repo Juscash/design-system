@@ -1,7 +1,7 @@
 import React from "react";
 import { Breadcrumb as AntdBreadcrumb, ConfigProvider } from "antd";
 import { ChevronRight } from "lucide-react";
-import { designSystemColors } from "../../theme/foundations";
+import { designSystemColors } from "../../theme";
 import type { BreadcrumbProps } from "../../types/components/Breadcrumb";
 import "./index.module.css";
 

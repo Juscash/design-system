@@ -5,8 +5,8 @@ import ptBR from "antd/locale/pt_BR";
 import dayjs from "dayjs";
 import "dayjs/locale/pt-br";
 import "antd/dist/reset.css";
-import { designSystemColors } from "./foundations";
-import type { JuscashProviderProps } from "../types/theme/JuscashProvider";
+import { designSystemColors } from "../foundations";
+import type { JuscashProviderProps } from "../../types/theme/JuscashProvider";
 
 dayjs.locale("pt-br");
 
@@ -54,4 +54,4 @@ export const JuscashProvider: React.FC<JuscashProviderProps> = ({ themeOverride,
 
 JuscashProvider.displayName = "JuscashProvider";
 
-export type { JuscashProviderProps } from "../types/theme/JuscashProvider";
+export type { JuscashProviderProps } from "../../types/theme/JuscashProvider";

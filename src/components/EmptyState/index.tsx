@@ -1,7 +1,7 @@
 import React from "react";
 import { Heart } from "lucide-react";
 import { Button } from "../Button";
-import { designSystemColors, radius, spacing } from "../../theme/foundations";
+import { designSystemColors, radius, spacing } from "../../theme";
 import type { EmptyStateProps } from "../../types/components/EmptyState";
 
 const ICON_WRAPPER_SIZE = 48;
