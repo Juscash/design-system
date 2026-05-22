@@ -1,4 +1,4 @@
-﻿import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Heart } from "lucide-react";
 import { Badge } from ".";

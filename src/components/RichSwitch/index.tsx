@@ -1,11 +1,11 @@
-﻿import React from "react";
+import React from "react";
 import { Switch } from "../Switch";
 import type { SwitchProps } from "../../types/components/Switch";
 import type { RichSwitchProps } from "../../types/components/Switch";
 import "./index.module.css";
 
 /**
- * VersÃ£o rica do switch: agrupa o componente base com um wrapper visual com
+ * Versão rica do switch: agrupa o componente base com um wrapper visual com
  * `label` + `secondaryText` ao lado, com hover/checked aplicados ao container
  * inteiro.
  */
@@ -30,7 +30,7 @@ export function RichSwitch({
   };
 
   const handleWrapperClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
-    // Evita duplo toggle quando o clique Ã© diretamente no switch interno.
+    // Evita duplo toggle quando o clique é diretamente no switch interno.
     if ((event.target as HTMLElement).closest(".ant-switch")) {
       return;
     }

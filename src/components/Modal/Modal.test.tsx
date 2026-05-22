@@ -1,42 +1,42 @@
-﻿import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import { Modal } from ".";
 import { Button } from "../Button";
 
 describe("Modal", () => {
-  it("renderiza com tÃ­tulo", () => {
+  it("renderiza com título", () => {
     render(
-      <Modal title="TÃ­tulo do Modal" open>
-        <p>ConteÃºdo</p>
+      <Modal title="Título do Modal" open>
+        <p>Conteúdo</p>
       </Modal>,
     );
-    expect(screen.getByText("TÃ­tulo do Modal")).toBeInTheDocument();
-    expect(screen.getByText("ConteÃºdo")).toBeInTheDocument();
+    expect(screen.getByText("Título do Modal")).toBeInTheDocument();
+    expect(screen.getByText("Conteúdo")).toBeInTheDocument();
   });
 
-  it("renderiza conteÃºdo quando open Ã© true", () => {
+  it("renderiza conteúdo quando open é true", () => {
     render(
       <Modal title="Modal Aberto" open>
-        <p>ConteÃºdo visÃ­vel</p>
+        <p>Conteúdo visível</p>
       </Modal>,
     );
-    expect(screen.getByText("ConteÃºdo visÃ­vel")).toBeInTheDocument();
+    expect(screen.getByText("Conteúdo visível")).toBeInTheDocument();
   });
 
-  it("nÃ£o renderiza conteÃºdo quando open Ã© false", () => {
+  it("não renderiza conteúdo quando open é false", () => {
     render(
       <Modal title="Modal Fechado" open={false}>
-        <p>ConteÃºdo invisÃ­vel</p>
+        <p>Conteúdo invisível</p>
       </Modal>,
     );
-    expect(screen.queryByText("ConteÃºdo invisÃ­vel")).not.toBeInTheDocument();
+    expect(screen.queryByText("Conteúdo invisível")).not.toBeInTheDocument();
   });
 
-  it("chama onCancel ao clicar no botÃ£o X", () => {
+  it("chama onCancel ao clicar no botão X", () => {
     const onCancel = vi.fn();
     render(
       <Modal title="Modal" open onCancel={onCancel}>
-        <p>ConteÃºdo</p>
+        <p>Conteúdo</p>
       </Modal>,
     );
     const closeButton = document.querySelector(".ant-modal-close");
@@ -49,17 +49,17 @@ describe("Modal", () => {
   it("aplica dsSize s corretamente", () => {
     render(
       <Modal title="Modal Small" open dsSize="s">
-        <p>ConteÃºdo</p>
+        <p>Conteúdo</p>
       </Modal>,
     );
     const modal = document.querySelector(".ant-modal");
     expect(modal).toHaveStyle({ width: "400px" });
   });
 
-  it("aplica dsSize m como padrÃ£o", () => {
+  it("aplica dsSize m como padrão", () => {
     render(
       <Modal title="Modal Medium" open>
-        <p>ConteÃºdo</p>
+        <p>Conteúdo</p>
       </Modal>,
     );
     const modal = document.querySelector(".ant-modal");
@@ -69,7 +69,7 @@ describe("Modal", () => {
   it("aplica dsSize l corretamente", () => {
     render(
       <Modal title="Modal Large" open dsSize="l">
-        <p>ConteÃºdo</p>
+        <p>Conteúdo</p>
       </Modal>,
     );
     const modal = document.querySelector(".ant-modal");
@@ -88,7 +88,7 @@ describe("Modal", () => {
           </div>
         }
       >
-        <p>ConteÃºdo</p>
+        <p>Conteúdo</p>
       </Modal>,
     );
     expect(
@@ -99,13 +99,13 @@ describe("Modal", () => {
     ).toBeInTheDocument();
   });
 
-  it("renderiza sem footer quando footer Ã© null", () => {
+  it("renderiza sem footer quando footer é null", () => {
     render(
       <Modal title="Modal sem Footer" open footer={null}>
-        <p>ConteÃºdo</p>
+        <p>Conteúdo</p>
       </Modal>,
     );
-    // NÃ£o deve haver botÃµes OK/Cancel padrÃ£o
+    // Não deve haver botões OK/Cancel padrão
     expect(
       screen.queryByRole("button", { name: /ok/i }),
     ).not.toBeInTheDocument();
@@ -114,7 +114,7 @@ describe("Modal", () => {
   it("aceita okText e cancelText customizados", () => {
     render(
       <Modal title="Modal" open okText="Salvar" cancelText="Descartar">
-        <p>ConteÃºdo</p>
+        <p>Conteúdo</p>
       </Modal>,
     );
     expect(screen.getByRole("button", { name: /salvar/i })).toBeInTheDocument();
@@ -127,7 +127,7 @@ describe("Modal", () => {
     const onOk = vi.fn();
     render(
       <Modal title="Modal" open onOk={onOk}>
-        <p>ConteÃºdo</p>
+        <p>Conteúdo</p>
       </Modal>,
     );
     const okButton = screen.getByRole("button", { name: /ok/i });
@@ -135,10 +135,10 @@ describe("Modal", () => {
     expect(onOk).toHaveBeenCalled();
   });
 
-  it("renderiza botÃ£o X para fechar", () => {
+  it("renderiza botão X para fechar", () => {
     render(
       <Modal title="Modal" open closable>
-        <p>ConteÃºdo</p>
+        <p>Conteúdo</p>
       </Modal>,
     );
     const closeButton = document.querySelector(".ant-modal-close");

@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { ConfigProvider, Radio as AntdRadio } from "antd";
 import type { ComponentToken } from "antd/es/radio/style";
 import { designSystemColors, spacing, radius } from "../../theme";
@@ -60,7 +60,7 @@ function getTokenOverrides(error: boolean) {
 }
 
 /**
- * Radio do design system. Aceita `error` como prop proprietÃ¡ria, que aplica
+ * Radio do design system. Aceita `error` como prop proprietária, que aplica
  * a paleta vermelha e adiciona a classe `ds-radio-error`.
  */
 export function Radio(props: RadioProps): React.ReactElement {

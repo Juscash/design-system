@@ -1,4 +1,4 @@
-﻿import React, { useMemo } from "react";
+import React, { useMemo } from "react";
 import { ConfigProvider, Table as AntdTable } from "antd";
 import type { ColumnsType, TablePaginationConfig } from "antd/es/table/interface";
 import type { TableProps as AntdTableProps } from "antd/es/table";
@@ -49,7 +49,7 @@ function renderPaginationItem(type: "prev" | "next"): React.ReactNode {
       }}
     >
       {isPrev && <ChevronLeft size={ICON_SIZE} />}
-      {isPrev ? "Anterior" : "PrÃ³ximo"}
+      {isPrev ? "Anterior" : "Próximo"}
       {!isPrev && <ChevronRight size={ICON_SIZE} />}
     </span>
   );
@@ -224,10 +224,10 @@ function getTableThemeTokens(): NonNullable<React.ComponentProps<typeof ConfigPr
 }
 
 /**
- * Table do design system. Aplica tokens prÃ³prios via `ConfigProvider` local,
- * adiciona pagination customizada (i18n "Anterior"/"PrÃ³ximo", contagem total,
- * page-size options) e envolve cÃ©lulas de string/number em `Tooltip` para
- * truncamento legÃ­vel.
+ * Table do design system. Aplica tokens próprios via `ConfigProvider` local,
+ * adiciona pagination customizada (i18n "Anterior"/"Próximo", contagem total,
+ * page-size options) e envolve células de string/number em `Tooltip` para
+ * truncamento legível.
  */
 export function Table<T>(props: TableProps<T>): React.ReactElement {
   const { columns, bordered = false, className, tableLayout = "fixed", scroll = undefined, pagination, ...rest } = props;

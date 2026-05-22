@@ -8,7 +8,7 @@ export * from "./components";
 export {
   type UploadFile,
 
-  // Core
+  // Núcleo
   ConfigProvider,
   theme,
   type ThemeConfig,
@@ -23,7 +23,7 @@ export {
   Flex,
   Form,
   type FormProps,
-  // Navigation
+  // Navegação
   Menu,
   type MenuProps,
   Breadcrumb,
@@ -35,7 +35,7 @@ export {
   Anchor,
   type AnchorProps,
 
-  // Data Entry
+  // Entrada de dados
   InputNumber,
   type InputNumberProps,
   TreeSelect,
@@ -60,7 +60,7 @@ export {
   ColorPicker,
   type ColorPickerProps,
 
-  // Data Display
+  // Exibição de dados
   Progress,
   type ProgressProps,
   Tree,
@@ -106,11 +106,11 @@ export {
   Result,
   type ResultProps,
 
-  // General
+  // Geral
   FloatButton,
   type FloatButtonProps,
 
-  // Other
+  // Outros
   Affix,
   type AffixProps,
   BackTop,

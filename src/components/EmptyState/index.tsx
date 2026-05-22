@@ -4,11 +4,18 @@ import { Button } from "../Button";
 import { designSystemColors, radius, spacing } from "../../theme/foundations";
 import type { EmptyStateProps } from "../../types/components/EmptyState";
 
+const ICON_WRAPPER_SIZE = 48;
+const TEXT_MAX_WIDTH = 300;
+const TEXT_FONT_SIZE = 13;
+const CONTAINER_WIDTH = 314;
+const DEFAULT_ICON_SIZE = 24;
+const DEFAULT_ICON_STROKE_WIDTH = 1.75;
+
 const iconWrapperStyle: React.CSSProperties = {
-  width: 48,
-  height: 48,
-  minWidth: 48,
-  minHeight: 48,
+  width: ICON_WRAPPER_SIZE,
+  height: ICON_WRAPPER_SIZE,
+  minWidth: ICON_WRAPPER_SIZE,
+  minHeight: ICON_WRAPPER_SIZE,
   display: "flex",
   alignItems: "center",
   justifyContent: "center",
@@ -20,9 +27,9 @@ const iconWrapperStyle: React.CSSProperties = {
 
 const titleStyle: React.CSSProperties = {
   margin: 0,
-  maxWidth: 300,
+  maxWidth: TEXT_MAX_WIDTH,
   fontFamily: "Inter, sans-serif",
-  fontSize: 13,
+  fontSize: TEXT_FONT_SIZE,
   lineHeight: "1.2",
   fontWeight: 700,
   color: designSystemColors.neutral[800],
@@ -31,9 +38,9 @@ const titleStyle: React.CSSProperties = {
 
 const descriptionStyle: React.CSSProperties = {
   margin: 0,
-  maxWidth: 300,
+  maxWidth: TEXT_MAX_WIDTH,
   fontFamily: "Inter, sans-serif",
-  fontSize: 13,
+  fontSize: TEXT_FONT_SIZE,
   lineHeight: "1.2",
   fontWeight: 400,
   color: designSystemColors.neutral[500],
@@ -51,7 +58,7 @@ export function EmptyState(props: EmptyStateProps): React.ReactElement {
     <div
       className={className}
       style={{
-        width: 314,
+        width: CONTAINER_WIDTH,
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
@@ -61,7 +68,7 @@ export function EmptyState(props: EmptyStateProps): React.ReactElement {
       }}
     >
       <div aria-hidden="true" style={iconWrapperStyle}>
-        {icon ?? <Heart size={24} strokeWidth={1.75} />}
+        {icon ?? <Heart size={DEFAULT_ICON_SIZE} strokeWidth={DEFAULT_ICON_STROKE_WIDTH} />}
       </div>
 
       <div

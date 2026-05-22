@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { Modal as AntdModal, ConfigProvider } from "antd";
 import type { ModalProps as AntdModalProps } from "antd";
 import { designSystemColors, radius, shadow, spacing } from "../../theme";
@@ -11,9 +11,9 @@ const MODAL_SIZE_M = 640;
 const MODAL_SIZE_L = 900;
 const TITLE_FONT_SIZE = 20;
 
-// O Antd 6 expÃµe `Modal.styles` como union complexa (objeto ou funÃ§Ã£o). Para
-// o uso interno do componente bastam os slots semÃ¢nticos abaixo + `content`
-// (suportado em runtime mas ausente do typing pÃºblico).
+// O Antd 6 expõe `Modal.styles` como union complexa (objeto ou função). Para
+// o uso interno do componente bastam os slots semânticos abaixo + `content`
+// (suportado em runtime mas ausente do typing público).
 type ModalCustomStyles = {
   content?: React.CSSProperties;
   header?: React.CSSProperties;
@@ -56,8 +56,8 @@ interface DefaultFooterProps {
 }
 
 /**
- * ConstrÃ³i um rodapÃ© padrÃ£o usando o `<Button>` do design system em vez dos
- * botÃµes nativos do Antd. SÃ³ Ã© usado quando `footer` nÃ£o Ã© passado.
+ * Constrói um rodapé padrão usando o `<Button>` do design system em vez dos
+ * botões nativos do Antd. Só é usado quando `footer` não é passado.
  */
 function buildDefaultFooter(footerProps: DefaultFooterProps): React.ReactNode {
   const { okText = "OK", cancelText = "Cancelar", onOk, onCancel, confirmLoading } = footerProps;
@@ -116,8 +116,8 @@ function buildCustomStyles(safeStyles: ModalCustomStyles | undefined): ModalCust
 
 /**
  * Modal do design system. Aceita `dsSize` (`s|m|l`) que define larguras
- * padrÃ£o; quando `width` Ã© informado, sobrescreve o `dsSize`. Quando `footer`
- * nÃ£o Ã© passado, gera um rodapÃ© com `<Button>` prÃ³prios da lib.
+ * padrão; quando `width` é informado, sobrescreve o `dsSize`. Quando `footer`
+ * não é passado, gera um rodapé com `<Button>` próprios da lib.
  */
 export function Modal(props: ModalProps): React.ReactElement {
   const { dsSize = "m", width, styles, footer, okText, cancelText, onOk, confirmLoading, ...rest } = props;

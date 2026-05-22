@@ -1,4 +1,4 @@
-﻿import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import { PageHeader } from ".";
 
 const meta: Meta<typeof PageHeader> = {

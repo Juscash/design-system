@@ -1,4 +1,4 @@
-﻿import { render, screen, waitFor, fireEvent } from "@testing-library/react";
+import { render, screen, waitFor, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import React from "react";
 import { Notification } from ".";

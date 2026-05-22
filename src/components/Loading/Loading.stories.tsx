@@ -1,4 +1,4 @@
-﻿import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import React from "react";
 import { Loading } from ".";
 import { designSystemColors } from "../../theme";
@@ -61,7 +61,7 @@ function Example() {
                 fontWeight: "bold",
               }}
             >
-              ðŸŽ¨ Figma Spec
+              🎨 Figma Spec
             </h3>
             <Figma showLink url={FIGMA_URL} height="400px" />
           </div>
@@ -85,7 +85,7 @@ function Example() {
     },
     tip: {
       control: "text",
-      description: "Texto de descriÃ§Ã£o (opcional)",
+      description: "Texto de descrição (opcional)",
     },
     fullscreen: {
       control: "boolean",
@@ -93,17 +93,17 @@ function Example() {
     },
     hover: {
       control: "boolean",
-      description: "ForÃ§a o estado hover",
+      description: "Força o estado hover",
       table: { category: "Pseudo States" },
     },
     active: {
       control: "boolean",
-      description: "ForÃ§a o estado active",
+      description: "Força o estado active",
       table: { category: "Pseudo States" },
     },
     focus: {
       control: "boolean",
-      description: "ForÃ§a o estado focus",
+      description: "Força o estado focus",
       table: { category: "Pseudo States" },
     },
   },

@@ -1,13 +1,13 @@
-﻿import React from "react";
+import React from "react";
 import { Checkbox } from "../Checkbox";
 import type { CheckboxProps } from "../../types/components/Checkbox";
 import type { RichCheckboxProps } from "../../types/components/Checkbox";
 import "./index.module.css";
 
 /**
- * VersÃ£o rica do checkbox: agrupa o componente base com um wrapper visual que
+ * Versão rica do checkbox: agrupa o componente base com um wrapper visual que
  * mostra `label` e `secondaryText` ao lado, com hover/checked aplicados ao
- * container inteiro. As classes `.rich-checkbox-*` sÃ£o definidas em
+ * container inteiro. As classes `.rich-checkbox-*` são definidas em
  * `global.css`.
  */
 export function RichCheckbox({
@@ -31,7 +31,7 @@ export function RichCheckbox({
   };
 
   const handleWrapperClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
-    // Evita duplo toggle quando o clique Ã© diretamente no checkbox interno.
+    // Evita duplo toggle quando o clique é diretamente no checkbox interno.
     if ((event.target as HTMLElement).closest(".ant-checkbox-wrapper")) {
       return;
     }

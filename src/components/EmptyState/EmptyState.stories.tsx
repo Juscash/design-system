@@ -1,4 +1,4 @@
-﻿import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Card } from "../Card";
 import { EmptyState } from ".";
@@ -41,13 +41,13 @@ const meta: Meta<typeof EmptyState> = {
       codePanel: true,
       description: {
         component: `
-Componente para estados vazios em pÃ¡ginas, cards e Ã¡reas de conteÃºdo.
+Componente para estados vazios em páginas, cards e áreas de conteúdo.
 
 ### Props:
-- \`title\`: tÃ­tulo principal do estado vazio
+- \`title\`: título principal do estado vazio
 - \`description\`: texto complementar
 - \`actionLabel\`: label do CTA opcional
-- \`icon\`: Ã­cone customizado opcional
+- \`icon\`: ícone customizado opcional
 
 ### Como usar:
 
@@ -121,7 +121,7 @@ export const WithoutButton: Story = {
 };
 
 export const FigmaIcon: Story = {
-  name: "Figma â€” Icon",
+  name: "Figma — Icon",
   parameters: {
     layout: "centered",
   },
@@ -144,7 +144,7 @@ export const FigmaIcon: Story = {
 };
 
 export const FigmaExamples: Story = {
-  name: "Figma â€” Examples",
+  name: "Figma — Examples",
   parameters: {
     layout: "fullscreen",
   },
@@ -185,7 +185,7 @@ function CardExample(): React.ReactElement {
                   color: designSystemColors.neutral[800],
                 }}
               >
-                AtualizaÃ§Ãµes DiÃ¡rio Oficial
+                Atualizações Diário Oficial
               </div>
               <Badge style={{ flexShrink: 0 }} variant="counter" count={1} />
             </div>
@@ -213,13 +213,13 @@ function CardExample(): React.ReactElement {
               color: "#6d6d6e",
             }}
           >
-            Acompanhe o DiÃ¡rio Oficial sem complicaÃ§Ãµes. Filtramos sÃ³ o que Ã© relevante para vocÃª.
+            Acompanhe o Diário Oficial sem complicações. Filtramos só o que é relevante para você.
           </p>
         </div>
 
         <div style={{ display: "flex", justifyContent: "center" }}>
           <EmptyState
-            title="Ainda nÃ£o hÃ¡ atualizaÃ§Ãµes disponÃ­veis."
+            title="Ainda não há atualizações disponíveis."
             icon={<FolderOpen size={24} strokeWidth={1.75} />}
             style={{ width: "100%" }}
           />
@@ -344,7 +344,7 @@ function TopBar(props: { mobile: boolean }): React.ReactElement {
             Enviar processo
           </Button>
         ) : null}
-        <Button type="ghost" size="s" icon={<Bell size={16} />} aria-label="NotificaÃ§Ãµes" />
+        <Button type="ghost" size="s" icon={<Bell size={16} />} aria-label="Notificações" />
         <div
           style={{
             width: 32,
@@ -400,13 +400,13 @@ function SidebarMenu(): React.ReactElement {
       <div style={{ ...itemStyle, justifyContent: "space-between" }}>
         <div style={{ display: "flex", alignItems: "center", gap: spacing[2] }}>
           <Gift size={16} />
-          BenefÃ­cios
+          Benefícios
         </div>
         <ChevronDown size={16} />
       </div>
       <SecondLevelItem icon={<Sparkles size={16} />} label="Which IA" />
       <SecondLevelItem icon={<GraduationCap size={16} />} label="JusConhecimento" />
-      <SecondLevelItem icon={<Newspaper size={16} />} label="DiÃ¡rio oficial" />
+      <SecondLevelItem icon={<Newspaper size={16} />} label="Diário oficial" />
       <div style={itemStyle}>
         <UserRound size={16} />
         Meu perfil
@@ -414,12 +414,12 @@ function SidebarMenu(): React.ReactElement {
       <div style={{ ...itemStyle, justifyContent: "space-between" }}>
         <div style={{ display: "flex", alignItems: "center", gap: spacing[2] }}>
           <Settings size={16} />
-          GestÃ£o
+          Gestão
         </div>
         <ChevronDown size={16} />
       </div>
-      <SecondLevelItem icon={<UserCog size={16} />} label="Gerenciar usuÃ¡rios" />
-      <SecondLevelItem icon={<Bell size={16} />} label="Central de notificaÃ§Ãµes" />
+      <SecondLevelItem icon={<UserCog size={16} />} label="Gerenciar usuários" />
+      <SecondLevelItem icon={<Bell size={16} />} label="Central de notificações" />
       <div style={itemStyle}>
         <Headphones size={16} />
         Suporte

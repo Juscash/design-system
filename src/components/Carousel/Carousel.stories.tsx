@@ -1,4 +1,4 @@
-﻿import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Carousel } from ".";
 
@@ -20,16 +20,16 @@ const meta: Meta<typeof Carousel> = {
       codePanel: true,
       description: {
         component: `
-Carrossel exibe uma sequÃªncia de conteÃºdos que podem ser navegados horizontalmente.
+Carrossel exibe uma sequência de conteúdos que podem ser navegados horizontalmente.
 Baseado no [Ant Design Carousel](https://ant.design/components/carousel).
 
 ### Props:
-- **Extended (Ant Design)**: Props padrÃ£o do AntD Carousel.
-- **showArrows**: Exibe setas de navegaÃ§Ã£o (24Ã—24px, borda neutral[300]).
+- **Extended (Ant Design)**: Props padrão do AntD Carousel.
+- **showArrows**: Exibe setas de navegação (24×24px, borda neutral[300]).
 
 ### Estados:
 - **Dots**: Inativos = 6px circle neutral[400], ativo = 24px pill neutral[800]
-- **Setas**: 24Ã—24, border 1px neutral[300], bg transparente, icon 14px
+- **Setas**: 24×24, border 1px neutral[300], bg transparente, icon 14px
 `,
       },
       page: () => (
@@ -54,15 +54,15 @@ Baseado no [Ant Design Carousel](https://ant.design/components/carousel).
   argTypes: {
     showArrows: {
       control: "boolean",
-      description: "Exibe setas de navegaÃ§Ã£o",
+      description: "Exibe setas de navegação",
     },
     dots: {
       control: "boolean",
-      description: "Exibe indicadores de pÃ¡gina",
+      description: "Exibe indicadores de página",
     },
     autoplay: {
       control: "boolean",
-      description: "ReproduÃ§Ã£o automÃ¡tica",
+      description: "Reprodução automática",
     },
   },
 };
@@ -70,7 +70,7 @@ Baseado no [Ant Design Carousel](https://ant.design/components/carousel).
 export default meta;
 type Story = StoryObj<typeof Carousel>;
 
-// â”€â”€â”€ Slot placeholder (como no Figma) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Slot placeholder (como no Figma) ────────────────────────────────────────
 
 const SlotBox = ({ height = 200 }: { height?: number }) => (
   <div
@@ -105,7 +105,7 @@ const SlotBox = ({ height = 200 }: { height?: number }) => (
   </div>
 );
 
-// â”€â”€â”€ Figma: 1 slide â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Figma: 1 slide ─────────────────────────────────────────────────────────
 
 export const OneSlide: Story = {
   name: "1 Slide (Figma)",
@@ -121,7 +121,7 @@ export const OneSlide: Story = {
   ),
 };
 
-// â”€â”€â”€ Figma: 2 slides â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Figma: 2 slides ────────────────────────────────────────────────────────
 
 export const TwoSlides: Story = {
   name: "2 Slides (Figma)",
@@ -136,7 +136,7 @@ export const TwoSlides: Story = {
   ),
 };
 
-// â”€â”€â”€ Figma: 3 slides â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Figma: 3 slides ────────────────────────────────────────────────────────
 
 export const ThreeSlides: Story = {
   name: "3 Slides (Figma)",
@@ -151,10 +151,10 @@ export const ThreeSlides: Story = {
   ),
 };
 
-// â”€â”€â”€ Figma: com imagem (1 slide) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Figma: com imagem (1 slide) ────────────────────────────────────────────
 
 export const WithImage1Slide: Story = {
-  name: "Com imagem â€” 1 Slide (Figma)",
+  name: "Com imagem — 1 Slide (Figma)",
   render: () => (
     <div style={{ width: 342 }}>
       <Carousel showArrows dots>
@@ -179,10 +179,10 @@ export const WithImage1Slide: Story = {
   ),
 };
 
-// â”€â”€â”€ Figma: com imagem (3 slides) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Figma: com imagem (3 slides) ───────────────────────────────────────────
 
 export const WithImage3Slides: Story = {
-  name: "Com imagem â€” 3 Slides (Figma)",
+  name: "Com imagem — 3 Slides (Figma)",
   render: () => (
     <div style={{ width: 684 }}>
       <Carousel showArrows dots slidesToShow={3} slidesToScroll={1}>
@@ -208,7 +208,7 @@ export const WithImage3Slides: Story = {
   ),
 };
 
-// â”€â”€â”€ Default (autoplay) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Default (autoplay) ─────────────────────────────────────────────────────
 
 export const Default: Story = {
   args: {

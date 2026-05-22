@@ -1,4 +1,4 @@
-﻿import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Search, DollarSign, Bell, Plus, Mail, Pencil, Trash, ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from ".";
@@ -30,13 +30,13 @@ const meta: Meta<ButtonStoryProps> = {
 
       description: {
         component: `
-Componente de botÃ£o baseado no [Ant Design Button](https://ant.design/components/button).
+Componente de botão baseado no [Ant Design Button](https://ant.design/components/button).
 
 ### Props:
-- **Extended (Ant Design)**: A maioria das propriedades padrÃ£o do AntD Button sÃ£o suportadas.
+- **Extended (Ant Design)**: A maioria das propriedades padrão do AntD Button são suportadas.
 - **Customized**:
-  - \`type\` ou \`variant\`: Define o estilo do botÃ£o (\`primary\`, \`secondary\`, \`outline\`, \`ghost\`, \`destructive\`, \`neutral\`). A prop \`variant\` tem prioridade sobre \`type\`.
-  - \`size\`: Define o tamanho do botÃ£o seguindo o Design System (\`xs\`, \`s\`, \`m\`).
+  - \`type\` ou \`variant\`: Define o estilo do botão (\`primary\`, \`secondary\`, \`outline\`, \`ghost\`, \`destructive\`, \`neutral\`). A prop \`variant\` tem prioridade sobre \`type\`.
+  - \`size\`: Define o tamanho do botão seguindo o Design System (\`xs\`, \`s\`, \`m\`).
 
 ### Como usar:
 
@@ -68,7 +68,7 @@ function Example() {
                 fontWeight: "bold",
               }}
             >
-              ðŸŽ¨ Figma Spec
+              🎨 Figma Spec
             </h3>
             <Figma showLink url={FIGMA_URL} height="400px" />
           </div>
@@ -96,17 +96,17 @@ function Example() {
     },
     hover: {
       control: "boolean",
-      description: "ForÃ§a o estado hover",
+      description: "Força o estado hover",
       table: { category: "Pseudo States" },
     },
     active: {
       control: "boolean",
-      description: "ForÃ§a o estado active",
+      description: "Força o estado active",
       table: { category: "Pseudo States" },
     },
     focus: {
       control: "boolean",
-      description: "ForÃ§a o estado focus",
+      description: "Força o estado focus",
       table: { category: "Pseudo States" },
     },
   },

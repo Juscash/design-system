@@ -110,6 +110,44 @@ function resolveDescriptionColor(type: AlertVariant): CustomTypographyProps["col
   return type === "neutral" ? "neutral" : (type as CustomTypographyProps["color"]);
 }
 
+type IconElement = React.ReactElement<{ style?: React.CSSProperties }>;
+
+/**
+ * Aplica os estilos compostos (margin-top quando há descrição, cor neutra
+ * quando o `type` é `neutral`) sobre o ícone resolvido. Retorna `null`/o
+ * próprio nó quando o ícone não é um elemento React clonável.
+ */
+function buildIconNode(resolvedIcon: React.ReactNode, type: AlertVariant, hasDescription: boolean): React.ReactNode {
+  if (!resolvedIcon || !React.isValidElement(resolvedIcon)) {
+    return resolvedIcon;
+  }
+  const icon = resolvedIcon as IconElement;
+  const iconColorStyle = type === "neutral" ? { color: designSystemColors.neutral[800] } : {};
+  return React.cloneElement(icon, {
+    style: {
+      ...(hasDescription ? { marginTop: 4 } : {}),
+      ...iconColorStyle,
+      ...(icon.props.style || {}),
+    },
+  });
+}
+
+function buildAlertTheme(type: AlertVariant): NonNullable<React.ComponentProps<typeof ConfigProvider>["theme"]> {
+  return {
+    components: {
+      Alert: {
+        ...getVariantTokens(type),
+        paddingContentVertical: spacing[4],
+        paddingContentHorizontal: spacing[4],
+        borderRadiusLG: radius.xl,
+        withDescriptionIconSize: ICON_SIZE,
+        defaultPadding: `${spacing[4]}px ${spacing[4]}px`,
+        withDescriptionPadding: `${spacing[4]}px ${spacing[4]}px`,
+      },
+    },
+  };
+}
+
 /**
  * Alert do design system. Aceita as variantes proprietárias `neutral`,
  * `error`, `success`, `info` e `warning`, todas com fundo neutral[50] e
@@ -117,42 +155,15 @@ function resolveDescriptionColor(type: AlertVariant): CustomTypographyProps["col
  */
 export function Alert(props: AlertProps): React.ReactElement {
   const { type = "neutral", showLine2, showButton, showLeftIcon, ...rest } = props;
-  void showLine2;
   void showButton;
 
   const finalShowIcon = rest.showIcon ?? showLeftIcon;
   const hasDescription = !!(rest.description || showLine2);
-
   const resolvedIcon = rest.icon || (finalShowIcon ? getDefaultIcon(type) : null);
-  const iconColorStyle = type === "neutral" ? { color: designSystemColors.neutral[800] } : {};
-
-  const iconNode =
-    resolvedIcon && React.isValidElement(resolvedIcon) ?
-      React.cloneElement(resolvedIcon as React.ReactElement<{ style?: React.CSSProperties }>, {
-        style: {
-          ...(hasDescription ? { marginTop: 4 } : {}),
-          ...iconColorStyle,
-          ...((resolvedIcon as React.ReactElement<{ style?: React.CSSProperties }>).props.style || {}),
-        },
-      })
-    : resolvedIcon;
+  const iconNode = buildIconNode(resolvedIcon, type, hasDescription);
 
   return (
-    <ConfigProvider
-      theme={{
-        components: {
-          Alert: {
-            ...getVariantTokens(type),
-            paddingContentVertical: spacing[4],
-            paddingContentHorizontal: spacing[4],
-            borderRadiusLG: radius.xl,
-            withDescriptionIconSize: ICON_SIZE,
-            defaultPadding: `${spacing[4]}px ${spacing[4]}px`,
-            withDescriptionPadding: `${spacing[4]}px ${spacing[4]}px`,
-          },
-        },
-      }}
-    >
+    <ConfigProvider theme={buildAlertTheme(type)}>
       <AntdAlert
         {...rest}
         type={resolveAntdType(type)}

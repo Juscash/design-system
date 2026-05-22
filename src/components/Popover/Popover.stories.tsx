@@ -1,4 +1,4 @@
-﻿import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Button } from "../Button";
 import { Popover } from ".";
@@ -39,10 +39,10 @@ const meta: Meta<PopoverStoryProps> = {
 Componente baseado no [Ant Design Popover](https://ant.design/components/popover).
 
 ### Features Juscash:
-- **Slots FlexÃ­veis**: Suporte a 1, 2 ou 3 slots (header, content, footer).
-- **Ãcone Customizado**: Prop \`icon\` para adicionar Ã­cone no header.
+- **Slots Flexíveis**: Suporte a 1, 2 ou 3 slots (header, content, footer).
+- **Ícone Customizado**: Prop \`icon\` para adicionar ícone no header.
 - **Tokens do Design System**: Sombra, border radius e cores aplicados via ConfigProvider.
-- **Compatibilidade**: MantÃ©m todas as props do Ant Design (\`title\`, \`content\`, \`trigger\`, \`placement\`, etc.).
+- **Compatibilidade**: Mantém todas as props do Ant Design (\`title\`, \`content\`, \`trigger\`, \`placement\`, etc.).
 
 ### Como usar:
 
@@ -50,15 +50,15 @@ Componente baseado no [Ant Design Popover](https://ant.design/components/popover
 import { Popover, Button } from "@juscash/design-system";
 
 // Uso simples (1 slot)
-<Popover content="ConteÃºdo do popover">
+<Popover content="Conteúdo do popover">
   <Button>Clique aqui</Button>
 </Popover>
 
 // Com header e footer (3 slots)
 <Popover
-  header="TÃ­tulo"
-  content="ConteÃºdo principal"
-  footer={<Button size="small">AÃ§Ã£o</Button>}
+  header="Título"
+  content="Conteúdo principal"
+  footer={<Button size="small">Ação</Button>}
   icon={<Bell size={16} />}
 >
   <Button>Abrir</Button>
@@ -84,7 +84,7 @@ import { Popover, Button } from "@juscash/design-system";
                 fontWeight: "bold",
               }}
             >
-              ðŸŽ¨ Figma Spec
+              🎨 Figma Spec
             </h3>
             <Figma showLink url={FIGMA_URL} height="400px" />
           </div>
@@ -102,7 +102,7 @@ import { Popover, Button } from "@juscash/design-system";
   argTypes: {
     header: {
       control: "text",
-      description: "ConteÃºdo do cabeÃ§alho (slot superior)",
+      description: "Conteúdo do cabeçalho (slot superior)",
       table: {
         type: { summary: "ReactNode" },
         category: "Juscash Props",
@@ -110,7 +110,7 @@ import { Popover, Button } from "@juscash/design-system";
     },
     footer: {
       control: "text",
-      description: "ConteÃºdo do rodapÃ© (slot inferior)",
+      description: "Conteúdo do rodapé (slot inferior)",
       table: {
         type: { summary: "ReactNode" },
         category: "Juscash Props",
@@ -118,7 +118,7 @@ import { Popover, Button } from "@juscash/design-system";
     },
     icon: {
       control: false,
-      description: "Ãcone customizado no header",
+      description: "Ícone customizado no header",
       table: {
         type: { summary: "ReactNode" },
         category: "Juscash Props",
@@ -126,7 +126,7 @@ import { Popover, Button } from "@juscash/design-system";
     },
     content: {
       control: "text",
-      description: "ConteÃºdo principal do popover",
+      description: "Conteúdo principal do popover",
       table: {
         type: { summary: "ReactNode | RenderFunction" },
         category: "Ant Design Props",
@@ -134,7 +134,7 @@ import { Popover, Button } from "@juscash/design-system";
     },
     title: {
       control: "text",
-      description: "TÃ­tulo do popover (alternativa ao header)",
+      description: "Título do popover (alternativa ao header)",
       table: {
         type: { summary: "ReactNode" },
         category: "Ant Design Props",
@@ -175,17 +175,17 @@ import { Popover, Button } from "@juscash/design-system";
     },
     hover: {
       control: "boolean",
-      description: "ForÃ§a o estado hover",
+      description: "Força o estado hover",
       table: { category: "Pseudo States" },
     },
     active: {
       control: "boolean",
-      description: "ForÃ§a o estado active",
+      description: "Força o estado active",
       table: { category: "Pseudo States" },
     },
     focus: {
       control: "boolean",
-      description: "ForÃ§a o estado focus",
+      description: "Força o estado focus",
       table: { category: "Pseudo States" },
     },
   },
@@ -198,7 +198,7 @@ type Story = StoryObj<PopoverStoryProps>;
 // Story 1: Default (1 slot - apenas content)
 export const Default: Story = {
   args: {
-    content: "Este Ã© um popover simples com apenas conteÃºdo.",
+    content: "Este é um popover simples com apenas conteúdo.",
     trigger: "click",
   },
   render: (args) => {
@@ -225,13 +225,13 @@ export const WithHeader: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Popover com header e conteÃºdo (2 slots).",
+        story: "Popover com header e conteúdo (2 slots).",
       },
     },
   },
   args: {
-    header: "NotificaÃ§Ãµes",
-    content: "VocÃª tem 3 novas notificaÃ§Ãµes para revisar.",
+    header: "Notificações",
+    content: "Você tem 3 novas notificações para revisar.",
     trigger: "click",
   },
   render: (args) => {
@@ -246,7 +246,7 @@ export const WithHeader: Story = {
     return (
       <div className={mergedClassName} style={{ padding: 100, display: "flex", justifyContent: "center" }}>
         <Popover {...props}>
-          <Button>Ver NotificaÃ§Ãµes</Button>
+          <Button>Ver Notificações</Button>
         </Popover>
       </div>
     );
@@ -258,13 +258,13 @@ export const Complete: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Popover completo com header, conteÃºdo e footer (3 slots).",
+        story: "Popover completo com header, conteúdo e footer (3 slots).",
       },
     },
   },
   args: {
-    header: "Confirmar AÃ§Ã£o",
-    content: "Tem certeza que deseja prosseguir com esta operaÃ§Ã£o?",
+    header: "Confirmar Ação",
+    content: "Tem certeza que deseja prosseguir com esta operação?",
     footer: (
       <div style={{ display: "flex", gap: 8, justifyContent: "flex-end" }}>
         <Button type="neutral" size="s">
@@ -289,7 +289,7 @@ export const Complete: Story = {
     return (
       <div className={mergedClassName} style={{ padding: 100, display: "flex", justifyContent: "center" }}>
         <Popover {...props}>
-          <Button>Abrir ConfirmaÃ§Ã£o</Button>
+          <Button>Abrir Confirmação</Button>
         </Popover>
       </div>
     );
@@ -301,13 +301,13 @@ export const CustomIcon: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Popover com Ã­cone customizado no header.",
+        story: "Popover com ícone customizado no header.",
       },
     },
   },
   args: {
-    header: "InformaÃ§Ã£o Importante",
-    content: "Esta Ã© uma mensagem informativa com Ã­cone customizado.",
+    header: "Informação Importante",
+    content: "Esta é uma mensagem informativa com ícone customizado.",
     icon: <Info size={16} />,
     trigger: "click",
   },
@@ -340,7 +340,7 @@ export const Placements: Story = {
     },
   },
   render: (args) => {
-    const content = "ConteÃºdo do popover";
+    const content = "Conteúdo do popover";
     const mergedClassName = getPseudoClassName(args);
     return (
       <div
@@ -439,8 +439,8 @@ export const WithAntdTitle: Story = {
     },
   },
   args: {
-    title: "TÃ­tulo via Antd",
-    content: "ConteÃºdo usando a prop title do Ant Design.",
+    title: "Título via Antd",
+    content: "Conteúdo usando a prop title do Ant Design.",
     trigger: "click",
   },
   render: (args) => {

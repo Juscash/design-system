@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { Checkbox as AntdCheckbox, ConfigProvider } from "antd";
 import { designSystemColors, spacing, radius } from "../../theme";
 import type { ComponentToken } from "antd/es/checkbox/style";
@@ -30,7 +30,7 @@ const errorTokens: Partial<ComponentToken> = {
 };
 
 /**
- * Checkbox do design system. Aceita `error` como prop proprietÃ¡ria, que aplica
+ * Checkbox do design system. Aceita `error` como prop proprietária, que aplica
  * a paleta vermelha e adiciona a classe `ds-checkbox-error` (consumida pelos
  * overrides em `global.css`).
  */
@@ -54,8 +54,8 @@ CheckboxInner.displayName = "Checkbox";
 
 const CheckboxWithGroup = CheckboxInner as CheckboxComponent;
 // Reexporta `Checkbox.Group` direto do Antd: o `ConfigProvider` do
-// `<JuscashProvider>` jÃ¡ garante o tema aplicado ao grupo, e wrappar
-// novamente quebraria a inferÃªncia genÃ©rica do consumidor sobre `T`.
+// `<JuscashProvider>` já garante o tema aplicado ao grupo, e wrappar
+// novamente quebraria a inferência genérica do consumidor sobre `T`.
 CheckboxWithGroup.Group = AntdCheckbox.Group;
 
 export const Checkbox = CheckboxWithGroup;

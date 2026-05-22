@@ -1,4 +1,4 @@
-﻿import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import React from "react";
 import { Badge } from "../Badge";
 import { Button } from "../Button";
@@ -48,11 +48,11 @@ const meta: Meta<TooltipStoryProps> = {
       codePanel: true,
       description: {
         component: `
-Tooltip exibe uma mensagem informativa quando o usuÃ¡rio passa o mouse ou foca em um elemento.
+Tooltip exibe uma mensagem informativa quando o usuário passa o mouse ou foca em um elemento.
 Baseado no [Ant Design Tooltip](https://ant.design/components/tooltip).
 
 ### Props:
-- **Extended (Ant Design)**: Props padrÃ£o do AntD Tooltip.
+- **Extended (Ant Design)**: Props padrão do AntD Tooltip.
 
 ### Como usar:
 
@@ -124,21 +124,21 @@ function Example() {
         "rightTop",
         "rightBottom",
       ],
-      description: "A posiÃ§Ã£o do tooltip relativa ao alvo",
+      description: "A posição do tooltip relativa ao alvo",
     },
     hover: {
       control: "boolean",
-      description: "ForÃ§a o estado hover",
+      description: "Força o estado hover",
       table: { category: "Pseudo States" },
     },
     active: {
       control: "boolean",
-      description: "ForÃ§a o estado active",
+      description: "Força o estado active",
       table: { category: "Pseudo States" },
     },
     focus: {
       control: "boolean",
-      description: "ForÃ§a o estado focus",
+      description: "Força o estado focus",
       table: { category: "Pseudo States" },
     },
   },
@@ -268,7 +268,7 @@ export const Placements: Story = {
 };
 
 export const FigmaSides: Story = {
-  name: "Figma â€” Sides",
+  name: "Figma — Sides",
   render: () => (
     <div
       style={{
@@ -314,7 +314,7 @@ export const FigmaSides: Story = {
 };
 
 export const FigmaIcon: Story = {
-  name: "Figma â€” Icon",
+  name: "Figma — Icon",
   render: () => (
     <div style={storyCardStyle}>
       <span style={{ fontSize: 13, color: "var(--color-neutral-500)" }}>Icon tooltip</span>
@@ -328,7 +328,7 @@ export const FigmaIcon: Story = {
 };
 
 export const FigmaExamples: Story = {
-  name: "Figma â€” Examples",
+  name: "Figma — Examples",
   render: () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
       <div style={storyCardStyle}>
@@ -355,7 +355,7 @@ export const FigmaExamples: Story = {
             defaultOpen
           >
             <Badge variant="secondary" statusColor="info">
-              AnÃ¡lise em andamento
+              Análise em andamento
             </Badge>
           </Tooltip>
         </div>

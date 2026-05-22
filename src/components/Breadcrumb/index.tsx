@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { Breadcrumb as AntdBreadcrumb, ConfigProvider } from "antd";
 import { ChevronRight } from "lucide-react";
 import { designSystemColors } from "../../theme/foundations";
@@ -10,7 +10,7 @@ const ITEM_FONT_SIZE = 13;
 
 /**
  * Breadcrumb com separador `ChevronRight` do Lucide e tipografia do design
- * system. O Ãºltimo item aparece em negrito conforme spec.
+ * system. O último item aparece em negrito conforme spec.
  */
 export function Breadcrumb(props: BreadcrumbProps): React.ReactElement {
   const { ...rest } = props;

@@ -1,4 +1,4 @@
-﻿import React, { useState } from "react";
+import React, { useState } from "react";
 import { Select as AntdSelect, ConfigProvider, Input as AntdInput } from "antd";
 import type { SelectProps as AntdSelectProps } from "antd";
 import type { ComponentToken } from "antd/es/select/style/token";
@@ -49,7 +49,12 @@ function getSizeTokens(dsSize?: SelectSize): SizeTokensResult {
     };
   }
 
-  const baseControlHeight = dsSize === "s" ? HEIGHT_S : dsSize === "m" ? HEIGHT_M : HEIGHT_L;
+  const heightBySize: Record<Exclude<SelectSize, "xs">, number> = {
+    s: HEIGHT_S,
+    m: HEIGHT_M,
+    l: HEIGHT_L,
+  };
+  const baseControlHeight = heightBySize[dsSize ?? "m"];
   return {
     componentToken: {},
     globalToken: {
@@ -194,6 +199,22 @@ const selectPrefixSuffixStyles = {
   },
 } as const;
 
+function buildWrapperStyle(height: number, style?: React.CSSProperties): SelectStyle {
+  return {
+    "--select-multi-item-border-color": MULTI_ITEM_BORDER_COLOR,
+    "--ds-select-height": `${height}px`,
+    transition: "all 0.2s ease",
+    ...style,
+  };
+}
+
+function resolveDsSize(dsSizeProp: SelectSize | undefined, size: SelectProps["size"] | undefined): SelectSize {
+  // `dsSize` tem prioridade absoluta; `size` é fallback de compatibilidade.
+  if (dsSizeProp) return dsSizeProp;
+  if (size) return mapToDsSize(size);
+  return "m";
+}
+
 /**
  * Select do design system. Aceita `dsSize` (`xs|s|m|l`) e `size` para
  * compatibilidade com Antd; reescreve sufixo/checkmark com ícones do Lucide,
@@ -217,20 +238,11 @@ export function Select(props: SelectProps): React.ReactElement {
 
   const [searchValue, setSearchValue] = useState("");
   const [currentValue, setCurrentValue] = useState<SelectProps["value"] | undefined>(value ?? defaultValue);
-  // `dsSize` tem prioridade absoluta; `size` é fallback de compatibilidade.
-  const resolvedSize: SelectSize = dsSizeProp ?? (size ? mapToDsSize(size) : "m");
+  const resolvedSize = resolveDsSize(dsSizeProp, size);
   const sizeTokens = getSizeTokens(resolvedSize);
   const isMultiple = rest.mode === "multiple" || rest.mode === "tags";
-
   const isOptionSelected = (optionValue: string | number | undefined): boolean =>
     isValueSelected(currentValue, optionValue);
-
-  const wrapperStyle: SelectStyle = {
-    "--select-multi-item-border-color": MULTI_ITEM_BORDER_COLOR,
-    "--ds-select-height": `${sizeTokens.height}px`,
-    transition: "all 0.2s ease",
-    ...style,
-  };
 
   return (
     <ConfigProvider theme={buildSelectTheme(sizeTokens)}>
@@ -245,13 +257,13 @@ export function Select(props: SelectProps): React.ReactElement {
         showSearch={false}
         searchValue={searchValue}
         styles={selectPrefixSuffixStyles}
-        style={wrapperStyle}
-        onChange={(val: SelectProps["value"], opt: DefaultOptionType | DefaultOptionType[] | undefined) => {
+        style={buildWrapperStyle(sizeTokens.height, style)}
+        onChange={(val, opt) => {
           setCurrentValue(val);
           rest.onChange?.(val, opt);
         }}
-        optionRender={(option: DefaultOptionType) => renderOptionContent(option, { isMultiple, isOptionSelected })}
-        popupRender={(menu: React.ReactNode) => renderPopup({ menu, showSearch, searchValue, setSearchValue })}
+        optionRender={(option) => renderOptionContent(option, { isMultiple, isOptionSelected })}
+        popupRender={(menu) => renderPopup({ menu, showSearch, searchValue, setSearchValue })}
       />
     </ConfigProvider>
   );

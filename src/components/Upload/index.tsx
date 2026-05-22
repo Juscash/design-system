@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { Upload as AntdUpload, ConfigProvider, Form } from "antd";
 import type { UploadFile } from "antd";
 import { LoaderCircle, Link as LinkIcon, Trash2, Upload as UploadIcon } from "lucide-react";
@@ -158,6 +158,18 @@ function buildIconRender(iconRender?: UploadProps["iconRender"]): NonNullable<Up
     ));
 }
 
+const SHOW_UPLOAD_LIST_NO_ICONS = { showPreviewIcon: false, showDownloadIcon: false, showRemoveIcon: false } as const;
+const UPLOAD_THEME = { components: { Upload: { ...baseTokens } }, token: uploadTokenOverrides } as const;
+
+interface ResolveValidationStatusArgs {
+  validationStatus?: UploadProps["validationStatus"];
+  formStatus: string | undefined;
+}
+
+function resolveValidationStatus(args: ResolveValidationStatusArgs): UploadProps["validationStatus"] {
+  return args.validationStatus ?? (args.formStatus === "error" ? "error" : undefined);
+}
+
 /**
  * Upload do design system. Suporta layout vertical/horizontal, ícones do
  * Lucide, e renderização de lista de arquivos com loading, erro e remoção
@@ -166,54 +178,30 @@ function buildIconRender(iconRender?: UploadProps["iconRender"]): NonNullable<Up
 export function Upload(props: UploadProps): React.ReactElement {
   const { status: formStatus } = Form.Item.useStatus();
   const {
-    disabled = false,
-    dsSize = "m",
-    layout = "vertical",
-    listType = "text",
-    className,
-    children,
-    fileList,
-    defaultFileList,
-    showUploadList = true,
-    iconRender,
-    itemRender,
-    validationStatus,
-    showTrigger = true,
-    ...rest
+    disabled = false, dsSize = "m", layout = "vertical", listType = "text",
+    className, children, fileList, defaultFileList, showUploadList = true,
+    iconRender, itemRender, validationStatus, showTrigger = true, ...rest
   } = props;
 
-  const files = fileList ?? defaultFileList ?? [];
-  const hasFiles = files.length > 0;
-  const resolvedValidationStatus = validationStatus ?? (formStatus === "error" ? "error" : undefined);
-  const shouldRenderList = showUploadList !== false;
+  const hasFiles = (fileList ?? defaultFileList ?? []).length > 0;
+  const resolvedValidationStatus = resolveValidationStatus({ validationStatus, formStatus });
   const showRemoveButton = shouldShowRemoveIcon(showUploadList);
   const rootClassName = buildRootClassName({
-    dsSize,
-    layout,
-    disabled,
-    hasFiles,
-    showTrigger,
-    validationStatus: resolvedValidationStatus,
-    className,
+    dsSize, layout, disabled, hasFiles, showTrigger,
+    validationStatus: resolvedValidationStatus, className,
   });
-
   const resolvedItemRender = itemRender ?? buildItemRender({ disabled, showRemoveButton, iconRender, listType });
-  const resolvedIconRender = buildIconRender(iconRender);
 
   return (
-    <ConfigProvider
-      theme={{ components: { Upload: { ...baseTokens } }, token: uploadTokenOverrides }}
-    >
+    <ConfigProvider theme={UPLOAD_THEME}>
       <AntdUpload
         fileList={fileList}
         defaultFileList={defaultFileList}
         listType={listType}
         className={rootClassName}
-        showUploadList={
-          shouldRenderList ? { showPreviewIcon: false, showDownloadIcon: false, showRemoveIcon: false } : false
-        }
+        showUploadList={showUploadList !== false ? SHOW_UPLOAD_LIST_NO_ICONS : false}
         itemRender={resolvedItemRender}
-        iconRender={resolvedIconRender}
+        iconRender={buildIconRender(iconRender)}
         {...rest}
       >
         {showTrigger ? children || renderDefaultTrigger(disabled) : null}

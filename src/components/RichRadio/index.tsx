@@ -1,11 +1,11 @@
-﻿import React from "react";
+import React from "react";
 import { Radio } from "../Radio";
 import type { RadioProps } from "../../types/components/Radio";
 import type { RichRadioProps } from "../../types/components/Radio";
 import "./index.module.css";
 
 /**
- * VersÃ£o rica do radio: agrupa o componente base com um wrapper visual com
+ * Versão rica do radio: agrupa o componente base com um wrapper visual com
  * `label` + `secondaryText` ao lado.
  */
 export function RichRadio({
@@ -29,7 +29,7 @@ export function RichRadio({
   };
 
   const handleWrapperClick: React.MouseEventHandler<HTMLDivElement> = (event) => {
-    // Evita duplo toggle quando o clique Ã© diretamente no radio interno.
+    // Evita duplo toggle quando o clique é diretamente no radio interno.
     if ((event.target as HTMLElement).closest(".ant-radio-wrapper")) {
       return;
     }

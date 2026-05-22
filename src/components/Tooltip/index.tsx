@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { Tooltip as AntdTooltip, ConfigProvider } from "antd";
 import { designSystemColors, radius } from "../../theme";
 import type {
@@ -12,8 +12,8 @@ const MAX_TOOLTIP_WIDTH = 200;
 const TOOLTIP_FONT_SIZE = 13;
 
 /**
- * Resolve um valor semÃ¢ntico do Antd Tooltip, que pode ser objeto literal ou
- * funÃ§Ã£o `(info) => objeto`. MantÃ©m a mesma interface contratada pelo Antd.
+ * Resolve um valor semântico do Antd Tooltip, que pode ser objeto literal ou
+ * função `(info) => objeto`. Mantém a mesma interface contratada pelo Antd.
  */
 function resolveSemanticValue<T extends object>(
   value: T | ((info: { props: TooltipProps }) => T) | undefined,

@@ -1,4 +1,4 @@
-﻿import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Breadcrumb } from ".";
 
@@ -22,17 +22,17 @@ const meta: Meta<BreadcrumbStoryProps> = {
       codePanel: true,
       description: {
         component: `
-Componente de Breadcrumb (migalhas de pÃ£o) para navegaÃ§Ã£o hierÃ¡rquica.
+Componente de Breadcrumb (migalhas de pão) para navegação hierárquica.
 Baseado no [Ant Design Breadcrumb](https://ant.design/components/breadcrumb).
 
-Mostra o caminho de navegaÃ§Ã£o dentro do sistema, indicando a localizaÃ§Ã£o atual do usuÃ¡rio.
+Mostra o caminho de navegação dentro do sistema, indicando a localização atual do usuário.
 
 ### Quando usar
 
-Use o breadcrumb em interfaces com mÃºltiplos nÃ­veis de navegaÃ§Ã£o (ex.: Categoria â†’ Subcategoria â†’ PÃ¡gina) para indicar ao usuÃ¡rio onde ele estÃ¡ na hierarquia de pÃ¡ginas e permitir retorno rÃ¡pido a nÃ­veis anteriores.
+Use o breadcrumb em interfaces com múltiplos níveis de navegação (ex.: Categoria → Subcategoria → Página) para indicar ao usuário onde ele está na hierarquia de páginas e permitir retorno rápido a níveis anteriores.
 
 ### Props:
-- **Extended (Ant Design)**: Props padrÃ£o do AntD Breadcrumb.
+- **Extended (Ant Design)**: Props padrão do AntD Breadcrumb.
 
 ### Como usar:
 
@@ -72,7 +72,7 @@ function Example() {
                 fontWeight: "bold",
               }}
             >
-              ðŸŽ¨ Figma Spec
+              🎨 Figma Spec
             </h3>
             <Figma showLink url={FIGMA_URL} height="400px" />
           </div>
@@ -99,7 +99,7 @@ function Example() {
 export default meta;
 type Story = StoryObj<BreadcrumbStoryProps>;
 
-/** Exemplo padrÃ£o do Figma: Home > ... > Components > **Breadcrumb** */
+/** Exemplo padrão do Figma: Home > ... > Components > **Breadcrumb** */
 export const Default: Story = {
   args: {
     items: [
@@ -118,7 +118,7 @@ export const Simple: Story = {
   },
 };
 
-/** Breadcrumb com mÃºltiplos nÃ­veis */
+/** Breadcrumb com múltiplos níveis */
 export const MultiLevel: Story = {
   args: {
     items: [

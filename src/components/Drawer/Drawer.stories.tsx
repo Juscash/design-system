@@ -1,4 +1,4 @@
-﻿import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import React, { useState } from "react";
 import { Drawer } from ".";
 import { Button } from "antd";
@@ -36,17 +36,17 @@ const meta: Meta<DrawerStoryProps> = {
       codePanel: true,
       description: {
         component: `
-Bottom Sheet / Drawer â€” painel que desliza a partir da borda inferior (ou lateral) para exibir conteÃºdo complementar.
+Bottom Sheet / Drawer — painel que desliza a partir da borda inferior (ou lateral) para exibir conteúdo complementar.
 Baseado no [Ant Design Drawer](https://ant.design/components/drawer).
 
 ### Specs (Figma):
 - **Placement default**: bottom (bottom sheet)
 - **Background**: neutral[50]
 - **Overlay**: rgba(23,23,23,0.25)
-- **Handle bar**: 50Ã—3px, neutral[200], 8px do topo
+- **Handle bar**: 50×3px, neutral[200], 8px do topo
 - **Border-radius (bottom)**: 10px top-left/right
 - **Header padding**: 24px
-- **TÃ­tulo**: neutral[800]
+- **Título**: neutral[800]
 
 ### Como usar:
 
@@ -54,7 +54,7 @@ Baseado no [Ant Design Drawer](https://ant.design/components/drawer).
 import { Drawer, Button } from "@juscash/design-system";
 
 function Example() {
-  return <Drawer open={false} height={300}>ConteÃºdo</Drawer>;
+  return <Drawer open={false} height={300}>Conteúdo</Drawer>;
 }
 \`\`\`
 `,
@@ -77,7 +77,7 @@ function Example() {
                 fontWeight: "bold",
               }}
             >
-              ðŸŽ¨ Figma Spec
+              🎨 Figma Spec
             </h3>
             <Figma showLink url={FIGMA_URL} height="400px" />
           </div>
@@ -94,27 +94,27 @@ function Example() {
     focus: false,
   },
   argTypes: {
-    title: { control: "text", description: "TÃ­tulo do Drawer" },
+    title: { control: "text", description: "Título do Drawer" },
     placement: {
       control: "select",
       options: ["right", "left", "top", "bottom"],
-      description: "PosiÃ§Ã£o de abertura",
+      description: "Posição de abertura",
     },
     width: { control: "number", description: "Largura do Drawer" },
     open: { control: "boolean", description: "Controla a visibilidade" },
     hover: {
       control: "boolean",
-      description: "ForÃ§a o estado hover",
+      description: "Força o estado hover",
       table: { category: "Pseudo States" },
     },
     active: {
       control: "boolean",
-      description: "ForÃ§a o estado active",
+      description: "Força o estado active",
       table: { category: "Pseudo States" },
     },
     focus: {
       control: "boolean",
-      description: "ForÃ§a o estado focus",
+      description: "Força o estado focus",
       table: { category: "Pseudo States" },
     },
   },
@@ -187,9 +187,9 @@ export const BottomSheet: Story = {
 export const Default: Story = {
   render: (args) => <DrawerWrapper {...args} />,
   args: {
-    title: "TÃ­tulo do Drawer",
+    title: "Título do Drawer",
     placement: "right",
-    children: <p>ConteÃºdo do Drawer...</p>,
+    children: <p>Conteúdo do Drawer...</p>,
     width: 400,
   },
 };
@@ -201,8 +201,8 @@ export const WithFooter: Story = {
     width: 400,
     children: (
       <>
-        <p>ConteÃºdo principal...</p>
-        <p>Mais informaÃ§Ãµes...</p>
+        <p>Conteúdo principal...</p>
+        <p>Mais informações...</p>
       </>
     ),
     footer: (

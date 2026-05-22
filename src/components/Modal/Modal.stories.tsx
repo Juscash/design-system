@@ -1,4 +1,4 @@
-﻿import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React, { useState } from "react";
 import { Button } from "../Button";
 import { Modal } from ".";
@@ -42,7 +42,7 @@ const meta: Meta<typeof Modal> = {
 Componente baseado no [Ant Design Modal](https://ant.design/components/modal).
 
 ### Props:
-- **Extended (Ant Design)**: Suporta as propriedades padrÃ£o do AntD Modal.
+- **Extended (Ant Design)**: Suporta as propriedades padrão do AntD Modal.
 - **Custom (Juscash)**:
   - \`dsSize\`: Tamanhos padronizados (\`s\` = 400px, \`m\` = 640px, \`l\` = 900px).
 
@@ -85,17 +85,17 @@ Para customizar, passe \`footer={<seus botoes>}\` ou \`footer={null}\` para esco
 export default meta;
 type Story = StoryObj<typeof Modal>;
 
-// â”€â”€â”€ Default (2 buttons right) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Default (2 buttons right) ─────────────────────────────────────────────
 
 export const Default: Story = {
-  name: "Default â€” 2 botoes (Figma)",
+  name: "Default — 2 botoes (Figma)",
   render: function DefaultStory() {
     const [open, setOpen] = useState(false);
     return (
       <div style={{ padding: 40 }}>
         <Button onClick={() => setOpen(true)}>Abrir Modal</Button>
         <Modal
-          title="TÃ­tulo do Modal"
+          title="Título do Modal"
           open={open}
           okText="Confirmar"
           cancelText="Cancelar"
@@ -109,17 +109,17 @@ export const Default: Story = {
   },
 };
 
-// â”€â”€â”€ Figma: 2 full-width buttons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Figma: 2 full-width buttons ───────────────────────────────────────
 
 export const FullWidthButtons: Story = {
-  name: "Footer â€” 2 full-width (Figma)",
+  name: "Footer — 2 full-width (Figma)",
   render: function FullWidthStory() {
     const [open, setOpen] = useState(false);
     return (
       <div style={{ padding: 40 }}>
         <Button onClick={() => setOpen(true)}>Abrir</Button>
         <Modal
-          title="TÃ­tulo"
+          title="Título"
           open={open}
           onCancel={() => setOpen(false)}
           footer={
@@ -140,17 +140,17 @@ export const FullWidthButtons: Story = {
   },
 };
 
-// â”€â”€â”€ Figma: 3 buttons â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Figma: 3 buttons ───────────────────────────────────────────────
 
 export const ThreeButtons: Story = {
-  name: "Footer â€” 3 botÃµes (Figma)",
+  name: "Footer — 3 botões (Figma)",
   render: function ThreeButtonsStory() {
     const [open, setOpen] = useState(false);
     return (
       <div style={{ padding: 40 }}>
         <Button onClick={() => setOpen(true)}>Abrir</Button>
         <Modal
-          title="TÃ­tulo"
+          title="Título"
           open={open}
           onCancel={() => setOpen(false)}
           footer={
@@ -160,7 +160,7 @@ export const ThreeButtons: Story = {
               </Button>
               <span style={{ flex: 1 }} />
               <Button type="ghost" onClick={() => setOpen(false)}>
-                AÃ§Ã£o secundÃ¡ria
+                Ação secundária
               </Button>
               <Button type="primary" onClick={() => setOpen(false)}>
                 Confirmar
@@ -175,17 +175,17 @@ export const ThreeButtons: Story = {
   },
 };
 
-// â”€â”€â”€ Figma: single full-width button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Figma: single full-width button ───────────────────────────────────
 
 export const SingleButton: Story = {
-  name: "Footer â€” 1 botÃ£o full-width (Figma)",
+  name: "Footer — 1 botão full-width (Figma)",
   render: function SingleButtonStory() {
     const [open, setOpen] = useState(false);
     return (
       <div style={{ padding: 40 }}>
         <Button onClick={() => setOpen(true)}>Abrir</Button>
         <Modal
-          title="TÃ­tulo"
+          title="Título"
           open={open}
           onCancel={() => setOpen(false)}
           footer={
@@ -201,10 +201,10 @@ export const SingleButton: Story = {
   },
 };
 
-// â”€â”€â”€ Figma: close only (no title) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Figma: close only (no title) ───────────────────────────────────────
 
 export const CloseOnly: Story = {
-  name: "Sem tÃ­tulo â€” close only (Figma)",
+  name: "Sem título — close only (Figma)",
   render: function CloseOnlyStory() {
     const [open, setOpen] = useState(false);
     return (
@@ -232,7 +232,7 @@ export const CloseOnly: Story = {
   },
 };
 
-// â”€â”€â”€ Tamanhos â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Tamanhos ──────────────────────────────────────────────────
 
 export const Sizes: Story = {
   name: "Tamanhos (s / m / l)",
@@ -261,7 +261,7 @@ export const Sizes: Story = {
   },
 };
 
-// â”€â”€â”€ Figma: com scroll â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Figma: com scroll ──────────────────────────────────────────────
 
 export const WithScroll: Story = {
   name: "Com scroll (Figma)",
@@ -271,7 +271,7 @@ export const WithScroll: Story = {
       <div style={{ padding: 40 }}>
         <Button onClick={() => setOpen(true)}>Modal com Scroll</Button>
         <Modal
-          title="Termos e CondiÃ§Ãµes"
+          title="Termos e Condições"
           open={open}
           onCancel={() => setOpen(false)}
           okText="Aceitar"
@@ -281,7 +281,7 @@ export const WithScroll: Story = {
           <div style={{ maxHeight: 300, overflow: "auto" }}>
             {Array.from({ length: 20 }, (_, i) => (
               <p key={i} style={{ color: "#737373", fontSize: 16, lineHeight: 1.5 }}>
-                ParÃ¡grafo {i + 1}: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
+                Parágrafo {i + 1}: Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.
               </p>
             ))}
           </div>
@@ -291,7 +291,7 @@ export const WithScroll: Story = {
   },
 };
 
-// â”€â”€â”€ Figma: Exemplo desktop com sidebar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Figma: Exemplo desktop com sidebar ─────────────────────────────────
 
 export const FigmaDesktopExample: Story = {
   name: "Exemplo desktop (Figma)",
@@ -301,7 +301,7 @@ export const FigmaDesktopExample: Story = {
       <div style={{ padding: 40 }}>
         <Button onClick={() => setOpen(true)}>Exemplo Figma</Button>
         <Modal
-          title="TÃ­tulo do Dialog"
+          title="Título do Dialog"
           open={open}
           onCancel={() => setOpen(false)}
           dsSize="m"

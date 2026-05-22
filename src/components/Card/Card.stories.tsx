@@ -1,4 +1,4 @@
-﻿import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Card } from ".";
 
@@ -22,13 +22,13 @@ const meta: Meta<typeof Card> = {
 Componente Card baseado no [Ant Design Card](https://ant.design/components/card).
 
 ### Props:
-- **Extended (Ant Design)**: Suporta as propriedades padrÃ£o do AntD Card.
+- **Extended (Ant Design)**: Suporta as propriedades padrão do AntD Card.
 - **Custom (Juscash)**:
   - \`clickable\`: Quando verdadeiro, habilita efeito de hover (shadow.m), cursor pointer e estado de focus (focus ring).
 
-### Estados (apenas para cards clicÃ¡veis):
+### Estados (apenas para cards clicáveis):
 - **Default**: shadow.xs (sutil)
-- **Hover**: shadow.m (elevaÃ§Ã£o mÃ©dia)
+- **Hover**: shadow.m (elevação média)
 - **Focus**: focus ring (3px neutral[300])
 `,
       },
@@ -72,7 +72,7 @@ Componente Card baseado no [Ant Design Card](https://ant.design/components/card)
 export default meta;
 type Story = StoryObj<typeof Card>;
 
-// â”€â”€â”€ Default (apenas conteÃºdo) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Default (apenas conteúdo) ───────────────────────────────────────────────
 
 export const Default: Story = {
   args: {
@@ -80,20 +80,20 @@ export const Default: Story = {
   },
 };
 
-// â”€â”€â”€ Com tÃ­tulo â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Com título ──────────────────────────────────────────────────────────────
 
 export const WithTitle: Story = {
-  name: "Com tÃ­tulo",
+  name: "Com título",
   args: {
     title: "Card Title",
     children: "Card content with a title",
   },
 };
 
-// â”€â”€â”€ ClicÃ¡vel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Clicável ────────────────────────────────────────────────────────────────
 
 export const Clickable: Story = {
-  name: "ClicÃ¡vel",
+  name: "Clicável",
   args: {
     children: "Passe o mouse para ver hover e use Tab para focus.",
     clickable: true,
@@ -101,10 +101,10 @@ export const Clickable: Story = {
   },
 };
 
-// â”€â”€â”€ NÃ£o clicÃ¡vel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Não clicável ────────────────────────────────────────────────────────────
 
 export const NonClickable: Story = {
-  name: "NÃ£o clicÃ¡vel (container)",
+  name: "Não clicável (container)",
   args: {
     title: "Non-Clickable Card",
     children: "This card behaves like a static container.",
@@ -112,7 +112,7 @@ export const NonClickable: Story = {
   },
 };
 
-// â”€â”€â”€ Figma: grid de variantes (default / hover / focus Ã— 1â€“3 slots) â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Figma: grid de variantes (default / hover / focus × 1–3 slots) ─────────
 
 const SlotBox = ({ height = 40 }: { height?: number }) => (
   <div
@@ -133,7 +133,7 @@ const SlotBox = ({ height = 40 }: { height?: number }) => (
 );
 
 export const VariantsGrid: Story = {
-  name: "Variantes â€” Figma (default / hover / focus)",
+  name: "Variantes — Figma (default / hover / focus)",
   render: () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
       {/* Labels */}
@@ -216,17 +216,17 @@ export const VariantsGrid: Story = {
   ),
 };
 
-// â”€â”€â”€ Figma: Exemplo Login â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Figma: Exemplo Login ────────────────────────────────────────────────────
 
 export const ExampleLogin: Story = {
-  name: "Exemplo â€” Login (Figma)",
+  name: "Exemplo — Login (Figma)",
   render: () => (
     <Card style={{ width: 368 }}>
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         <div>
           <h2 style={{ fontSize: 31, fontWeight: 700, margin: 0, lineHeight: 1.2 }}>Boas-vindas!</h2>
           <p style={{ fontSize: 16, color: "#6d6d6e", margin: "8px 0 0", lineHeight: 1.2 }}>
-            Bem-vindo ao Programa de BenefÃ­cios JusCash! Por favor, insira seus dados abaixo para realizar o login.
+            Bem-vindo ao Programa de Benefícios JusCash! Por favor, insira seus dados abaixo para realizar o login.
           </p>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
@@ -286,17 +286,17 @@ export const ExampleLogin: Story = {
   ),
 };
 
-// â”€â”€â”€ Figma: Exemplo Feedback â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+// ─── Figma: Exemplo Feedback ─────────────────────────────────────────────────
 
 export const ExampleFeedback: Story = {
-  name: "Exemplo â€” Feedback (Figma)",
+  name: "Exemplo — Feedback (Figma)",
   render: () => (
     <Card style={{ width: 368 }}>
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         <div>
-          <h3 style={{ fontSize: 20, fontWeight: 700, margin: 0, lineHeight: 1.2 }}>Queremos ouvir vocÃª!</h3>
+          <h3 style={{ fontSize: 20, fontWeight: 700, margin: 0, lineHeight: 1.2 }}>Queremos ouvir você!</h3>
           <p style={{ fontSize: 16, color: "#6d6d6e", margin: "8px 0 0", lineHeight: 1.2 }}>
-            Sua experiÃªncia no nosso Programa de BenefÃ­cios Ã© muito importante para a gente. O seu feedback pode fazer toda a diferenÃ§a para construirmos um programa ainda mais completo e vantajoso para vocÃª.
+            Sua experiência no nosso Programa de Benefícios é muito importante para a gente. O seu feedback pode fazer toda a diferença para construirmos um programa ainda mais completo e vantajoso para você.
           </p>
         </div>
         <button

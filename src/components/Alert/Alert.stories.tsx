@@ -1,4 +1,4 @@
-﻿import type { Meta, StoryObj } from "@storybook/react-vite";
+import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Alert } from ".";
 import { Button } from "../Button";
@@ -28,16 +28,16 @@ const meta: Meta<AlertStoryProps> = {
       codePanel: true,
       description: {
         component: `
-Componente que exibe uma mensagem de aviso para chamar a atenÃ§Ã£o do usuÃ¡rio sobre informaÃ§Ãµes importantes.
+Componente que exibe uma mensagem de aviso para chamar a atenção do usuário sobre informações importantes.
 Baseado no [Ant Design Alert](https://ant.design/components/alert).
 
 ### Props:
-- **Extended (Ant Design)**: Props padrÃ£o do Antd (message, description, showIcon, etc).
+- **Extended (Ant Design)**: Props padrão do Antd (message, description, showIcon, etc).
 - **Custom (Juscash)**:
   - \`type\`: 'neutral' (default) | 'error' | 'success' | 'info' | 'warning'.
-  - \`showLine2\`: Controla a exibiÃ§Ã£o de uma descriÃ§Ã£o secundÃ¡ria (mapeado para usar prop \`description\`).
-  - \`showButton\`: Controla a exibiÃ§Ã£o de aÃ§Ã£o (mapeado para usar prop \`action\`).
-  - \`showLeftIcon\`: Controla a exibiÃ§Ã£o do Ã­cone (mapeado para prop \`showIcon\`).
+  - \`showLine2\`: Controla a exibição de uma descrição secundária (mapeado para usar prop \`description\`).
+  - \`showButton\`: Controla a exibição de ação (mapeado para usar prop \`action\`).
+  - \`showLeftIcon\`: Controla a exibição do ícone (mapeado para prop \`showIcon\`).
 
 ### Como usar:
 
@@ -68,7 +68,7 @@ function Example() {
                 fontWeight: "bold",
               }}
             >
-              ðŸŽ¨ Figma Spec
+              🎨 Figma Spec
             </h3>
             <Figma showLink url={FIGMA_URL} height="400px" />
           </div>
@@ -87,33 +87,33 @@ function Example() {
     type: {
       control: "select",
       options: ["neutral", "error", "success", "info", "warning"],
-      description: "Tipo do alerta. 'neutral' Ã© customizado do Design System.",
+      description: "Tipo do alerta. 'neutral' é customizado do Design System.",
     },
     showLine2: {
       control: "boolean",
-      description: "Habilita segunda linha (descriÃ§Ã£o). Use a prop `description` para o conteÃºdo.",
+      description: "Habilita segunda linha (descrição). Use a prop `description` para o conteúdo.",
     },
     showButton: {
       control: "boolean",
-      description: "Habilita botÃ£o de aÃ§Ã£o. Use a prop `action` para o conteÃºdo.",
+      description: "Habilita botão de ação. Use a prop `action` para o conteúdo.",
     },
     showLeftIcon: {
       control: "boolean",
-      description: "Exibe Ã­cone. Mapeado para `showIcon`.",
+      description: "Exibe ícone. Mapeado para `showIcon`.",
     },
     hover: {
       control: "boolean",
-      description: "ForÃ§a o estado hover",
+      description: "Força o estado hover",
       table: { category: "Pseudo States" },
     },
     active: {
       control: "boolean",
-      description: "ForÃ§a o estado active",
+      description: "Força o estado active",
       table: { category: "Pseudo States" },
     },
     focus: {
       control: "boolean",
-      description: "ForÃ§a o estado focus",
+      description: "Força o estado focus",
       table: { category: "Pseudo States" },
     },
   },
@@ -140,9 +140,9 @@ export const Default: Story = {
 
 // Figma Example 1: neutral + check icon + closable (X)
 export const NeutralWithClose: Story = {
-  name: "Neutral com Ã­cone e fechar",
+  name: "Neutral com ícone e fechar",
   args: {
-    message: "ConfiguraÃ§Ãµes salvas com sucesso.",
+    message: "Configurações salvas com sucesso.",
     type: "neutral",
     showIcon: true,
     icon: <CircleCheck size={16} />,
@@ -152,9 +152,9 @@ export const NeutralWithClose: Story = {
 
 // Figma Example 2: neutral + circle-alert icon
 export const NeutralWithAlert: Story = {
-  name: "Neutral com Ã­cone alerta",
+  name: "Neutral com ícone alerta",
   args: {
-    message: "Seu plano expirarÃ¡ em 3 dias. Considere renovÃ¡-lo para evitar interrupÃ§Ãµes.",
+    message: "Seu plano expirará em 3 dias. Considere renová-lo para evitar interrupções.",
     type: "neutral",
     showIcon: true,
     icon: <AlertCircle size={16} />,
@@ -163,7 +163,7 @@ export const NeutralWithAlert: Story = {
 
 // Figma Example 3: error + circle-alert + title + description
 export const ErrorWithDescription: Story = {
-  name: "Error com descriÃ§Ã£o",
+  name: "Error com descrição",
   args: {
     message: "Falha ao salvar os dados.",
     description: "Tente novamente mais tarde.",
@@ -175,9 +175,9 @@ export const ErrorWithDescription: Story = {
 
 // Figma Example 4: neutral + check icon + button action
 export const NeutralWithAction: Story = {
-  name: "Neutral com aÃ§Ã£o",
+  name: "Neutral com ação",
   args: {
-    message: "Arquivo excluÃ­do com sucesso.",
+    message: "Arquivo excluído com sucesso.",
     type: "neutral",
     showIcon: true,
     icon: <CircleCheck size={16} />,

@@ -1,4 +1,4 @@
-﻿import React from "react";
+import React from "react";
 import { ConfigProvider, Card as AntdCard } from "antd";
 import { designSystemColors, radius, spacing, shadow } from "../../theme";
 import type { ComponentToken } from "antd/es/card/style";
@@ -11,7 +11,7 @@ const baseTokens: Partial<ComponentToken> = {
 };
 
 /**
- * Card do design system, com sombra `xs` por padrÃ£o. Se `clickable` for
+ * Card do design system, com sombra `xs` por padrão. Se `clickable` for
  * verdadeiro adiciona cursor pointer, tabIndex 0 e a classe
  * `ds-card-clickable` consumida pelos overrides globais de hover/focus.
  */
