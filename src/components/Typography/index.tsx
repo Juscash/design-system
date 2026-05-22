@@ -3,7 +3,7 @@ import { Typography as AntdTypography, ConfigProvider } from "antd";
 import type { TitleProps } from "antd/es/typography/Title";
 import type { TextProps } from "antd/es/typography/Text";
 import type { ParagraphProps } from "antd/es/typography/Paragraph";
-import { designSystemColors } from "../../theme";
+import { designSystemColors, typography as typographyToken } from "../../theme";
 import type {
   BodyProps,
   CaptionProps,
@@ -15,15 +15,17 @@ import type {
 
 const { Title, Text, Paragraph } = AntdTypography;
 
-const HEADING1_SIZE = 61;
-const HEADING2_SIZE = 49;
-const HEADING3_SIZE = 39;
-const HEADING4_SIZE = 31;
-const HEADING5_SIZE = 25;
-const HEADING6_SIZE = 20;
-const BODY1_SIZE = 16;
-const BODY2_SIZE = 13;
-const CAPTION_SIZE = 10;
+const HEADING1_SIZE = typographyToken.scale.heading1.px;
+const HEADING2_SIZE = typographyToken.scale.heading2.px;
+const HEADING3_SIZE = typographyToken.scale.heading3.px;
+const HEADING4_SIZE = typographyToken.scale.heading4.px;
+const HEADING5_SIZE = typographyToken.scale.heading5.px;
+const HEADING6_SIZE = typographyToken.scale.heading6.px;
+const BODY1_SIZE = typographyToken.scale.body1.px;
+const BODY2_SIZE = typographyToken.scale.body2.px;
+const CAPTION_SIZE = typographyToken.scale.caption1.px;
+const FONT_WEIGHT = typographyToken.fontWeight;
+const LINE_HEIGHT = typographyToken.lineHeight;
 
 const colorMap: Record<DSColor, string> = {
   primary: designSystemColors.brand.primary[600],
@@ -40,56 +42,56 @@ const colorMap: Record<DSColor, string> = {
 const typographyVariants = {
   heading1: {
     fontSizeHeading1: HEADING1_SIZE,
-    lineHeightHeading1: 1.2,
-    fontWeightStrong: 700,
-    colorTextHeading: designSystemColors.neutral[800],
+    lineHeightHeading1: LINE_HEIGHT,
+    fontWeightStrong: FONT_WEIGHT,
+    colorTextHeading: designSystemColors.text.dark,
   },
   heading2: {
     fontSizeHeading2: HEADING2_SIZE,
-    lineHeightHeading2: 1.2,
-    fontWeightStrong: 700,
-    colorTextHeading: designSystemColors.neutral[800],
+    lineHeightHeading2: LINE_HEIGHT,
+    fontWeightStrong: FONT_WEIGHT,
+    colorTextHeading: designSystemColors.text.dark,
   },
   heading3: {
     fontSizeHeading3: HEADING3_SIZE,
-    lineHeightHeading3: 1.2,
-    fontWeightStrong: 700,
-    colorTextHeading: designSystemColors.neutral[800],
+    lineHeightHeading3: LINE_HEIGHT,
+    fontWeightStrong: FONT_WEIGHT,
+    colorTextHeading: designSystemColors.text.dark,
   },
   heading4: {
     fontSizeHeading4: HEADING4_SIZE,
-    lineHeightHeading4: 1.2,
-    fontWeightStrong: 700,
-    colorTextHeading: designSystemColors.neutral[800],
+    lineHeightHeading4: LINE_HEIGHT,
+    fontWeightStrong: FONT_WEIGHT,
+    colorTextHeading: designSystemColors.text.dark,
   },
   heading5: {
     fontSizeHeading5: HEADING5_SIZE,
-    lineHeightHeading5: 1.2,
-    fontWeightStrong: 700,
-    colorTextHeading: designSystemColors.neutral[800],
+    lineHeightHeading5: LINE_HEIGHT,
+    fontWeightStrong: FONT_WEIGHT,
+    colorTextHeading: designSystemColors.text.dark,
   },
   // O Antd `Typography.Title` aceita `level` 1–5; "Heading 6" é renderizado
   // como `level={5}` e usa propositalmente os tokens de heading5 sobrescritos
   // com o tamanho HEADING6_SIZE (20px) para preservar a hierarquia visual.
   heading6: {
     fontSizeHeading5: HEADING6_SIZE,
-    colorTextHeading: designSystemColors.neutral[800],
-    lineHeightHeading5: 1.2,
-    fontWeightStrong: 700,
+    colorTextHeading: designSystemColors.text.dark,
+    lineHeightHeading5: LINE_HEIGHT,
+    fontWeightStrong: FONT_WEIGHT,
   },
   body1: {
     fontSize: BODY1_SIZE,
-    lineHeight: 1.5,
-    colorText: designSystemColors.neutral[800],
+    lineHeight: LINE_HEIGHT,
+    colorText: designSystemColors.text.dark,
   },
   body2: {
     fontSize: BODY2_SIZE,
-    lineHeight: 1.4,
-    colorText: designSystemColors.neutral[800],
+    lineHeight: LINE_HEIGHT,
+    colorText: designSystemColors.text.dark,
   },
   caption: {
     fontSize: CAPTION_SIZE,
-    lineHeight: 1.3,
+    lineHeight: LINE_HEIGHT,
     colorText: designSystemColors.neutral[600],
   },
 } as const;
@@ -109,9 +111,9 @@ function renderTypography(variant: TypographyVariant, baseStyle: React.CSSProper
     case "heading6":
       return <Title level={5} style={baseStyle} {...(rest as TitleProps)} />;
     case "body1":
-      return <Paragraph style={{ ...baseStyle, fontSize: BODY1_SIZE, lineHeight: 1.5 }} {...(rest as ParagraphProps)} />;
+      return <Paragraph style={{ ...baseStyle, fontSize: BODY1_SIZE, lineHeight: LINE_HEIGHT }} {...(rest as ParagraphProps)} />;
     case "body2":
-      return <Paragraph style={{ ...baseStyle, fontSize: BODY2_SIZE, lineHeight: 1.4 }} {...(rest as ParagraphProps)} />;
+      return <Paragraph style={{ ...baseStyle, fontSize: BODY2_SIZE, lineHeight: LINE_HEIGHT }} {...(rest as ParagraphProps)} />;
     case "caption":
       return <Text style={baseStyle} {...(rest as TextProps)} />;
     default:
@@ -121,7 +123,8 @@ function renderTypography(variant: TypographyVariant, baseStyle: React.CSSProper
 
 /**
  * Componente raiz de tipografia. Aplica `variant` (`heading1..6`, `body1|2`,
- * `caption`) e `color` (paleta DS) sobre o `Typography` do Antd.
+ * `caption`) e `color` (paleta DS) sobre o `Typography` do Antd usando os
+ * tokens do design system (`Inter`, peso `400`, line-height `1.2`).
  */
 export function Typography(props: CustomTypographyProps): React.ReactElement {
   const { variant = "body1", color = "dark", style, ...rest } = props;
@@ -135,7 +138,7 @@ export function Typography(props: CustomTypographyProps): React.ReactElement {
   };
 
   const node = renderTypography(variant, baseStyle, rest);
-  return <ConfigProvider theme={{ token: { fontWeightStrong: 700, ...variantTheme } }}>{node}</ConfigProvider>;
+  return <ConfigProvider theme={{ token: { fontWeightStrong: FONT_WEIGHT, ...variantTheme } }}>{node}</ConfigProvider>;
 }
 
 Typography.displayName = "Typography";

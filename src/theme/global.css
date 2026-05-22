@@ -29,7 +29,7 @@
   --color-neutral-200: #e5e5e5;
   --color-neutral-300: #d4d4d4;
   --color-neutral-400: #a3a3a3;
-  --color-neutral-500: #737373;
+  --color-neutral-500: #6d6d6e;
   --color-neutral-600: #525252;
   --color-neutral-700: #404040;
   --color-neutral-800: #262626;
@@ -84,6 +84,48 @@
   --color-feedback-orange-500: #b15600;
   --color-feedback-orange-900: #8b4400;
 
+  /* Opacities */
+  --color-opacities-dark-25: #17171740;
+  --color-opacities-light-0-01: #ffffff00;
+  --color-opacities-light-50: #ffffff80;
+
+  /* Text - alias semântico */
+  --color-text-dark: var(--color-neutral-800);
+  --color-text-disabled: var(--color-neutral-400);
+  --color-text-light: var(--color-neutral-50);
+  --color-text-soft: var(--color-neutral-500);
+  --color-text-links-default: var(--color-feedback-blue-500);
+  --color-text-links-hover: var(--color-feedback-blue-900);
+
+  /* Border - alias semântico */
+  --color-border-regular: var(--color-neutral-300);
+  --color-border-disabled: var(--color-neutral-200);
+
+  /* Background - alias semântico */
+  --color-background-white: var(--color-neutral-50);
+  --color-background-grey: var(--color-neutral-100);
+  --color-background-opacities: var(--color-opacities-dark-25);
+
+  /* Button - alias semântico (brand) */
+  --color-button-brand-default: var(--color-brand-primary-600);
+  --color-button-brand-hover-active: var(--color-brand-primary-800);
+  --color-button-brand-disabled: var(--color-neutral-300);
+
+  /* Button - alias semântico (secondary) */
+  --color-button-secondary-default: var(--color-brand-secondary-700);
+  --color-button-secondary-hover-active: var(--color-brand-secondary-800);
+  --color-button-secondary-disabled: var(--color-neutral-300);
+
+  /* Button - alias semântico (neutral) */
+  --color-button-neutral-default: var(--color-neutral-200);
+  --color-button-neutral-hover-active: var(--color-neutral-400);
+  --color-button-neutral-disabled: var(--color-neutral-300);
+
+  /* Button - alias semântico (destructive) */
+  --color-button-destructive-default: var(--color-feedback-red-500);
+  --color-button-destructive-hover-active: var(--color-feedback-red-900);
+  --color-button-destructive-disabled: var(--color-neutral-300);
+
   /* ============================================
      RADIUS
      ============================================ */
@@ -124,39 +166,69 @@
 
   /* ============================================
      TYPOGRAPHY
+     Fonte: página Fundamentos do Figma. Família Inter,
+     peso 400 (Regular), line-height 1.2 unitless para
+     toda a escala.
      ============================================ */
+  --font-weight-regular: 400;
+  --font-line-height: 1.2;
+  --font-letter-spacing: 0;
+
   --font-heading-1-size: 61px;
-  --font-heading-1-weight: 700;
-  --font-heading-1-line-height: 0;
+  --font-heading-1-weight: var(--font-weight-regular);
+  --font-heading-1-line-height: var(--font-line-height);
 
   --font-heading-2-size: 49px;
-  --font-heading-2-weight: 700;
-  --font-heading-2-line-height: 0;
+  --font-heading-2-weight: var(--font-weight-regular);
+  --font-heading-2-line-height: var(--font-line-height);
 
   --font-heading-3-size: 39px;
-  --font-heading-3-weight: 700;
-  --font-heading-3-line-height: 0;
+  --font-heading-3-weight: var(--font-weight-regular);
+  --font-heading-3-line-height: var(--font-line-height);
 
   --font-heading-4-size: 31px;
-  --font-heading-4-weight: 700;
-  --font-heading-4-line-height: 0;
+  --font-heading-4-weight: var(--font-weight-regular);
+  --font-heading-4-line-height: var(--font-line-height);
 
   --font-heading-5-size: 25px;
-  --font-heading-5-weight: 700;
-  --font-heading-5-line-height: 0;
+  --font-heading-5-weight: var(--font-weight-regular);
+  --font-heading-5-line-height: var(--font-line-height);
 
   --font-heading-6-size: 20px;
-  --font-heading-6-weight: 700;
-  --font-heading-6-line-height: 0;
+  --font-heading-6-weight: var(--font-weight-regular);
+  --font-heading-6-line-height: var(--font-line-height);
 
   --font-body-1-size: 16px;
-  --font-body-1-line-height: 0;
+  --font-body-1-weight: var(--font-weight-regular);
+  --font-body-1-line-height: var(--font-line-height);
 
   --font-body-2-size: 13px;
-  --font-body-2-line-height: 0;
+  --font-body-2-weight: var(--font-weight-regular);
+  --font-body-2-line-height: var(--font-line-height);
 
   --font-caption-size: 10px;
-  --font-caption-line-height: 0;
+  --font-caption-weight: var(--font-weight-regular);
+  --font-caption-line-height: var(--font-line-height);
+
+  /* ============================================
+     CONTAINER
+     Define a área útil de conteúdo conforme breakpoint.
+     ============================================ */
+  --container-padding-top: 24px;
+  --container-padding-x: 24px;
+  --container-system-max-width: 1800px;
+  --container-system-fixed-from: 1920px;
+  --container-site-max-width: 1086px;
+  --container-site-fixed-from: 1366px;
+
+  /* ============================================
+     ASPECT RATIO
+     ============================================ */
+  --aspect-ratio-square: 1 / 1;
+  --aspect-ratio-portrait: 3 / 4;
+  --aspect-ratio-landscape: 4 / 3;
+  --aspect-ratio-widescreen: 16 / 9;
+  --aspect-ratio-mobile: 9 / 16;
 }
 
 /* ============================================
