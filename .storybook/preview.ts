@@ -68,19 +68,6 @@ const preview: Preview = {
       test: "todo",
     },
   },
-  globalTypes: {
-    locale: {
-      description: "Internationalization locale",
-      defaultValue: "pt-BR",
-      toolbar: {
-        icon: "globe",
-        items: [
-          { value: "pt-BR", right: "🇧🇷", title: "Português" },
-          { value: "en", right: "🇺🇸", title: "English" },
-        ],
-      },
-    },
-  },
 };
 
 export default preview;

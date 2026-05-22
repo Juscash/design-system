@@ -1,0 +1,134 @@
+<!--
+  Tradução pt-BR aplicada DENTRO do iframe de preview do Storybook.
+
+  Manager e preview são iframes separados — manager-head.html não chega aqui.
+  Aqui traduzimos textos do addon-docs (Show code, Copy code, Copy) e botões
+  do canvas que vivem no preview.
+-->
+<script>
+  (function () {
+    "use strict";
+
+    var DICT_TEXT = {
+      "Show code": "Mostrar código",
+      "Hide code": "Esconder código",
+      "Copy code": "Copiar código",
+      "Copy": "Copiar",
+      "Copied!": "Copiado!",
+      "Copy link": "Copiar link",
+      "Read docs": "Ler documentação",
+      "Read the docs": "Ler a documentação",
+      "Loading...": "Carregando...",
+      "Components": "Componentes",
+      "Stories": "Stories",
+      "Documentation": "Documentação",
+      "Default": "Padrão",
+      // Tabela de controles do autodocs
+      "Name": "Nome",
+      "Description": "Descrição",
+      "Control": "Controle",
+      "Set boolean": "Definir booleano",
+      "Set color": "Definir cor",
+      "Set object": "Definir objeto",
+      "Set array": "Definir array",
+      "Set number": "Definir número",
+      "Set string": "Definir texto",
+      "Set date": "Definir data",
+      "Edit string...": "Editar texto...",
+      "Choose option...": "Escolha uma opção...",
+      "Reset controls": "Resetar controles",
+      "true": "verdadeiro",
+      "false": "falso",
+      "True": "Verdadeiro",
+      "False": "Falso",
+    };
+
+    var DICT_ATTR = Object.assign({}, DICT_TEXT, {
+      "Show code": "Mostrar código",
+      "Hide code": "Esconder código",
+      "Copy": "Copiar",
+      "Open in new tab": "Abrir em nova aba",
+      "Close": "Fechar",
+    });
+
+    var ATTRS = ["title", "aria-label", "placeholder", "alt"];
+
+    function translateTextNode(node) {
+      if (node.nodeType !== Node.TEXT_NODE) return;
+      var raw = node.nodeValue || "";
+      var trimmed = raw.trim();
+      if (!trimmed) return;
+      var t = DICT_TEXT[trimmed];
+      if (t) node.nodeValue = raw.replace(trimmed, t);
+    }
+
+    function translateAttrs(el) {
+      if (!el || el.nodeType !== Node.ELEMENT_NODE || !el.getAttribute) return;
+      for (var i = 0; i < ATTRS.length; i++) {
+        var v = el.getAttribute(ATTRS[i]);
+        if (v && DICT_ATTR[v]) el.setAttribute(ATTRS[i], DICT_ATTR[v]);
+      }
+    }
+
+    function walkText(root) {
+      var iter = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+      var n;
+      while ((n = iter.nextNode())) translateTextNode(n);
+    }
+    function walkAttrs(root) {
+      if (root.nodeType === Node.ELEMENT_NODE) translateAttrs(root);
+      if (root.querySelectorAll) {
+        root.querySelectorAll("[title],[aria-label],[placeholder],[alt]").forEach(translateAttrs);
+      }
+    }
+
+    var pending = new Set();
+    var scheduled = false;
+    function flush() {
+      scheduled = false;
+      pending.forEach(function (node) {
+        if (!node || !node.isConnected) return;
+        if (node.nodeType === Node.TEXT_NODE) translateTextNode(node);
+        else if (node.nodeType === Node.ELEMENT_NODE) {
+          translateAttrs(node);
+          walkText(node);
+          walkAttrs(node);
+        }
+      });
+      pending.clear();
+    }
+    function schedule(node) {
+      pending.add(node);
+      if (!scheduled) {
+        scheduled = true;
+        setTimeout(flush, 50);
+      }
+    }
+
+    function init() {
+      walkText(document.body);
+      walkAttrs(document.body);
+      var obs = new MutationObserver(function (mutations) {
+        for (var i = 0; i < mutations.length; i++) {
+          var m = mutations[i];
+          for (var j = 0; j < m.addedNodes.length; j++) schedule(m.addedNodes[j]);
+          if (m.type === "attributes" && m.target) schedule(m.target);
+          if (m.type === "characterData" && m.target) schedule(m.target);
+        }
+      });
+      obs.observe(document.body, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+        attributes: true,
+        attributeFilter: ATTRS,
+      });
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
+  })();
+</script>
