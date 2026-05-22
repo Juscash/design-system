@@ -1,27 +1,29 @@
 # Juscash Design System
 
-Bem-vindo ao repositório do **Juscash Design System**. Este projeto é um monorepo que contém a biblioteca de componentes proprietária da Juscash e seu respectivo site de documentação.
+Bem-vindo ao repositório do **Juscash Design System**. Este projeto é a biblioteca de componentes proprietária da Juscash junto com seu site de documentação interativa.
 
 ## 🔗 Links Úteis
 
 - **Documentação Interativa**: [https://Juscash.github.io/design-system/](https://Juscash.github.io/design-system/)
-- **Guia de Instalação**: [documentacao/instalacao/README.md](./documentacao/instalacao/README.md)
-- **Guia de Criação de Componentes**: [documentacao/criacao/README.md](./documentacao/criacao/README.md)
+- **Guia de Instalação**: [docs/instalacao/README.md](./docs/instalacao/README.md)
+- **Guia de Criação de Componentes**: [docs/criacao/README.md](./docs/criacao/README.md)
 
 ---
 
 ## 🏗️ Estrutura do Projeto
 
-O projeto utiliza **NPM Workspaces** para gerenciar os pacotes:
+Pacote único `@juscash/design-system` no escopo Juscash, com Storybook colocado para showcase:
 
-- `packages/design-system`: O núcleo da biblioteca. Construído sobre o **Ant Design 6** e estilizado com tokens proprietários da Juscash.
-- `docs`: Aplicativo Vite que serve como vitrine (Showcase) e playground para os componentes.
+- `src/` — fonte da biblioteca (componentes + tema).
+- `.storybook/` — config do Storybook que consome `src/` em dev e `dist/` em build.
+- `docs/` — guias internos em pt-BR (criação, instalação, confluence).
+- `scripts/` — versão e publicação.
 
 ### Principais Dependências da Biblioteca
 
 - **React 18/19**
-- **Ant Design 6** (Base técnica)
-- **Lucide React** (Biblioteca única de ícones)
+- **Ant Design 6** (base técnica)
+- **Lucide React** (biblioteca única de ícones)
 
 ---
 
@@ -29,26 +31,34 @@ O projeto utiliza **NPM Workspaces** para gerenciar os pacotes:
 
 ### 1. Instalação
 
-Na raiz do projeto, instale todas as dependências:
+Na raiz do projeto:
 
 ```bash
 npm install
 ```
 
-### 2. Rodando a Documentação Localmente
+### 2. Rodando o Storybook Localmente
 
-Para visualizar as alterações nos componentes em tempo real:
+Para visualizar alterações em tempo real:
 
 ```bash
 npm run dev
 ```
 
+Storybook sobe em `http://localhost:6006`.
+
 ### 3. Build Completo
 
-Para gerar o build da biblioteca e do site simultaneamente:
+```bash
+npm run build            # builda a biblioteca (tsup -> dist/)
+npm run build:storybook  # builda o showcase estático (storybook-static/)
+```
+
+### 4. Testes
 
 ```bash
-npm run build
+npm run test:run                       # unit tests da lib (vitest + jsdom)
+npm run test:storybook                 # testes do Storybook (Playwright headless)
 ```
 
 ---
@@ -61,25 +71,24 @@ A biblioteca é publicada no **GitHub Packages**. O deploy é acionado via tags:
 
 1. Finalize suas alterações.
 2. Execute um dos scripts de versão:
-   - `npm run version:patch` (Correções)
-   - `npm run version:minor` (Novas features)
-   - `npm run version:major` (Breaking changes)
+   - `npm run version:patch` (correções)
+   - `npm run version:minor` (novas features)
+   - `npm run version:major` (breaking changes)
 3. Execute `npm run version:publish` para subir a tag e disparar o workflow de publicação automática.
 
 ### Deploy do Front-end (Documentação)
 
 O site de documentação é hospedado no **GitHub Pages**.
 
-- O deploy é **automático** sempre que houver um push ou merge na branch `main`.
+- O deploy é **automático** em todo `push`/`merge` na branch `main`.
 
 ---
 
 ## 🛠️ Tecnologias Utilizadas
 
-- **Monorepo**: NPM Workspaces
-- **Build Tool**: Tsup (biblioteca) e Vite (docs)
+- **Build da Lib**: Tsup
+- **Docs/Playground**: Storybook 10 (`@storybook/nextjs-vite`)
+- **Testes**: Vitest + Testing Library + Playwright
 - **CI/CD**: GitHub Actions
-- **Icons**: Lucide React
-- **Autenticação de Pacotes**: GitHub Packages (@juscash scope)
-
----
+- **Ícones**: Lucide React
+- **Registry**: GitHub Packages (escopo `@juscash`)

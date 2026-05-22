@@ -6,7 +6,7 @@ dist
 .turbo
 .vite
 .storybook-static
-docs/storybook-static
+storybook-static
 *.tsbuildinfo
 
 # Test output

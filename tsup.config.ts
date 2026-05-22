@@ -1,10 +1,18 @@
 import { defineConfig } from "tsup";
 import { copyFileSync } from "fs";
-import { join } from "path";
+import { join, dirname } from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = dirname(fileURLToPath(import.meta.url));
 
 export default defineConfig({
   entry: ["src/index.ts"],
   format: ["cjs", "esm"],
+  // Preserva extensões publicadas: CJS -> .js, ESM -> .mjs (override do default
+  // do tsup que, com "type": "module" no package.json, emitiria .cjs / .js).
+  outExtension: ({ format }) => ({
+    js: format === "cjs" ? ".js" : ".mjs",
+  }),
   dts: true,
   sourcemap: true,
   clean: true,

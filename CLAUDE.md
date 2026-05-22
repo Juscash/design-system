@@ -23,26 +23,25 @@ Monorepo do **Juscash Design System** — biblioteca de componentes React (`@jus
 
 A biblioteca é uma **camada de identidade visual sobre o Ant Design 6**: cada componente embrulha o equivalente do `antd` aplicando tokens, variantes e comportamentos próprios via `ConfigProvider` local.
 
-## Estrutura do monorepo
+## Estrutura do projeto
 
 ```
 design-system/
-├── packages/
-│   └── design-system/        # @juscash/design-system — biblioteca publicada
-│       ├── src/
-│       │   ├── components/   # Componentes UI (wrappers do antd)
-│       │   ├── theme/        # Provider, tokens, global.css
-│       │   └── index.ts      # API pública do pacote
-│       ├── tsup.config.ts    # Build (ESM + CJS + d.ts + css)
-│       └── vitest.config.ts  # Testes unitários (jsdom)
-├── docs/                     # @juscash/storybook — showcase/playground
-│   └── .storybook/           # Config do Storybook (preview, main, theme)
+├── src/                      # @juscash/design-system — biblioteca publicada
+│   ├── components/           # Componentes UI (wrappers do antd)
+│   ├── theme/                # Provider, tokens, global.css
+│   └── index.ts              # API pública do pacote
+├── .storybook/               # Config do Storybook (preview, main, theme)
+├── docs/                     # Guias internos pt-BR (criacao, instalacao, confluence)
 ├── scripts/                  # Versionamento, publicação, utilitários
-├── documentacao/             # Guias internos (instalação, criação)
+├── tsup.config.ts            # Build (ESM + CJS + d.ts + css)
+├── vitest.config.ts          # Testes (projects: unit + storybook)
+├── tsconfig.json
+├── package.json              # Único — deps da lib + devDeps de build/storybook
 └── .github/workflows/        # publish.yml, deploy-docs.yml
 ```
 
-NPM Workspaces orquestra `packages/*` e `docs`. Todo trabalho de componente acontece dentro de `packages/design-system/src`.
+Pacote único. Storybook colocado na raiz consome `src/` em dev e `dist/` em build via aliases do Vite. Todo trabalho de componente acontece dentro de `src/`.
 
 ## Stack obrigatória
 
@@ -64,29 +63,21 @@ Não adicione bibliotecas externas sem necessidade real e sem justificativa téc
 
 ## Comandos de build e desenvolvimento
 
-Executar na raiz do monorepo:
+Executar na raiz:
 
 ```bash
-npm install                  # instala workspaces (lib + docs)
-npm run dev                  # libera porta 6006 e sobe Storybook
-npm run build                # build da lib (tsup) + build do Storybook
-npm run build:design-system  # build apenas da biblioteca
-npm run build:docs           # build apenas do Storybook
-npm run test:docs            # roda os testes do Storybook (Playwright headless)
-npm run start                # serve o Storybook estático (após build)
+npm install              # instala todas as deps (lib + storybook devDeps)
+npm run dev              # libera porta 6006 e sobe Storybook em http://localhost:6006
+npm run build            # tsup -> dist/ (ESM + CJS + d.ts + css)
+npm run build:storybook  # storybook build -> storybook-static/
+npm run test             # vitest watch
+npm run test:run         # vitest run (uma rodada, ambos projects)
+npm run test:storybook   # apenas testes do Storybook (Playwright headless)
+npm run start            # serve o Storybook estático (após build:storybook)
+npm run clean            # rimraf dist storybook-static
 ```
 
-Comandos internos do workspace da biblioteca:
-
-```bash
-npm run build    -w @juscash/design-system   # tsup
-npm run dev      -w @juscash/design-system   # tsup --watch
-npm run test     -w @juscash/design-system   # vitest (watch)
-npm run test:run -w @juscash/design-system   # vitest run (uma rodada)
-npm run clean    -w @juscash/design-system   # rimraf dist
-```
-
-> O script `lint` na raiz é placeholder (`echo "no lint configured"`). Não há ESLint configurado ainda; a verificação de qualidade roda via `npm run build` (que aciona o `tsup` com `dts: true`, gerando types e falhando em erros de tipo) e via `npm run test:run` dentro do pacote.
+> O script `lint` é placeholder (`echo "no lint configured"`). Não há ESLint configurado ainda; a verificação de qualidade roda via `npm run build` (que aciona o `tsup` com `dts: true`, gerando types e falhando em erros de tipo) e via `npm run test:run`.
 
 ## Variáveis de ambiente
 
@@ -104,14 +95,14 @@ Não comitar `.env` real (já no `.gitignore`). Se uma nova variável aparecer, 
 
 Para cada componente novo:
 
-1. **Pasta** em `PascalCase` em `packages/design-system/src/components/<Nome>/`.
+1. **Pasta** em `PascalCase` em `src/components/<Nome>/`.
 2. **Implementação**: arquivo `index.tsx` dentro da pasta, exportando o componente.
 3. **Re-export**: a pasta deve ter um `index.ts` quando o componente estiver em outro arquivo; quando a implementação já estiver em `index.tsx`, dispensa o re-export.
 4. **Tipos**: declarados em arquivo separado conforme a seção _TypeScript_ abaixo.
 5. **Stories**: arquivo `<Nome>.stories.tsx` colocado na pasta — convenção do Storybook exige nome único para localizar os stories via glob (`**/*.stories.@(js|jsx|mjs|ts|tsx)`).
 6. **Testes**: arquivo `<Nome>.test.tsx` colocado na pasta — convenção do Vitest exige nome único.
 7. **CSS scoped** (opcional): `index.module.css` na própria pasta — ver seção _Estilos_.
-8. **Export público**: adicionar `export * from "./<Nome>"` em `packages/design-system/src/components/index.ts`.
+8. **Export público**: adicionar `export * from "./<Nome>"` em `src/components/index.ts`.
 
 ### Princípios de implementação
 
@@ -135,7 +126,7 @@ Para cada componente novo:
 
 ### Theme e tokens
 
-A camada de tema vive em `packages/design-system/src/theme/`:
+A camada de tema vive em `src/theme/`:
 
 - `JuscashProvider.tsx` — wrapper que junta `AntdRegistry` + `ConfigProvider` com `colorPrimary` e locale `pt_BR`. Exportado para o consumidor envolver a app.
 - `foundations/` — fonte de verdade dos tokens em TS: `colors.ts`, `spacing.ts`, `radius.ts`, `shadow.ts`, `breakpoints.ts`. Cada um exporta o objeto `as const` + o tipo derivado (`typeof`).
@@ -153,11 +144,11 @@ A camada de tema vive em `packages/design-system/src/theme/`:
 
 **Todo arquivo TypeScript/TSX criado no projeto se chama `index.ts` ou `index.tsx`.** O casing das convenções de nomenclatura aplica-se ao **nome da pasta** que contém o `index`. A única exceção são arquivos cujo nome é exigido por ferramenta externa: `<Nome>.stories.tsx` (Storybook) e `<Nome>.test.tsx` (Vitest) podem coexistir na mesma pasta.
 
-- **Componentes:** pasta em `PascalCase` → `packages/design-system/src/components/Button/index.tsx`.
-- **Hooks:** pasta em `camelCase` com prefixo `use` → `packages/design-system/src/hooks/useFoo/index.ts`.
-- **Utils:** pasta em `camelCase` → `packages/design-system/src/utils/formatDateTime/index.ts`.
-- **Constantes:** pasta em `camelCase` → `packages/design-system/src/constants/foo/index.ts`.
-- **Tipos:** estrutura espelhada em `packages/design-system/src/types/{components,hooks,utils,theme}/<Name>/index.ts`.
+- **Componentes:** pasta em `PascalCase` → `src/components/Button/index.tsx`.
+- **Hooks:** pasta em `camelCase` com prefixo `use` → `src/hooks/useFoo/index.ts`.
+- **Utils:** pasta em `camelCase` → `src/utils/formatDateTime/index.ts`.
+- **Constantes:** pasta em `camelCase` → `src/constants/foo/index.ts`.
+- **Tipos:** estrutura espelhada em `src/types/{components,hooks,utils,theme}/<Name>/index.ts`.
 
 Nunca crie arquivos como `Button.tsx`, `useFoo.ts`, `button.types.ts`. Use sempre uma pasta nomeada com o símbolo, contendo `index.ts(x)`. Stories e tests são a única exceção e ficam dentro da própria pasta do símbolo.
 
@@ -165,7 +156,7 @@ Nunca crie arquivos como `Button.tsx`, `useFoo.ts`, `button.types.ts`. Use sempr
 
 - **Proibido `any`.** Use tipos explícitos, genéricos ou `unknown` quando o tipo for desconhecido.
 - **Tipos de retorno explícitos** em funções e componentes exportados (ex.: `function Button(props: ButtonProps): React.ReactElement`).
-- **Tipos em arquivo separado da implementação.** Toda tipagem vive em `packages/design-system/src/types/{components,hooks,utils,theme}/<Name>/index.ts`. Não declare props/tipos dentro do `index.tsx` do componente. Não use arquivos sufixados com `*.types.ts`.
+- **Tipos em arquivo separado da implementação.** Toda tipagem vive em `src/types/{components,hooks,utils,theme}/<Name>/index.ts`. Não declare props/tipos dentro do `index.tsx` do componente. Não use arquivos sufixados com `*.types.ts`.
 - **Sempre importe tipos com `import type`** — o build com `tsup --dts` é estrito quanto a isso e evita imports de runtime desnecessários.
 
 Componentes importam suas props a partir de `src/types`:
@@ -198,7 +189,7 @@ import { Button, Card, JuscashProvider, designSystemColors } from "@juscash/desi
 import "@juscash/design-system/dist/index.css";
 ```
 
-**Nunca importe `antd` diretamente em código publicável** — quebra a aplicação da identidade visual. O `antd` é dependência transitiva exposta através do barrel `packages/design-system/src/index.ts`.
+**Nunca importe `antd` diretamente em código publicável** — quebra a aplicação da identidade visual. O `antd` é dependência transitiva exposta através do barrel `src/index.ts`.
 
 ## Componentes React
 
@@ -220,15 +211,15 @@ Adicionalmente:
 - Retorno e parâmetros tipados (tipos em `src/types/hooks/<Nome>/index.ts` quando exportados publicamente).
 - Responsabilidade única.
 - **Específicos de um componente:** ficam junto, em `<Componente>/hooks/use<Nome>/index.ts`.
-- **Reutilizados por múltiplos componentes:** sobem para `packages/design-system/src/hooks/use<Nome>/index.ts`. Não promova preventivamente — só quando o reuso for real.
+- **Reutilizados por múltiplos componentes:** sobem para `src/hooks/use<Nome>/index.ts`. Não promova preventivamente — só quando o reuso for real.
 
 ## Utils
 
-Utils ficam em `packages/design-system/src/utils/<nome>/index.ts`, com a pasta em `camelCase`. Apenas **funções puras e reutilizáveis**. Sem JSX, sem estado React, sem regra específica de componente. Útil para coisas como `clamp`, `mergeStyles`, `getContrastColor`, helpers de token, etc.
+Utils ficam em `src/utils/<nome>/index.ts`, com a pasta em `camelCase`. Apenas **funções puras e reutilizáveis**. Sem JSX, sem estado React, sem regra específica de componente. Útil para coisas como `clamp`, `mergeStyles`, `getContrastColor`, helpers de token, etc.
 
 ## Constantes
 
-Constantes compartilhadas ficam em `packages/design-system/src/constants/<grupo>/index.ts`. Use `UPPER_SNAKE_CASE` para constantes globais.
+Constantes compartilhadas ficam em `src/constants/<grupo>/index.ts`. Use `UPPER_SNAKE_CASE` para constantes globais.
 
 **Sem números mágicos.** Extraia valores literais para constantes nomeadas ou para tokens (`spacing`, `radius`, etc.). Exceções permitidas: `-1, 0, 1, 2, 100, 1000`. Tudo que vier do design (tamanhos, alturas, paddings) vai para `theme/foundations` — nunca hardcoded no componente.
 
@@ -245,7 +236,7 @@ Código, nomes de pastas, arquivos, variáveis, funções, classes e exports fic
 
 - **Proibido CSS global novo.** Toda regra de estilo nova vive em um arquivo `index.module.css` colocado na pasta do componente que a consome. Use a importação default do CSS Module (`import styles from "./index.module.css"`) e acesse via `styles.<className>`.
 - **`theme/global.css` é zona reservada.** Só entram lá: (1) definição das CSS variables (`--color-*`, `--spacing-*`, etc.) e (2) overrides de seletores nativos do antd (`.ant-*`, `.ant-picker-*`, etc.) que não podem ser escopados via CSS Module. Qualquer classe própria da camada Juscash (`.ds-*`, `.juscash-*`, `.rich-*`) deve migrar para o `index.module.css` do componente correspondente quando o componente for tocado.
-- **Estilo reutilizado em mais de um lugar vira componente.** Se um padrão visual (botão custom, card, badge, layout, etc.) aparecer em dois ou mais arquivos, **não** duplique o CSS nem extraia para um CSS global — extraia um componente reutilizável em `packages/design-system/src/components/<Nome>/index.tsx` com seu próprio `index.module.css`. Os consumidores passam a importar o componente, não o CSS.
+- **Estilo reutilizado em mais de um lugar vira componente.** Se um padrão visual (botão custom, card, badge, layout, etc.) aparecer em dois ou mais arquivos, **não** duplique o CSS nem extraia para um CSS global — extraia um componente reutilizável em `src/components/<Nome>/index.tsx` com seu próprio `index.module.css`. Os consumidores passam a importar o componente, não o CSS.
 - **Use os tokens** (`designSystemColors`, `spacing`, `radius`, `shadow`, `breakpoints`) ou as CSS variables (`var(--color-neutral-300)`, `var(--spacing-4)`, etc.) dentro do `index.module.css` em vez de valores literais.
 - **Evite estilos inline extensos.** Estilos inline são aceitáveis apenas para valores dinâmicos calculados em runtime que não cabem em um seletor (ex.: `style={{ height: dynamicHeight }}`).
 - **Sem CSS duplicado entre módulos.** Se aparecer, extraia componente (ver regra acima).
@@ -253,7 +244,7 @@ Código, nomes de pastas, arquivos, variáveis, funções, classes e exports fic
 Estrutura típica de um componente:
 
 ```
-packages/design-system/src/components/Button/
+src/components/Button/
   index.tsx
   index.module.css
   Button.stories.tsx
@@ -264,7 +255,7 @@ packages/design-system/src/components/Button/
 
 Toda alteração visual ou nova variante deve estar refletida no Storybook. Padrões esperados:
 
-- **Localização:** `<Componente>/<Nome>.stories.tsx` (o glob do Storybook em `docs/.storybook/main.mts` aponta para `packages/design-system/src/**/*.stories.@(js|jsx|mjs|ts|tsx)`).
+- **Localização:** `<Componente>/<Nome>.stories.tsx` (o glob do Storybook em `.storybook/main.mts` aponta para `src/**/*.stories.@(js|jsx|mjs|ts|tsx)`).
 - **`title`:** `"Components/<Nome>"` (ou outra categoria — veja `addon-docs/blocks` para subcategorias).
 - **`tags: ["autodocs"]`** para gerar a aba _Docs_ automaticamente.
 - **`parameters.design`** apontando para o node do Figma (`type: "figma"`, `url: "..."`). Isso ativa o `@storybook/addon-designs/blocks` no painel.
@@ -324,12 +315,12 @@ Se mudou comportamento visual, suba o Storybook (`npm run dev`) e valide a story
 
 ## Padrão esperado para novas entregas
 
-1. Criar ou atualizar tipos em `packages/design-system/src/types/.../<Name>/index.ts`.
+1. Criar ou atualizar tipos em `src/types/.../<Name>/index.ts`.
 2. Criar componente, hook ou util em pasta própria com `index.ts(x)` dentro.
 3. Adicionar `index.module.css` colocado quando houver estilo próprio; usar tokens/CSS variables em vez de literais.
 4. Adicionar/atualizar `<Nome>.stories.tsx` cobrindo Default + variantes proprietárias + Playground, com link do Figma em `parameters.design`.
 5. Adicionar/atualizar `<Nome>.test.tsx` cobrindo render, variantes, estados e callbacks.
-6. Re-exportar em `packages/design-system/src/components/index.ts` (ou no barrel correspondente).
+6. Re-exportar em `src/components/index.ts` (ou no barrel correspondente).
 7. Manter funções ≤ 50 linhas, arquivos ≤ 300 linhas, props ≤ 8, parâmetros ≤ 4.
 8. Sem `any`, sem `console.log`, sem `debugger`, sem código comentado.
 9. JSDoc em pt-BR para funções exportadas.
@@ -353,7 +344,7 @@ Configuração do agente vive em `.github/workflows/code-review-agent.yml` e `.g
 
 ### Composição global e provider
 
-`packages/design-system/src/theme/JuscashProvider.tsx` é o componente que o consumidor envolve em volta da app. Internamente:
+`src/theme/JuscashProvider.tsx` é o componente que o consumidor envolve em volta da app. Internamente:
 
 1. **`AntdRegistry`** (`@ant-design/nextjs-registry`) — extrai o CSS-in-JS do antd no SSR (apps Next.js no App Router).
 2. **`ConfigProvider`** (`antd`) — aplica o tema base (`colorPrimary` da brand primary 400, fontFamily `--font-primary`) e o locale `pt_BR` customizado (com overrides em `Table` para textos de ordenação).
@@ -365,19 +356,19 @@ O consumidor pode passar `themeOverride` para sobrescrever tokens pontuais, que 
 
 | Camada                    | Localização                                                            |
 | ------------------------- | ---------------------------------------------------------------------- |
-| Foundation tokens (TS)    | `packages/design-system/src/theme/foundations/*.ts`                    |
-| Theme provider            | `packages/design-system/src/theme/JuscashProvider.tsx`                 |
-| CSS variables + overrides | `packages/design-system/src/theme/global.css`                          |
-| Componentes UI            | `packages/design-system/src/components/<Nome>/index.tsx`               |
-| API pública (barrel)      | `packages/design-system/src/index.ts`                                  |
-| Showcase                  | `docs/.storybook/` + stories colocadas em `packages/.../*.stories.tsx` |
+| Foundation tokens (TS)    | `src/theme/foundations/*.ts`                    |
+| Theme provider            | `src/theme/JuscashProvider.tsx`                 |
+| CSS variables + overrides | `src/theme/global.css`                          |
+| Componentes UI            | `src/components/<Nome>/index.tsx`               |
+| API pública (barrel)      | `src/index.ts`                                  |
+| Showcase                  | `.storybook/` + stories colocadas em `src/**/*.stories.tsx` |
 | Automação/scripts         | `scripts/`                                                             |
 
-`packages/design-system/src/index.ts` é a única fronteira pública. Tudo que precisa ser usado por consumidores externos passa por aqui — inclusive re-exports controlados do `antd` (componentes que a biblioteca aceita "passar adiante" como `Form`, `Modal`, `Drawer`, `Popover`, etc.) e o agregador `LucideIcons` (`export * as LucideIcons from "lucide-react"`).
+`src/index.ts` é a única fronteira pública. Tudo que precisa ser usado por consumidores externos passa por aqui — inclusive re-exports controlados do `antd` (componentes que a biblioteca aceita "passar adiante" como `Form`, `Modal`, `Drawer`, `Popover`, etc.) e o agregador `LucideIcons` (`export * as LucideIcons from "lucide-react"`).
 
 ### Build da biblioteca (tsup)
 
-`packages/design-system/tsup.config.ts` produz, a partir de `src/index.ts`:
+`tsup.config.ts` produz, a partir de `src/index.ts`:
 
 - `dist/index.js` (CJS) e `dist/index.mjs` (ESM)
 - `dist/index.d.ts` (types — `dts: true`)
@@ -388,18 +379,18 @@ O consumidor pode passar `themeOverride` para sobrescrever tokens pontuais, que 
 
 O arquivo CSS é exposto pelo `package.json` em `"./dist/index.css": "./dist/index.css"` e deve ser importado pelo consumidor (ex.: `import "@juscash/design-system/dist/index.css"`). O `JuscashProvider` carrega `antd/dist/reset.css` internamente.
 
-### Storybook (docs/)
+### Storybook
 
-`docs/.storybook/main.mts` configura o Storybook com `@storybook/nextjs-vite`. Em **DEVELOPMENT** os aliases apontam para `packages/design-system/src` (hot reload do código fonte); em **build** apontam para `packages/design-system/dist` (bundle real). `AntdRegistryMock` evita problemas do `nextjs-registry` fora de um app Next real.
+`.storybook/main.mts` configura o Storybook com `@storybook/nextjs-vite`. Em **DEVELOPMENT** os aliases apontam para `src/` (hot reload do código fonte); em **build** apontam para `dist/` (bundle real). `AntdRegistryMock` evita problemas do `nextjs-registry` fora de um app Next real.
 
-`docs/.storybook/preview.ts` envolve toda story em `<JuscashProvider>`, define o locale e configura viewports (mobile/tablet/desktop) e o addon `a11y` em modo `todo`.
+`.storybook/preview.ts` envolve toda story em `<JuscashProvider>`, define o locale e configura viewports (mobile/tablet/desktop) e o addon `a11y` em modo `todo`.
 
 ### Publicação da biblioteca
 
 Acionada por **tag git** `v*` via `.github/workflows/publish.yml`. Fluxo:
 
-1. `npm run version:patch|minor|major` — atualiza `packages/design-system/package.json` (`scripts/version.js`).
-2. `npm run version:publish` — `scripts/version-publish.js` faz `git add` + commit (`chore: bump @juscash/design-system to vX.Y.Z`) + cria tag local + `git push --tags`.
+1. `npm run version:patch|minor|major` — atualiza `package.json` (`scripts/version.cjs`).
+2. `npm run version:publish` — `scripts/version-publish.cjs` faz `git add` + commit (`chore: bump @juscash/design-system to vX.Y.Z`) + cria tag local + `git push --tags`.
 3. O workflow `publish.yml` é disparado pela tag: builda com `tsup` e publica em **GitHub Packages** (`https://npm.pkg.github.com`, escopo `@juscash`) usando `NODE_AUTH_TOKEN` injetado pelo Actions.
 
 Não publique manualmente — sempre use os scripts. Se precisar reverter, faça nova tag patch acima da última, não despublique.
@@ -408,8 +399,8 @@ Não publique manualmente — sempre use os scripts. Se precisar reverter, faça
 
 Workflow `.github/workflows/deploy-docs.yml`. Dispara automaticamente em `push` ou `merge` na branch `main`:
 
-1. Builda a biblioteca (`npm run build:design-system`).
-2. Builda o Storybook (`npm run build:docs` com `GITHUB_PAGES=true`).
-3. Faz upload de `docs/storybook-static` para o ambiente do GitHub Pages.
+1. Builda a biblioteca (`npm run build`).
+2. Builda o Storybook (`npm run build:storybook` com `GITHUB_PAGES=true`).
+3. Faz upload de `storybook-static` para o ambiente do GitHub Pages.
 
 Se alterou um componente e quer que apareça no site, é só dar push para `main`. Se quer que outros projetos consumam a alteração, **precisa publicar** (seção acima) — o site reflete o código de `main`, não a última versão publicada do pacote.

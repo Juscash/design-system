@@ -33,7 +33,7 @@ Nosso sistema é uma camada de design sobre o **Ant Design 6**. As regras de our
 
 ## 2. Desenvolvimento do Componente (Package)
 
-Localização: `packages/design-system/src/components/[NomeDoComponente].tsx`
+Localização: `src/components/[NomeDoComponente].tsx`
 
 ### Exemplo de Implementação Robusta
 
@@ -79,11 +79,11 @@ export function [Nome](props: [Nome]Props): React.ReactElement {
 
 ## 3. Exportação e Registro
 
-1. **Local**: `packages/design-system/src/components/index.ts`
+1. **Local**: `src/components/index.ts`
    ```ts
    export * from "./[Nome]";
    ```
-2. **Global**: `packages/design-system/src/index.ts` (Onde o pacote expõe tudo para o NPM).
+2. **Global**: `src/index.ts` (Onde o pacote expõe tudo para o NPM).
 
 ---
 

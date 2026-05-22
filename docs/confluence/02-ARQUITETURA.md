@@ -4,10 +4,10 @@
 
 O pacote **`@juscash/design-system`** não é apenas um "wrapper" simples do Ant Design. Ele atua como uma camada de abstração estratégica, garantindo que a aplicação final consuma componentes padronizados, seguros e alinhados visualmente com a marca Juscash, independentemente da implementação interna.
 
-Utilizamos uma estrutura de **Monorepo** (gerenciada via NPM Workspaces) para separar claramente a biblioteca distribuível da documentação:
+A organização do código separa claramente a biblioteca distribuível da configuração do showcase:
 
-- **`packages/design-system`**: O "Core" da biblioteca. É este pacote que você instala via NPM.
-- **`docs`**: O site do Storybook. Ele é apenas um consumidor do pacote design-system, servindo como ambiente de desenvolvimento e vitrine.
+- **`src/`**: O "Core" da biblioteca. É o conteúdo deste diretório que é empacotado e publicado no NPM como `@juscash/design-system`.
+- **`.storybook/`**: Config do Storybook. Consome `src/` em dev e `dist/` em build, servindo como ambiente de desenvolvimento e vitrine.
 
 ### Fluxo de Dependências
 

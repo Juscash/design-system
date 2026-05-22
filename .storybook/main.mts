@@ -6,14 +6,14 @@ import type { StorybookConfig } from "@storybook/nextjs-vite";
 
 const require = createRequire(import.meta.url);
 
-const rootDir = resolve(dirname(fileURLToPath(import.meta.url)), "../..");
-const designSystemSrc = resolve(rootDir, "packages/design-system/src");
-const designSystemDist = resolve(rootDir, "packages/design-system/dist");
-const designSystemCssSrc = resolve(rootDir, "packages/design-system/src/theme/global.css");
-const designSystemCssDist = resolve(rootDir, "packages/design-system/dist/index.css");
+const rootDir = resolve(dirname(fileURLToPath(import.meta.url)), "..");
+const designSystemSrc = resolve(rootDir, "src");
+const designSystemDist = resolve(rootDir, "dist");
+const designSystemCssSrc = resolve(rootDir, "src/theme/global.css");
+const designSystemCssDist = resolve(rootDir, "dist/index.css");
 
 const config: StorybookConfig = {
-  stories: ["../../packages/design-system/src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
+  stories: ["../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
 
   addons: [
     getAbsolutePath("@storybook/addon-links"),

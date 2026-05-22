@@ -24,7 +24,6 @@ jobs:
           scope: "@juscash"
 
       - name: Install dependencies
-        working-directory: packages/design-system
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
@@ -32,11 +31,9 @@ jobs:
           npm install --ignore-scripts --no-audit --no-fund
 
       - name: Build package
-        working-directory: packages/design-system
         run: npm run build
 
       - name: Publish to GitHub Packages
-        working-directory: packages/design-system
         env:
           NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: npm publish

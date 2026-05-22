@@ -1,33 +1,96 @@
 {
-  "name": "design_juscash",
-  "version": "0.1.1",
-  "private": true,
-  "workspaces": [
-    "packages/*",
-    "docs"
+  "name": "@juscash/design-system",
+  "version": "0.1.43",
+  "description": "Design system Juscash baseado em Ant Design 6",
+  "type": "module",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Juscash/design-system.git"
+  },
+  "main": "dist/index.js",
+  "module": "dist/index.mjs",
+  "types": "dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    },
+    "./dist/index.css": "./dist/index.css"
+  },
+  "files": [
+    "dist"
+  ],
+  "sideEffects": [
+    "*.css",
+    "*.less"
   ],
   "scripts": {
-    "build": "npm run build -w @juscash/design-system && npm run build-storybook -w @juscash/storybook",
-    "build:design-system": "npm run build -w @juscash/design-system",
-    "build:docs": "npm run build-storybook -w @juscash/storybook",
-    "dev": " node scripts/kill-port-6006.js && npm run storybook -w @juscash/storybook",
+    "build": "tsup",
+    "build:storybook": "storybook build",
+    "clean": "rimraf dist storybook-static",
+    "dev": "node scripts/kill-port-6006.cjs && storybook dev -p 6006 --no-open",
     "lint": "echo \"no lint configured\"",
-    "test": "echo \"no tests configured\"",
-    "test:docs": "npm run test-storybook -w @juscash/storybook",
-    "start": "npm run start -w @juscash/storybook",
-    "version:patch": "node scripts/version.js patch",
-    "version:minor": "node scripts/version.js minor",
-    "version:major": "node scripts/version.js major",
-    "version:publish": "node scripts/version-publish.js"
+    "prepublishOnly": "npm run build",
+    "start": "npx http-server storybook-static",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:storybook": "vitest run --project=storybook",
+    "version:patch": "node scripts/version.cjs patch",
+    "version:minor": "node scripts/version.cjs minor",
+    "version:major": "node scripts/version.cjs major",
+    "version:publish": "node scripts/version-publish.cjs"
   },
   "engines": {
     "node": ">=20.0.0"
   },
+  "dependencies": {
+    "@ant-design/cssinjs": "^1.21.0",
+    "@ant-design/nextjs-registry": "^1.3.0",
+    "antd": "6.2.2",
+    "lucide-react": "^0.468.0",
+    "react-slick": "^0.31.0",
+    "slick-carousel": "^1.8.1",
+    "vite": "^7.3.0"
+  },
+  "peerDependencies": {
+    "react": "^18.0.0 || ^19.0.0",
+    "react-dom": "^18.0.0 || ^19.0.0"
+  },
   "devDependencies": {
+    "@storybook/addon-a11y": "^10.2.8",
+    "@storybook/addon-designs": "^11.1.2",
+    "@storybook/addon-docs": "^10.2.8",
+    "@storybook/addon-links": "^10.2.8",
+    "@storybook/addon-vitest": "^10.2.8",
+    "@storybook/nextjs-vite": "^10.2.8",
+    "@testing-library/dom": "^10.4.1",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
     "@types/node": "^20.17.0",
+    "@types/react": "^19.0.0",
+    "@types/react-dom": "^19.0.0",
+    "@types/testing-library__dom": "^7.0.2",
+    "@types/testing-library__react": "^10.0.1",
+    "@vitejs/plugin-react": "^5.1.4",
+    "@vitest/browser": "^4.0.18",
+    "@vitest/browser-playwright": "^4.0.18",
+    "@vitest/coverage-v8": "^4.0.18",
     "fdir": "^6.5.0",
     "is-core-module": "^2.16.1",
+    "jsdom": "^27.4.0",
+    "playwright": "^1.58.0",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "rimraf": "^5.0.0",
+    "storybook": "^10.2.8",
+    "storybook-addon-pseudo-states": "^10.2.8",
     "tinyglobby": "^0.2.15",
-    "typescript": "^5.6.3"
+    "tsup": "^8.0.0",
+    "typescript": "^5.6.3",
+    "vitest": "^4.0.18"
+  },
+  "publishConfig": {
+    "registry": "https://npm.pkg.github.com"
   }
 }
