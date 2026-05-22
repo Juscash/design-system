@@ -118,4 +118,5 @@ InputWithTextArea.TextArea = TextArea;
 export const Input = InputWithTextArea;
 export { TextArea };
 
-export type { InputProps, InputSize, TextAreaProps } from "../../types/components/Input";
+export type { InputProps, InputSize } from "../../types/components/Input";
+export type { TextAreaProps } from "../../types/components/TextArea";

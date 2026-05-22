@@ -17,13 +17,12 @@ Object.defineProperty(window, "matchMedia", {
 });
 
 class ResizeObserverMock {
-  observe() {}
-  unobserve() {}
-  disconnect() {}
+  observe(): void {}
+  unobserve(): void {}
+  disconnect(): void {}
 }
 
-// @ts-expect-error test environment polyfill
-global.ResizeObserver = ResizeObserverMock;
+global.ResizeObserver = ResizeObserverMock as unknown as typeof ResizeObserver;
 
 describe("Avatar", () => {
   it("renders with initials", () => {

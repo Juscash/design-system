@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Input } from "../Input";
-import type { TextAreaProps } from "../../types/components/Input";
+import type { TextAreaProps } from "../../types/components/TextArea";
 import { FormItem } from "../FormItem";
 import { Form } from "antd";
 

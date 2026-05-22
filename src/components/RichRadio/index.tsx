@@ -1,7 +1,7 @@
 import React from "react";
 import { Radio } from "../Radio";
 import type { RadioProps } from "../../types/components/Radio";
-import type { RichRadioProps } from "../../types/components/Radio";
+import type { RichRadioProps } from "../../types/components/RichRadio";
 import "./index.module.css";
 
 /**
@@ -53,4 +53,4 @@ export function RichRadio({
 
 RichRadio.displayName = "RichRadio";
 
-export type { RichRadioProps } from "../../types/components/Radio";
+export type { RichRadioProps } from "../../types/components/RichRadio";

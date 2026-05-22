@@ -10,6 +10,7 @@ const CONFIRM_MODAL_WIDTH = 480;
 const TITLE_FONT_SIZE = 20;
 const DESCRIPTION_FONT_SIZE = 16;
 const CONTENT_GAP = 16;
+const COLOR_MASK = "rgba(0, 0, 0, 0.45)";
 
 // O Antd 6 expõe `Modal.styles` como union complexa (objeto ou função). Para
 // o uso interno do componente bastam os slots semânticos abaixo + `content`
@@ -44,7 +45,7 @@ const customStyles: ModalCustomStyles = {
     borderRadius: radius["3xl"],
     padding: spacing[6],
   },
-  mask: { backgroundColor: "rgba(0, 0, 0, 0.45)" },
+  mask: { backgroundColor: COLOR_MASK },
   header: { marginBottom: 0, padding: 0 },
   body: { padding: 0 },
   footer: { padding: 0, marginTop: 0 },

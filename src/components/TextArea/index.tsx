@@ -1,7 +1,7 @@
 import React from "react";
 import { Input as AntdInput, ConfigProvider } from "antd";
 import { designSystemColors, radius } from "../../theme";
-import type { TextAreaProps } from "../../types/components/Input";
+import type { TextAreaProps } from "../../types/components/TextArea";
 
 const { TextArea: AntdTextArea } = AntdInput;
 
@@ -42,4 +42,4 @@ export function TextArea(props: TextAreaProps): React.ReactElement {
 
 TextArea.displayName = "TextArea";
 
-export type { TextAreaProps } from "../../types/components/Input";
+export type { TextAreaProps } from "../../types/components/TextArea";

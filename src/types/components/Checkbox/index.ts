@@ -9,8 +9,3 @@ export type CheckboxComponent = ((props: CheckboxProps) => ReactElement) & {
   displayName?: string;
   Group: typeof AntdCheckbox.Group;
 };
-
-export type RichCheckboxProps = CheckboxProps & {
-  label: string;
-  secondaryText?: string;
-};

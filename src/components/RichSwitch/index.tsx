@@ -1,7 +1,7 @@
 import React from "react";
 import { Switch } from "../Switch";
 import type { SwitchProps } from "../../types/components/Switch";
-import type { RichSwitchProps } from "../../types/components/Switch";
+import type { RichSwitchProps } from "../../types/components/RichSwitch";
 import "./index.module.css";
 
 /**
@@ -54,4 +54,4 @@ export function RichSwitch({
 
 RichSwitch.displayName = "RichSwitch";
 
-export type { RichSwitchProps } from "../../types/components/Switch";
+export type { RichSwitchProps } from "../../types/components/RichSwitch";

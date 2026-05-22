@@ -7,6 +7,7 @@ const BOTTOM_HANDLE_WIDTH = 50;
 const BOTTOM_HANDLE_HEIGHT = 3;
 const BOTTOM_HANDLE_RADIUS = 2;
 const BOTTOM_RADIUS = 10;
+const COLOR_MASK_DRAWER = "rgba(23, 23, 23, 0.25)";
 
 /**
  * Drawer com tokens próprios do design system. Em `placement="bottom"`,
@@ -28,7 +29,7 @@ export const Drawer: React.FC<DrawerProps> = ({ children, placement = "bottom", 
           },
         },
         token: {
-          colorBgMask: "rgba(23, 23, 23, 0.25)",
+          colorBgMask: COLOR_MASK_DRAWER,
         },
       }}
     >

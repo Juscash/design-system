@@ -103,13 +103,13 @@ describe("Popover", () => {
   });
 
   it("aceita props do Antd (placement)", () => {
-    const { container } = render(
+    render(
       <Popover content="Conteúdo" placement="bottom" open>
         <Button>Trigger</Button>
       </Popover>,
     );
-    // Antd adiciona classes baseadas no placement
-    expect(container.querySelector(".ant-popover")).toBeInTheDocument();
+    // Antd renderiza o popover em portal, fora do container do trigger.
+    expect(document.querySelector(".ant-popover")).toBeInTheDocument();
   });
 
   it("aceita props do Antd (trigger)", () => {
@@ -124,7 +124,7 @@ describe("Popover", () => {
   it("renderiza com footer contendo botões", () => {
     render(
       <Popover
-        header="Confirmar"
+        header="Cabeçalho"
         content="Tem certeza?"
         footer={
           <div>
@@ -137,7 +137,7 @@ describe("Popover", () => {
         <Button>Trigger</Button>
       </Popover>,
     );
-    expect(screen.getByText("Confirmar")).toBeInTheDocument();
+    expect(screen.getByText("Cabeçalho")).toBeInTheDocument();
     expect(screen.getByText("Tem certeza?")).toBeInTheDocument();
     expect(
       screen.getByRole("button", { name: /cancelar/i }),

@@ -63,7 +63,7 @@ describe("Modal", () => {
       </Modal>,
     );
     const modal = document.querySelector(".ant-modal");
-    expect(modal).toHaveStyle({ width: "520px" });
+    expect(modal).toHaveStyle({ width: "640px" });
   });
 
   it("aplica dsSize l corretamente", () => {
@@ -73,7 +73,7 @@ describe("Modal", () => {
       </Modal>,
     );
     const modal = document.querySelector(".ant-modal");
-    expect(modal).toHaveStyle({ width: "720px" });
+    expect(modal).toHaveStyle({ width: "900px" });
   });
 
   it("renderiza com footer customizado", () => {

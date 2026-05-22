@@ -116,6 +116,41 @@ function getVariantStyles(variant: BadgeVariant, statusColor?: BadgeStatusColor)
   }
 }
 
+interface ResolveBadgeContentArgs {
+  isCounter: boolean;
+  shouldShowCounter: boolean;
+  hasLabelOrIcon: boolean;
+  hasLabel: boolean;
+  count: BadgeProps["count"];
+  leftIcon: BadgeProps["leftIcon"];
+  rightIcon: BadgeProps["rightIcon"];
+  children: BadgeProps["children"];
+  contentStyles: React.CSSProperties;
+}
+
+/**
+ * Resolve o conteúdo visual do badge (counter, label ou ícone) sem aninhar
+ * ternários. Retorna `undefined` quando não há nada para renderizar.
+ */
+function resolveBadgeContent(args: ResolveBadgeContentArgs): React.ReactNode {
+  const iconWrapperStyle: React.CSSProperties = { display: "inline-flex", alignItems: "center" };
+
+  if (args.isCounter) {
+    if (!args.shouldShowCounter) return undefined;
+    return <span style={args.contentStyles}>{args.count}</span>;
+  }
+
+  if (!args.hasLabelOrIcon) return undefined;
+
+  return (
+    <span style={args.contentStyles}>
+      {args.leftIcon ? <span style={iconWrapperStyle}>{args.leftIcon}</span> : null}
+      {args.hasLabel ? <span>{args.children}</span> : null}
+      {args.rightIcon ? <span style={iconWrapperStyle}>{args.rightIcon}</span> : null}
+    </span>
+  );
+}
+
 function mergeBadgeStyles(
   styles: BadgeStylesProp | undefined,
   indicatorStyles: React.CSSProperties,
@@ -167,17 +202,18 @@ export function Badge(props: BadgeProps): React.ReactElement {
   } satisfies React.CSSProperties;
 
   const hasLabel = children !== undefined && children !== null;
-  const badgeContent =
-    isCounter ?
-      shouldShowCounter ? <span style={contentStyles}>{count}</span>
-      : undefined
-    : hasLabel || leftIcon || rightIcon ?
-      <span style={contentStyles}>
-        {leftIcon ? <span style={{ display: "inline-flex", alignItems: "center" }}>{leftIcon}</span> : null}
-        {hasLabel ? <span>{children}</span> : null}
-        {rightIcon ? <span style={{ display: "inline-flex", alignItems: "center" }}>{rightIcon}</span> : null}
-      </span>
-    : undefined;
+  const hasLabelOrIcon = Boolean(hasLabel || leftIcon || rightIcon);
+  const badgeContent = resolveBadgeContent({
+    isCounter,
+    shouldShowCounter,
+    hasLabelOrIcon,
+    hasLabel,
+    count,
+    leftIcon,
+    rightIcon,
+    children,
+    contentStyles,
+  });
 
   const indicatorStyles = getIndicatorResetStyles();
 

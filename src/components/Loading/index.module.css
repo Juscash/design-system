@@ -1,0 +1,16 @@
+/*
+  Estilos próprios do Loading.
+*/
+
+@keyframes ds-loading-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+:global(.ds-loading-spinner) {
+  animation: ds-loading-spin 1s linear infinite;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}

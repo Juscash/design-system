@@ -12,42 +12,44 @@ const PAGINATION_DEFAULT_SIZE = 5;
 const ICON_SIZE = 12;
 const SORTER_ICON_SIZE = 16;
 const FONT_SIZE_DEFAULT = 13;
+const OPTION_HEIGHT = 28;
+const PAGINATION_ITEM_SIZE = 32;
+const TABLE_FONT_FAMILY = "Inter, sans-serif";
+const COLOR_TRANSPARENT_WHITE_HIGHER = "rgba(255, 255, 255, 0.01)";
+const COLOR_TRANSPARENT_WHITE_FULL = "rgba(255, 255, 255, 0)";
+const PAGINATION_GAP = 4;
 
 interface DefaultPaginationArgs {
   pagination: TablePaginationConfig | false | undefined;
 }
 
+const totalTextStyle: React.CSSProperties = {
+  fontFamily: TABLE_FONT_FAMILY,
+  fontSize: FONT_SIZE_DEFAULT,
+  lineHeight: "1.2",
+  fontWeight: 400,
+  color: designSystemColors.neutral[800],
+};
+
+const paginationItemStyle: React.CSSProperties = {
+  display: "inline-flex",
+  alignItems: "center",
+  gap: PAGINATION_GAP,
+  fontFamily: TABLE_FONT_FAMILY,
+  fontSize: FONT_SIZE_DEFAULT,
+  lineHeight: "1.2",
+  fontWeight: 400,
+  color: designSystemColors.neutral[800],
+};
+
 function renderTotalText(total: number): React.ReactNode {
-  return (
-    <span
-      style={{
-        fontFamily: "Inter, sans-serif",
-        fontSize: FONT_SIZE_DEFAULT,
-        lineHeight: "1.2",
-        fontWeight: 400,
-        color: designSystemColors.neutral[800],
-      }}
-    >
-      {total} registros
-    </span>
-  );
+  return <span style={totalTextStyle}>{total} registros</span>;
 }
 
 function renderPaginationItem(type: "prev" | "next"): React.ReactNode {
   const isPrev = type === "prev";
   return (
-    <span
-      style={{
-        display: "inline-flex",
-        alignItems: "center",
-        gap: 4,
-        fontFamily: "Inter, sans-serif",
-        fontSize: FONT_SIZE_DEFAULT,
-        lineHeight: "1.2",
-        fontWeight: 400,
-        color: designSystemColors.neutral[800],
-      }}
-    >
+    <span style={paginationItemStyle}>
       {isPrev && <ChevronLeft size={ICON_SIZE} />}
       {isPrev ? "Anterior" : "Próximo"}
       {!isPrev && <ChevronRight size={ICON_SIZE} />}
@@ -92,31 +94,36 @@ function renderSortIcon(): React.ReactElement {
   );
 }
 
+const cellContentStyle: React.CSSProperties = {
+  display: "block",
+  margin: 0,
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+  fontFamily: TABLE_FONT_FAMILY,
+  fontSize: FONT_SIZE_DEFAULT,
+  lineHeight: 1.2,
+  fontWeight: 400,
+  color: designSystemColors.neutral[800],
+};
+
 function renderCellContent(value: unknown): React.ReactNode {
   if (typeof value === "string" || typeof value === "number") {
     return (
       <Tooltip title={value}>
-        <span
-          style={{
-            display: "block",
-            margin: 0,
-            overflow: "hidden",
-            textOverflow: "ellipsis",
-            whiteSpace: "nowrap",
-            fontFamily: "Inter, sans-serif",
-            fontSize: FONT_SIZE_DEFAULT,
-            lineHeight: "15.6px",
-            fontWeight: 400,
-            color: designSystemColors.neutral[800],
-          }}
-        >
-          {value}
-        </span>
+        <span style={cellContentStyle}>{value}</span>
       </Tooltip>
     );
   }
   return value as React.ReactNode;
 }
+
+const columnTitleStyle: React.CSSProperties = {
+  margin: 0,
+  fontSize: FONT_SIZE_DEFAULT,
+  lineHeight: 1.2,
+  fontWeight: 700,
+};
 
 function buildColumns<T>(columns: ColumnsType<T> | undefined): ColumnsType<T> | undefined {
   return columns?.map((col) => ({
@@ -128,7 +135,7 @@ function buildColumns<T>(columns: ColumnsType<T> | undefined): ColumnsType<T> | 
     title:
       typeof col.title === "string" ? (
         <Tooltip title={col.title}>
-          <span style={{ margin: 0, fontSize: FONT_SIZE_DEFAULT, lineHeight: "1.2", fontWeight: 700 }}>{col.title}</span>
+          <span style={columnTitleStyle}>{col.title}</span>
         </Tooltip>
       ) : (
         col.title
@@ -151,28 +158,30 @@ const tableThemeBaseToken = {
   borderRadiusLG: radius.xl,
 };
 
+const CHECKBOX_INTERACTIVE_SIZE = 16;
+
 const tableSelectTokens = {
   activeBorderColor: designSystemColors.neutral[300],
   hoverBorderColor: designSystemColors.neutral[300],
   activeOutlineColor: designSystemColors.neutral[300],
   optionFontSize: FONT_SIZE_DEFAULT,
-  multipleItemBorderColor: "#D4D4D4",
-  optionHeight: 28,
-  optionPadding: "4px 8px",
+  multipleItemBorderColor: designSystemColors.neutral[300],
+  optionHeight: OPTION_HEIGHT,
+  optionPadding: `${spacing[1]}px ${spacing[2]}px`,
   colorText: designSystemColors.neutral[800],
   colorBgElevated: designSystemColors.neutral[50],
   optionSelectedFontWeight: 400,
   optionSelectedBg: designSystemColors.neutral[200],
-  multipleItemBg: "rgba(255, 255, 255, 0.01)",
-  borderRadiusSM: 8,
+  multipleItemBg: COLOR_TRANSPARENT_WHITE_HIGHER,
+  borderRadiusSM: radius.xl,
 };
 
 const tablePaginationTokens = {
-  itemActiveBg: "rgba(255, 255, 255, 0)",
+  itemActiveBg: COLOR_TRANSPARENT_WHITE_FULL,
   itemActiveColor: designSystemColors.neutral[800],
   itemActiveColorHover: designSystemColors.neutral[800],
-  itemBg: "rgba(255, 255, 255, 0)",
-  itemSize: 32,
+  itemBg: COLOR_TRANSPARENT_WHITE_FULL,
+  itemSize: PAGINATION_ITEM_SIZE,
   colorPrimary: designSystemColors.neutral[800],
   colorText: designSystemColors.neutral[800],
   colorTextDisabled: designSystemColors.neutral[400],
@@ -190,14 +199,14 @@ const tableCheckboxTokens = {
   colorTextDisabled: designSystemColors.neutral[400],
   colorBorder: designSystemColors.neutral[300],
   colorBorderDisabled: designSystemColors.neutral[300],
-  controlInteractiveSize: 16,
+  controlInteractiveSize: CHECKBOX_INTERACTIVE_SIZE,
   borderRadiusSM: radius.md,
   paddingXS: spacing[2],
 };
 
 const tableTableTokens = {
-  cellPaddingBlock: 8,
-  cellPaddingInline: 8,
+  cellPaddingBlock: spacing[2],
+  cellPaddingInline: spacing[2],
   headerBg: designSystemColors.neutral[50],
   headerColor: designSystemColors.neutral[800],
   colorBgContainer: designSystemColors.neutral[50],

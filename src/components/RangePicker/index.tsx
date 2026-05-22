@@ -3,7 +3,7 @@ import { DatePicker as AntdDatePicker, ConfigProvider } from "antd";
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { datePickerLocale, datePickerTheme } from "../DatePicker";
 import { designSystemColors, radius } from "../../theme";
-import type { RangePickerProps } from "../../types/components/DatePicker";
+import type { RangePickerProps } from "../../types/components/RangePicker";
 
 const ICON_SIZE = 16;
 const NAV_BUTTON_SIZE = 32;
@@ -66,4 +66,4 @@ export const RangePicker: React.FC<RangePickerProps> = ({
 
 RangePicker.displayName = "RangePicker";
 
-export type { RangePickerProps } from "../../types/components/DatePicker";
+export type { RangePickerProps } from "../../types/components/RangePicker";

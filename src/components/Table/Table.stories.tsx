@@ -220,7 +220,9 @@ function ActionIconButton(props: { icon: React.ReactNode; label: string; destruc
   );
 }
 
-const baseColumns: ColumnsType<{ key: string; nome: string; email: string; status: string }> = [
+type BaseRow = { key: string; nome: string; email: string; status: string };
+
+const baseColumnsTyped: ColumnsType<BaseRow> = [
   { title: "Nome", dataIndex: "nome", key: "nome", sorter: (a, b) => a.nome.localeCompare(b.nome) },
   { title: "Email", dataIndex: "email", key: "email", ellipsis: true },
   {
@@ -230,6 +232,8 @@ const baseColumns: ColumnsType<{ key: string; nome: string; email: string; statu
     render: (value: string) => <StatusPill status={value === "Ativo" ? "Concluído" : "Pendente"} compact />,
   },
 ];
+
+const baseColumns = baseColumnsTyped as ColumnsType<unknown>;
 
 const baseData = [
   { key: "1", nome: "Julia Mascarenhas", email: "julia@juscash.com", status: "Ativo" },
@@ -431,8 +435,8 @@ function SelectableDesktopTable(props: {
     rows.filter((row) => row.checked || row.selected).map((row) => row.key),
   );
   const [openActionKey, setOpenActionKey] = React.useState<string | null>(null);
-  const [currentPage, setCurrentPage] = React.useState(pagination && pagination !== false ? pagination.current : 1);
-  const [pageSize, setPageSize] = React.useState(pagination && pagination !== false ? pagination.pageSize : 15);
+  const [currentPage, setCurrentPage] = React.useState(pagination ? pagination.current : 1);
+  const [pageSize, setPageSize] = React.useState(pagination ? pagination.pageSize : 15);
 
   const mergedPagination =
     pagination === false ?

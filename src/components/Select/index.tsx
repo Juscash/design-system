@@ -18,7 +18,10 @@ const MENU_ITEM_HEIGHT = 32;
 const OPTION_FONT_SIZE = 13;
 const SEARCH_ICON_SIZE = 15;
 const SUFFIX_ICON_SIZE = 16;
-const MULTI_ITEM_BORDER_COLOR = "#D4D4D4";
+const OUTLINE_WIDTH = 3;
+const MULTI_ITEM_BORDER_COLOR = designSystemColors.neutral[300];
+const COLOR_ERROR_OUTLINE = "rgba(210, 25, 11, 0.4)";
+const COLOR_TRANSPARENT_WHITE = "rgba(255, 255, 255, 0.01)";
 
 interface SizeTokensResult {
   componentToken: Partial<ComponentToken>;
@@ -162,9 +165,9 @@ function buildSelectTheme(args: SelectThemeArgs): NonNullable<React.ComponentPro
         colorBgElevated: designSystemColors.neutral[50],
         optionSelectedFontWeight: 400,
         optionSelectedBg: designSystemColors.neutral[200],
-        multipleItemBg: "rgba(255, 255, 255, 0.01)",
-        borderRadiusSM: 8,
-        colorErrorOutline: "rgba(210, 25, 11, 0.4)",
+        multipleItemBg: COLOR_TRANSPARENT_WHITE,
+        borderRadiusSM: radius.xl,
+        colorErrorOutline: COLOR_ERROR_OUTLINE,
         activeOutlineColor: designSystemColors.neutral[300],
       },
     },
@@ -172,15 +175,15 @@ function buildSelectTheme(args: SelectThemeArgs): NonNullable<React.ComponentPro
       ...args.globalToken,
       colorBorder: designSystemColors.neutral[300],
       colorError: designSystemColors.feedback.red[500],
-      colorErrorOutline: "rgba(210, 25, 11, 0.4)",
-      controlOutlineWidth: 3,
+      colorErrorOutline: COLOR_ERROR_OUTLINE,
+      controlOutlineWidth: OUTLINE_WIDTH,
       controlOutline: designSystemColors.neutral[300],
       colorTextDisabled: designSystemColors.neutral[400],
       colorBgContainerDisabled: designSystemColors.neutral[50],
       colorTextPlaceholder: designSystemColors.neutral[500],
       colorBgContainer: designSystemColors.neutral[50],
       colorText: designSystemColors.neutral[800],
-      borderRadiusLG: 8,
+      borderRadiusLG: radius.xl,
     },
   };
 }

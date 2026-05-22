@@ -10,6 +10,7 @@ const MODAL_SIZE_S = 400;
 const MODAL_SIZE_M = 640;
 const MODAL_SIZE_L = 900;
 const TITLE_FONT_SIZE = 20;
+const COLOR_MASK = "rgba(0, 0, 0, 0.45)";
 
 // O Antd 6 expõe `Modal.styles` como union complexa (objeto ou função). Para
 // o uso interno do componente bastam os slots semânticos abaixo + `content`
@@ -43,7 +44,6 @@ function getModalTokens(): Record<string, unknown> {
     titleColor: designSystemColors.neutral[800],
     closeBtnHoverBg: designSystemColors.neutral[100],
     closeBtnActiveBg: designSystemColors.neutral[200],
-    colorBgMask: "rgba(0, 0, 0, 0.45)",
   };
 }
 
@@ -108,7 +108,7 @@ function buildCustomStyles(safeStyles: ModalCustomStyles | undefined): ModalCust
       ...(safeStyles?.footer ?? {}),
     },
     mask: {
-      backgroundColor: "rgba(0, 0, 0, 0.45)",
+      backgroundColor: COLOR_MASK,
       ...(safeStyles?.mask ?? {}),
     },
   };

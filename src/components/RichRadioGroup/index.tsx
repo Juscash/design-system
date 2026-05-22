@@ -1,7 +1,7 @@
 import React from "react";
 import { Radio } from "../Radio";
 import { designSystemColors, spacing } from "../../theme";
-import type { RichRadioGroupProps } from "../../types/components/Radio";
+import type { RichRadioGroupProps } from "../../types/components/RichRadioGroup";
 
 const LABEL_FONT_SIZE = 13;
 const SECONDARY_FONT_SIZE = 10;
@@ -69,4 +69,4 @@ export function RichRadioGroup({
 
 RichRadioGroup.displayName = "RichRadioGroup";
 
-export type { RichRadioGroupProps, RichRadioOption } from "../../types/components/Radio";
+export type { RichRadioGroupProps, RichRadioOption } from "../../types/components/RichRadioGroup";

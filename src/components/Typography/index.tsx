@@ -68,10 +68,14 @@ const typographyVariants = {
     fontWeightStrong: 700,
     colorTextHeading: designSystemColors.neutral[800],
   },
+  // O Antd `Typography.Title` aceita `level` 1–5; "Heading 6" é renderizado
+  // como `level={5}` e usa propositalmente os tokens de heading5 sobrescritos
+  // com o tamanho HEADING6_SIZE (20px) para preservar a hierarquia visual.
   heading6: {
     fontSizeHeading5: HEADING6_SIZE,
     colorTextHeading: designSystemColors.neutral[800],
     lineHeightHeading5: 1.2,
+    fontWeightStrong: 700,
   },
   body1: {
     fontSize: BODY1_SIZE,

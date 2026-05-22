@@ -26,16 +26,14 @@ describe("Tabs Component", () => {
   it("switches tabs on click", () => {
     render(<Tabs items={items} defaultActiveKey="1" />);
 
-    // Check initial state
-    expect(screen.getByText("Content 1")).toBeInTheDocument();
-    expect(screen.queryByText("Content 2")).not.toBeInTheDocument();
+    // Antd mantém todos os painéis montados; ajuste é via classe `*-hidden`.
+    const initialActive = document.querySelector(".ant-tabs-tabpane-active");
+    expect(initialActive?.textContent).toBe("Content 1");
 
-    // Click on second tab
     fireEvent.click(screen.getByText("Tab 2"));
 
-    // Check new state
-    expect(screen.getByText("Content 2")).toBeInTheDocument();
-    expect(screen.queryByText("Content 1")).not.toBeInTheDocument();
+    const newActive = document.querySelector(".ant-tabs-tabpane-active");
+    expect(newActive?.textContent).toBe("Content 2");
   });
 
   it("calls onChange callback", () => {

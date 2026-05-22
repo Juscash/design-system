@@ -3,6 +3,11 @@ import { Skeleton as AntdSkeleton, ConfigProvider } from "antd";
 import { designSystemColors } from "../../theme";
 import type { SkeletonComponent, SkeletonProps } from "../../types/components/Skeleton";
 
+/**
+ * Skeleton do design system. Aplica `colorFill` neutral[100] via `ConfigProvider`
+ * local; expõe os subcomponentes do Antd (`Button`, `Avatar`, `Input`, `Image`,
+ * `Node`) como propriedades estáticas para uso direto.
+ */
 const SkeletonInner: React.FC<SkeletonProps> = (props) => {
   return (
     <ConfigProvider

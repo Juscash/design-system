@@ -1,7 +1,7 @@
 import React from "react";
 import { ConfigProvider, Switch as AntdSwitch } from "antd";
 import type { ComponentToken } from "antd/es/switch/style";
-import { designSystemColors, spacing } from "../../theme";
+import { designSystemColors, shadow, spacing } from "../../theme";
 import type { SwitchProps } from "../../types/components/Switch";
 
 const TRACK_HEIGHT = 24;
@@ -21,7 +21,7 @@ const baseTokens: Partial<ComponentToken> = {
   handleSize: HANDLE_SIZE,
   handleSizeSM: HANDLE_SIZE_SM,
   handleBg: designSystemColors.neutral[50],
-  handleShadow: "0px 1px 2px rgba(0, 0, 0, 0.05)",
+  handleShadow: shadow.xs,
   innerMinMargin: spacing[2],
   innerMaxMargin: spacing[3],
   innerMinMarginSM: spacing[1],

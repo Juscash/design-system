@@ -1,7 +1,7 @@
 import React from "react";
 import { Checkbox } from "../Checkbox";
 import type { CheckboxProps } from "../../types/components/Checkbox";
-import type { RichCheckboxProps } from "../../types/components/Checkbox";
+import type { RichCheckboxProps } from "../../types/components/RichCheckbox";
 import "./index.module.css";
 
 /**
@@ -55,4 +55,4 @@ export function RichCheckbox({
 
 RichCheckbox.displayName = "RichCheckbox";
 
-export type { RichCheckboxProps } from "../../types/components/Checkbox";
+export type { RichCheckboxProps } from "../../types/components/RichCheckbox";

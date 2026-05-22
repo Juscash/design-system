@@ -1,7 +1,7 @@
 import type { ReactElement } from "react";
 import type { SkeletonProps as AntdSkeletonProps, Skeleton as AntdSkeleton } from "antd";
 
-export interface SkeletonProps extends AntdSkeletonProps {}
+export type SkeletonProps = AntdSkeletonProps;
 
 export type SkeletonComponent = ((props: SkeletonProps) => ReactElement) & {
   displayName?: string;

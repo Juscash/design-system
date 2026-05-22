@@ -2,7 +2,7 @@ import React from "react";
 import { ChevronDown, ChevronUp } from "lucide-react";
 import { Avatar } from "../Avatar";
 import { designSystemColors } from "../../theme";
-import type { AvatarMenuProps } from "../../types/components/Avatar";
+import type { AvatarMenuProps } from "../../types/components/AvatarMenu";
 
 const FOCUS_RING_RADIUS = 999;
 const CHEVRON_SIZE = 16;
@@ -42,4 +42,4 @@ export const AvatarMenu: React.FC<AvatarMenuProps> = ({ state = "default", child
 
 AvatarMenu.displayName = "AvatarMenu";
 
-export type { AvatarMenuProps, AvatarMenuState } from "../../types/components/Avatar";
+export type { AvatarMenuProps, AvatarMenuState } from "../../types/components/AvatarMenu";

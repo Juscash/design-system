@@ -1,3 +1,3 @@
 import type { SpinProps } from "antd";
 
-export interface LoadingProps extends SpinProps {}
+export type LoadingProps = SpinProps;

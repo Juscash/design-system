@@ -1,4 +1,3 @@
-import type { DatePickerProps as AntdDatePickerProps, TimeRangePickerProps } from "antd";
+import type { DatePickerProps as AntdDatePickerProps } from "antd";
 
 export type DatePickerProps = AntdDatePickerProps;
-export type RangePickerProps = TimeRangePickerProps;

@@ -209,7 +209,7 @@ export const Large: Story = {
 export const Disabled: Story = {
   args: {
     defaultActiveKey: "1",
-    items: buildItems("m").map((item, index) => ({ ...item, disabled: index === 1 })),
+    items: (buildItems("m") ?? []).map((item, index) => ({ ...item, disabled: index === 1 })),
   },
 };
 
