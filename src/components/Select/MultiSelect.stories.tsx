@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { Select } from "./Select";
-import { FormItem } from "../FormItem/FormItem";
+import { Select } from ".";
+import { FormItem } from "../FormItem";
 import { Form } from "antd";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";

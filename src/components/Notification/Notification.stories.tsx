@@ -1,8 +1,8 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+﻿import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Heart, AlertCircle, Loader } from "lucide-react";
 import { Button } from "../Button";
-import { Notification } from "./Notification";
+import { Notification } from ".";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
@@ -193,7 +193,7 @@ export const Loading: Story = {
 // --- Figma: Stacking (empilhamento) ---
 
 export const Stacking: Story = {
-  name: "Empilhamento — stack (Figma)",
+  name: "Empilhamento â€” stack (Figma)",
   render: () => {
     const [api, contextHolder] = Notification.useNotification();
 

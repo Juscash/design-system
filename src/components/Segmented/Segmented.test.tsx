@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
+﻿import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
-import { Segmented } from "./Segmented";
+import { Segmented } from ".";
 
 describe("Segmented", () => {
   it("renders segmented with plain options", () => {

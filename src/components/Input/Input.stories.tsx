@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+﻿import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { Input } from "./Input";
+import { Input } from ".";
 import { FormItem } from "../FormItem";
 import { Form } from "antd";
 import { shadow } from "../../theme";
@@ -32,9 +32,9 @@ const meta: Meta<InputStoryProps> = {
 Componente de Input baseado no [Ant Design Input](https://ant.design/components/input).
 
 ### Props:
-- **Extended (Ant Design)**: Suporta as propriedades padrão do AntD Input.
+- **Extended (Ant Design)**: Suporta as propriedades padrÃ£o do AntD Input.
 - **Custom (Juscash)**:
-  - \`size\`: Define o tamanho específico seguindo o Design System (\`xs\`, \`s\`, \`m\`, \`l\`).
+  - \`size\`: Define o tamanho especÃ­fico seguindo o Design System (\`xs\`, \`s\`, \`m\`, \`l\`).
 
 ### Como usar:
 
@@ -65,7 +65,7 @@ function Example() {
                 fontWeight: "bold",
               }}
             >
-              🎨 Figma Spec
+              ðŸŽ¨ Figma Spec
             </h3>
             <Figma showLink url={FIGMA_URL} height="400px" />
           </div>
@@ -90,17 +90,17 @@ function Example() {
     },
     hover: {
       control: "boolean",
-      description: "Força o estado hover",
+      description: "ForÃ§a o estado hover",
       table: { category: "Pseudo States" },
     },
     active: {
       control: "boolean",
-      description: "Força o estado active",
+      description: "ForÃ§a o estado active",
       table: { category: "Pseudo States" },
     },
     focus: {
       control: "boolean",
-      description: "Força o estado focus",
+      description: "ForÃ§a o estado focus",
       table: { category: "Pseudo States" },
     },
   },

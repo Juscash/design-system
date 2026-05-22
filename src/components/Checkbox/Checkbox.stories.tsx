@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { Checkbox } from "./Checkbox";
-import { RichCheckbox } from "./RichCheckbox";
+import { Checkbox } from ".";
+import { RichCheckbox } from "../RichCheckbox";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";

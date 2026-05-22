@@ -1,0 +1,133 @@
+/*
+  Estilos próprios do Tabs (incluindo variantes `primary`/`secondary` e
+  sub-tamanhos via CSS variables).
+*/
+
+:global(.ds-tabs) {
+  --ds-tabs-active-color: var(--color-brand-primary-600);
+  --ds-tabs-tab-height: 29px;
+  --ds-tabs-tab-padding-x: 8px;
+  --ds-tabs-tab-padding-y: 4px;
+  --ds-tabs-tab-gap: 4px;
+  --ds-tabs-font-size: 13px;
+  --ds-tabs-font-weight: 400;
+  --ds-tabs-icon-size: 16px;
+}
+
+:global(.ds-tabs.ds-tabs-secondary) {
+  --ds-tabs-active-color: var(--color-brand-secondary-600);
+}
+
+:global(.ds-tabs.ds-tabs-l) {
+  --ds-tabs-tab-height: 32px;
+  --ds-tabs-tab-padding-x: 12px;
+  --ds-tabs-tab-padding-y: 4px;
+  --ds-tabs-tab-gap: 8px;
+  --ds-tabs-font-size: 13px;
+  --ds-tabs-icon-size: 12px;
+}
+
+:global(.ds-tabs.ds-tabs-s) {
+  --ds-tabs-tab-height: 20px;
+  --ds-tabs-tab-padding-x: 4px;
+  --ds-tabs-tab-padding-y: 1px;
+  --ds-tabs-tab-gap: 4px;
+  --ds-tabs-font-size: 10px;
+  --ds-tabs-icon-size: 12px;
+}
+
+:global(.ds-tabs) :global(.ant-tabs-nav) {
+  margin: 0 !important;
+}
+
+:global(.ds-tabs) :global(.ant-tabs-nav::before) {
+  border-bottom: 1px solid var(--color-neutral-300) !important;
+}
+
+:global(.ds-tabs) :global(.ant-tabs-nav-wrap),
+:global(.ds-tabs) :global(.ant-tabs-nav-list) {
+  gap: 0 !important;
+}
+
+:global(.ds-tabs) :global(.ant-tabs-tab) {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: var(--ds-tabs-tab-height) !important;
+  padding: var(--ds-tabs-tab-padding-y) var(--ds-tabs-tab-padding-x) !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border-bottom: 1px solid transparent !important;
+  box-sizing: border-box !important;
+}
+
+:global(.ds-tabs) :global(.ant-tabs-tab-btn) {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: var(--ds-tabs-tab-gap) !important;
+  font-size: var(--ds-tabs-font-size) !important;
+  line-height: 1.2 !important;
+  font-weight: 400 !important;
+  color: var(--color-neutral-500) !important;
+}
+
+:global(.ds-tabs) :global(.ant-tabs-tab-btn) svg {
+  width: var(--ds-tabs-icon-size) !important;
+  height: var(--ds-tabs-icon-size) !important;
+}
+
+:global(.ds-tabs) :global(.ant-tabs-tab:hover) :global(.ant-tabs-tab-btn),
+:global(.ds-tabs) :global(.ant-tabs-tab.pseudo-hover) :global(.ant-tabs-tab-btn) {
+  color: var(--ds-tabs-active-color) !important;
+}
+
+:global(.ds-tabs) :global(.ant-tabs-tab.ant-tabs-tab-active) {
+  border-bottom-color: var(--ds-tabs-active-color) !important;
+}
+
+:global(.ds-tabs) :global(.ant-tabs-tab.ant-tabs-tab-active) :global(.ant-tabs-tab-btn) {
+  color: var(--ds-tabs-active-color) !important;
+  font-weight: 700 !important;
+}
+
+:global(.ds-tabs) :global(.ant-tabs-tab.pseudo-focus-visible) {
+  background: var(--color-neutral-50) !important;
+  border-radius: 8px 8px 0 0 !important;
+  box-shadow: var(--shadow-focus) !important;
+}
+
+:global(.ds-tabs) :global(.ant-tabs-tab-disabled) :global(.ant-tabs-tab-btn),
+:global(.ds-tabs) :global(.ant-tabs-tab.ant-tabs-tab-disabled) :global(.ant-tabs-tab-btn) {
+  color: var(--color-neutral-400) !important;
+}
+
+:global(.ds-tabs) :global(.ant-tabs-ink-bar) {
+  height: 1px !important;
+  background: var(--ds-tabs-active-color) !important;
+}
+
+:global(.ds-tabs) :global(.ant-tabs-nav-more) {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-height: var(--ds-tabs-tab-height) !important;
+  padding: var(--ds-tabs-tab-padding-y) var(--ds-tabs-tab-padding-x) !important;
+  margin: 0 !important;
+  background: transparent !important;
+  border: none !important;
+  border-bottom: 1px solid var(--color-neutral-300) !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  color: var(--color-neutral-500) !important;
+}
+
+:global(.ds-tabs) :global(.ant-tabs-nav-more) svg {
+  width: 12px !important;
+  height: 12px !important;
+}
+
+:global(.ds-tabs) :global(.ant-tabs-content-holder) {
+  margin-top: 8px !important;
+  background: transparent !important;
+}

@@ -1,0 +1,23 @@
+/*
+  Estilos próprios do Radio: variante de erro e estado neutral focado.
+*/
+
+:global(.ds-radio-error) :global(.ant-radio-inner) {
+  border-color: var(--color-feedback-red-500) !important;
+}
+
+:global(.ant-radio-disabled.ds-radio-error) :global(.ant-radio-inner) {
+  border-color: transparent !important;
+}
+
+:global(.ds-radio-error) :global(.ant-radio) :global(.ant-radio-inner:focus-visible) {
+  box-shadow: var(--shadow-focus-error) !important;
+}
+
+:global(.ds-radio-error.pseudo-focus-visible) :global(.ant-radio) :global(.ant-radio-inner) {
+  box-shadow: var(--shadow-focus-error) !important;
+}
+
+:global(.ds-neutral.pseudo-focus-visible) :global(.ant-radio-inner) {
+  box-shadow: var(--shadow-focus) !important;
+}

@@ -1,9 +1,9 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+﻿import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Grid, List } from "lucide-react";
 import { Description, Controls, Primary as DocsPrimary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
-import { Segmented } from "./Segmented";
+import { Segmented } from ".";
 import { designSystemColors } from "../../theme";
 
 const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4886-14656&m=dev";

@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+﻿import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import React from "react";
 import { Ellipsis, Heart } from "lucide-react";
-import { Tabs } from "./Tabs";
+import { Tabs } from ".";
 import type { TabsProps } from "antd";
 import { designSystemColors } from "../../theme";
 
@@ -79,9 +79,9 @@ Componente baseado no [Ant Design Tabs](https://ant.design/components/tabs).
 
 ### Features Juscash:
 - **Variantes**: Suporte a \`primary\` e \`secondary\`.
-- **Tamanhos**: \`s\`, \`m\` e \`l\`, seguindo o Figma com altura, fonte e espaçamento ajustados.
+- **Tamanhos**: \`s\`, \`m\` e \`l\`, seguindo o Figma com altura, fonte e espaÃ§amento ajustados.
 - **Estados**: Hover, ativo, foco e disabled alinhados ao Design System.
-- **Overflow**: suporte ao estado collapsed com botão de overflow.
+- **Overflow**: suporte ao estado collapsed com botÃ£o de overflow.
 `,
       },
       page: () => (
@@ -214,7 +214,7 @@ export const Disabled: Story = {
 };
 
 export const FigmaExamples: Story = {
-  name: "Figma — Examples",
+  name: "Figma â€” Examples",
   render: () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 32, width: "fit-content", padding: 24 }}>
       <div style={{ width: 469 }}>
@@ -238,7 +238,7 @@ export const FigmaExamples: Story = {
 };
 
 export const FigmaCollapsed: Story = {
-  name: "Figma — Collapsed",
+  name: "Figma â€” Collapsed",
   render: () => <CollapsedPreview size="l" />,
   decorators: [(StoryComponent) => <div style={{ padding: 24 }}><StoryComponent /></div>],
 };

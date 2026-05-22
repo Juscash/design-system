@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
+﻿import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { Tag } from "./Tag";
+import { Tag } from ".";
 
 describe("Tag", () => {
   it("renders tag with text", () => {

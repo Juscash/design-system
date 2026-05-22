@@ -1,8 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Heart } from "lucide-react";
-import { Select } from "./Select";
-import { FormItem } from "../FormItem/FormItem";
+import { Select } from ".";
+import { FormItem } from "../FormItem";
 import { Form } from "antd";
 import { designSystemColors } from "../../theme";
 

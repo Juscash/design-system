@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
+﻿import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { Typography, Heading1, Heading2, Body1, Caption } from "./Typography";
+import { Typography, Heading1, Heading2, Body1, Caption } from ".";
 
 describe("Typography", () => {
   it("renders body1 text", () => {

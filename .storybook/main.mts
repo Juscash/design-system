@@ -57,7 +57,7 @@ const config: StorybookConfig = {
       },
       build: {
         rollupOptions: {
-          onwarn(warning: any, warn: any) {
+          onwarn(warning: { code?: string }, warn: (warning: unknown) => void) {
             if (warning.code === "MODULE_LEVEL_DIRECTIVE") {
               return;
             }
@@ -71,6 +71,6 @@ const config: StorybookConfig = {
 
 export default config;
 
-function getAbsolutePath(value: string): any {
+function getAbsolutePath(value: string): string {
   return dirname(require.resolve(`${value}/package.json`));
 }

@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+﻿import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { Typography, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Body1, Body2, Caption } from "./Typography";
+import { Typography, Heading1, Heading2, Heading3, Heading4, Heading5, Heading6, Body1, Body2, Caption } from ".";
 
 import { Title, Subtitle, Description, Primary as DocsPrimary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
@@ -76,7 +76,7 @@ function Example() {
                 fontWeight: "bold",
               }}
             >
-              🎨 Figma Spec
+              ðŸŽ¨ Figma Spec
             </h3>
             <Figma showLink url={FIGMA_URL} height="400px" />
           </div>
@@ -97,17 +97,17 @@ function Example() {
     },
     hover: {
       control: "boolean",
-      description: "Força o estado hover",
+      description: "ForÃ§a o estado hover",
       table: { category: "Pseudo States" },
     },
     active: {
       control: "boolean",
-      description: "Força o estado active",
+      description: "ForÃ§a o estado active",
       table: { category: "Pseudo States" },
     },
     focus: {
       control: "boolean",
-      description: "Força o estado focus",
+      description: "ForÃ§a o estado focus",
       table: { category: "Pseudo States" },
     },
   },
@@ -163,7 +163,7 @@ export const BodyVariants: Story = {
     return (
       <div className={mergedClassName} style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
         <Body1>Body 1 - Texto principal</Body1>
-        <Body2>Body 2 - Texto secundário</Body2>
+        <Body2>Body 2 - Texto secundÃ¡rio</Body2>
         <Caption>Caption - Legenda</Caption>
       </div>
     );

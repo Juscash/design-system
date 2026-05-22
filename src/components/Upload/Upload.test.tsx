@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
+﻿import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { Upload } from "./Upload";
+import { Upload } from ".";
 
 describe("Upload", () => {
   it("renders upload component", () => {

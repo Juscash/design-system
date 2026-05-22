@@ -1,6 +1,6 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+﻿import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import { Drawer } from "./Drawer";
+import { Drawer } from ".";
 import { Button } from "antd";
 import React, { useState } from "react";
 

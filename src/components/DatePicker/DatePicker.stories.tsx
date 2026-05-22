@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { DatePicker, RangePicker } from "./DatePicker";
+import { DatePicker } from ".";
+import { RangePicker } from "../RangePicker";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";

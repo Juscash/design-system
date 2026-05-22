@@ -1,7 +1,7 @@
-import React from "react";
+﻿import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import { Tabs } from "./Tabs";
+import { Tabs } from ".";
 
 describe("Tabs Component", () => {
   const items = [

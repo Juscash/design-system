@@ -1,0 +1,16 @@
+/*
+  Estilos próprios do Checkbox: variante de erro (a paleta vermelha já vem
+  via tokens do Antd; aqui ficam estados que tokens não cobrem).
+*/
+
+:global(.ds-checkbox-error:has(.ant-checkbox-input:focus-visible)) :global(.ant-checkbox-inner) {
+  box-shadow: var(--shadow-focus-error) !important;
+}
+
+:global(.ds-checkbox-error:hover:not(.ant-checkbox-wrapper-disabled)) :global(.ant-checkbox-inner) {
+  border-color: var(--color-feedback-red-900) !important;
+}
+
+:global(.pseudo-focus-visible.ds-checkbox-error) :global(.ant-checkbox-inner) {
+  box-shadow: var(--shadow-focus-error) !important;
+}

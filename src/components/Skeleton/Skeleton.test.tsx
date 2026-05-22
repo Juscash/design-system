@@ -1,6 +1,6 @@
-import { render } from "@testing-library/react";
+﻿import { render } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { Skeleton } from "./Skeleton";
+import { Skeleton } from ".";
 
 describe("Skeleton", () => {
   it("renders correctly", () => {

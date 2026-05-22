@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
+﻿import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { Radio, RadioGroup } from "./Radio";
+import { Radio, RadioGroup } from ".";
 
 describe("Radio", () => {
   it("renders radio with label", () => {

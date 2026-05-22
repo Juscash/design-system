@@ -1,6 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { Avatar, AvatarGroup, AvatarMenu } from "./Avatar";
+import { Avatar, AvatarGroup } from ".";
+import { AvatarMenu } from "../AvatarMenu";
 import { User } from "lucide-react";
 
 const FIGMA_URL =

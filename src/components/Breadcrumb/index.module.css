@@ -1,0 +1,14 @@
+/*
+  Estilos próprios do Breadcrumb.
+*/
+
+:global(.juscash-breadcrumb.ant-breadcrumb) a:hover {
+  color: var(--color-neutral-800) !important;
+  text-decoration: underline !important;
+}
+
+:global(.juscash-breadcrumb.ant-breadcrumb) :global(.ant-breadcrumb-separator) {
+  display: inline-flex !important;
+  align-items: center !important;
+  color: var(--color-neutral-500) !important;
+}

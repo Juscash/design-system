@@ -1,5 +1,5 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
-import { FormItem } from "./FormItem";
+﻿import type { Meta, StoryObj } from "@storybook/react-vite";
+import { FormItem } from ".";
 import { Input } from "../Input";
 
 const meta: Meta<typeof FormItem> = {

@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+﻿import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { Tag } from "./Tag";
+import { Tag } from ".";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
@@ -29,7 +29,7 @@ const meta: Meta<TagStoryProps> = {
 Componente de tag baseado no [Ant Design Tag](https://ant.design/components/tag).
 
 ### Props:
-- **Extended (Ant Design)**: Props padrão do AntD Tag.
+- **Extended (Ant Design)**: Props padrÃ£o do AntD Tag.
 
 ### Como usar:
 
@@ -60,7 +60,7 @@ function Example() {
                 fontWeight: "bold",
               }}
             >
-              🎨 Figma Spec
+              ðŸŽ¨ Figma Spec
             </h3>
             <Figma showLink url={FIGMA_URL} height="400px" />
           </div>
@@ -87,17 +87,17 @@ function Example() {
     },
     hover: {
       control: "boolean",
-      description: "Força o estado hover",
+      description: "ForÃ§a o estado hover",
       table: { category: "Pseudo States" },
     },
     active: {
       control: "boolean",
-      description: "Força o estado active",
+      description: "ForÃ§a o estado active",
       table: { category: "Pseudo States" },
     },
     focus: {
       control: "boolean",
-      description: "Força o estado focus",
+      description: "ForÃ§a o estado focus",
       table: { category: "Pseudo States" },
     },
   },

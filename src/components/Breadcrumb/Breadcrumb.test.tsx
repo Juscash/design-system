@@ -1,7 +1,7 @@
-import React from "react";
+﻿import React from "react";
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { Breadcrumb } from "./Breadcrumb";
+import { Breadcrumb } from ".";
 
 describe("Breadcrumb Component", () => {
   it("renders correctly with items", () => {

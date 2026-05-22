@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
+﻿import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { Checkbox } from "./Checkbox";
+import { Checkbox } from ".";
 
 describe("Checkbox", () => {
   it("renders checkbox with label", () => {

@@ -1,44 +1,44 @@
-import { render, screen } from "@testing-library/react";
+﻿import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { Popover } from "./Popover";
+import { Popover } from ".";
 import { Button } from "../Button";
 import { Info } from "lucide-react";
 
 describe("Popover", () => {
-  it("renderiza com conteúdo simples", () => {
+  it("renderiza com conteÃºdo simples", () => {
     render(
-      <Popover content="Conteúdo do popover" open>
+      <Popover content="ConteÃºdo do popover" open>
         <Button>Trigger</Button>
       </Popover>,
     );
-    expect(screen.getByText("Conteúdo do popover")).toBeInTheDocument();
+    expect(screen.getByText("ConteÃºdo do popover")).toBeInTheDocument();
   });
 
   it("renderiza com title do Antd", () => {
     render(
-      <Popover title="Título" content="Conteúdo" open>
+      <Popover title="TÃ­tulo" content="ConteÃºdo" open>
         <Button>Trigger</Button>
       </Popover>,
     );
-    expect(screen.getByText("Título")).toBeInTheDocument();
-    expect(screen.getByText("Conteúdo")).toBeInTheDocument();
+    expect(screen.getByText("TÃ­tulo")).toBeInTheDocument();
+    expect(screen.getByText("ConteÃºdo")).toBeInTheDocument();
   });
 
   it("renderiza com header customizado (2 slots)", () => {
     render(
-      <Popover header="Header Customizado" content="Conteúdo principal" open>
+      <Popover header="Header Customizado" content="ConteÃºdo principal" open>
         <Button>Trigger</Button>
       </Popover>,
     );
     expect(screen.getByText("Header Customizado")).toBeInTheDocument();
-    expect(screen.getByText("Conteúdo principal")).toBeInTheDocument();
+    expect(screen.getByText("ConteÃºdo principal")).toBeInTheDocument();
   });
 
   it("renderiza com footer customizado (3 slots)", () => {
     render(
       <Popover
         header="Header"
-        content="Conteúdo"
+        content="ConteÃºdo"
         footer="Footer Customizado"
         open
       >
@@ -46,15 +46,15 @@ describe("Popover", () => {
       </Popover>,
     );
     expect(screen.getByText("Header")).toBeInTheDocument();
-    expect(screen.getByText("Conteúdo")).toBeInTheDocument();
+    expect(screen.getByText("ConteÃºdo")).toBeInTheDocument();
     expect(screen.getByText("Footer Customizado")).toBeInTheDocument();
   });
 
-  it("renderiza com ícone customizado no header", () => {
+  it("renderiza com Ã­cone customizado no header", () => {
     render(
       <Popover
-        header="Header com ícone"
-        content="Conteúdo"
+        header="Header com Ã­cone"
+        content="ConteÃºdo"
         icon={<Info data-testid="custom-icon" size={16} />}
         open
       >
@@ -62,24 +62,24 @@ describe("Popover", () => {
       </Popover>,
     );
     expect(screen.getByTestId("custom-icon")).toBeInTheDocument();
-    expect(screen.getByText("Header com ícone")).toBeInTheDocument();
+    expect(screen.getByText("Header com Ã­cone")).toBeInTheDocument();
   });
 
-  it("renderiza apenas conteúdo quando não há header ou footer", () => {
+  it("renderiza apenas conteÃºdo quando nÃ£o hÃ¡ header ou footer", () => {
     render(
-      <Popover content="Apenas conteúdo" open>
+      <Popover content="Apenas conteÃºdo" open>
         <Button>Trigger</Button>
       </Popover>,
     );
-    expect(screen.getByText("Apenas conteúdo")).toBeInTheDocument();
+    expect(screen.getByText("Apenas conteÃºdo")).toBeInTheDocument();
   });
 
   it("prioriza header customizado sobre title do Antd", () => {
     render(
       <Popover
         header="Header Customizado"
-        title="Título Antd"
-        content="Conteúdo"
+        title="TÃ­tulo Antd"
+        content="ConteÃºdo"
         open
       >
         <Button>Trigger</Button>
@@ -87,13 +87,13 @@ describe("Popover", () => {
     );
     // Header customizado deve aparecer
     expect(screen.getByText("Header Customizado")).toBeInTheDocument();
-    // Title do Antd não deve aparecer quando header está presente
-    expect(screen.queryByText("Título Antd")).not.toBeInTheDocument();
+    // Title do Antd nÃ£o deve aparecer quando header estÃ¡ presente
+    expect(screen.queryByText("TÃ­tulo Antd")).not.toBeInTheDocument();
   });
 
   it("renderiza trigger corretamente", () => {
     render(
-      <Popover content="Conteúdo">
+      <Popover content="ConteÃºdo">
         <Button>Clique aqui</Button>
       </Popover>,
     );
@@ -104,7 +104,7 @@ describe("Popover", () => {
 
   it("aceita props do Antd (placement)", () => {
     const { container } = render(
-      <Popover content="Conteúdo" placement="bottom" open>
+      <Popover content="ConteÃºdo" placement="bottom" open>
         <Button>Trigger</Button>
       </Popover>,
     );
@@ -114,14 +114,14 @@ describe("Popover", () => {
 
   it("aceita props do Antd (trigger)", () => {
     render(
-      <Popover content="Conteúdo" trigger="click">
+      <Popover content="ConteÃºdo" trigger="click">
         <Button>Trigger</Button>
       </Popover>,
     );
     expect(screen.getByRole("button")).toBeInTheDocument();
   });
 
-  it("renderiza com footer contendo botões", () => {
+  it("renderiza com footer contendo botÃµes", () => {
     render(
       <Popover
         header="Confirmar"
@@ -149,11 +149,11 @@ describe("Popover", () => {
 
   it("renderiza apenas header e content (sem footer)", () => {
     render(
-      <Popover header="Apenas Header" content="E conteúdo" open>
+      <Popover header="Apenas Header" content="E conteÃºdo" open>
         <Button>Trigger</Button>
       </Popover>,
     );
     expect(screen.getByText("Apenas Header")).toBeInTheDocument();
-    expect(screen.getByText("E conteúdo")).toBeInTheDocument();
+    expect(screen.getByText("E conteÃºdo")).toBeInTheDocument();
   });
 });

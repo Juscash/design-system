@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { Input, TextArea } from "./Input";
+import { Input } from ".";
+import { TextArea } from "../TextArea";
 
 describe("Input", () => {
   it("renders input with placeholder", () => {

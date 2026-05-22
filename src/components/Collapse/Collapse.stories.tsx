@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+﻿import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { Collapse } from "./Collapse";
+import { Collapse } from ".";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
@@ -28,7 +28,7 @@ const meta: Meta<CollapseStoryProps> = {
 Componente Collapse (Accordion) baseado no [Ant Design Collapse](https://ant.design/components/collapse).
 
 ### Props:
-- **Extended (Ant Design)**: Suporta todas as propriedades padrão do AntD Collapse.
+- **Extended (Ant Design)**: Suporta todas as propriedades padrÃ£o do AntD Collapse.
 
 ### Como usar:
 
@@ -59,7 +59,7 @@ function Example() {
                 fontWeight: "bold",
               }}
             >
-              🎨 Figma Spec
+              ðŸŽ¨ Figma Spec
             </h3>
             <Figma showLink url={FIGMA_URL} height="400px" />
           </div>
@@ -78,17 +78,17 @@ function Example() {
   argTypes: {
     hover: {
       control: "boolean",
-      description: "Força o estado hover",
+      description: "ForÃ§a o estado hover",
       table: { category: "Pseudo States" },
     },
     active: {
       control: "boolean",
-      description: "Força o estado active",
+      description: "ForÃ§a o estado active",
       table: { category: "Pseudo States" },
     },
     focus: {
       control: "boolean",
-      description: "Força o estado focus",
+      description: "ForÃ§a o estado focus",
       table: { category: "Pseudo States" },
     },
   },
@@ -106,7 +106,7 @@ function Example() {
 export default meta;
 type Story = StoryObj<CollapseStoryProps>;
 
-const text = `O cashback será disponibilizado na plataforma após a comprovação da protocolização do contrato nos autos. Confira as regras em nossa política.`;
+const text = `O cashback serÃ¡ disponibilizado na plataforma apÃ³s a comprovaÃ§Ã£o da protocolizaÃ§Ã£o do contrato nos autos. Confira as regras em nossa polÃ­tica.`;
 
 const items = [{ key: "1", label: "Label", children: <p>{text}</p> }];
 
@@ -185,7 +185,7 @@ export const Examples: Story = {
         items={[
           {
             key: "1",
-            label: "Qual é o valor do cashback?",
+            label: "Qual Ã© o valor do cashback?",
             children: <p>{text}</p>,
           },
         ]}
@@ -203,7 +203,7 @@ export const Examples: Story = {
         items={[
           {
             key: "3",
-            label: "O que é o Which?",
+            label: "O que Ã© o Which?",
             children: <p>{text}</p>,
           },
         ]}

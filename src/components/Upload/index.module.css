@@ -1,0 +1,230 @@
+/*
+  Estilos próprios do Upload.
+
+  O Antd renderiza a lista de arquivos em uma árvore que escapa do escopo do
+  CSS Module, por isso os seletores são marcados com `:global(...)` para
+  alcançar nós aninhados.
+*/
+
+:global(.juscash-upload-root) {
+  width: 100% !important;
+}
+
+:global(.juscash-upload-root) :global(.ant-upload) {
+  width: 100% !important;
+  display: block !important;
+}
+
+:global(.juscash-upload-root.juscash-upload-layout-horizontal) {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+:global(.juscash-upload-root.juscash-upload-layout-horizontal) :global(.ant-upload) {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+}
+
+:global(.juscash-upload-root.juscash-upload-layout-horizontal.juscash-upload-has-files) :global(.ant-upload-list) {
+  flex: 1 1 0 !important;
+  min-width: 0 !important;
+}
+
+:global(.juscash-upload-root.juscash-upload-files-only) :global(.ant-upload) {
+  display: none !important;
+}
+
+:global(.juscash-upload-trigger) {
+  width: 100% !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  padding: 0 12px !important;
+  margin: 0 !important;
+  border: 1px solid var(--color-neutral-300) !important;
+  border-radius: 8px !important;
+  background: var(--color-neutral-50) !important;
+  box-shadow: none !important;
+  color: var(--color-neutral-800) !important;
+  cursor: pointer !important;
+  overflow: hidden !important;
+  text-align: left !important;
+  font-family: "Inter", sans-serif !important;
+  transition: none !important;
+}
+
+:global(.juscash-upload-trigger:hover),
+:global(.juscash-upload-trigger:focus),
+:global(.juscash-upload-trigger:active) {
+  border-color: var(--color-neutral-300) !important;
+  background: var(--color-neutral-50) !important;
+  box-shadow: none !important;
+  color: var(--color-neutral-800) !important;
+  outline: none !important;
+}
+
+:global(.juscash-upload-size-xs) :global(.juscash-upload-trigger) {
+  min-height: 24px !important;
+  height: 24px !important;
+}
+:global(.juscash-upload-size-s) :global(.juscash-upload-trigger) {
+  min-height: 32px !important;
+  height: 32px !important;
+}
+:global(.juscash-upload-size-m) :global(.juscash-upload-trigger) {
+  min-height: 36px !important;
+  height: 36px !important;
+}
+:global(.juscash-upload-size-l) :global(.juscash-upload-trigger) {
+  min-height: 40px !important;
+  height: 40px !important;
+}
+
+:global(.juscash-upload-root.pseudo-focus-visible) :global(.juscash-upload-trigger) {
+  box-shadow: var(--shadow-focus) !important;
+}
+
+:global(.juscash-upload-root.juscash-upload-error) :global(.juscash-upload-trigger) {
+  border-color: var(--color-feedback-red-500) !important;
+}
+
+:global(.juscash-upload-root.juscash-upload-error.pseudo-focus-visible) :global(.juscash-upload-trigger) {
+  box-shadow: var(--shadow-focus-error) !important;
+}
+
+:global(.juscash-upload-root.juscash-upload-disabled) :global(.juscash-upload-trigger) {
+  border-color: var(--color-neutral-200) !important;
+  background: var(--color-neutral-50) !important;
+  color: var(--color-neutral-400) !important;
+  cursor: not-allowed !important;
+}
+
+:global(.juscash-upload-trigger-icon),
+:global(.juscash-upload-file-icon) {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  flex: none !important;
+  color: currentColor !important;
+}
+
+:global(.juscash-upload-trigger-text) {
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+  font-weight: 700 !important;
+}
+
+:global(.juscash-upload-root.juscash-upload-disabled) :global(.juscash-upload-trigger-icon),
+:global(.juscash-upload-root.juscash-upload-disabled) :global(.juscash-upload-trigger-text) {
+  color: var(--color-neutral-400) !important;
+}
+
+:global(.juscash-upload-root) :global(.ant-upload-list) {
+  display: flex !important;
+  flex-direction: column !important;
+  gap: 8px !important;
+  margin-top: 8px !important;
+}
+
+:global(.juscash-upload-root.juscash-upload-layout-horizontal) :global(.ant-upload-list),
+:global(.juscash-upload-root.juscash-upload-files-only) :global(.ant-upload-list) {
+  margin-top: 0 !important;
+}
+
+:global(.juscash-upload-root) :global(.ant-upload-list-item-container) {
+  width: 100% !important;
+  margin: 0 !important;
+}
+
+:global(.juscash-upload-root) :global(.ant-upload-list-item) {
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+}
+
+:global(.juscash-upload-root) :global(.ant-upload-list-item::before) {
+  display: none !important;
+}
+
+:global(.juscash-upload-root) :global(.ant-upload-list-item-name),
+:global(.juscash-upload-root) :global(.ant-upload-list-item-actions) {
+  display: none !important;
+}
+
+:global(.juscash-upload-file-row) {
+  display: flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+  min-height: 24px !important;
+  color: var(--color-neutral-800) !important;
+}
+
+:global(.juscash-upload-file-name) {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+  font-weight: 400 !important;
+  color: currentColor !important;
+}
+
+:global(.juscash-upload-file-error) {
+  color: var(--color-feedback-red-500) !important;
+}
+
+:global(.juscash-upload-file-loading),
+:global(.juscash-upload-file-disabled) {
+  color: var(--color-neutral-400) !important;
+}
+
+:global(.juscash-upload-file-spinner) {
+  animation: ds-upload-spin 1s linear infinite;
+}
+
+:global(.juscash-upload-remove-button) {
+  width: 24px !important;
+  height: 24px !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  padding: 4px !important;
+  border: none !important;
+  border-radius: 4px !important;
+  background: transparent !important;
+  color: var(--color-neutral-800) !important;
+  box-shadow: none !important;
+  cursor: pointer !important;
+  transition: none !important;
+}
+
+:global(.juscash-upload-remove-button:hover) {
+  background: var(--color-neutral-100) !important;
+}
+
+:global(.juscash-upload-remove-button:focus),
+:global(.juscash-upload-remove-button:active) {
+  outline: none !important;
+}
+
+:global(.juscash-upload-root.pseudo-focus-visible) :global(.juscash-upload-remove-button) {
+  box-shadow: var(--shadow-focus) !important;
+}
+
+:global(.juscash-upload-root.juscash-upload-disabled) :global(.juscash-upload-remove-button),
+:global(.juscash-upload-file-disabled) :global(.juscash-upload-remove-button) {
+  color: var(--color-neutral-400) !important;
+  cursor: not-allowed !important;
+}
+
+@keyframes ds-upload-spin {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}

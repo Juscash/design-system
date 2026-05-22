@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+﻿import type { Meta, StoryObj } from "@storybook/react-vite";
 import React, { useState } from "react";
 import { Button } from "../Button";
-import { ConfirmModal } from "./ConfirmModal";
+import { ConfirmModal } from ".";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
@@ -35,13 +35,13 @@ const meta: Meta<ConfirmModalStoryProps> = {
       codePanel: true,
       description: {
         component: `
-Modal de confirmação para ações que requerem aprovação do usuário.
+Modal de confirmaÃ§Ã£o para aÃ§Ãµes que requerem aprovaÃ§Ã£o do usuÃ¡rio.
 
 ### Props:
 - **Custom (Juscash)**:
   - \`type\`: \`info\`, \`warning\`, \`danger\`.
-  - \`confirmText\`/\`cancelText\`: Define os textos dos botões.
-  - \`confirmLoading\`: Estado de carregamento do botão de confirmação.
+  - \`confirmText\`/\`cancelText\`: Define os textos dos botÃµes.
+  - \`confirmLoading\`: Estado de carregamento do botÃ£o de confirmaÃ§Ã£o.
 
 ### Como usar:
 
@@ -57,7 +57,7 @@ function Example() {
       <ConfirmModal
         open={open}
         title="Excluir"
-        description="Você tem certeza que deseja excluir este item?"
+        description="VocÃª tem certeza que deseja excluir este item?"
         type="danger"
         confirmText="Excluir"
         cancelText="Cancelar"
@@ -88,7 +88,7 @@ function Example() {
                 fontWeight: "bold",
               }}
             >
-              🎨 Figma Spec
+              ðŸŽ¨ Figma Spec
             </h3>
             <Figma showLink url={FIGMA_URL} height="400px" />
           </div>
@@ -107,7 +107,7 @@ function Example() {
     type: {
       control: "select",
       options: ["info", "warning", "danger", "secondary"],
-      description: "Tipo de confirmação (afeta cor do botão)",
+      description: "Tipo de confirmaÃ§Ã£o (afeta cor do botÃ£o)",
       table: {
         type: { summary: '"info" | "warning" | "danger"' },
         defaultValue: { summary: '"info"' },
@@ -116,7 +116,7 @@ function Example() {
     },
     title: {
       control: "text",
-      description: "Título do modal",
+      description: "TÃ­tulo do modal",
       table: {
         type: { summary: "ReactNode" },
         category: "Juscash Props",
@@ -124,7 +124,7 @@ function Example() {
     },
     description: {
       control: "text",
-      description: "Descrição/mensagem do modal",
+      description: "DescriÃ§Ã£o/mensagem do modal",
       table: {
         type: { summary: "ReactNode" },
         category: "Juscash Props",
@@ -132,7 +132,7 @@ function Example() {
     },
     confirmText: {
       control: "text",
-      description: "Texto do botão de confirmação",
+      description: "Texto do botÃ£o de confirmaÃ§Ã£o",
       table: {
         type: { summary: "string" },
         defaultValue: { summary: '"Confirmar"' },
@@ -141,7 +141,7 @@ function Example() {
     },
     cancelText: {
       control: "text",
-      description: "Texto do botão cancelar (omitir para esconder)",
+      description: "Texto do botÃ£o cancelar (omitir para esconder)",
       table: {
         type: { summary: "string" },
         category: "Juscash Props",
@@ -149,7 +149,7 @@ function Example() {
     },
     confirmLoading: {
       control: "boolean",
-      description: "Estado de loading do botão de confirmação",
+      description: "Estado de loading do botÃ£o de confirmaÃ§Ã£o",
       table: {
         type: { summary: "boolean" },
         defaultValue: { summary: "false" },
@@ -158,17 +158,17 @@ function Example() {
     },
     hover: {
       control: "boolean",
-      description: "Força o estado hover",
+      description: "ForÃ§a o estado hover",
       table: { category: "Pseudo States" },
     },
     active: {
       control: "boolean",
-      description: "Força o estado active",
+      description: "ForÃ§a o estado active",
       table: { category: "Pseudo States" },
     },
     focus: {
       control: "boolean",
-      description: "Força o estado focus",
+      description: "ForÃ§a o estado focus",
       table: { category: "Pseudo States" },
     },
   },
@@ -189,12 +189,12 @@ export default meta;
 
 type Story = StoryObj<ConfirmModalStoryProps>;
 
-// Story 1: Default (com dois botões)
+// Story 1: Default (com dois botÃµes)
 export const Default: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Modal de confirmação padrão com botões Cancelar e Confirmar.",
+        story: "Modal de confirmaÃ§Ã£o padrÃ£o com botÃµes Cancelar e Confirmar.",
       },
     },
   },
@@ -210,14 +210,14 @@ export const Default: Story = {
 
     return (
       <div style={{ padding: 40 }}>
-        <Button onClick={() => setOpen(true)}>Abrir Confirmação</Button>
+        <Button onClick={() => setOpen(true)}>Abrir ConfirmaÃ§Ã£o</Button>
         <ConfirmModal
           {...props}
           open={open}
-          title="Tem certeza que deseja sair desta página?"
-          description="Suas alterações podem ser perdidas."
+          title="Tem certeza que deseja sair desta pÃ¡gina?"
+          description="Suas alteraÃ§Ãµes podem ser perdidas."
           confirmText="Confirmar"
-          cancelText="Não, ficar na página"
+          cancelText="NÃ£o, ficar na pÃ¡gina"
           onConfirm={() => setOpen(false)}
           onCancel={() => setOpen(false)}
           className={mergedClassName}
@@ -232,7 +232,7 @@ export const Secondary: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Modal de confirmação com botão secundário (azul).",
+        story: "Modal de confirmaÃ§Ã£o com botÃ£o secundÃ¡rio (azul).",
       },
     },
   },
@@ -248,15 +248,15 @@ export const Secondary: Story = {
 
     return (
       <div style={{ padding: 40 }}>
-        <Button onClick={() => setOpen(true)}>Abrir Confirmação</Button>
+        <Button onClick={() => setOpen(true)}>Abrir ConfirmaÃ§Ã£o</Button>
         <ConfirmModal
           {...props}
           open={open}
-          title="Tem certeza que deseja sair desta página?"
-          description="Suas alterações podem ser perdidas."
+          title="Tem certeza que deseja sair desta pÃ¡gina?"
+          description="Suas alteraÃ§Ãµes podem ser perdidas."
           type="secondary"
           confirmText="Confirmar"
-          cancelText="Não, ficar na página"
+          cancelText="NÃ£o, ficar na pÃ¡gina"
           onConfirm={() => setOpen(false)}
           onCancel={() => setOpen(false)}
           className={mergedClassName}
@@ -271,7 +271,7 @@ export const Danger: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Modal de confirmação para ações destrutivas (excluir).",
+        story: "Modal de confirmaÃ§Ã£o para aÃ§Ãµes destrutivas (excluir).",
       },
     },
   },
@@ -294,7 +294,7 @@ export const Danger: Story = {
           {...props}
           open={open}
           title="Excluir"
-          description="Você tem certeza que deseja excluir este item?"
+          description="VocÃª tem certeza que deseja excluir este item?"
           type="danger"
           confirmText="Excluir"
           cancelText="Cancelar"
@@ -312,7 +312,7 @@ export const SingleButton: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Modal com apenas um botão de confirmação (sem cancelar).",
+        story: "Modal com apenas um botÃ£o de confirmaÃ§Ã£o (sem cancelar).",
       },
     },
   },
@@ -333,7 +333,7 @@ export const SingleButton: Story = {
           {...props}
           open={open}
           title="Excluir"
-          description="Você tem certeza que deseja excluir este item?"
+          description="VocÃª tem certeza que deseja excluir este item?"
           confirmText="Label"
           onConfirm={() => setOpen(false)}
           onCancel={() => setOpen(false)}
@@ -349,7 +349,7 @@ export const WithLoading: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Modal com estado de loading no botão de confirmação.",
+        story: "Modal com estado de loading no botÃ£o de confirmaÃ§Ã£o.",
       },
     },
   },
@@ -374,12 +374,12 @@ export const WithLoading: Story = {
 
     return (
       <div style={{ padding: 40 }}>
-        <Button onClick={() => setOpen(true)}>Salvar Alterações</Button>
+        <Button onClick={() => setOpen(true)}>Salvar AlteraÃ§Ãµes</Button>
         <ConfirmModal
           {...props}
           open={open}
-          title="Salvar alterações?"
-          description="Deseja salvar as alterações feitas?"
+          title="Salvar alteraÃ§Ãµes?"
+          description="Deseja salvar as alteraÃ§Ãµes feitas?"
           confirmText="Salvar"
           cancelText="Cancelar"
           confirmLoading={loading}
@@ -415,18 +415,18 @@ export const FigmaExample: Story = {
 
     return (
       <div style={{ padding: 40, display: "flex", gap: 16 }}>
-        <Button onClick={() => setOpen1(true)}>Botão único</Button>
+        <Button onClick={() => setOpen1(true)}>BotÃ£o Ãºnico</Button>
         <Button onClick={() => setOpen2(true)}>Com Cancelar</Button>
         <Button type="destructive" onClick={() => setOpen3(true)}>
-          Ação Destrutiva
+          AÃ§Ã£o Destrutiva
         </Button>
 
-        {/* Exemplo 1: Botão único */}
+        {/* Exemplo 1: BotÃ£o Ãºnico */}
         <ConfirmModal
           {...props}
           open={open1}
           title="Excluir"
-          description="Você tem certeza que deseja excluir este item?"
+          description="VocÃª tem certeza que deseja excluir este item?"
           confirmText="Label"
           onConfirm={() => setOpen1(false)}
           onCancel={() => setOpen1(false)}
@@ -438,7 +438,7 @@ export const FigmaExample: Story = {
           {...props}
           open={open2}
           title="Excluir"
-          description="Você tem certeza que deseja excluir este item?"
+          description="VocÃª tem certeza que deseja excluir este item?"
           confirmText="Excluir"
           cancelText="Label"
           type="danger"
@@ -447,14 +447,14 @@ export const FigmaExample: Story = {
           className={mergedClassName}
         />
 
-        {/* Exemplo 3: Sair da página */}
+        {/* Exemplo 3: Sair da pÃ¡gina */}
         <ConfirmModal
           {...props}
           open={open3}
-          title="Tem certeza que deseja sair desta página?"
-          description="Suas alterações podem ser perdidas."
+          title="Tem certeza que deseja sair desta pÃ¡gina?"
+          description="Suas alteraÃ§Ãµes podem ser perdidas."
           confirmText="Confirmar"
-          cancelText="Não, ficar na página"
+          cancelText="NÃ£o, ficar na pÃ¡gina"
           onConfirm={() => setOpen3(false)}
           onCancel={() => setOpen3(false)}
           className={mergedClassName}

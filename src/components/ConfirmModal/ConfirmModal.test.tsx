@@ -1,26 +1,26 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+﻿import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import { ConfirmModal } from "./ConfirmModal";
+import { ConfirmModal } from ".";
 
 describe("ConfirmModal", () => {
-  it("renderiza com título e descrição", () => {
+  it("renderiza com tÃ­tulo e descriÃ§Ã£o", () => {
     render(
       <ConfirmModal
         open
-        title="Confirmar ação"
+        title="Confirmar aÃ§Ã£o"
         description="Tem certeza?"
         onConfirm={() => {}}
       />,
     );
-    expect(screen.getByText("Confirmar ação")).toBeInTheDocument();
+    expect(screen.getByText("Confirmar aÃ§Ã£o")).toBeInTheDocument();
     expect(screen.getByText("Tem certeza?")).toBeInTheDocument();
   });
 
-  it("renderiza botão de confirmação", () => {
+  it("renderiza botÃ£o de confirmaÃ§Ã£o", () => {
     render(
       <ConfirmModal
         open
-        title="Título"
+        title="TÃ­tulo"
         confirmText="Excluir"
         onConfirm={() => {}}
       />,
@@ -30,11 +30,11 @@ describe("ConfirmModal", () => {
     ).toBeInTheDocument();
   });
 
-  it("renderiza botão de cancelar quando cancelText é fornecido", () => {
+  it("renderiza botÃ£o de cancelar quando cancelText Ã© fornecido", () => {
     render(
       <ConfirmModal
         open
-        title="Título"
+        title="TÃ­tulo"
         confirmText="OK"
         cancelText="Cancelar"
         onConfirm={() => {}}
@@ -45,11 +45,11 @@ describe("ConfirmModal", () => {
     ).toBeInTheDocument();
   });
 
-  it("não renderiza botão de cancelar quando cancelText não é fornecido", () => {
+  it("nÃ£o renderiza botÃ£o de cancelar quando cancelText nÃ£o Ã© fornecido", () => {
     render(
       <ConfirmModal
         open
-        title="Título"
+        title="TÃ­tulo"
         confirmText="OK"
         onConfirm={() => {}}
       />,
@@ -59,12 +59,12 @@ describe("ConfirmModal", () => {
     ).not.toBeInTheDocument();
   });
 
-  it("chama onConfirm ao clicar no botão de confirmação", () => {
+  it("chama onConfirm ao clicar no botÃ£o de confirmaÃ§Ã£o", () => {
     const onConfirm = vi.fn();
     render(
       <ConfirmModal
         open
-        title="Título"
+        title="TÃ­tulo"
         confirmText="Confirmar"
         onConfirm={onConfirm}
       />,
@@ -73,12 +73,12 @@ describe("ConfirmModal", () => {
     expect(onConfirm).toHaveBeenCalled();
   });
 
-  it("chama onCancel ao clicar no botão de cancelar", () => {
+  it("chama onCancel ao clicar no botÃ£o de cancelar", () => {
     const onCancel = vi.fn();
     render(
       <ConfirmModal
         open
-        title="Título"
+        title="TÃ­tulo"
         confirmText="OK"
         cancelText="Cancelar"
         onConfirm={() => {}}
@@ -89,11 +89,11 @@ describe("ConfirmModal", () => {
     expect(onCancel).toHaveBeenCalled();
   });
 
-  it("não renderiza quando open é false", () => {
+  it("nÃ£o renderiza quando open Ã© false", () => {
     render(
-      <ConfirmModal open={false} title="Título oculto" onConfirm={() => {}} />,
+      <ConfirmModal open={false} title="TÃ­tulo oculto" onConfirm={() => {}} />,
     );
-    expect(screen.queryByText("Título oculto")).not.toBeInTheDocument();
+    expect(screen.queryByText("TÃ­tulo oculto")).not.toBeInTheDocument();
   });
 
   it("aceita type danger", () => {

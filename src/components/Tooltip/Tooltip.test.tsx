@@ -1,7 +1,7 @@
-import { render, screen, waitFor } from "@testing-library/react";
+﻿import { render, screen, waitFor } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
-import { Tooltip, type TooltipProps } from "./Tooltip";
+import { Tooltip, type TooltipProps } from ".";
 
 async function hoverTooltip() {
   const user = userEvent.setup();

@@ -1,7 +1,7 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+﻿import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Heart } from "lucide-react";
-import { Badge } from "./Badge";
+import { Badge } from ".";
 
 import { Title, Subtitle, Description, Primary as DocsPrimary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
@@ -66,7 +66,7 @@ function Example() {
                 fontWeight: "bold",
               }}
             >
-              🎨 Figma Spec
+              ðŸŽ¨ Figma Spec
             </h3>
             <Figma showLink url={FIGMA_URL} height="400px" />
           </div>
@@ -202,7 +202,7 @@ export const SecondaryWarning: Story = {
 };
 
 export const SecondaryCaution: Story = {
-  name: "Secondary — Caution (Yellow)",
+  name: "Secondary â€” Caution (Yellow)",
   args: {
     variant: "secondary",
     statusColor: "caution",
@@ -211,7 +211,7 @@ export const SecondaryCaution: Story = {
 };
 
 export const SecondaryInfo: Story = {
-  name: "Secondary — Info (Blue)",
+  name: "Secondary â€” Info (Blue)",
   args: {
     variant: "secondary",
     statusColor: "info",
@@ -220,7 +220,7 @@ export const SecondaryInfo: Story = {
 };
 
 export const SecondaryAllColors: Story = {
-  name: "Secondary — Todas as cores (Figma)",
+  name: "Secondary â€” Todas as cores (Figma)",
   render: () => (
     <div style={{ display: "flex", gap: 16, alignItems: "center", flexWrap: "wrap" }}>
       <Badge variant="secondary" statusColor="success">Label</Badge>

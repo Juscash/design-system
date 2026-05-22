@@ -1,0 +1,66 @@
+/*
+  Estilos próprios do Carousel da JusCash. Os seletores `:global(.ant-carousel ...)`
+  são necessários porque o Antd renderiza o slick em uma árvore que escapa do
+  CSS Module por escopo.
+*/
+
+.ds-carousel-root {
+  position: relative;
+  margin: 0 40px;
+  padding-bottom: 30px;
+}
+
+:global(.ant-carousel) :global(.slick-slide) {
+  text-align: center;
+  height: auto;
+  background: transparent;
+  overflow: hidden;
+}
+
+:global(.ant-carousel) :global(.slick-slide) > div {
+  padding: 0 8px;
+}
+
+:global(.ant-carousel) :global(.slick-dots) {
+  position: absolute;
+  bottom: -25px !important;
+  left: 0;
+  right: 0;
+  display: flex !important;
+  justify-content: center;
+  align-items: center;
+  padding: 4px;
+  margin: 0 auto;
+  list-style: none;
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: var(--radius-xl);
+  width: fit-content;
+  gap: 4px;
+}
+
+:global(.ant-carousel) :global(.slick-dots li) {
+  width: 6px;
+  height: 6px;
+  margin: 0;
+  display: inline-block;
+}
+
+:global(.ant-carousel) :global(.slick-dots li button) {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--color-neutral-400) !important;
+  opacity: 1 !important;
+  transition: all 0.3s;
+  border: none;
+}
+
+:global(.ant-carousel) :global(.slick-dots li.slick-active) {
+  width: 24px;
+}
+
+:global(.ant-carousel) :global(.slick-dots li.slick-active button) {
+  width: 24px;
+  border-radius: 4px;
+  background: var(--color-neutral-800) !important;
+}

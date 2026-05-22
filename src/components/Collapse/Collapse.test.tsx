@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
+﻿import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { Collapse } from "./Collapse";
+import { Collapse } from ".";
 
 const items = [{ key: "1", label: "Panel 1", children: "Content 1" }];
 

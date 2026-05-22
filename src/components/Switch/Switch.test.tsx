@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
+﻿import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { Switch } from "./Switch";
+import { Switch } from ".";
 
 describe("Switch", () => {
   it("renders switch", () => {

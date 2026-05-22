@@ -1,6 +1,6 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+﻿import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import { Carousel } from "./Carousel";
+import { Carousel } from ".";
 
 // Mock matchMedia for Slick Carousel
 beforeAll(() => {

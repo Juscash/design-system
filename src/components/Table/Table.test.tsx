@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
+﻿import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { Table } from "./Table";
+import { Table } from ".";
 
 const columns = [{ title: "Name", dataIndex: "name", key: "name" }];
 

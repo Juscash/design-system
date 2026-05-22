@@ -1,7 +1,7 @@
-import { render, screen } from "@testing-library/react";
+﻿import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
 import { Plus } from "lucide-react";
-import { Button } from "./Button";
+import { Button } from ".";
 import { shadow } from "../../theme";
 
 describe("Button", () => {

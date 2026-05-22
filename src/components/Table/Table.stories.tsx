@@ -1,11 +1,11 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+﻿import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import type { ColumnsType } from "antd/es/table";
 import {
   MoreHorizontal,
   Trash2,
 } from "lucide-react";
-import { Table } from "./Table";
+import { Table } from ".";
 import { Badge } from "../Badge";
 import { Checkbox } from "../Checkbox";
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
@@ -24,7 +24,7 @@ type DesktopRow = {
   cliente: string;
   processo: string;
   valor: string;
-  status: "Aprovado" | "Em análise" | "Pendente";
+  status: "Aprovado" | "Em anÃ¡lise" | "Pendente";
 };
 
 type TransactionRow = {
@@ -37,7 +37,7 @@ type TransactionRow = {
   infosSecundarias: string;
   valores: string;
   valoresSecundarios: string;
-  status: "Concluído" | "Pendente" | "Cancelado";
+  status: "ConcluÃ­do" | "Pendente" | "Cancelado";
 };
 
 const meta: Meta<typeof Table> = {
@@ -55,7 +55,7 @@ const meta: Meta<typeof Table> = {
         component: `
 Tabela baseada no Ant Design com acabamento visual do design system da JusCash.
 
-Links de referência:
+Links de referÃªncia:
 - Design system: ${FIGMA_URL}
 - Exemplo real de uso: ${TRANSACTIONS_FIGMA_URL}
 `,
@@ -165,9 +165,9 @@ function CellText(props: { primary: string; secondary?: string; strong?: boolean
   );
 }
 
-function StatusPill(props: { status: "Concluído" | "Pendente" | "Cancelado" | "Aprovado" | "Em análise" | "Pendente"; compact?: boolean }) {
+function StatusPill(props: { status: "ConcluÃ­do" | "Pendente" | "Cancelado" | "Aprovado" | "Em anÃ¡lise" | "Pendente"; compact?: boolean }) {
   const { status, compact = false } = props;
-  const statusColor = status === "Concluído" || status === "Aprovado" ? "success" : status === "Cancelado" ? "error" : "caution";
+  const statusColor = status === "ConcluÃ­do" || status === "Aprovado" ? "success" : status === "Cancelado" ? "error" : "caution";
 
   return (
     <Badge
@@ -227,7 +227,7 @@ const baseColumns: ColumnsType<{ key: string; nome: string; email: string; statu
     title: "Status",
     dataIndex: "status",
     key: "status",
-    render: (value: string) => <StatusPill status={value === "Ativo" ? "Concluído" : "Pendente"} compact />,
+    render: (value: string) => <StatusPill status={value === "Ativo" ? "ConcluÃ­do" : "Pendente"} compact />,
   },
 ];
 
@@ -275,16 +275,16 @@ const desktopDataColumns: ColumnsType<DesktopRow> = [
     title: "",
     key: "actions-placeholder",
     width: 48,
-    render: () => <ActionIconButton icon={<MoreHorizontal size={16} />} label="Ações" size={24} />,
+    render: () => <ActionIconButton icon={<MoreHorizontal size={16} />} label="AÃ§Ãµes" size={24} />,
   },
 ];
 
 const desktopRows: DesktopRow[] = [
   { key: "1", selected: true, checked: true, id: "3401", cliente: "Ana Souza", processo: "0002457-65.2026", valor: "R$ 12.350,00", status: "Aprovado" },
-  { key: "2", id: "3402", cliente: "Bruno Lima", processo: "0002458-22.2026", valor: "R$ 7.480,00", status: "Em análise" },
+  { key: "2", id: "3402", cliente: "Bruno Lima", processo: "0002458-22.2026", valor: "R$ 7.480,00", status: "Em anÃ¡lise" },
   { key: "3", id: "3403", cliente: "Carla Dias", processo: "0002459-11.2026", valor: "R$ 3.190,00", status: "Pendente" },
   { key: "4", id: "3404", cliente: "Diego Ramos", processo: "0002460-98.2026", valor: "R$ 16.250,00", status: "Aprovado" },
-  { key: "5", id: "3405", cliente: "Elisa Prado", processo: "0002461-74.2026", valor: "R$ 8.900,00", status: "Em análise" },
+  { key: "5", id: "3405", cliente: "Elisa Prado", processo: "0002461-74.2026", valor: "R$ 8.900,00", status: "Em anÃ¡lise" },
 ];
 
 const desktopStoryRows: DesktopRow[] = Array.from({ length: 30 }, (_, index) => {
@@ -356,7 +356,7 @@ function buildDesktopColumns(props: {
             <>
               <ActionIconButton
                 icon={<MoreHorizontal size={16} />}
-                label="Ações"
+                label="AÃ§Ãµes"
                 size={24}
                 onClick={() => {
                   setOpenActionKey((current) => (current === record.key ? null : record.key));
@@ -492,14 +492,14 @@ function TransactionsTablePreview() {
         columns={[
           ...transactionsColumns.slice(0, -1),
           {
-            title: "Ações",
+            title: "AÃ§Ãµes",
             key: "acoes",
             width: 88,
             render: (_value, record) => (
               <div style={{ position: "relative", display: "flex", justifyContent: "center" }}>
                 <ActionIconButton
                   icon={<MoreHorizontal size={16} />}
-                  label="Ações"
+                  label="AÃ§Ãµes"
                   onClick={() => {
                     setOpenActionKey((current) => (current === record.key ? null : record.key));
                   }}
@@ -596,7 +596,7 @@ const transactionsColumns: ColumnsType<TransactionRow> = [
     key: "processo",
     width: 220,
     sorter: (a, b) => a.processo.localeCompare(b.processo),
-    render: (value: string) => <CellText primary={value} secondary="Cível · São Paulo" gapPx={4} />,
+    render: (value: string) => <CellText primary={value} secondary="CÃ­vel Â· SÃ£o Paulo" gapPx={4} />,
   },
   {
     title: "Infos venda",
@@ -621,10 +621,10 @@ const transactionsColumns: ColumnsType<TransactionRow> = [
     render: (value: TransactionRow["status"]) => <StatusPill status={value} />,
   },
   {
-    title: "Ações",
+    title: "AÃ§Ãµes",
     key: "acoes",
     width: 88,
-    render: () => <ActionIconButton icon={<MoreHorizontal size={16} />} label="Ações" />,
+    render: () => <ActionIconButton icon={<MoreHorizontal size={16} />} label="AÃ§Ãµes" />,
   },
 ];
 
@@ -636,33 +636,33 @@ const transactionRows: TransactionRow[] = [
     clienteSecundario: "CPF 117.***.***-90",
     processo: "0002457-65.2026.8.26.0100",
     infosVenda: "Contrato CJ-2026-001",
-    infosSecundarias: "15/03/2026 · Portabilidade",
+    infosSecundarias: "15/03/2026 Â· Portabilidade",
     valores: "12.350,00",
-    valoresSecundarios: "Líquido 11.720,50",
-    status: "Concluído",
+    valoresSecundarios: "LÃ­quido 11.720,50",
+    status: "ConcluÃ­do",
   },
   {
     key: "2",
     id: "3242",
-    cliente: "Marcos Vinícius",
+    cliente: "Marcos VinÃ­cius",
     clienteSecundario: "CPF 991.***.***-18",
     processo: "0002458-22.2026.8.26.0100",
     infosVenda: "Contrato CJ-2026-002",
-    infosSecundarias: "16/03/2026 · Refinanciamento",
+    infosSecundarias: "16/03/2026 Â· Refinanciamento",
     valores: "7.480,00",
-    valoresSecundarios: "Líquido 6.950,30",
+    valoresSecundarios: "LÃ­quido 6.950,30",
     status: "Pendente",
   },
   {
     key: "3",
     id: "3243",
-    cliente: "Patrícia Gomes",
+    cliente: "PatrÃ­cia Gomes",
     clienteSecundario: "CPF 405.***.***-42",
     processo: "0002459-11.2026.8.26.0100",
     infosVenda: "Contrato CJ-2026-003",
-    infosSecundarias: "17/03/2026 · Antecipação",
+    infosSecundarias: "17/03/2026 Â· AntecipaÃ§Ã£o",
     valores: "3.190,00",
-    valoresSecundarios: "Líquido 2.988,90",
+    valoresSecundarios: "LÃ­quido 2.988,90",
     status: "Cancelado",
   },
   {
@@ -672,10 +672,10 @@ const transactionRows: TransactionRow[] = [
     clienteSecundario: "CPF 223.***.***-07",
     processo: "0002460-98.2026.8.26.0100",
     infosVenda: "Contrato CJ-2026-004",
-    infosSecundarias: "17/03/2026 · Portabilidade",
+    infosSecundarias: "17/03/2026 Â· Portabilidade",
     valores: "16.250,00",
-    valoresSecundarios: "Líquido 15.690,00",
-    status: "Concluído",
+    valoresSecundarios: "LÃ­quido 15.690,00",
+    status: "ConcluÃ­do",
   },
 ];
 
@@ -699,7 +699,7 @@ export const Default: Story = {
 };
 
 export const FigmaExamples: Story = {
-  name: "Figma — Examples",
+  name: "Figma â€” Examples",
   render: () => (
     <div style={surfaceStyle}>
       <div style={exampleStackStyle}>

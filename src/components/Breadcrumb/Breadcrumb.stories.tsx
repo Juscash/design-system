@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/react-vite";
+﻿import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { Breadcrumb } from "./Breadcrumb";
+import { Breadcrumb } from ".";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
@@ -22,17 +22,17 @@ const meta: Meta<BreadcrumbStoryProps> = {
       codePanel: true,
       description: {
         component: `
-Componente de Breadcrumb (migalhas de pão) para navegação hierárquica.
+Componente de Breadcrumb (migalhas de pÃ£o) para navegaÃ§Ã£o hierÃ¡rquica.
 Baseado no [Ant Design Breadcrumb](https://ant.design/components/breadcrumb).
 
-Mostra o caminho de navegação dentro do sistema, indicando a localização atual do usuário.
+Mostra o caminho de navegaÃ§Ã£o dentro do sistema, indicando a localizaÃ§Ã£o atual do usuÃ¡rio.
 
 ### Quando usar
 
-Use o breadcrumb em interfaces com múltiplos níveis de navegação (ex.: Categoria → Subcategoria → Página) para indicar ao usuário onde ele está na hierarquia de páginas e permitir retorno rápido a níveis anteriores.
+Use o breadcrumb em interfaces com mÃºltiplos nÃ­veis de navegaÃ§Ã£o (ex.: Categoria â†’ Subcategoria â†’ PÃ¡gina) para indicar ao usuÃ¡rio onde ele estÃ¡ na hierarquia de pÃ¡ginas e permitir retorno rÃ¡pido a nÃ­veis anteriores.
 
 ### Props:
-- **Extended (Ant Design)**: Props padrão do AntD Breadcrumb.
+- **Extended (Ant Design)**: Props padrÃ£o do AntD Breadcrumb.
 
 ### Como usar:
 
@@ -72,7 +72,7 @@ function Example() {
                 fontWeight: "bold",
               }}
             >
-              🎨 Figma Spec
+              ðŸŽ¨ Figma Spec
             </h3>
             <Figma showLink url={FIGMA_URL} height="400px" />
           </div>
@@ -99,7 +99,7 @@ function Example() {
 export default meta;
 type Story = StoryObj<BreadcrumbStoryProps>;
 
-/** Exemplo padrão do Figma: Home > ... > Components > **Breadcrumb** */
+/** Exemplo padrÃ£o do Figma: Home > ... > Components > **Breadcrumb** */
 export const Default: Story = {
   args: {
     items: [
@@ -118,7 +118,7 @@ export const Simple: Story = {
   },
 };
 
-/** Breadcrumb com múltiplos níveis */
+/** Breadcrumb com mÃºltiplos nÃ­veis */
 export const MultiLevel: Story = {
   args: {
     items: [

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { Switch } from "./Switch";
-import { RichSwitch } from "./RichSwitch";
+import { Switch } from ".";
+import { RichSwitch } from "../RichSwitch";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";

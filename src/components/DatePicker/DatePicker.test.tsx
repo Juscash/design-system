@@ -1,6 +1,7 @@
 import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { DatePicker, RangePicker } from "./DatePicker";
+import { DatePicker } from ".";
+import { RangePicker } from "../RangePicker";
 
 // Mock do matchMedia, necessário para componentes Ant Design
 Object.defineProperty(window, "matchMedia", {

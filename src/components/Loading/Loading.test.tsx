@@ -1,6 +1,6 @@
-import { render, screen } from "@testing-library/react";
+﻿import { render, screen } from "@testing-library/react";
 import { describe, it, expect } from "vitest";
-import { Loading } from "./Loading";
+import { Loading } from ".";
 
 describe("Loading", () => {
   it("renders correctly", () => {

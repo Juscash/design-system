@@ -1,0 +1,15 @@
+/*
+  Estilos próprios do Card. Os tokens base (sombra default, borda) ainda
+  cascateiam via `.ant-card`, definidos globalmente em `theme/global.css`.
+*/
+
+:global(.ds-card-clickable.ant-card-hoverable:hover) {
+  box-shadow: var(--shadow-m) !important;
+  border-color: var(--color-neutral-300) !important;
+}
+
+:global(.ds-card-clickable.ant-card:focus-visible) {
+  box-shadow: var(--shadow-focus) !important;
+  border-color: var(--color-neutral-300) !important;
+  outline: none !important;
+}

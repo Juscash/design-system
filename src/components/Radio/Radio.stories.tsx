@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { Radio, RadioGroup } from "./Radio";
-import { RichRadio } from "./RichRadio";
+import { Radio, RadioGroup } from ".";
+import { RichRadio } from "../RichRadio";
 
 import { designSystemColors } from "../../theme";
 

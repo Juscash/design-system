@@ -1,6 +1,6 @@
-import type { Meta, StoryObj } from "@storybook/nextjs-vite";
+﻿import type { Meta, StoryObj } from "@storybook/nextjs-vite";
 import React from "react";
-import { Skeleton } from "./Skeleton";
+import { Skeleton } from ".";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
@@ -26,11 +26,11 @@ const meta: Meta<SkeletonStoryProps> = {
       codePanel: true,
       description: {
         component: `
-Placeholder usado para indicar carregamento de conteúdo.
+Placeholder usado para indicar carregamento de conteÃºdo.
 Baseado no [Ant Design Skeleton](https://ant.design/components/skeleton).
 
 ### Props:
-- **Extended (Ant Design)**: Props padrão do AntD Skeleton.
+- **Extended (Ant Design)**: Props padrÃ£o do AntD Skeleton.
 
 ### Como usar:
 
@@ -61,7 +61,7 @@ function Example() {
                 fontWeight: "bold",
               }}
             >
-              🎨 Figma Spec
+              ðŸŽ¨ Figma Spec
             </h3>
             <Figma showLink url={FIGMA_URL} height="400px" />
           </div>
@@ -80,21 +80,21 @@ function Example() {
   argTypes: {
     loading: { control: "boolean", description: "Estado de carregamento" },
     avatar: { control: "boolean", description: "Mostra placeholder de avatar" },
-    title: { control: "boolean", description: "Mostra placeholder de título" },
-    paragraph: { control: "object", description: "Configuração do parágrafo" },
+    title: { control: "boolean", description: "Mostra placeholder de tÃ­tulo" },
+    paragraph: { control: "object", description: "ConfiguraÃ§Ã£o do parÃ¡grafo" },
     hover: {
       control: "boolean",
-      description: "Força o estado hover",
+      description: "ForÃ§a o estado hover",
       table: { category: "Pseudo States" },
     },
     active: {
       control: "boolean",
-      description: "Força o estado active",
+      description: "ForÃ§a o estado active",
       table: { category: "Pseudo States" },
     },
     focus: {
       control: "boolean",
-      description: "Força o estado focus",
+      description: "ForÃ§a o estado focus",
       table: { category: "Pseudo States" },
     },
   },
