@@ -1,93 +1,415 @@
 # CLAUDE.md
 
-This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+Este arquivo fornece orientações para o Claude Code (claude.ai/code) ao trabalhar com código neste repositório.
 
-## Monorepo layout
+O foco deste documento é manter o código **clean code** e em conformidade com as regras do agente de revisão. As regras estão materializadas neste arquivo. Quaisquer convenções legadas que conflitem com elas são consideradas obsoletas e devem ser migradas quando o arquivo for tocado.
 
-NPM Workspaces monorepo with two workspaces:
+## Primeiro passo obrigatório: carregar `.code-review.json`
 
-- `packages/design-system` — the library `@juscash/design-system` (published to **GitHub Packages**, not npm). Built with **tsup** (CJS + ESM + `.d.ts`); CSS is copied to `dist/index.css` via tsup `onSuccess`.
-- `docs` — workspace named `@juscash/storybook` (private). Storybook 10 / Next.js-Vite framework. It reads stories directly from `packages/design-system/src/**/*.stories.tsx` and aliases `@juscash/design-system` to the package's `src/` in dev and `dist/` in build (see `docs/.storybook/main.mts`).
+**Antes de qualquer outra ação no projeto**, o Claude Code deve abrir o arquivo `.code-review.json` na raiz do repositório, ler todas as regras (severidades, limites, convenções, ignores, padrões de secret, etc.) e **manter essas regras em memória durante toda a sessão**. Esse arquivo é a fonte de verdade do agente de revisão automática (`.github/scripts/code-review-agent.js`) e tem precedência sobre qualquer interpretação livre deste `CLAUDE.md`.
 
-The root `package.json` runs every multi-package command via `-w <workspace>`. There is no `apps/` directory despite stale references in `AGENTS.md`.
+Procedimento esperado em toda nova conversa, antes de propor ou aplicar mudanças:
 
-## Commands
+1. `Read` em `.code-review.json` (raiz do repo).
+2. Internalizar os campos chave: `general.*` (limites de arquivo/função, idioma de comentário), `rules.*` (severidades por categoria), `ignore.*` (caminhos não revisados).
+3. Aplicar essas regras como **gates**: se uma alteração violar uma regra `error`, ela é bloqueante e precisa ser corrigida antes de finalizar; regras `warning`/`info` viram pendências a sinalizar para o usuário.
+4. Sempre que este `CLAUDE.md` divergir do `.code-review.json`, **vence o `.code-review.json`** — sinalize a divergência para o usuário decidir se atualiza o `CLAUDE.md`.
 
-| Task | Command | Notes |
-|---|---|---|
-| Install | `npm install` | Required at the root — workspaces resolve from here. |
-| Dev | `npm run dev` | Runs Storybook on port 6006 (not Vite). `scripts/kill-port-6006.js` clears the port first. |
-| Build everything | `npm run build` | Builds the library, then `build-storybook`. |
-| Build only library | `npm run build:design-system` | |
-| Build only docs | `npm run build:docs` | `GITHUB_PAGES=true` env switches base path for Pages deploy. |
-| Test library | `npm run test -w @juscash/design-system` | Vitest watch. Append a name pattern after `--` to filter, e.g. `npm run test -w @juscash/design-system -- Button`. |
-| Test library (CI) | `npm run test:run -w @juscash/design-system` | One-shot. |
-| Test storybook | `npm run test:docs` | Runs Vitest via `@storybook/addon-vitest` + Playwright. |
-| Lint | none | Root `lint` script is a stub (`echo`). Prettier is configured (`.prettierrc`) but there is no eslint setup. |
-| Bump version | `npm run version:{patch\|minor\|major}` | Updates `packages/design-system/package.json` only — does not commit. |
-| Release | `npm run version:publish [patch\|minor\|major]` | Bumps, commits (`chore: bump ... to X.Y.Z`), tags `vX.Y.Z`, pushes both. CI takes it from there. |
+Se o arquivo não existir, avisar o usuário antes de continuar — sem ele, o agente de revisão automática (workflow `code-review-agent.yml`) aborta com exit 0 e perdemos o controle de qualidade no PR.
 
-## Release pipeline
+## Objetivo do projeto
 
-Two GitHub Actions, both in `.github/workflows/`:
+Monorepo do **Juscash Design System** — biblioteca de componentes React (`@juscash/design-system`) consumida pelos demais produtos da JusCash, mais o site de documentação interativa (Storybook) que serve de showcase e playground.
 
-- `publish.yml` — triggered by tag push `v*`. Installs only in `packages/design-system`, builds with tsup, runs `npm publish` to `https://npm.pkg.github.com`. Auth uses `GITHUB_TOKEN`. **Tests are not run in this workflow** — verify locally before tagging.
-- `deploy-docs.yml` — triggered by push to `main`. Builds DS then docs, deploys `docs/storybook-static` to GitHub Pages.
+A biblioteca é uma **camada de identidade visual sobre o Ant Design 6**: cada componente embrulha o equivalente do `antd` aplicando tokens, variantes e comportamentos próprios via `ConfigProvider` local.
 
-`version:publish` does the bump-commit-tag-push end-to-end; manual steps are echoed by `scripts/version.js` if you only want the bump.
-
-## Library architecture
-
-The library is a thin opinionated wrapper around **Ant Design 6**. The public API in `packages/design-system/src/index.ts` is in three layers:
-
-1. **Customized components** (`./components/*`) — re-exported first so they win the name collision against antd.
-2. **Theme** (`./theme/*`) — `JuscashProvider` (the top-level `ConfigProvider` with pt-BR locale, dayjs locale, and `AntdRegistry`) + design tokens (`colors`, `radius`, `shadow`, `spacing`, `breakpoints`) under `./theme/foundations/`.
-3. **Passthrough re-exports** of antd primitives that aren't customized (Layout, Form, Pagination, Tooltip, etc.). The base antd `Button` is re-exported as `AntButton` so it stays accessible. `LucideIcons` is re-exported as a namespace from `lucide-react`.
-
-**CSS:** `src/theme/global.css` is copied to `dist/index.css` at build time. Consumers must import it: `import "@juscash/design-system/dist/index.css"`. Storybook handles this via the preview decorator.
-
-**Externals (tsup):** `react`, `react-dom`, `antd`, `@ant-design/cssinjs` — these stay as peer deps so consumers' antd version is used.
-
-## Component pattern (important when adding/editing)
-
-Each customized component lives in `packages/design-system/src/components/<Name>/` with four files:
+## Estrutura do monorepo
 
 ```
-<Name>.tsx          // implementation
-<Name>.stories.tsx  // CSF3 stories
-<Name>.test.tsx     // Vitest + Testing Library
-index.ts            // export * from "./<Name>"
+design-system/
+├── packages/
+│   └── design-system/        # @juscash/design-system — biblioteca publicada
+│       ├── src/
+│       │   ├── components/   # Componentes UI (wrappers do antd)
+│       │   ├── theme/        # Provider, tokens, global.css
+│       │   └── index.ts      # API pública do pacote
+│       ├── tsup.config.ts    # Build (ESM + CJS + d.ts + css)
+│       └── vitest.config.ts  # Testes unitários (jsdom)
+├── docs/                     # @juscash/storybook — showcase/playground
+│   └── .storybook/           # Config do Storybook (preview, main, theme)
+├── scripts/                  # Versionamento, publicação, utilitários
+├── documentacao/             # Guias internos (instalação, criação)
+└── .github/workflows/        # publish.yml, deploy-docs.yml
 ```
 
-The Juscash style is applied **per-instance** by wrapping the antd primitive in a local `ConfigProvider` with token overrides — not globally. See `Button.tsx` for the canonical pattern: each variant has its own `getXxxTokens(): Partial<ButtonToken>` function returning antd component-level tokens, and the render path does:
+NPM Workspaces orquestra `packages/*` e `docs`. Todo trabalho de componente acontece dentro de `packages/design-system/src`.
 
-```tsx
-<ConfigProvider theme={{ components: { Button: { ...tokens, ...sizeTokens } } }}>
-  <AntdButton type={antdType} ... />
-</ConfigProvider>
+## Stack obrigatória
+
+Use apenas as bibliotecas já previstas no projeto:
+
+- **React** 18/19 (peer)
+- **TypeScript** ^5.6
+- **Ant Design 6** (`antd`) — base técnica de todo componente
+- **`@ant-design/cssinjs`** e **`@ant-design/nextjs-registry`** — integração de estilos no SSR de consumidores Next.js
+- **Lucide React** (`lucide-react`) — único provedor de ícones
+- **dayjs** (+ locale `pt-br`) — datas/locale para componentes do antd
+- **Tsup** — build da biblioteca (ESM + CJS + d.ts)
+- **Storybook 10** (`@storybook/nextjs-vite`) + addons `addon-docs`, `addon-a11y`, `addon-designs`, `addon-vitest`, `storybook-addon-pseudo-states` — docs e playground
+- **Vitest** + **Testing Library** + **jsdom** — testes unitários da biblioteca
+- **Playwright** (via `@vitest/browser-playwright`) — testes em navegador disparados pelo addon-vitest do Storybook
+- **react-slick** + **slick-carousel** — dependências do componente `Carousel`
+
+Não adicione bibliotecas externas sem necessidade real e sem justificativa técnica clara. Se for indispensável, declare como `peerDependency` quando fizer sentido (a biblioteca já trata `react` e `react-dom` assim) para evitar duplicação no consumidor.
+
+## Comandos de build e desenvolvimento
+
+Executar na raiz do monorepo:
+
+```bash
+npm install                  # instala workspaces (lib + docs)
+npm run dev                  # libera porta 6006 e sobe Storybook
+npm run build                # build da lib (tsup) + build do Storybook
+npm run build:design-system  # build apenas da biblioteca
+npm run build:docs           # build apenas do Storybook
+npm run test:docs            # roda os testes do Storybook (Playwright headless)
+npm run start                # serve o Storybook estático (após build)
 ```
 
-When adding a new variant or component, follow this token-override pattern rather than CSS overrides. Pull color/radius/spacing/shadow values from `../../theme` (foundations) instead of hardcoding hex/px.
+Comandos internos do workspace da biblioteca:
 
-**Pseudo-focus class:** the `pseudo-focus-visible` / `pseudo-focus` className (from `storybook-addon-pseudo-states`) is checked at runtime to apply `shadow.focus` as `boxShadow`. This is so the addon's "show focus state" toggle works in Storybook — keep the check when copying the Button pattern.
+```bash
+npm run build    -w @juscash/design-system   # tsup
+npm run dev      -w @juscash/design-system   # tsup --watch
+npm run test     -w @juscash/design-system   # vitest (watch)
+npm run test:run -w @juscash/design-system   # vitest run (uma rodada)
+npm run clean    -w @juscash/design-system   # rimraf dist
+```
 
-## Testing
+> O script `lint` na raiz é placeholder (`echo "no lint configured"`). Não há ESLint configurado ainda; a verificação de qualidade roda via `npm run build` (que aciona o `tsup` com `dts: true`, gerando types e falhando em erros de tipo) e via `npm run test:run` dentro do pacote.
 
-- Runner: **Vitest 4** + jsdom. Setup in `packages/design-system/vitest.setup.ts` (just `@testing-library/jest-dom/vitest`).
-- Match pattern: `src/**/*.test.{ts,tsx}`.
-- Single file/test: pass a name filter after `--`, e.g. `npm run test:run -w @juscash/design-system -- Button.test`.
-- Storybook tests are a separate Vitest project under `docs/` using `@storybook/addon-vitest` + Playwright browser mode.
+## Variáveis de ambiente
 
-## Conventions
+- **`GITHUB_TOKEN`** (ou PAT com `read:packages`) — necessário para `npm install` quando o pacote é consumido por outro projeto, pois `@juscash/design-system` é publicado no **GitHub Packages**. O `.npmrc` do consumidor deve apontar o escopo `@juscash` para `https://npm.pkg.github.com` e ler o token via env var. **Nunca comitar token em texto plano** — use variável de ambiente.
+- **`NODE_AUTH_TOKEN`** — usado pelo workflow `publish.yml` para autenticar na publicação (injetado automaticamente como `${{ secrets.GITHUB_TOKEN }}`).
+- **`GITHUB_PAGES=true`** — flag usada apenas no workflow `deploy-docs.yml` durante o build do Storybook para gerar paths corretos para GitHub Pages.
 
-- **Conventional Commits** — `chore: bump @juscash/design-system to X.Y.Z` is auto-generated; the rest of the history is freer (`fix:`, `chore:`).
-- **Prettier**: `printWidth: 130`, `experimentalTernaries: true`, `experimentalOperatorPosition: "start"`, double quotes, trailing commas.
-- **Locale**: components ship pt-BR strings via `JuscashProvider` (e.g., the Table sort tooltips are overridden in Portuguese). Don't introduce hardcoded English copy.
-- **Icons**: use `lucide-react` only — antd's icon package isn't a dependency.
+Não comitar `.env` real (já no `.gitignore`). Se uma nova variável aparecer, espelhe em `.env.example` para o agente de revisão validar.
 
-## Side directories
+## Design System: padrão de componente
 
-- `.context/` — agent playbooks, skill definitions, architectural docs. Reference material for agents; not consumed by the build.
-- `.changeset/` — changesets is configured (`config.json`) but the active release flow uses the `scripts/version*.js` path; changesets isn't currently wired to CI.
-- `documentacao/` — internal Portuguese docs (Confluence exports, install/creation guides). Edit when adding user-facing docs.
-- `assets/`, `JS-2050.txt`, `prompt.md` — legacy reference material, not part of the build.
+**Toda UI é construída embrulhando o componente equivalente do `antd` com tokens e props proprietárias.** O `antd` nunca é exposto cru: o consumidor importa de `@juscash/design-system`.
+
+### Anatomia esperada
+
+Para cada componente novo:
+
+1. **Pasta** em `PascalCase` em `packages/design-system/src/components/<Nome>/`.
+2. **Implementação**: arquivo `index.tsx` dentro da pasta, exportando o componente.
+3. **Re-export**: a pasta deve ter um `index.ts` quando o componente estiver em outro arquivo; quando a implementação já estiver em `index.tsx`, dispensa o re-export.
+4. **Tipos**: declarados em arquivo separado conforme a seção _TypeScript_ abaixo.
+5. **Stories**: arquivo `<Nome>.stories.tsx` colocado na pasta — convenção do Storybook exige nome único para localizar os stories via glob (`**/*.stories.@(js|jsx|mjs|ts|tsx)`).
+6. **Testes**: arquivo `<Nome>.test.tsx` colocado na pasta — convenção do Vitest exige nome único.
+7. **CSS scoped** (opcional): `index.module.css` na própria pasta — ver seção _Estilos_.
+8. **Export público**: adicionar `export * from "./<Nome>"` em `packages/design-system/src/components/index.ts`.
+
+### Princípios de implementação
+
+- **Estender props do antd, nunca reduzir.** O tipo de props deve combinar `Omit` dos campos que você customiza + suas próprias props proprietárias:
+
+  ```tsx
+  type CleanAntdProps = Omit<AntdButtonProps, "type" | "size">;
+  export type ButtonProps = CleanAntdProps & {
+    variant?: "primary" | "secondary" | "outline" | "ghost" | "destructive";
+    size?: "xs" | "s" | "m";
+  };
+  ```
+
+- **Isolar identidade visual via `ConfigProvider` local.** Cada componente envolve o equivalente do `antd` em `<ConfigProvider theme={{ components: { Foo: tokens } }}>`. Isso permite que o consumidor use o componente sem precisar de um provider global e impede vazamento de tema.
+
+- **Usar tokens, não literais.** Importe `designSystemColors`, `spacing`, `radius`, `shadow`, `breakpoints` de `../../theme` e passe-os aos tokens do antd. Sem hex hardcoded, sem pixels mágicos.
+
+- **`displayName` em todo componente exportado**: `Button.displayName = "Button"`. Facilita debug no React DevTools e no Storybook autodocs.
+
+- **`lucide-react` é o único provedor de ícones.** Não desenhe SVGs custom se houver equivalente no Lucide; não importe ícones de outras libs.
+
+### Theme e tokens
+
+A camada de tema vive em `packages/design-system/src/theme/`:
+
+- `JuscashProvider.tsx` — wrapper que junta `AntdRegistry` + `ConfigProvider` com `colorPrimary` e locale `pt_BR`. Exportado para o consumidor envolver a app.
+- `foundations/` — fonte de verdade dos tokens em TS: `colors.ts`, `spacing.ts`, `radius.ts`, `shadow.ts`, `breakpoints.ts`. Cada um exporta o objeto `as const` + o tipo derivado (`typeof`).
+- `global.css` — define as **CSS variables** (`--color-*`, `--spacing-*`, `--radius-*`, `--shadow-*`, `--font-*`) e os overrides obrigatoriamente globais de classes nativas do antd (`.ant-*`). Essas variáveis são lidas pelos `index.module.css` dos componentes.
+
+> **Importante:** `theme/global.css` só existe para coisas que **precisam** ser globais — definição das CSS variables e overrides em seletores do antd que não podem ser escopados via CSS Modules. Estilos próprios da camada Juscash devem ir para `index.module.css` colocado junto do componente (ver seção _Estilos_).
+
+## Convenções de nomenclatura
+
+- **Padrão geral:** `camelCase` para variáveis, funções, parâmetros, hooks e utils.
+- **Constantes globais:** `UPPER_SNAKE_CASE`.
+- **Types, interfaces e componentes:** `PascalCase`.
+
+### Estrutura de arquivos e pastas
+
+**Todo arquivo TypeScript/TSX criado no projeto se chama `index.ts` ou `index.tsx`.** O casing das convenções de nomenclatura aplica-se ao **nome da pasta** que contém o `index`. A única exceção são arquivos cujo nome é exigido por ferramenta externa: `<Nome>.stories.tsx` (Storybook) e `<Nome>.test.tsx` (Vitest) podem coexistir na mesma pasta.
+
+- **Componentes:** pasta em `PascalCase` → `packages/design-system/src/components/Button/index.tsx`.
+- **Hooks:** pasta em `camelCase` com prefixo `use` → `packages/design-system/src/hooks/useFoo/index.ts`.
+- **Utils:** pasta em `camelCase` → `packages/design-system/src/utils/formatDateTime/index.ts`.
+- **Constantes:** pasta em `camelCase` → `packages/design-system/src/constants/foo/index.ts`.
+- **Tipos:** estrutura espelhada em `packages/design-system/src/types/{components,hooks,utils,theme}/<Name>/index.ts`.
+
+Nunca crie arquivos como `Button.tsx`, `useFoo.ts`, `button.types.ts`. Use sempre uma pasta nomeada com o símbolo, contendo `index.ts(x)`. Stories e tests são a única exceção e ficam dentro da própria pasta do símbolo.
+
+## TypeScript
+
+- **Proibido `any`.** Use tipos explícitos, genéricos ou `unknown` quando o tipo for desconhecido.
+- **Tipos de retorno explícitos** em funções e componentes exportados (ex.: `function Button(props: ButtonProps): React.ReactElement`).
+- **Tipos em arquivo separado da implementação.** Toda tipagem vive em `packages/design-system/src/types/{components,hooks,utils,theme}/<Name>/index.ts`. Não declare props/tipos dentro do `index.tsx` do componente. Não use arquivos sufixados com `*.types.ts`.
+- **Sempre importe tipos com `import type`** — o build com `tsup --dts` é estrito quanto a isso e evita imports de runtime desnecessários.
+
+Componentes importam suas props a partir de `src/types`:
+
+```ts
+import type { ButtonProps } from "../../types/components/Button";
+```
+
+O `tsconfig.base.json` força `strict: true`, `isolatedModules: true`, `forceConsistentCasingInFileNames: true` — ou seja, qualquer regressão de tipo aparece no `npm run build`.
+
+## Imports
+
+Dentro do pacote, prefira imports relativos **rasos** entre módulos vizinhos. O monorepo não tem alias `@/` configurado no `tsconfig.base.json`, e o build (`tsup`) é executado a partir de `src/` — manter os imports relativos curtos é o que mantém o pacote portável e o tree-shaking previsível.
+
+```ts
+// correto (dentro do pacote @juscash/design-system)
+import { designSystemColors, spacing } from "../../theme";
+import { Tooltip } from "../Tooltip";
+import type { ButtonProps } from "../../types/components/Button";
+
+// incorreto
+import { designSystemColors } from "../../../../theme"; // cadeia profunda demais — recolocar o arquivo
+import { Button } from "antd"; // não importe antd direto na app pública
+```
+
+Já no consumidor externo, o caminho é sempre `@juscash/design-system`:
+
+```ts
+import { Button, Card, JuscashProvider, designSystemColors } from "@juscash/design-system";
+import "@juscash/design-system/dist/index.css";
+```
+
+**Nunca importe `antd` diretamente em código publicável** — quebra a aplicação da identidade visual. O `antd` é dependência transitiva exposta através do barrel `packages/design-system/src/index.ts`.
+
+## Componentes React
+
+- **Um componente por pasta** (`index.tsx`).
+- **Sem regra de negócio em componentes.** Componentes do design-system são primitivos visuais — não conhecem domínio, não falam com API, não tocam storage.
+- **Hooks em arquivos separados** dos componentes. Se um componente precisa de hook próprio, vive em `<Componente>/hooks/use<Nome>/index.ts`.
+- **Hooks têm prefixo `use`.**
+- **Máximo 8 props por componente.** Se ultrapassar, divida em subcomponentes ou em padrões de composição (slots).
+
+Adicionalmente:
+
+- Componentes visuais preferem composição (`children`, slots) a props booleanas que ramificam comportamento.
+- Sempre encerre com `Component.displayName = "Component"`.
+- O componente deve aceitar pelo menos `className` e `style` quando o equivalente do antd aceita, para não cortar o consumidor.
+
+## Hooks
+
+- Pasta em `camelCase` começando com `use`, contendo `index.ts`: `useDebounce/index.ts`, `useControlledState/index.ts`.
+- Retorno e parâmetros tipados (tipos em `src/types/hooks/<Nome>/index.ts` quando exportados publicamente).
+- Responsabilidade única.
+- **Específicos de um componente:** ficam junto, em `<Componente>/hooks/use<Nome>/index.ts`.
+- **Reutilizados por múltiplos componentes:** sobem para `packages/design-system/src/hooks/use<Nome>/index.ts`. Não promova preventivamente — só quando o reuso for real.
+
+## Utils
+
+Utils ficam em `packages/design-system/src/utils/<nome>/index.ts`, com a pasta em `camelCase`. Apenas **funções puras e reutilizáveis**. Sem JSX, sem estado React, sem regra específica de componente. Útil para coisas como `clamp`, `mergeStyles`, `getContrastColor`, helpers de token, etc.
+
+## Constantes
+
+Constantes compartilhadas ficam em `packages/design-system/src/constants/<grupo>/index.ts`. Use `UPPER_SNAKE_CASE` para constantes globais.
+
+**Sem números mágicos.** Extraia valores literais para constantes nomeadas ou para tokens (`spacing`, `radius`, etc.). Exceções permitidas: `-1, 0, 1, 2, 100, 1000`. Tudo que vier do design (tamanhos, alturas, paddings) vai para `theme/foundations` — nunca hardcoded no componente.
+
+## Comentários e docstrings
+
+- **Idioma:** comentários e JSDoc em **pt-BR**.
+- **JSDoc obrigatório** em funções exportadas e em funções com lógica não trivial (variantes, mapas de token, parsers).
+- **`TODO` sem referência clara** (issue, ticket ou motivo) é sinalizado.
+- **Código comentado** é sinalizado — não deixe trechos comentados no projeto.
+
+Código, nomes de pastas, arquivos, variáveis, funções, classes e exports ficam em **inglês**. Apenas comentários e docstrings em pt-BR.
+
+## Estilos (CSS)
+
+- **Proibido CSS global novo.** Toda regra de estilo nova vive em um arquivo `index.module.css` colocado na pasta do componente que a consome. Use a importação default do CSS Module (`import styles from "./index.module.css"`) e acesse via `styles.<className>`.
+- **`theme/global.css` é zona reservada.** Só entram lá: (1) definição das CSS variables (`--color-*`, `--spacing-*`, etc.) e (2) overrides de seletores nativos do antd (`.ant-*`, `.ant-picker-*`, etc.) que não podem ser escopados via CSS Module. Qualquer classe própria da camada Juscash (`.ds-*`, `.juscash-*`, `.rich-*`) deve migrar para o `index.module.css` do componente correspondente quando o componente for tocado.
+- **Estilo reutilizado em mais de um lugar vira componente.** Se um padrão visual (botão custom, card, badge, layout, etc.) aparecer em dois ou mais arquivos, **não** duplique o CSS nem extraia para um CSS global — extraia um componente reutilizável em `packages/design-system/src/components/<Nome>/index.tsx` com seu próprio `index.module.css`. Os consumidores passam a importar o componente, não o CSS.
+- **Use os tokens** (`designSystemColors`, `spacing`, `radius`, `shadow`, `breakpoints`) ou as CSS variables (`var(--color-neutral-300)`, `var(--spacing-4)`, etc.) dentro do `index.module.css` em vez de valores literais.
+- **Evite estilos inline extensos.** Estilos inline são aceitáveis apenas para valores dinâmicos calculados em runtime que não cabem em um seletor (ex.: `style={{ height: dynamicHeight }}`).
+- **Sem CSS duplicado entre módulos.** Se aparecer, extraia componente (ver regra acima).
+
+Estrutura típica de um componente:
+
+```
+packages/design-system/src/components/Button/
+  index.tsx
+  index.module.css
+  Button.stories.tsx
+  Button.test.tsx
+```
+
+## Stories (Storybook)
+
+Toda alteração visual ou nova variante deve estar refletida no Storybook. Padrões esperados:
+
+- **Localização:** `<Componente>/<Nome>.stories.tsx` (o glob do Storybook em `docs/.storybook/main.mts` aponta para `packages/design-system/src/**/*.stories.@(js|jsx|mjs|ts|tsx)`).
+- **`title`:** `"Components/<Nome>"` (ou outra categoria — veja `addon-docs/blocks` para subcategorias).
+- **`tags: ["autodocs"]`** para gerar a aba _Docs_ automaticamente.
+- **`parameters.design`** apontando para o node do Figma (`type: "figma"`, `url: "..."`). Isso ativa o `@storybook/addon-designs/blocks` no painel.
+- **`parameters.docs.description.component`** com uma descrição em pt-BR contendo: link para a doc do antd correspondente, props proprietárias, exemplo de uso copiável.
+- **Cobertura mínima:** uma story `Default`, uma story por variante proprietária (`type`/`variant`/`size`), e uma `Playground` controlada por args.
+- **Pseudo-estados:** quando o componente tem hover/focus/active estilizados, use `storybook-addon-pseudo-states` para expor esses estados como controles (ex.: `pseudo-focus-visible`).
+
+Antes de mergear, abra o Storybook (`npm run dev`) e valide a story na aba _Docs_ — controles devem refletir todas as variantes; estados de erro/disabled devem estar visíveis.
+
+## Testes
+
+Toda alteração de comportamento ou nova lógica deve estar coberta. Padrões esperados:
+
+- **Localização:** `<Componente>/<Nome>.test.tsx` (Vitest acha pelo padrão `src/**/*.test.{ts,tsx}`).
+- **Stack:** Vitest + `@testing-library/react` + `@testing-library/jest-dom` (matchers via `vitest.setup.ts`).
+- **Cobertura mínima:** renderização da variante default, todas as variantes proprietárias, estados `disabled` / `error` / `loading` quando existirem, callbacks (`onClick`, `onChange`) e classNames/atributos que o componente promete.
+- **Rodar local:** `npm run test:run -w @juscash/design-system` antes de commitar.
+- **Testes do Storybook (Playwright):** `npm run test:docs` na raiz roda as stories em browser headless via `@storybook/addon-vitest`. Use para regressão visual e a11y; configurações em `docs/vitest.config.ts`.
+
+## Limites duros
+
+- **Arquivo:** máximo **300 linhas** (excluindo `<Nome>.stories.tsx` e `<Nome>.test.tsx`).
+- **Função:** máximo **50 linhas**.
+- **Parâmetros por função:** máximo **4**.
+- **Props por componente:** máximo **8**.
+- **Complexidade ciclomática por função:** máximo **10**.
+- **Sem ternários aninhados.**
+
+Componentes que ultrapassam o limite de linhas devem ser quebrados em subcomponentes ou ter mapas de tokens extraídos para `utils/` ou para `theme/foundations/`.
+
+## Qualidade de código
+
+- Sem `console.log` em código de produção.
+- Sem `debugger`.
+- Sem números mágicos (exceto `-1, 0, 1, 2, 100, 1000`).
+- Sem ternários aninhados.
+- Sem `any` desnecessário.
+- Sem código comentado.
+- Sem imports mortos.
+- Sem duplicação óbvia.
+- Sem regra de negócio em componentes.
+- Componentes sempre encerram com `displayName`.
+
+`tsconfig.json` do pacote força `strict`, e o `tsup` com `dts: true` gera os tipos no build — o build quebra com imports/parâmetros não usados ou erro de tipo.
+
+## Verificação antes de finalizar
+
+Antes de finalizar qualquer alteração:
+
+```bash
+npm run build:design-system                # tsup com dts: faz type-check e gera artefatos
+npm run test:run -w @juscash/design-system # testes da biblioteca
+npm run build:docs                         # garante que o Storybook compila com a alteração
+```
+
+Se mudou comportamento visual, suba o Storybook (`npm run dev`) e valide a story do componente alterado.
+
+## Padrão esperado para novas entregas
+
+1. Criar ou atualizar tipos em `packages/design-system/src/types/.../<Name>/index.ts`.
+2. Criar componente, hook ou util em pasta própria com `index.ts(x)` dentro.
+3. Adicionar `index.module.css` colocado quando houver estilo próprio; usar tokens/CSS variables em vez de literais.
+4. Adicionar/atualizar `<Nome>.stories.tsx` cobrindo Default + variantes proprietárias + Playground, com link do Figma em `parameters.design`.
+5. Adicionar/atualizar `<Nome>.test.tsx` cobrindo render, variantes, estados e callbacks.
+6. Re-exportar em `packages/design-system/src/components/index.ts` (ou no barrel correspondente).
+7. Manter funções ≤ 50 linhas, arquivos ≤ 300 linhas, props ≤ 8, parâmetros ≤ 4.
+8. Sem `any`, sem `console.log`, sem `debugger`, sem código comentado.
+9. JSDoc em pt-BR para funções exportadas.
+10. Rodar `npm run build:design-system`, `npm run test:run -w @juscash/design-system` e `npm run build:docs`.
+
+## Arquivos ignorados pelo agente de revisão
+
+Os caminhos abaixo **não** são revisados:
+
+- `*.test.ts`, `*.spec.ts`, `*.test.tsx`, `*.spec.tsx`
+- `**/__tests__/**`
+- `**/*.stories.tsx`, `**/*.stories.ts`
+- `**/migrations/**`, `**/generated/**`
+- `**/dist/**`, `**/build/**`, `**/.next/**`, `**/storybook-static/**`
+- `**/node_modules/**`
+- `package-lock.json`, `yarn.lock`, `*.lock`
+
+Configuração do agente vive em `.github/workflows/code-review-agent.yml` e `.github/scripts/code-review-agent.js`.
+
+## Arquitetura
+
+### Composição global e provider
+
+`packages/design-system/src/theme/JuscashProvider.tsx` é o componente que o consumidor envolve em volta da app. Internamente:
+
+1. **`AntdRegistry`** (`@ant-design/nextjs-registry`) — extrai o CSS-in-JS do antd no SSR (apps Next.js no App Router).
+2. **`ConfigProvider`** (`antd`) — aplica o tema base (`colorPrimary` da brand primary 400, fontFamily `--font-primary`) e o locale `pt_BR` customizado (com overrides em `Table` para textos de ordenação).
+3. **`dayjs.locale("pt-br")`** — chamado no módulo para garantir que os componentes de data renderizem em pt-BR.
+
+O consumidor pode passar `themeOverride` para sobrescrever tokens pontuais, que são merged sobre o tema base.
+
+### Camadas e fluxo
+
+| Camada                    | Localização                                                            |
+| ------------------------- | ---------------------------------------------------------------------- |
+| Foundation tokens (TS)    | `packages/design-system/src/theme/foundations/*.ts`                    |
+| Theme provider            | `packages/design-system/src/theme/JuscashProvider.tsx`                 |
+| CSS variables + overrides | `packages/design-system/src/theme/global.css`                          |
+| Componentes UI            | `packages/design-system/src/components/<Nome>/index.tsx`               |
+| API pública (barrel)      | `packages/design-system/src/index.ts`                                  |
+| Showcase                  | `docs/.storybook/` + stories colocadas em `packages/.../*.stories.tsx` |
+| Automação/scripts         | `scripts/`                                                             |
+
+`packages/design-system/src/index.ts` é a única fronteira pública. Tudo que precisa ser usado por consumidores externos passa por aqui — inclusive re-exports controlados do `antd` (componentes que a biblioteca aceita "passar adiante" como `Form`, `Modal`, `Drawer`, `Popover`, etc.) e o agregador `LucideIcons` (`export * as LucideIcons from "lucide-react"`).
+
+### Build da biblioteca (tsup)
+
+`packages/design-system/tsup.config.ts` produz, a partir de `src/index.ts`:
+
+- `dist/index.js` (CJS) e `dist/index.mjs` (ESM)
+- `dist/index.d.ts` (types — `dts: true`)
+- `dist/index.css` (cópia do `src/theme/global.css` via hook `onSuccess`)
+- `dist/*.map` (sourcemaps)
+
+`react`, `react-dom`, `antd` e `@ant-design/cssinjs` ficam como **external** — o consumidor é quem provê. `treeshake: true` + `splitting: false` mantém o bundle previsível.
+
+O arquivo CSS é exposto pelo `package.json` em `"./dist/index.css": "./dist/index.css"` e deve ser importado pelo consumidor (ex.: `import "@juscash/design-system/dist/index.css"`). O `JuscashProvider` carrega `antd/dist/reset.css` internamente.
+
+### Storybook (docs/)
+
+`docs/.storybook/main.mts` configura o Storybook com `@storybook/nextjs-vite`. Em **DEVELOPMENT** os aliases apontam para `packages/design-system/src` (hot reload do código fonte); em **build** apontam para `packages/design-system/dist` (bundle real). `AntdRegistryMock` evita problemas do `nextjs-registry` fora de um app Next real.
+
+`docs/.storybook/preview.ts` envolve toda story em `<JuscashProvider>`, define o locale e configura viewports (mobile/tablet/desktop) e o addon `a11y` em modo `todo`.
+
+### Publicação da biblioteca
+
+Acionada por **tag git** `v*` via `.github/workflows/publish.yml`. Fluxo:
+
+1. `npm run version:patch|minor|major` — atualiza `packages/design-system/package.json` (`scripts/version.js`).
+2. `npm run version:publish` — `scripts/version-publish.js` faz `git add` + commit (`chore: bump @juscash/design-system to vX.Y.Z`) + cria tag local + `git push --tags`.
+3. O workflow `publish.yml` é disparado pela tag: builda com `tsup` e publica em **GitHub Packages** (`https://npm.pkg.github.com`, escopo `@juscash`) usando `NODE_AUTH_TOKEN` injetado pelo Actions.
+
+Não publique manualmente — sempre use os scripts. Se precisar reverter, faça nova tag patch acima da última, não despublique.
+
+### Deploy do Storybook (GitHub Pages)
+
+Workflow `.github/workflows/deploy-docs.yml`. Dispara automaticamente em `push` ou `merge` na branch `main`:
+
+1. Builda a biblioteca (`npm run build:design-system`).
+2. Builda o Storybook (`npm run build:docs` com `GITHUB_PAGES=true`).
+3. Faz upload de `docs/storybook-static` para o ambiente do GitHub Pages.
+
+Se alterou um componente e quer que apareça no site, é só dar push para `main`. Se quer que outros projetos consumam a alteração, **precisa publicar** (seção acima) — o site reflete o código de `main`, não a última versão publicada do pacote.
