@@ -38,6 +38,13 @@ const preview: Preview = {
     options: {
       storySort: {
         method: "alphabetical",
+        order: [
+          "Fundamentos",
+          ["Visão Geral", "Cores", "Tipografia", "Espaçamento", "Bordas", "Sombras", "Breakpoints", "Container", "Aspect Ratio"],
+          "Components",
+          ["Visão Geral", "*"],
+          "*",
+        ],
       },
     },
 
