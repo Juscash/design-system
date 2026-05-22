@@ -15,6 +15,9 @@ const designSystemCssDist = resolve(rootDir, "dist/index.css");
 const config: StorybookConfig = {
   stories: ["../src/**/*.stories.@(js|jsx|mjs|ts|tsx)"],
 
+  // Serve a pasta da logo em /assets/* (usado pelo brandImage do tema do manager).
+  staticDirs: [{ from: "../src/theme/logo", to: "/assets" }],
+
   addons: [
     getAbsolutePath("@storybook/addon-links"),
     getAbsolutePath("@storybook/addon-docs"),

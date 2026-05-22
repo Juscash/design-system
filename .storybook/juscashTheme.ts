@@ -3,6 +3,7 @@ import { create } from "storybook/theming";
 export default create({
   base: "light",
   brandTitle: "Juscash Design System",
+  brandImage: "/assets/logo-full.svg",
   brandUrl: "https://juscash.com.br",
   brandTarget: "_self",
 
