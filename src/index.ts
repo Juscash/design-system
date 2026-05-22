@@ -23,11 +23,10 @@ export {
   Flex,
   Form,
   type FormProps,
+
   // Navegação
   Menu,
   type MenuProps,
-  Breadcrumb,
-  type BreadcrumbProps,
   Pagination,
   type PaginationProps,
   Steps,
@@ -42,8 +41,6 @@ export {
   type TreeSelectProps,
   Cascader,
   type CascaderProps,
-  DatePicker,
-  type DatePickerProps,
   TimePicker,
   type TimePickerProps,
   Calendar,
@@ -67,12 +64,6 @@ export {
   type TreeProps,
   Timeline,
   type TimelineProps,
-  Collapse,
-  type CollapseProps,
-  Carousel,
-  type CarouselProps,
-  Avatar,
-  type AvatarProps,
   Descriptions,
   type DescriptionsProps,
   Empty,
@@ -81,22 +72,12 @@ export {
   type ImageProps,
   List,
   type ListProps,
-  Popover,
-  type PopoverProps,
   Statistic,
   type StatisticProps,
-  Skeleton,
-  type SkeletonProps,
   QRCode,
   type QRCodeProps,
 
   // Feedback
-  Alert,
-  type AlertProps,
-  Drawer,
-  type DrawerProps,
-  Modal,
-  type ModalProps,
   message,
   notification,
   Popconfirm,
@@ -117,14 +98,41 @@ export {
   type BackTopProps,
   Dropdown,
   type DropdownProps,
-  Tooltip,
-  type TooltipProps,
   Tour,
   type TourProps,
   Watermark,
   type WatermarkProps,
 } from "antd";
 
-export { Button as AntButton, type ButtonProps as AntButtonProps } from "antd";
+// Pass-through dos componentes do Antd cujo nome colide com componentes
+// proprietários do design system. Renomeados com prefixo `Ant` para que o
+// consumidor possa usar o original do Antd quando precisar de comportamento
+// 1:1 sem a camada de identidade visual.
+export {
+  Alert as AntAlert,
+  type AlertProps as AntAlertProps,
+  Avatar as AntAvatar,
+  type AvatarProps as AntAvatarProps,
+  Breadcrumb as AntBreadcrumb,
+  type BreadcrumbProps as AntBreadcrumbProps,
+  Button as AntButton,
+  type ButtonProps as AntButtonProps,
+  Carousel as AntCarousel,
+  type CarouselProps as AntCarouselProps,
+  Collapse as AntCollapse,
+  type CollapseProps as AntCollapseProps,
+  DatePicker as AntDatePicker,
+  type DatePickerProps as AntDatePickerProps,
+  Drawer as AntDrawer,
+  type DrawerProps as AntDrawerProps,
+  Modal as AntModal,
+  type ModalProps as AntModalProps,
+  Popover as AntPopover,
+  type PopoverProps as AntPopoverProps,
+  Skeleton as AntSkeleton,
+  type SkeletonProps as AntSkeletonProps,
+  Tooltip as AntTooltip,
+  type TooltipProps as AntTooltipProps,
+} from "antd";
 
 export * as LucideIcons from "lucide-react";
