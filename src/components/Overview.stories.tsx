@@ -68,7 +68,11 @@ const categories: Category[] = [
     items: [
       { name: "Card", description: "Contêiner elevado para agrupar conteúdo.", icon: IconCard },
       { name: "Collapse", description: "Sanfona expansível para conteúdo agrupado.", icon: IconCollapse },
-      { name: "PageHeader", description: "Cabeçalho de página com título, breadcrumbs e ações.", icon: IconPageHeader },
+      {
+        name: "PageHeader",
+        description: "Cabeçalho de página com título, descrição opcional e slot de ações responsivo.",
+        icon: IconPageHeader,
+      },
     ],
   },
   {
