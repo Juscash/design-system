@@ -175,10 +175,11 @@ o ecossistema. Mitigado por:
 
 ## 7. Props proprietárias
 
-| Prop       | Tipo      | Default | Descrição                                                                    |
-| ---------- | --------- | ------- | ---------------------------------------------------------------------------- |
-| `error`    | `boolean` | `false` | Aplica a paleta vermelha (`feedback.red.500`) na borda/fundo/sombra de foco. |
-| `truncate` | `boolean` | `false` | Trunca o label com `...` quando o texto excede a largura do container.       |
+| Prop       | Tipo               | Default                         | Descrição                                                                                                        |
+| ---------- | ------------------ | ------------------------------- | ---------------------------------------------------------------------------------------------------------------- |
+| `error`    | `boolean`          | `false`                         | Aplica a paleta vermelha (`feedback.red.500`) na borda/fundo/sombra de foco.                                     |
+| `truncate` | `boolean`          | `false`                         | Trunca o label com `...` quando o texto excede a largura disponível.                                              |
+| `width`    | `number \| string` | `undefined` (240 com `truncate`)| Limita a largura máxima do wrapper. Number = pixels; string = qualquer valor CSS (`"50%"`, `"30ch"`, `"240px"`). |
 
 ### 7.1. Estados e prop `error`
 
