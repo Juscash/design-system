@@ -91,6 +91,15 @@ function Example() {
       control: "boolean",
       description: "Desabilita a interação com o componente",
     },
+    truncate: {
+      control: "boolean",
+      description: "Aplica `...` no label quando o texto ultrapassa a largura disponível.",
+    },
+    width: {
+      control: { type: "number" },
+      description:
+        "Largura máxima do wrapper. Number = pixels; string = qualquer valor CSS. Default `240` quando `truncate=true`.",
+    },
     focus: {
       control: "boolean",
       description: "Força o estado focus (visual)",
@@ -168,6 +177,35 @@ export const ErrorFocus: Story = {
     focus: true,
     error: true,
     checked: false,
+  },
+};
+
+export const Truncate: Story = {
+  args: {
+    truncate: true,
+    children: "Texto de label bem mais longo que o limite imposto pelo width para forçar o ellipsis",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "`truncate=true` sem `width` explícito usa o default `240` (240px).",
+      },
+    },
+  },
+};
+
+export const TruncateWidthCustom: Story = {
+  args: {
+    truncate: true,
+    width: 160,
+    children: "Texto de label mais longo que 160px",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "`width=160` sobrescreve o default 240.",
+      },
+    },
   },
 };
 

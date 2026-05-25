@@ -17,7 +17,6 @@
 :root {
   /* Fallback caso o consumidor não defina a fonte */
   --font-primary: "Inter", sans-serif;
-  --ant-radio-radio-bg-color: var(--color-neutral-50) !important;
 
   /* ============================================
      COLORS - Design System Juscash
@@ -406,34 +405,10 @@
 
 /* ============================================
    RADIO — overrides nativos
+   Específicos do Radio do design system foram movidos para
+   src/components/Radio/index.module.css (scoped via classes
+   .ds-radio e .ds-radio-group).
    ============================================ */
-.ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
-  background-color: var(--color-neutral-50) !important;
-  border-color: var(--ant-radio-button-solid-checked-bg) !important;
-}
-
-.ant-radio-wrapper .ant-radio-wrapper .ant-radio-checked .ant-radio-inner {
-  background-color: var(--color-neutral-300) !important;
-  border-color: var(--ant-radio-button-solid-checked-bg) !important;
-}
-
-.ant-radio-wrapper .ant-radio-disabled .ant-radio-inner:after {
-  background-color: var(--color-neutral-200) !important;
-}
-
-.ant-radio-wrapper .ant-radio-inner:after {
-  background-color: var(--ant-color-primary) !important;
-}
-
-.ant-radio-wrapper .ant-radio-checked.ant-radio-disabled .ant-radio-inner {
-  border-color: transparent !important;
-}
-
-.ant-radio-label {
-  font-size: 13px !important;
-  font-weight: 400 !important;
-  color: var(--color-neutral-800) !important;
-}
 
 /* ============================================
    BREADCRUMB — overrides nativos

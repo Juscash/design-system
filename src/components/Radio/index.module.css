@@ -1,23 +1,117 @@
 /*
-  Estilos próprios do Radio: variante de erro e estado neutral focado.
+  Estilos próprios do Radio. Classes envoltas em `:global(...)` para
+  permanecerem globais após o processamento do Vite e do `tsup`.
+
+  Scoping:
+    - `.ds-radio`            → radio standalone (passou pelo wrapper React).
+    - `.ds-radio-group`      → grupo wrappado; itens internos ficam sob
+                                 `.ds-radio-group .ant-radio-wrapper`.
+    - `.ds-radio-error`      → modificador da variante de erro.
+    - `.ds-radio--truncate`  → modificador do label truncado.
 */
 
-:global(.ds-radio-error) :global(.ant-radio-inner) {
+/* ============================================================
+   BG do círculo (Antd default usa --ant-color-bg-container, mas
+   queremos neutral.50 explícito independente do tema do consumidor).
+   ============================================================ */
+
+:global(.ds-radio .ant-radio-inner),
+:global(.ds-radio-group .ant-radio-wrapper .ant-radio-inner) {
+  background-color: var(--color-neutral-50) !important;
+}
+
+/* ============================================================
+   FOCO E HOVER (padrão — sem erro)
+   ============================================================ */
+
+:global(.ds-radio:has(.ant-radio-input:focus-visible) .ant-radio-inner),
+:global(.ds-radio-group .ant-radio-wrapper:has(.ant-radio-input:focus-visible) .ant-radio-inner) {
+  box-shadow: var(--shadow-focus) !important;
+}
+
+:global(.ds-radio.pseudo-focus-visible .ant-radio-inner),
+:global(.ds-radio-group .pseudo-focus-visible.ant-radio-wrapper .ant-radio-inner) {
+  box-shadow: var(--shadow-focus) !important;
+}
+
+/* ============================================================
+   CHECKED — dot interior com cor primary
+   ============================================================ */
+
+:global(.ds-radio .ant-radio-checked .ant-radio-inner::after),
+:global(.ds-radio-group .ant-radio-checked .ant-radio-inner::after) {
+  background-color: var(--color-brand-primary-600) !important;
+}
+
+/* ============================================================
+   DISABLED — border desabilitada, dot cinza
+   ============================================================ */
+
+:global(.ds-radio .ant-radio-disabled .ant-radio-inner),
+:global(.ds-radio-group .ant-radio-disabled .ant-radio-inner) {
+  border-color: var(--color-border-disabled) !important;
+  background-color: var(--color-neutral-50) !important;
+}
+
+:global(.ds-radio .ant-radio-checked.ant-radio-disabled .ant-radio-inner::after),
+:global(.ds-radio-group .ant-radio-checked.ant-radio-disabled .ant-radio-inner::after) {
+  background-color: var(--color-neutral-300) !important;
+}
+
+/* ============================================================
+   LABEL — tipografia conforme foundations
+   ============================================================ */
+
+:global(.ds-radio.ant-radio-wrapper > span:last-child),
+:global(.ds-radio-group .ant-radio-wrapper > span:last-child),
+:global(.ds-radio .ant-radio-label),
+:global(.ds-radio-group .ant-radio-label) {
+  font-family: var(--font-primary) !important;
+  font-size: var(--font-body-2-size) !important;
+  font-weight: 400 !important;
+  color: var(--color-neutral-800) !important;
+}
+
+/* ============================================================
+   ERROR — border vermelha, dot vermelho, focus error
+   ============================================================ */
+
+:global(.ds-radio-error .ant-radio-inner) {
   border-color: var(--color-feedback-red-500) !important;
 }
 
-:global(.ant-radio-disabled.ds-radio-error) :global(.ant-radio-inner) {
+:global(.ds-radio-error .ant-radio-checked .ant-radio-inner::after) {
+  background-color: var(--color-feedback-red-500) !important;
+}
+
+:global(.ds-radio-error:has(.ant-radio-input:focus-visible) .ant-radio-inner) {
+  box-shadow: var(--shadow-focus-error) !important;
+}
+
+:global(.ds-radio-error.pseudo-focus-visible .ant-radio-inner) {
+  box-shadow: var(--shadow-focus-error) !important;
+}
+
+:global(.ant-radio-disabled.ds-radio-error .ant-radio-inner) {
   border-color: transparent !important;
 }
 
-:global(.ds-radio-error) :global(.ant-radio) :global(.ant-radio-inner:focus-visible) {
-  box-shadow: var(--shadow-focus-error) !important;
+/* ============================================================
+   TRUNCATE — ellipsis no label
+   ============================================================ */
+
+:global(.ds-radio--truncate.ant-radio-wrapper) {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  min-width: 0;
 }
 
-:global(.ds-radio-error.pseudo-focus-visible) :global(.ant-radio) :global(.ant-radio-inner) {
-  box-shadow: var(--shadow-focus-error) !important;
-}
-
-:global(.ds-neutral.pseudo-focus-visible) :global(.ant-radio-inner) {
-  box-shadow: var(--shadow-focus) !important;
+:global(.ds-radio--truncate.ant-radio-wrapper > span:last-child),
+:global(.ds-radio--truncate .ant-radio-label) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1 1 auto;
 }
