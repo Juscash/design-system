@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Checkbox } from ".";
-import { RichCheckbox } from "../RichCheckbox";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
@@ -36,16 +35,13 @@ Componente de checkbox baseado no [Ant Design Checkbox](https://ant.design/compo
 ### Como usar:
 
 \`\`\`tsx
-import { Checkbox, RichCheckbox } from "@juscash/design-system";
+import { Checkbox } from "@juscash/design-system";
 
 function Example() {
   return (
     <>
       <Checkbox>Concordo com os termos</Checkbox>
-      <RichCheckbox 
-        label="Opção Premium" 
-        secondaryText="Inclui benefícios extras"
-      />
+      <Checkbox rich label="Opção Premium" secondaryText="Inclui benefícios extras" />
     </>
   );
 }
@@ -348,44 +344,32 @@ export const GroupList: StoryObj<typeof Checkbox.Group> = {
 };
 
 // ============================================
-// RICH CHECKBOX - Variação do Figma
+// RICH — variação via prop `rich`
 // ============================================
 
-export const RichCheckboxUnchecked: StoryObj<typeof RichCheckbox> = {
-  render: () => <RichCheckbox label="Label" secondaryText="Secondary text" />,
+export const RichUnchecked: Story = {
+  args: { rich: true, label: "Opção Premium", secondaryText: "Inclui todos os benefícios" },
   parameters: {
-    docs: {
-      description: {
-        story: "Rich Checkbox não selecionado - variação com label e texto secundário conforme Figma.",
-      },
-    },
+    docs: { description: { story: "`rich=true` envelopa o checkbox em card 240×44 com `label` + `secondaryText`. Estado: unchecked." } },
   },
 };
 
-export const RichCheckboxChecked: StoryObj<typeof RichCheckbox> = {
-  render: () => <RichCheckbox checked label="Label" secondaryText="Secondary text" />,
+export const RichChecked: Story = {
+  args: { rich: true, label: "Opção Premium", secondaryText: "Inclui todos os benefícios", checked: true },
   parameters: {
-    docs: {
-      description: {
-        story: "Rich Checkbox selecionado - background muda para neutral/100 quando checked.",
-      },
-    },
+    docs: { description: { story: "Mesma variação rich, com `checked=true`. BG muda para `neutral.100`." } },
   },
 };
 
-export const RichCheckboxGroup: StoryObj = {
+export const RichGroup: Story = {
   render: () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: "8px", width: "240px" }}>
-      <RichCheckbox label="Opção Premium" secondaryText="Inclui todos os benefícios" />
-      <RichCheckbox checked label="Opção Básica" secondaryText="Recursos essenciais" />
-      <RichCheckbox label="Opção Avançada" secondaryText="Para usuários experientes" />
+    <div style={{ display: "flex", flexDirection: "column", gap: 8, width: 240 }}>
+      <Checkbox rich label="Opção Premium" secondaryText="Inclui todos os benefícios" />
+      <Checkbox rich label="Opção Básica" secondaryText="Recursos essenciais" defaultChecked />
+      <Checkbox rich label="Opção Avançada" secondaryText="Para usuários experientes" />
     </div>
   ),
   parameters: {
-    docs: {
-      description: {
-        story: "Grupo de Rich Checkboxes - exemplo de uso prático.",
-      },
-    },
+    docs: { description: { story: "Múltiplos checkboxes rich empilhados — uso típico em listas de opções." } },
   },
 };

@@ -82,6 +82,23 @@ describe("Radio", () => {
     expect(onChange).not.toHaveBeenCalled();
   });
 
+  it("applies ds-radio--rich class when rich prop is true", () => {
+    const { container } = render(<Radio rich label="Premium" secondaryText="Benefícios extras" />);
+    const wrapper = container.querySelector("label.ant-radio-wrapper");
+    expect(wrapper?.className).toMatch(/ds-radio--rich/);
+  });
+
+  it("renders rich content with label and secondary text", () => {
+    render(<Radio rich label="Opção Premium" secondaryText="Inclui benefícios" />);
+    expect(screen.getByText("Opção Premium")).toBeInTheDocument();
+    expect(screen.getByText("Inclui benefícios")).toBeInTheDocument();
+  });
+
+  it("falls back to children when rich label is omitted", () => {
+    render(<Radio rich>Texto via children</Radio>);
+    expect(screen.getByText("Texto via children")).toBeInTheDocument();
+  });
+
   it("forwards custom className alongside ds-radio", () => {
     const { container } = render(<Radio className="custom-cls">Label</Radio>);
     const wrapper = container.querySelector("label.ant-radio-wrapper");

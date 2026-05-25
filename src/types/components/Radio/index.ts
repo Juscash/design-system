@@ -13,4 +13,14 @@ export type RadioProps = AntdRadioProps & {
    * string CSS. Quando `truncate=true` e `width` é `undefined`, usa `240px`.
    */
   width?: number | string;
+  /**
+   * Quando `true`, renderiza no formato **rich** (Figma `rich radio`, 240×44)
+   * — card clicável com `label` principal e `secondaryText` opcional ao lado
+   * do radio. Cliques em qualquer ponto do card selecionam o item.
+   */
+  rich?: boolean;
+  /** Texto principal exibido ao lado do radio no modo `rich`. Quando ausente, usa `children`. */
+  label?: string;
+  /** Texto secundário (`caption/01 - 10px`) abaixo do `label` no modo `rich`. */
+  secondaryText?: string;
 };

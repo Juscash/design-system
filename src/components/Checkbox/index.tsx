@@ -8,6 +8,10 @@ import "./index.module.css";
 const BASE_CLASS = "ds-checkbox";
 const ERROR_CLASS = "ds-checkbox-error";
 const TRUNCATE_CLASS = "ds-checkbox--truncate";
+const RICH_CLASS = "ds-checkbox--rich";
+const RICH_CONTENT_CLASS = "ds-checkbox-rich__content";
+const RICH_LABEL_CLASS = "ds-checkbox-rich__label";
+const RICH_SECONDARY_CLASS = "ds-checkbox-rich__secondary";
 const GROUP_CLASS = "ds-checkbox-group";
 
 const CHECKBOX_BOX_SIZE = 16;
@@ -58,8 +62,23 @@ const errorTokens: Partial<ComponentToken> = {
  * `.ds-checkbox` sempre presente, `.ds-checkbox-error` quando `error=true`,
  * `.ds-checkbox--truncate` quando `truncate=true`, mais o className externo se houver.
  */
-function buildClassName(external: string | undefined, error: boolean, truncate: boolean): string {
-  return [BASE_CLASS, error ? ERROR_CLASS : "", truncate ? TRUNCATE_CLASS : "", external ?? ""].filter(Boolean).join(" ");
+function buildClassName(external: string | undefined, error: boolean, truncate: boolean, rich: boolean): string {
+  return [BASE_CLASS, error ? ERROR_CLASS : "", truncate ? TRUNCATE_CLASS : "", rich ? RICH_CLASS : "", external ?? ""]
+    .filter(Boolean)
+    .join(" ");
+}
+
+/**
+ * Compõe o conteúdo (children) do checkbox quando `rich=true`. Combina
+ * `label` (ou children) com `secondaryText` em uma estrutura empilhada.
+ */
+function buildRichContent(label: React.ReactNode, secondaryText: string | undefined): React.ReactNode {
+  return (
+    <span className={RICH_CONTENT_CLASS}>
+      <span className={RICH_LABEL_CLASS}>{label}</span>
+      {secondaryText ? <span className={RICH_SECONDARY_CLASS}>{secondaryText}</span> : null}
+    </span>
+  );
 }
 
 /**
@@ -94,10 +113,25 @@ function buildStyle(external: React.CSSProperties | undefined, maxWidth: string 
  * `Checkbox.Group` é exposto como sub-componente — wrapper que aplica
  * `.ds-checkbox-group` ao container e o `ConfigProvider` com os tokens.
  */
-function CheckboxInner({ error, truncate, width, className, style, ...props }: CheckboxProps): React.ReactElement {
-  const finalClassName = buildClassName(className, Boolean(error), Boolean(truncate));
-  const maxWidth = resolveMaxWidth(width, Boolean(truncate));
+function CheckboxInner({
+  error,
+  truncate,
+  width,
+  rich,
+  label,
+  secondaryText,
+  className,
+  style,
+  children,
+  ...props
+}: CheckboxProps): React.ReactElement {
+  const finalClassName = buildClassName(className, Boolean(error), Boolean(truncate), Boolean(rich));
+  // No modo rich, o card já ocupa 100% do container pai — `width`/`truncate`
+  // não aplicam `max-width` inline (que sobrescreveria os 100%). O truncate
+  // do label dentro do card vem das classes CSS `.ds-checkbox--truncate`.
+  const maxWidth = rich ? undefined : resolveMaxWidth(width, Boolean(truncate));
   const finalStyle = buildStyle(style, maxWidth);
+  const renderedChildren = rich ? buildRichContent(label ?? children, secondaryText) : children;
 
   return (
     <ConfigProvider
@@ -107,7 +141,9 @@ function CheckboxInner({ error, truncate, width, className, style, ...props }: C
         },
       }}
     >
-      <AntdCheckbox {...props} className={finalClassName} style={finalStyle} />
+      <AntdCheckbox {...props} className={finalClassName} style={finalStyle}>
+        {renderedChildren}
+      </AntdCheckbox>
     </ConfigProvider>
   );
 }

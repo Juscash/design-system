@@ -133,6 +133,86 @@
 }
 
 /* ============================================================
+   RICH — card 240×44 com label e secondary text (Figma 4051:2242)
+   `.ds-checkbox--rich` é aplicado ao `<label class="ant-checkbox-wrapper">`.
+   ============================================================ */
+
+:global(.ds-checkbox--rich.ant-checkbox-wrapper) {
+  display: flex !important;
+  align-items: center !important;
+  gap: var(--spacing-2) !important;
+  padding: 6px var(--spacing-3) !important;
+  border: 1px solid var(--color-border-regular) !important;
+  border-radius: var(--radius-xl) !important;
+  background-color: var(--color-neutral-50) !important;
+  transition: background-color 0.15s ease-in-out !important;
+  cursor: pointer !important;
+  width: 100% !important;
+  min-height: 44px !important;
+  box-sizing: border-box !important;
+}
+
+/* Quando há `secondaryText` (duas linhas de texto), alinha pelo topo
+   para que a caixa do checkbox fique paralela à primeira linha. */
+:global(.ds-checkbox--rich.ant-checkbox-wrapper:has(.ds-checkbox-rich__secondary)) {
+  align-items: flex-start !important;
+}
+
+:global(.ds-checkbox--rich.ant-checkbox-wrapper:hover) {
+  background-color: var(--color-neutral-100) !important;
+}
+
+:global(.ds-checkbox--rich.ant-checkbox-wrapper:has(.ant-checkbox-input:checked)) {
+  background-color: var(--color-neutral-100) !important;
+}
+
+:global(.ds-checkbox--rich.ant-checkbox-wrapper-disabled) {
+  border-color: var(--color-border-disabled) !important;
+  cursor: not-allowed !important;
+}
+
+/* Apenas quando há secondary text aplicamos o ajuste fino de margem
+   para alinhar o checkbox com a primeira linha do texto. */
+:global(.ds-checkbox--rich:has(.ds-checkbox-rich__secondary) .ant-checkbox) {
+  margin-top: 2.5px !important;
+}
+
+:global(.ds-checkbox-rich__content) {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+:global(.ds-checkbox-rich__label) {
+  font-family: var(--font-primary);
+  font-size: var(--font-body-2-size);
+  font-weight: 400;
+  line-height: var(--font-line-height);
+  color: var(--color-text-dark);
+}
+
+:global(.ds-checkbox-rich__secondary) {
+  font-family: var(--font-primary);
+  font-size: var(--font-caption-size);
+  font-weight: 400;
+  line-height: var(--font-line-height);
+  color: var(--color-text-soft);
+}
+
+/* Truncate dinâmico do label e secondary no modo rich + truncate.
+   O conteúdo do rich já tem `min-width: 0` para que o flex permita encolher.
+   Aplica ellipsis no label e no secondaryText. */
+:global(.ds-checkbox--rich.ds-checkbox--truncate .ds-checkbox-rich__label),
+:global(.ds-checkbox--rich.ds-checkbox--truncate .ds-checkbox-rich__secondary) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================================
    ERROR — paleta vermelha em foco e hover
    ============================================================ */
 

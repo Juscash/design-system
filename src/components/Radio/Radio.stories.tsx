@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Radio, RadioGroup } from ".";
-import { RichRadio } from "../RichRadio";
 
 import { designSystemColors } from "../../theme";
 
@@ -270,80 +269,34 @@ export const GroupList: Story = {
 };
 
 // ============================================
-// RICH RADIO - Variação com label e secondary text
+// RICH — variação via prop `rich`
 // ============================================
 
-export const RichRadioUnchecked: Story = {
-  render: () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-      <label style={{ fontSize: 13, color: designSystemColors.neutral[900] }}>Rich Radio - Unchecked</label>
-      <RichRadio label="Opção Premium" secondaryText="Inclui todos os benefícios" />
-    </div>
-  ),
+export const RichUnchecked: Story = {
+  args: { rich: true, label: "Opção Premium", secondaryText: "Inclui todos os benefícios" },
   parameters: {
-    docs: {
-      description: {
-        story: "Rich Radio não marcado com label e secondary text.",
-      },
-    },
+    docs: { description: { story: "`rich=true` envelopa o radio em card 240×44 com `label` + `secondaryText`. Estado: unchecked." } },
   },
 };
 
-export const RichRadioChecked: Story = {
-  render: () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-      <label style={{ fontSize: 13, color: designSystemColors.neutral[900] }}>Rich Radio - Checked</label>
-      <RichRadio label="Opção Premium" secondaryText="Inclui todos os benefícios" checked />
-    </div>
-  ),
+export const RichChecked: Story = {
+  args: { rich: true, label: "Opção Premium", secondaryText: "Inclui todos os benefícios", checked: true },
   parameters: {
-    docs: {
-      description: {
-        story: "Rich Radio marcado com label e secondary text.",
-      },
-    },
+    docs: { description: { story: "Mesma variação rich, com `checked=true`." } },
   },
 };
 
-export const RichRadioGroup: Story = {
-  render: () => {
-    const [value, setValue] = React.useState("option1");
-
-    return (
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        <label style={{ fontSize: 13, color: designSystemColors.neutral[900] }}>Rich Radio Group</label>
-        <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-          <RichRadio
-            value="option1"
-            label="Opção Premium"
-            secondaryText="Inclui todos os benefícios"
-            checked={value === "option1"}
-            onChange={() => setValue("option1")}
-          />
-          <RichRadio
-            value="option2"
-            label="Opção Básica"
-            secondaryText="Funcionalidades essenciais"
-            checked={value === "option2"}
-            onChange={() => setValue("option2")}
-          />
-          <RichRadio
-            value="option3"
-            label="Opção Desabilitada"
-            secondaryText="Não disponível no momento"
-            checked={value === "option3"}
-            disabled
-            onChange={() => setValue("option3")}
-          />
-        </div>
-      </div>
-    );
-  },
+export const RichGroup: Story = {
+  render: () => (
+    <RadioGroup defaultValue="option1" style={{ display: "flex", flexDirection: "column", gap: 8, width: 240 }}>
+      <Radio rich value="option1" label="Opção Premium" secondaryText="Inclui todos os benefícios" />
+      <Radio rich value="option2" label="Opção Básica" secondaryText="Funcionalidades essenciais" />
+      <Radio rich value="option3" label="Opção Desabilitada" secondaryText="Não disponível no momento" disabled />
+    </RadioGroup>
+  ),
   parameters: {
     docs: {
-      description: {
-        story: "Grupo de Rich Radio com gerenciamento de estado. Similar ao RichCheckbox.",
-      },
+      description: { story: "`Radio.Group` coordena seleção exclusiva. Múltiplos `rich` empilhados — composição típica em formulários." },
     },
   },
 };

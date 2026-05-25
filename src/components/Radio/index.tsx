@@ -8,6 +8,10 @@ import "./index.module.css";
 const BASE_CLASS = "ds-radio";
 const ERROR_CLASS = "ds-radio-error";
 const TRUNCATE_CLASS = "ds-radio--truncate";
+const RICH_CLASS = "ds-radio--rich";
+const RICH_CONTENT_CLASS = "ds-radio-rich__content";
+const RICH_LABEL_CLASS = "ds-radio-rich__label";
+const RICH_SECONDARY_CLASS = "ds-radio-rich__secondary";
 const GROUP_CLASS = "ds-radio-group";
 
 const RADIO_SIZE = 16;
@@ -82,8 +86,22 @@ function getTokenOverrides(error: boolean) {
  * `.ds-radio` sempre presente, `.ds-radio-error` em erro, `.ds-radio--truncate`
  * em label truncado, mais o className externo.
  */
-function buildClassName(external: string | undefined, error: boolean, truncate: boolean): string {
-  return [BASE_CLASS, error ? ERROR_CLASS : "", truncate ? TRUNCATE_CLASS : "", external ?? ""].filter(Boolean).join(" ");
+function buildClassName(external: string | undefined, error: boolean, truncate: boolean, rich: boolean): string {
+  return [BASE_CLASS, error ? ERROR_CLASS : "", truncate ? TRUNCATE_CLASS : "", rich ? RICH_CLASS : "", external ?? ""]
+    .filter(Boolean)
+    .join(" ");
+}
+
+/**
+ * Compõe o conteúdo (children) do radio quando `rich=true`.
+ */
+function buildRichContent(label: React.ReactNode, secondaryText: string | undefined): React.ReactNode {
+  return (
+    <span className={RICH_CONTENT_CLASS}>
+      <span className={RICH_LABEL_CLASS}>{label}</span>
+      {secondaryText ? <span className={RICH_SECONDARY_CLASS}>{secondaryText}</span> : null}
+    </span>
+  );
 }
 
 /**
@@ -113,10 +131,13 @@ function buildStyle(external: React.CSSProperties | undefined, maxWidth: string 
  * - `width` — largura máxima do wrapper. Number = px; string = CSS livre.
  */
 function RadioInner(props: RadioProps): React.ReactElement {
-  const { error, truncate, width, className, style, ...rest } = props;
-  const finalClassName = buildClassName(className, Boolean(error), Boolean(truncate));
-  const maxWidth = resolveMaxWidth(width, Boolean(truncate));
+  const { error, truncate, width, rich, label, secondaryText, className, style, children, ...rest } = props;
+  const finalClassName = buildClassName(className, Boolean(error), Boolean(truncate), Boolean(rich));
+  // No modo rich o card já ocupa 100% do container pai — não aplicamos
+  // `max-width` inline. O truncate do label dentro do card vem do CSS.
+  const maxWidth = rich ? undefined : resolveMaxWidth(width, Boolean(truncate));
   const finalStyle = buildStyle(style, maxWidth);
+  const renderedChildren = rich ? buildRichContent(label ?? children, secondaryText) : children;
 
   return (
     <ConfigProvider
@@ -125,7 +146,9 @@ function RadioInner(props: RadioProps): React.ReactElement {
         token: getTokenOverrides(Boolean(error)),
       }}
     >
-      <AntdRadio {...rest} className={finalClassName} style={finalStyle} />
+      <AntdRadio {...rest} className={finalClassName} style={finalStyle}>
+        {renderedChildren}
+      </AntdRadio>
     </ConfigProvider>
   );
 }

@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Switch } from ".";
-import { RichSwitch } from "../RichSwitch";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
@@ -216,80 +215,55 @@ export const GroupList: Story = {
 };
 
 // ============================================
-// RICH SWITCH - Variação com label e secondary text
+// RICH SWITCH — variação via prop `rich`
 // ============================================
 
-export const RichSwitchUnchecked: Story = {
-  render: () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-      <label style={{ fontSize: 13, fontWeight: 500 }}>Rich Switch - Unchecked</label>
-      <RichSwitch label="Notificações" secondaryText="Receber alertas por email" />
-    </div>
-  ),
+export const RichUnchecked: Story = {
+  args: { rich: true, label: "Notificações", secondaryText: "Receber alertas por email" },
   parameters: {
     docs: {
-      description: {
-        story: "Rich Switch não marcado com label e secondary text.",
-      },
+      description: { story: "`rich=true` envelopa o switch em card 240×44 com `label` + `secondaryText`. Estado: unchecked." },
     },
   },
 };
 
-export const RichSwitchChecked: Story = {
-  render: () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-      <label style={{ fontSize: 13, fontWeight: 500 }}>Rich Switch - Checked</label>
-      <RichSwitch label="Notificações" secondaryText="Receber alertas por email" defaultChecked />
-    </div>
-  ),
+export const RichChecked: Story = {
+  args: { rich: true, label: "Notificações", secondaryText: "Receber alertas por email", defaultChecked: true },
   parameters: {
-    docs: {
-      description: {
-        story: "Rich Switch marcado com label e secondary text.",
-      },
-    },
+    docs: { description: { story: "Mesma variação rich, com `defaultChecked=true`." } },
   },
 };
 
-export const RichSwitchGroup: Story = {
+export const RichGroup: Story = {
   render: () => {
-    const [values, setValues] = React.useState({
-      notifications: true,
-      marketing: false,
-      updates: true,
-    });
-
+    const [values, setValues] = React.useState({ notifications: true, marketing: false, updates: true });
     return (
-      <div style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-        <label style={{ fontSize: 13, fontWeight: 500 }}>Rich Switch Group</label>
-        <div style={{ display: "flex", flexDirection: "column", gap: 5 }}>
-          <RichSwitch
-            label="Notificações"
-            secondaryText="Receber alertas por email"
-            checked={values.notifications}
-            onChange={(checked) => setValues({ ...values, notifications: checked })}
-          />
-          <RichSwitch
-            label="Marketing"
-            secondaryText="Novidades e promoções"
-            checked={values.marketing}
-            onChange={(checked) => setValues({ ...values, marketing: checked })}
-          />
-          <RichSwitch
-            label="Atualizações"
-            secondaryText="Mudanças no sistema"
-            checked={values.updates}
-            onChange={(checked) => setValues({ ...values, updates: checked })}
-          />
-        </div>
+      <div style={{ display: "flex", flexDirection: "column", gap: 8, width: 240 }}>
+        <Switch
+          rich
+          label="Notificações"
+          secondaryText="Receber alertas por email"
+          checked={values.notifications}
+          onChange={(checked) => setValues({ ...values, notifications: checked })}
+        />
+        <Switch
+          rich
+          label="Marketing"
+          secondaryText="Novidades e promoções"
+          checked={values.marketing}
+          onChange={(checked) => setValues({ ...values, marketing: checked })}
+        />
+        <Switch
+          rich
+          label="Atualizações"
+          secondaryText="Mudanças no sistema"
+          checked={values.updates}
+          onChange={(checked) => setValues({ ...values, updates: checked })}
+        />
       </div>
     );
   },
   parameters: {
-    docs: {
-      description: {
-        story: "Grupo de Rich Switch com gerenciamento de estado. Similar ao RichCheckbox e RichRadio.",
-      },
-    },
+    docs: { description: { story: "Múltiplos switches rich empilhados — composição usual em formulários de preferências." } },
   },
 };

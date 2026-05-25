@@ -131,6 +131,28 @@ describe("Checkbox", () => {
     expect(screen.getByRole("checkbox")).toBeChecked();
   });
 
+  it("applies ds-checkbox--rich class when rich prop is true", () => {
+    const { container } = render(<Checkbox rich label="Premium" secondaryText="Benefícios extras" />);
+    const wrapper = container.querySelector("label.ant-checkbox-wrapper");
+    expect(wrapper?.className).toMatch(/ds-checkbox--rich/);
+  });
+
+  it("renders rich content with label and secondary text", () => {
+    render(<Checkbox rich label="Opção Premium" secondaryText="Inclui benefícios" />);
+    expect(screen.getByText("Opção Premium")).toBeInTheDocument();
+    expect(screen.getByText("Inclui benefícios")).toBeInTheDocument();
+  });
+
+  it("rich without secondaryText still renders the label", () => {
+    render(<Checkbox rich label="Apenas título" />);
+    expect(screen.getByText("Apenas título")).toBeInTheDocument();
+  });
+
+  it("falls back to children when rich label is omitted", () => {
+    render(<Checkbox rich>Texto via children</Checkbox>);
+    expect(screen.getByText("Texto via children")).toBeInTheDocument();
+  });
+
   it("forwards custom className alongside ds-checkbox", () => {
     const { container } = render(<Checkbox className="custom-cls">Label</Checkbox>);
     const wrapper = container.querySelector("label.ant-checkbox-wrapper");

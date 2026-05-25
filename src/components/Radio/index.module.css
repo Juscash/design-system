@@ -97,6 +97,82 @@
 }
 
 /* ============================================================
+   RICH — card 240×44 com label e secondary text (Figma 8175:10294)
+   `.ds-radio--rich` é aplicado ao `<label class="ant-radio-wrapper">`.
+   ============================================================ */
+
+:global(.ds-radio--rich.ant-radio-wrapper) {
+  display: flex !important;
+  align-items: center !important;
+  gap: var(--spacing-2) !important;
+  padding: 6px var(--spacing-3) !important;
+  border: 1px solid var(--color-border-regular) !important;
+  border-radius: var(--radius-xl) !important;
+  background-color: var(--color-neutral-50) !important;
+  transition: background-color 0.15s ease-in-out !important;
+  cursor: pointer !important;
+  width: 100% !important;
+  min-height: 44px !important;
+  box-sizing: border-box !important;
+}
+
+/* Quando há `secondaryText` (duas linhas), alinha pelo topo. */
+:global(.ds-radio--rich.ant-radio-wrapper:has(.ds-radio-rich__secondary)) {
+  align-items: flex-start !important;
+}
+
+:global(.ds-radio--rich.ant-radio-wrapper:hover) {
+  background-color: var(--color-neutral-100) !important;
+}
+
+:global(.ds-radio--rich.ant-radio-wrapper:has(.ant-radio-input:checked)) {
+  background-color: var(--color-neutral-100) !important;
+}
+
+:global(.ds-radio--rich.ant-radio-wrapper-disabled) {
+  border-color: var(--color-border-disabled) !important;
+  cursor: not-allowed !important;
+}
+
+/* Apenas com secondary text aplicamos o ajuste fino de margem. */
+:global(.ds-radio--rich:has(.ds-radio-rich__secondary) .ant-radio) {
+  margin-top: 2.5px !important;
+}
+
+:global(.ds-radio-rich__content) {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+:global(.ds-radio-rich__label) {
+  font-family: var(--font-primary);
+  font-size: var(--font-body-2-size);
+  font-weight: 400;
+  line-height: var(--font-line-height);
+  color: var(--color-text-dark);
+}
+
+:global(.ds-radio-rich__secondary) {
+  font-family: var(--font-primary);
+  font-size: var(--font-caption-size);
+  font-weight: 400;
+  line-height: var(--font-line-height);
+  color: var(--color-text-soft);
+}
+
+/* Truncate dinâmico do label e secondary no modo rich + truncate. */
+:global(.ds-radio--rich.ds-radio--truncate .ds-radio-rich__label),
+:global(.ds-radio--rich.ds-radio--truncate .ds-radio-rich__secondary) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================================
    TRUNCATE — ellipsis no label
    ============================================================ */
 

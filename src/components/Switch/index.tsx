@@ -7,6 +7,12 @@ import "./index.module.css";
 
 const BASE_CLASS = "ds-switch";
 const ERROR_CLASS = "ds-switch-error";
+const RICH_WRAPPER_CLASS = "ds-switch-rich";
+const RICH_WRAPPER_DISABLED_CLASS = "ds-switch-rich--disabled";
+const RICH_WRAPPER_TRUNCATE_CLASS = "ds-switch-rich--truncate";
+const RICH_CONTENT_CLASS = "ds-switch-rich__content";
+const RICH_LABEL_CLASS = "ds-switch-rich__label";
+const RICH_SECONDARY_CLASS = "ds-switch-rich__secondary";
 
 const TRACK_HEIGHT = 18;
 const TRACK_HEIGHT_SM = 14;
@@ -18,8 +24,6 @@ const HANDLE_SIZE_SM = 10;
 
 /**
  * Tokens do Switch alinhados ao Figma (track 33×18, handle 14, padding 2).
- * `handleBg` é sempre `neutral.50` (branco quase). `handleShadow` usa
- * `shadow.xs` para elevação sutil.
  */
 const switchTokens: Partial<ComponentToken> = {
   trackHeight: TRACK_HEIGHT,
@@ -40,9 +44,6 @@ const switchTokens: Partial<ComponentToken> = {
 /**
  * Tokens globais (cores) aplicados via `theme.token`. Hover/active recebem
  * a mesma cor de `colorPrimary` — Figma define que o hover não muda visual.
- *
- * - `error=false` → verde `brand.primary.600`.
- * - `error=true`  → vermelho `feedback.red.500`.
  */
 function getTokenOverrides(error: boolean) {
   if (error) {
@@ -60,34 +61,68 @@ function getTokenOverrides(error: boolean) {
 }
 
 /**
- * Compõe a className final: `.ds-switch` sempre presente, `.ds-switch-error`
- * em erro, mais o className externo.
+ * Compõe a className final do switch: `.ds-switch` sempre presente,
+ * `.ds-switch-error` em erro, mais o className externo.
  */
 function buildClassName(external: string | undefined, error: boolean): string {
   return [BASE_CLASS, error ? ERROR_CLASS : "", external ?? ""].filter(Boolean).join(" ");
 }
 
 /**
+ * Forwarda o click do wrapper rich para o `<button class="ant-switch">`
+ * interno. Ignora cliques que já caem no botão (evita duplo toggle).
+ */
+function handleRichWrapperClick(event: React.MouseEvent<HTMLLabelElement>): void {
+  const target = event.target as HTMLElement;
+  if (target.closest(".ant-switch")) return;
+  const button = event.currentTarget.querySelector<HTMLButtonElement>(".ant-switch");
+  if (!button || button.disabled) return;
+  button.click();
+}
+
+/**
  * Switch do design system. Toggle on/off binário. Props proprietárias:
  *
  * - `error` — paleta vermelha (`feedback.red.500`) para validação inválida.
+ * - `rich` — quando `true`, envelopa o switch em um card 240×44 com
+ *   `label` principal + `secondaryText` opcional (Figma `rich switch group`).
  *
- * Demais props (incluindo `loading`, `disabled`, `size`, `checkedChildren`,
- * `unCheckedChildren`, `onChange`, `defaultChecked`) seguem a API do Antd.
+ * Demais props seguem a API do Antd (`loading`, `disabled`, `size`,
+ * `onChange`, `defaultChecked`, etc.).
  */
 export function Switch(props: SwitchProps): React.ReactElement {
-  const { error, className, ...rest } = props;
+  const { error, rich, label, secondaryText, truncate, className, disabled, ...rest } = props;
   const finalClassName = buildClassName(className, Boolean(error));
 
-  return (
+  const antdSwitch = (
     <ConfigProvider
       theme={{
         components: { Switch: switchTokens },
         token: getTokenOverrides(Boolean(error)),
       }}
     >
-      <AntdSwitch {...rest} className={finalClassName} />
+      <AntdSwitch {...rest} disabled={disabled} className={finalClassName} />
     </ConfigProvider>
+  );
+
+  if (!rich) return antdSwitch;
+
+  const wrapperClassName = [
+    RICH_WRAPPER_CLASS,
+    disabled ? RICH_WRAPPER_DISABLED_CLASS : "",
+    truncate ? RICH_WRAPPER_TRUNCATE_CLASS : "",
+  ]
+    .filter(Boolean)
+    .join(" ");
+
+  return (
+    <label className={wrapperClassName} onClick={handleRichWrapperClick}>
+      {antdSwitch}
+      <span className={RICH_CONTENT_CLASS}>
+        {label !== undefined ? <span className={RICH_LABEL_CLASS}>{label}</span> : null}
+        {secondaryText !== undefined ? <span className={RICH_SECONDARY_CLASS}>{secondaryText}</span> : null}
+      </span>
+    </label>
   );
 }
 

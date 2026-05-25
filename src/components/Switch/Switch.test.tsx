@@ -64,6 +64,27 @@ describe("Switch", () => {
     expect(container.querySelector(".ant-switch-small")).not.toBeNull();
   });
 
+  it("renders rich wrapper with label and secondary text", () => {
+    const { container } = render(<Switch rich label="Notificações" secondaryText="Receber alertas" />);
+    expect(container.querySelector(".ds-switch-rich")).not.toBeNull();
+    expect(screen.getByText("Notificações")).toBeInTheDocument();
+    expect(screen.getByText("Receber alertas")).toBeInTheDocument();
+  });
+
+  it("rich wrapper forwards click to the switch button (triggers onChange)", () => {
+    const onChange = vi.fn();
+    const { container } = render(<Switch rich label="Notificações" onChange={onChange} />);
+    const labelEl = container.querySelector(".ds-switch-rich__label") as HTMLElement;
+    fireEvent.click(labelEl);
+    expect(onChange).toHaveBeenCalled();
+    expect(onChange.mock.calls[0][0]).toBe(true);
+  });
+
+  it("rich disabled applies the disabled modifier to the wrapper", () => {
+    const { container } = render(<Switch rich disabled label="Disabled" />);
+    expect(container.querySelector(".ds-switch-rich")?.className).toMatch(/ds-switch-rich--disabled/);
+  });
+
   it("forwards custom className alongside ds-switch", () => {
     const { container } = render(<Switch className="custom-cls" />);
     const sw = container.querySelector(".ant-switch");
