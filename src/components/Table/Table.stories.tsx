@@ -69,11 +69,11 @@ Links de referência:
           <Controls />
           <div style={{ marginTop: "2rem", display: "grid", gap: "1.5rem" }}>
             <div>
-              <h3 style={{ margin: "0 0 0.75rem", fontSize: "1rem", fontWeight: 700 }}>Figma Spec</h3>
+              <h2 style={{ margin: "0 0 0.75rem", fontSize: "1rem", fontWeight: 700 }}>Figma Spec</h2>
               <Figma showLink url={FIGMA_URL} height="420px" />
             </div>
             <div>
-              <h3 style={{ margin: "0 0 0.75rem", fontSize: "1rem", fontWeight: 700 }}>Figma Usage Example</h3>
+              <h2 style={{ margin: "0 0 0.75rem", fontSize: "1rem", fontWeight: 700 }}>Figma Usage Example</h2>
               <Figma showLink url={TRANSACTIONS_FIGMA_URL} height="320px" />
             </div>
           </div>
@@ -91,6 +91,9 @@ const surfaceStyle: React.CSSProperties = {
   borderRadius: 8,
   background: "#fafafa",
   padding: 24,
+  overflowX: "auto",
+  maxWidth: "100%",
+  boxSizing: "border-box",
 };
 
 const exampleStackStyle: React.CSSProperties = {
@@ -276,7 +279,7 @@ const desktopDataColumns: ColumnsType<DesktopRow> = [
     render: (value: DesktopRow["status"]) => <StatusPill status={value} compact />,
   },
   {
-    title: "",
+    title: <span style={{ position: "absolute", width: 1, height: 1, padding: 0, margin: -1, overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap", border: 0 }}>Ações</span>,
     key: "actions-placeholder",
     width: 48,
     render: () => <ActionIconButton icon={<MoreHorizontal size={16} />} label="Ações" size={24} />,
@@ -321,6 +324,7 @@ function buildDesktopColumns(props: {
     {
       title: (
         <Checkbox
+          aria-label="Selecionar todas as linhas"
           checked={allSelected}
           onChange={(event) => {
             setSelectedKeys(event.target.checked ? rows.map((row) => row.key) : []);
@@ -332,6 +336,7 @@ function buildDesktopColumns(props: {
       width: 32,
       render: (_value, record) => (
         <Checkbox
+          aria-label={`Selecionar linha ${record.id}`}
           checked={selectedKeys.includes(record.key)}
           onChange={(event) => {
             setSelectedKeys((current) =>
@@ -343,7 +348,7 @@ function buildDesktopColumns(props: {
     },
     ...desktopDataColumns.slice(0, -1),
     {
-      title: "",
+      title: <span style={{ position: "absolute", width: 1, height: 1, padding: 0, margin: -1, overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap", border: 0 }}>{deleteAction ? "Excluir" : "Ações"}</span>,
       key: deleteAction ? "delete" : "actions",
       width: 48,
       render: (_value, record) => (
@@ -779,6 +784,238 @@ export const Transactions: Story = {
         <p style={figmaLabelStyle}>transactions</p>
         <TransactionsTablePreview />
       </div>
+    </div>
+  ),
+};
+
+// ──────────────────────────────────────────────────────────────────────────
+// Estados e cenários explícitos (após a refatoração)
+// ──────────────────────────────────────────────────────────────────────────
+
+/**
+ * Tabela com ordenação ativa em duas colunas. Clique no cabeçalho para
+ * alternar ascendente/descendente.
+ */
+export const WithSorter: Story = {
+  name: "Ordenação por coluna",
+  args: {
+    columns: baseColumns,
+    dataSource: baseData,
+    pagination: false,
+  },
+};
+
+/**
+ * Estado de loading — renderiza o skeleton overlay nativo do Antd com tokens
+ * do design system.
+ */
+export const LoadingState: Story = {
+  name: "Estado — Loading",
+  args: {
+    columns: baseColumns,
+    dataSource: baseData,
+    loading: true,
+    pagination: false,
+  },
+};
+
+/**
+ * Estado vazio com mensagem padrão em pt-BR ("Nenhum registro encontrado.").
+ * O consumidor pode customizar via `locale.emptyText`.
+ */
+export const EmptyState: Story = {
+  name: "Estado — Vazio",
+  args: {
+    columns: baseColumns,
+    dataSource: [],
+    pagination: false,
+  },
+};
+
+/**
+ * Estado de erro — composição com um `<div>` de aviso acima da tabela. A
+ * `Table` em si não tem prop nativa de "error"; o consumidor renderiza um
+ * componente de feedback (Alert, banner, etc.) controlando o fluxo.
+ */
+export const ErrorState: Story = {
+  name: "Estado — Erro",
+  render: () => (
+    <div style={{ display: "grid", gap: 12 }}>
+      <div
+        role="alert"
+        style={{
+          padding: 12,
+          border: "1px solid #d2190b",
+          borderRadius: 8,
+          background: "#fef2ec",
+          color: "#9d231c",
+          fontFamily: "Inter, sans-serif",
+          fontSize: 13,
+        }}
+      >
+        Falha ao carregar os registros. Tente novamente em instantes.
+      </div>
+      <Table columns={baseColumns} dataSource={[]} pagination={false} />
+    </div>
+  ),
+};
+
+/**
+ * Recriação 1:1 do footer de paginação do Figma (`8124:10863`): contagem
+ * total à esquerda, prev/next + páginas no meio, select de itens-por-página
+ * à direita. Gaps uniformes de 4px entre todos os itens.
+ */
+export const FigmaPaginationFooter: Story = {
+  name: "Figma — Paginação footer",
+  args: {
+    columns: baseColumns,
+    dataSource: Array.from({ length: 78 }, (_, index) => ({
+      key: String(index),
+      nome: `Linha ${index + 1}`,
+      email: `usuario${index + 1}@juscash.com`,
+      status: index % 2 === 0 ? "Ativo" : "Pendente",
+    })),
+    pagination: {
+      pageSize: 15,
+      current: 1,
+      showSizeChanger: true,
+      pageSizeOptions: ["15", "30", "50"],
+    },
+  },
+};
+
+/**
+ * Cenário com bulk actions: quando há linhas selecionadas, uma barra de
+ * ações aparece **acima** da tabela com a contagem e os botões de ação em
+ * massa, conforme o item `Description: Itens selecionados` do Figma
+ * (`8124:9475`).
+ */
+export const BulkActions: Story = {
+  name: "Seleção múltipla com bulk actions",
+  render: () => {
+    function BulkBar(props: { count: number; onClear: () => void }) {
+      if (props.count === 0) return null;
+      return (
+        <div
+          style={{
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "space-between",
+            padding: "8px 12px",
+            border: "1px solid #d4d4d4",
+            borderRadius: 8,
+            background: "#fafafa",
+            fontFamily: "Inter, sans-serif",
+            fontSize: 13,
+          }}
+        >
+          <span>
+            <strong>{props.count}</strong> ite{props.count === 1 ? "m" : "ns"} selecionado{props.count === 1 ? "" : "s"}
+          </span>
+          <div style={{ display: "flex", gap: 8 }}>
+            <button
+              type="button"
+              onClick={props.onClear}
+              style={{
+                height: 32,
+                padding: "0 12px",
+                border: "1px solid #d4d4d4",
+                borderRadius: 8,
+                background: "transparent",
+                color: "#262626",
+                cursor: "pointer",
+                fontSize: 13,
+              }}
+            >
+              Limpar
+            </button>
+            <button
+              type="button"
+              style={{
+                height: 32,
+                padding: "0 12px",
+                border: "none",
+                borderRadius: 8,
+                background: "#d2190b",
+                color: "#fafafa",
+                cursor: "pointer",
+                fontSize: 13,
+              }}
+            >
+              Excluir selecionados
+            </button>
+          </div>
+        </div>
+      );
+    }
+
+    function Demo() {
+      const [selectedKeys, setSelectedKeys] = React.useState<React.Key[]>([]);
+      return (
+        <div style={{ display: "grid", gap: 12 }}>
+          <BulkBar count={selectedKeys.length} onClear={() => setSelectedKeys([])} />
+          <Table
+            columns={baseColumns}
+            dataSource={baseData}
+            rowKey="key"
+            rowSelection={{
+              type: "checkbox",
+              selectedRowKeys: selectedKeys,
+              onChange: setSelectedKeys,
+            }}
+            pagination={false}
+          />
+        </div>
+      );
+    }
+    return <Demo />;
+  },
+};
+
+/**
+ * Cenário com seleção única (radio): apenas uma linha pode ser selecionada
+ * por vez.
+ */
+export const SingleSelection: Story = {
+  name: "Seleção única (radio)",
+  render: () => {
+    function Demo() {
+      const [selectedKeys, setSelectedKeys] = React.useState<React.Key[]>([]);
+      return (
+        <Table
+          columns={baseColumns}
+          dataSource={baseData}
+          rowKey="key"
+          rowSelection={{
+            type: "radio",
+            selectedRowKeys: selectedKeys,
+            onChange: setSelectedKeys,
+          }}
+          pagination={false}
+        />
+      );
+    }
+    return <Demo />;
+  },
+};
+
+/**
+ * Cenário responsivo mobile: largura estreita + `scroll.x` para rolagem
+ * horizontal da tabela.
+ */
+export const MobileScroll: Story = {
+  name: "Responsivo — Mobile (scroll.x)",
+  parameters: {
+    viewport: { defaultViewport: "mobile1" },
+  },
+  render: () => (
+    <div style={{ width: 360, border: "1px dashed #d4d4d4", padding: 8 }}>
+      <Table
+        columns={baseColumns}
+        dataSource={baseData}
+        pagination={false}
+        scroll={{ x: 600 }}
+      />
     </div>
   ),
 };

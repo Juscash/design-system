@@ -1,11 +1,11 @@
 import React, { useMemo } from "react";
 import { ConfigProvider, Table as AntdTable } from "antd";
-import type { ColumnsType, TablePaginationConfig } from "antd/es/table/interface";
+import type { ColumnsType, ColumnType, TablePaginationConfig } from "antd/es/table/interface";
 import type { TableProps as AntdTableProps } from "antd/es/table";
 import { ChevronLeft, ChevronRight, ChevronsUpDown } from "lucide-react";
 import { Tooltip } from "../Tooltip";
 import { designSystemColors, radius, spacing } from "../../theme";
-import type { TableProps } from "../../types/components/Table";
+import type { TableProps, TableResponsiveMode } from "../../types/components/Table";
 import "./index.module.css";
 
 const PAGINATION_DEFAULT_SIZE = 5;
@@ -14,10 +14,23 @@ const SORTER_ICON_SIZE = 16;
 const FONT_SIZE_DEFAULT = 13;
 const OPTION_HEIGHT = 28;
 const PAGINATION_ITEM_SIZE = 32;
+const SINGULAR_COUNT = 1;
 const TABLE_FONT_FAMILY = "Inter, sans-serif";
 const COLOR_TRANSPARENT_WHITE_HIGHER = "rgba(255, 255, 255, 0.01)";
 const COLOR_TRANSPARENT_WHITE_FULL = "rgba(255, 255, 255, 0)";
 const PAGINATION_GAP = 4;
+const CHECKBOX_INTERACTIVE_SIZE = 16;
+const DEFAULT_RESPONSIVE_MODE: TableResponsiveMode = "scroll";
+
+const RESPONSIVE_CLASS_MAP: Record<TableResponsiveMode, string | undefined> = {
+  scroll: undefined,
+  blocks: "ds-table--blocks",
+  auto: "ds-table--auto",
+};
+
+const DEFAULT_LOCALE = {
+  emptyText: "Nenhum registro encontrado.",
+};
 
 interface DefaultPaginationArgs {
   pagination: TablePaginationConfig | false | undefined;
@@ -43,16 +56,17 @@ const paginationItemStyle: React.CSSProperties = {
 };
 
 function renderTotalText(total: number): React.ReactNode {
-  return <span style={totalTextStyle}>{total} registros</span>;
+  const label = total === SINGULAR_COUNT ? "item" : "itens";
+  return <span style={totalTextStyle}>{total} {label}</span>;
 }
 
 function renderPaginationItem(type: "prev" | "next"): React.ReactNode {
   const isPrev = type === "prev";
   return (
     <span style={paginationItemStyle}>
-      {isPrev && <ChevronLeft size={ICON_SIZE} />}
+      {isPrev && <ChevronLeft size={ICON_SIZE} aria-hidden="true" />}
       {isPrev ? "Anterior" : "Próximo"}
-      {!isPrev && <ChevronRight size={ICON_SIZE} />}
+      {!isPrev && <ChevronRight size={ICON_SIZE} aria-hidden="true" />}
     </span>
   );
 }
@@ -125,28 +139,47 @@ const columnTitleStyle: React.CSSProperties = {
   fontWeight: 700,
 };
 
+/**
+ * Extrai uma string descritiva do `title` da coluna, usada como
+ * `data-label` na td (necessária no modo `blocks`/`auto` que troca o
+ * cabeçalho horizontal por rótulos repetidos em cada célula).
+ */
+function extractColumnLabel<T>(col: ColumnType<T>): string {
+  if (typeof col.title === "string") return col.title;
+  if (typeof col.title === "number") return String(col.title);
+  return "";
+}
+
 function buildColumns<T>(columns: ColumnsType<T> | undefined): ColumnsType<T> | undefined {
-  return columns?.map((col) => ({
-    ...col,
-    ...(!col.showSorterTooltip && {
-      showSorterTooltip: { target: "sorter-icon" },
-    }),
-    ...(col.sorter && !col.sortIcon && { sortIcon: renderSortIcon }),
-    title:
-      typeof col.title === "string" ? (
-        <Tooltip title={col.title}>
-          <span style={columnTitleStyle}>{col.title}</span>
-        </Tooltip>
-      ) : (
-        col.title
-      ),
-    render: (value: unknown, record: T, index: number) => {
-      if (col.render) {
-        return col.render(value, record, index);
-      }
-      return renderCellContent(value);
-    },
-  }));
+  return columns?.map((col) => {
+    const label = extractColumnLabel(col as ColumnType<T>);
+    const existingOnCell = (col as ColumnType<T>).onCell;
+    return {
+      ...col,
+      ...(!col.showSorterTooltip && {
+        showSorterTooltip: { target: "sorter-icon" },
+      }),
+      ...(col.sorter && !col.sortIcon && { sortIcon: renderSortIcon }),
+      title:
+        typeof col.title === "string" ? (
+          <Tooltip title={col.title}>
+            <span style={columnTitleStyle}>{col.title}</span>
+          </Tooltip>
+        ) : (
+          col.title
+        ),
+      onCell: (record: T, index?: number) => {
+        const base = existingOnCell ? existingOnCell(record, index) : {};
+        return { ...base, "data-label": label };
+      },
+      render: (value: unknown, record: T, index: number) => {
+        if (col.render) {
+          return col.render(value, record, index);
+        }
+        return renderCellContent(value);
+      },
+    };
+  });
 }
 
 const tableThemeBaseToken = {
@@ -157,8 +190,6 @@ const tableThemeBaseToken = {
   borderRadius: radius.xl,
   borderRadiusLG: radius.xl,
 };
-
-const CHECKBOX_INTERACTIVE_SIZE = 16;
 
 const tableSelectTokens = {
   activeBorderColor: designSystemColors.neutral[300],
@@ -197,7 +228,7 @@ const tableCheckboxTokens = {
   colorBgContainer: designSystemColors.neutral[50],
   colorText: designSystemColors.neutral[800],
   colorTextDisabled: designSystemColors.neutral[400],
-  colorBorder: designSystemColors.neutral[300],
+  colorBorder: designSystemColors.neutral[400],
   colorBorderDisabled: designSystemColors.neutral[300],
   controlInteractiveSize: CHECKBOX_INTERACTIVE_SIZE,
   borderRadiusSM: radius.md,
@@ -233,13 +264,35 @@ function getTableThemeTokens(): NonNullable<React.ComponentProps<typeof ConfigPr
 }
 
 /**
+ * Compõe a lista de classes do `ds-table` a partir da prop `responsive`.
+ */
+function buildResponsiveClassName(responsive: TableResponsiveMode): string | undefined {
+  return RESPONSIVE_CLASS_MAP[responsive];
+}
+
+/**
  * Table do design system. Aplica tokens próprios via `ConfigProvider` local,
- * adiciona pagination customizada (i18n "Anterior"/"Próximo", contagem total,
- * page-size options) e envolve células de string/number em `Tooltip` para
- * truncamento legível.
+ * adiciona pagination customizada (i18n "Anterior"/"Próximo", contagem total
+ * em pt-BR "{N} itens", page-size options) e envolve células de
+ * string/number em `Tooltip` para truncamento legível.
+ *
+ * Suporta duas estratégias de responsividade via prop `responsive`:
+ *   - `scroll` (default): tabela horizontal com `scroll.x` quando estreita.
+ *   - `blocks`: cada linha vira um cartão com label da coluna acima do valor.
+ *   - `auto`: comportamento de `scroll` em ≥ 768 px e `blocks` em < 768 px.
  */
 export function Table<T>(props: TableProps<T>): React.ReactElement {
-  const { columns, bordered = false, className, tableLayout = "fixed", scroll = undefined, pagination, ...rest } = props;
+  const {
+    columns,
+    bordered = false,
+    className,
+    tableLayout = "fixed",
+    scroll = undefined,
+    pagination,
+    locale,
+    responsive = DEFAULT_RESPONSIVE_MODE,
+    ...rest
+  } = props;
 
   const mergedPagination = useMemo(
     () => buildPagination({ pagination: pagination as TablePaginationConfig | false | undefined }),
@@ -247,7 +300,8 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
   );
 
   const customColumns = useMemo(() => buildColumns<T>(columns), [columns]);
-  const mergedClassName = ["ds-table", className].filter(Boolean).join(" ");
+  const mergedClassName = ["ds-table", buildResponsiveClassName(responsive), className].filter(Boolean).join(" ");
+  const mergedLocale = { ...DEFAULT_LOCALE, ...locale };
 
   return (
     <ConfigProvider theme={getTableThemeTokens()}>
@@ -259,6 +313,7 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
         bordered={bordered}
         columns={customColumns}
         className={mergedClassName}
+        locale={mergedLocale}
       />
     </ConfigProvider>
   );
@@ -266,4 +321,4 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
 
 Table.displayName = "Table";
 
-export type { TableProps } from "../../types/components/Table";
+export type { TableProps, TableResponsiveMode } from "../../types/components/Table";

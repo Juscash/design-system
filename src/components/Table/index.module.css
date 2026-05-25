@@ -1,20 +1,30 @@
 /*
   Estilos próprios do Table (linhas, header, paginação, sort icon).
+
+  As medidas são extraídas direto do Figma (`node-id=4069-6603`):
+    - heading row .................. 32px
+    - data row ..................... 44px
+    - cell padding ................. 8px (vertical 0 + vertical-align middle)
+    - container border ............. 1px solid neutral-300, radius xl (8px)
+    - background ................... neutral-50 (#fafafa)
+    - selected row bg .............. neutral-200 (#e5e5e5)
+    - hover row bg ................. neutral-100 (#f5f5f5)
+    - typography ................... Inter 13/1.2 (700 no header, 400 nas células)
+    - pagination row ............... 36px, gap uniforme de 4px entre itens
 */
 
-:global(.ds-table.ant-table-wrapper) {
-  background: transparent !important;
-}
+/* ── Wrapper externo ────────────────────────────────────────────────────── */
 
+:global(.ds-table.ant-table-wrapper),
 :global(.ds-table.ant-table-wrapper) :global(.ant-table) {
   background: transparent !important;
 }
 
 :global(.ds-table.ant-table-wrapper) :global(.ant-table-container) {
-  overflow: hidden !important;
   border: 1px solid var(--color-neutral-300) !important;
   border-radius: var(--radius-xl) !important;
   background: var(--color-neutral-50) !important;
+  overflow: hidden !important;
 }
 
 :global(.ds-table.ant-table-wrapper) :global(.ant-table-header),
@@ -23,23 +33,64 @@
   background: transparent !important;
 }
 
+/*
+  Antd insere uma `.ant-table-measure-row` (linha invisível usada para
+  calcular larguras quando `scroll.x` está ativo). Em alguns layouts ela
+  renderiza com 44px de altura e cria uma "linha vazia" entre o thead e o
+  primeiro tr. Forçamos altura 0 sem remover do DOM, preservando o cálculo
+  de colunas do Antd.
+*/
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-measure-row) {
+  height: 0 !important;
+  visibility: collapse !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-measure-row) > td {
+  height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+}
+
+/* ── Heading row (thead) ────────────────────────────────────────────────── */
+
+/*
+  O `<tr>` do thead herda do `<body>` um line-height padrão (~21px na maioria
+  dos browsers) que infla a altura da linha mesmo quando o `<th>` tem
+  line-height controlado. Setamos line-height explícito no `<tr>` para evitar
+  o vazamento desse strut.
+*/
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr {
+  height: 32px !important;
+  line-height: 1 !important;
+}
+
 :global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr > th,
 :global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr > td {
   height: 32px !important;
   padding: 8px !important;
-  border-bottom: 1px solid var(--color-neutral-200) !important;
+  border-bottom: 1px solid var(--color-neutral-300) !important;
   border-inline-end: none !important;
   background: var(--color-neutral-50) !important;
   color: var(--color-neutral-800) !important;
   font-family: "Inter", sans-serif !important;
   font-size: 13px !important;
   font-weight: 700 !important;
-  line-height: 1.2 !important;
+  /*
+    line-height fixo em px (15) garante que a soma:
+      padding-block (8+8) + line-box (15) + border (1) = 32
+    bata com a altura declarada no Figma. Sem isso, o `tr` herda strut
+    de 21px do <body> e a célula salta para 36-38px.
+  */
+  line-height: 15px !important;
+  vertical-align: middle !important;
   box-sizing: border-box !important;
 }
 
-:global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr {
-  height: 32px !important;
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr > th > *,
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr > td > * {
+  line-height: 15px !important;
 }
 
 :global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr > th::before,
@@ -73,23 +124,25 @@
   background: var(--color-neutral-100) !important;
 }
 
+/* ── Data rows (tbody) ──────────────────────────────────────────────────── */
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr {
+  height: 44px !important;
+  line-height: 1 !important;
+}
+
 :global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr > td {
   height: 44px !important;
-  min-height: 44px !important;
-  padding: 8px !important;
-  border-top: 1px solid var(--color-neutral-200) !important;
+  padding: 10px 8px !important;
+  border-top: 1px solid var(--color-neutral-300) !important;
   border-inline-end: none !important;
   background: var(--color-neutral-50) !important;
-  vertical-align: middle !important;
   color: var(--color-neutral-800) !important;
   font-family: "Inter", sans-serif !important;
   font-size: 13px !important;
   line-height: 1.2 !important;
+  vertical-align: middle !important;
   box-sizing: border-box !important;
-}
-
-:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr {
-  height: 44px !important;
 }
 
 :global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr:hover > td {
@@ -103,10 +156,7 @@
   background: var(--color-neutral-200) !important;
 }
 
-:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr:global(.ds-table-row-multiline) {
-  height: 71px !important;
-}
-
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr:global(.ds-table-row-multiline),
 :global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr:global(.ds-table-row-multiline) > td {
   height: 71px !important;
 }
@@ -123,15 +173,6 @@
   min-height: 54px !important;
 }
 
-:global(.ds-table.ant-table-wrapper.ds-table-selection-preview) :global(.ant-table-tbody) > tr:hover > td {
-  background: var(--color-neutral-100) !important;
-}
-
-:global(.ds-table.ant-table-wrapper.ds-table-selection-preview) :global(.ant-table-tbody) > tr:global(.ds-table-row-selected) > td,
-:global(.ds-table.ant-table-wrapper.ds-table-selection-preview) :global(.ant-table-tbody) > tr:global(.ds-table-row-selected:hover) > td {
-  background: var(--color-neutral-200) !important;
-}
-
 :global(.ds-table.ant-table-wrapper) :global(.ant-table-cell) :global(.ant-typography),
 :global(.ds-table.ant-table-wrapper) :global(.ant-table-cell) p {
   margin: 0 !important;
@@ -143,13 +184,94 @@
   max-width: 32px !important;
 }
 
-/* ── Paginação dentro do contexto do .ds-table ── */
+/*
+  Selection column comprime padding-block para o checkbox (16px) caber
+  dentro do `height: 32px` declarado no Figma sem inflar a row toda.
+  Sem este ajuste, o checkbox força a heading row a ~36px porque
+  16 (checkbox) + 16 (padding 8+8) + 1 (border) excede 32.
+*/
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr > th:global(.ant-table-selection-column),
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr > td:global(.ant-table-selection-column) {
+  padding-block: 4px !important;
+}
+
+/* ── Checkbox dentro da Table ───────────────────────────────────────────── */
+
+/*
+  Bug fix: ao passar o mouse pela linha (bg neutral-100), o fundo do
+  checkbox (neutral-50) ficava muito próximo do bg da linha, fazendo o
+  controle "sumir" visualmente. Mantemos a borda forte e o fundo neutro
+  mesmo no hover.
+
+  Antd v6 renderiza o checkbox visível diretamente no `.ant-checkbox`
+  (sem `.ant-checkbox-inner` como em versões anteriores).
+*/
+
+/*
+  O `.ant-checkbox-wrapper` herda `line-height: 21px` do <body>, gerando
+  um strut de 21px que infla a célula da seleção (e por consequência
+  TODA a row do thead vai a 38px). Travamos line-height 1 para que o
+  wrapper se ajuste ao tamanho do checkbox visível (16px) e respeite o
+  height 32px definido na th.
+*/
+:global(.ds-table.ant-table-wrapper) :global(.ant-checkbox-wrapper) {
+  line-height: 1 !important;
+  align-items: center !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-selection) {
+  display: inline-flex !important;
+  align-items: center !important;
+  line-height: 1 !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-checkbox) {
+  background-color: var(--color-neutral-50) !important;
+  border: 1px solid var(--color-neutral-400) !important;
+  border-radius: var(--radius-md) !important;
+  transition: border-color 0.15s ease, background-color 0.15s ease !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr:hover :global(.ant-checkbox) {
+  border-color: var(--color-neutral-500) !important;
+  background-color: var(--color-neutral-50) !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-checkbox-wrapper:hover) :global(.ant-checkbox),
+:global(.ds-table.ant-table-wrapper) :global(.ant-checkbox:hover) {
+  border-color: var(--color-neutral-800) !important;
+  background-color: var(--color-neutral-50) !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-checkbox-checked) {
+  background-color: var(--color-brand-primary-600) !important;
+  border-color: var(--color-brand-primary-600) !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-checkbox-checked:hover),
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr:hover :global(.ant-checkbox-checked) {
+  background-color: var(--color-brand-primary-700) !important;
+  border-color: var(--color-brand-primary-700) !important;
+}
+
+/* ── Paginação ──────────────────────────────────────────────────────────── */
+
 :global(.ds-table.ant-table-wrapper) :global(.ant-table-pagination.ant-pagination) {
   margin: 12px 0 0 !important;
   padding: 0 !important;
   display: flex !important;
   align-items: center !important;
   gap: 4px !important;
+  flex-wrap: wrap !important;
+}
+
+/*
+  Override do Antd: `.ant-pagination-options` traz `margin-inline-start: 16px`
+  por padrão, criando um espaçamento maior que o gap uniforme de 4px do
+  Figma entre `Próximo` e o select de itens-por-página.
+*/
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-options) {
+  margin-inline-start: 0 !important;
 }
 
 :global(.ds-table.ant-table-wrapper) :global(.ant-pagination-total-text) {
@@ -160,12 +282,27 @@
   line-height: 1.2 !important;
 }
 
-:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-item),
-:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-prev),
-:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-next) {
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-item) {
   min-width: 32px !important;
   height: 32px !important;
   margin: 0 !important;
+  background: var(--color-neutral-50) !important;
+}
+
+/*
+  Anterior/Próximo: min-width 90px (conforme Figma `8124:10865` /
+  `8124:10868`), altura 32px, com o conteúdo (ícone + label)
+  centralizado horizontalmente. Usa `min-width` para que possa crescer
+  caso o consumidor traduza o label para uma string mais longa.
+*/
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-prev),
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-next) {
+  min-width: 90px !important;
+  height: 32px !important;
+  margin: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 :global(.ds-table.ant-table-wrapper) :global(.ant-pagination-item) {
@@ -173,8 +310,8 @@
   align-items: center !important;
   justify-content: center !important;
   border: 1px solid transparent !important;
-  border-radius: 8px !important;
-  background: transparent !important;
+  border-radius: var(--radius-xl) !important;
+  background: var(--color-neutral-50) !important;
 }
 
 :global(.ds-table.ant-table-wrapper) :global(.ant-pagination-item) a {
@@ -187,25 +324,46 @@
   color: var(--color-neutral-800) !important;
   font-family: "Inter", sans-serif !important;
   font-size: 13px !important;
+  font-weight: 400 !important;
+  line-height: 1.2 !important;
+}
+
+/*
+  Tipografia dos itens da paginação (numerados, ativo, prev/next):
+  Inter 13/1.2/400 conforme o Figma. Antd aplica peso 600 no
+  `-item-active` por default; reescrevemos para manter consistência.
+*/
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-item),
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-item-active),
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-item-active) a,
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-prev),
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-next),
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-prev) :global(.ant-pagination-item-link),
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-next) :global(.ant-pagination-item-link) {
+  font-family: "Inter", sans-serif !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
   line-height: 1.2 !important;
 }
 
 :global(.ds-table.ant-table-wrapper) :global(.ant-pagination-item-active),
 :global(.ds-table.ant-table-wrapper) :global(.ant-pagination-item-active:hover) {
   border-color: var(--color-neutral-300) !important;
-  background: transparent !important;
+  background: var(--color-neutral-50) !important;
 }
 
 :global(.ds-table.ant-table-wrapper) :global(.ant-pagination-prev) :global(.ant-pagination-item-link),
 :global(.ds-table.ant-table-wrapper) :global(.ant-pagination-next) :global(.ant-pagination-item-link) {
-  width: auto !important;
-  min-width: 32px !important;
+  width: 100% !important;
   height: 32px !important;
-  padding: 0 8px !important;
+  padding: 0 !important;
   border: none !important;
-  border-radius: 8px !important;
+  border-radius: var(--radius-xl) !important;
   background: transparent !important;
   color: var(--color-neutral-800) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
 }
 
 :global(.ds-table.ant-table-wrapper) :global(.ant-pagination-prev) :global(.ant-pagination-item-link:hover),
@@ -219,17 +377,13 @@
   color: var(--color-neutral-400) !important;
 }
 
-:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-options) {
-  margin-inline-start: 8px !important;
-}
-
 :global(.ds-table.ant-table-wrapper) :global(.ant-pagination-options-size-changer.ant-select) {
   width: 165px !important;
   height: 36px !important;
   min-height: 36px !important;
   padding: 0 8px 0 12px !important;
   border: 1px solid var(--color-neutral-300) !important;
-  border-radius: 8px !important;
+  border-radius: var(--radius-xl) !important;
   background: var(--color-neutral-50) !important;
   box-sizing: border-box !important;
 }
@@ -272,4 +426,117 @@
   display: flex !important;
   align-items: center !important;
   color: var(--color-neutral-800) !important;
+}
+
+/* ── Modo responsivo "blocks" (cards) ───────────────────────────────────── */
+
+/*
+  A variante `responsive="blocks"` (`.ds-table--blocks`) transforma cada
+  linha em um cartão vertical empilhando as células — cada cell exibe o
+  rótulo da coluna acima do valor, conforme o frame `table cell mobile`
+  do Figma (`4791:12172`). Use quando a tabela precisar ser legível em
+  viewports estreitos sem scroll horizontal.
+*/
+
+:global(.ds-table--blocks) :global(.ant-table-thead) {
+  display: none !important;
+}
+
+:global(.ds-table--blocks) :global(.ant-table-tbody) > tr {
+  display: flex !important;
+  flex-direction: column !important;
+  width: 100% !important;
+  height: auto !important;
+  padding: 16px !important;
+  border-top: 1px solid var(--color-neutral-300) !important;
+  background: var(--color-neutral-50) !important;
+}
+
+:global(.ds-table--blocks) :global(.ant-table-tbody) > tr:first-child {
+  border-top: none !important;
+}
+
+:global(.ds-table--blocks) :global(.ant-table-tbody) > tr > td {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  padding: 8px 0 !important;
+  border-top: none !important;
+}
+
+:global(.ds-table--blocks) :global(.ant-table-tbody) > tr > td::before {
+  content: attr(data-label);
+  display: block;
+  margin-bottom: 4px;
+  color: var(--color-neutral-500);
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+:global(.ds-table--blocks) :global(.ant-table-tbody) > tr > td:global(.ant-table-selection-column),
+:global(.ds-table--blocks) :global(.ant-table-tbody) > tr > td[data-label=""] {
+  padding: 0 !important;
+}
+
+:global(.ds-table--blocks) :global(.ant-table-tbody) > tr > td:global(.ant-table-selection-column)::before,
+:global(.ds-table--blocks) :global(.ant-table-tbody) > tr > td[data-label=""]::before {
+  display: none !important;
+}
+
+:global(.ds-table--blocks) :global(.ant-table-container) {
+  overflow: visible !important;
+}
+
+:global(.ds-table--blocks) :global(.ant-table-cell-scrollbar) {
+  display: none !important;
+}
+
+/* Em viewport < 768px, força automaticamente o modo `auto`. */
+@media (max-width: 767px) {
+  :global(.ds-table--auto) :global(.ant-table-thead) {
+    display: none !important;
+  }
+
+  :global(.ds-table--auto) :global(.ant-table-tbody) > tr {
+    display: flex !important;
+    flex-direction: column !important;
+    width: 100% !important;
+    height: auto !important;
+    padding: 16px !important;
+    border-top: 1px solid var(--color-neutral-300) !important;
+    background: var(--color-neutral-50) !important;
+  }
+
+  :global(.ds-table--auto) :global(.ant-table-tbody) > tr:first-child {
+    border-top: none !important;
+  }
+
+  :global(.ds-table--auto) :global(.ant-table-tbody) > tr > td {
+    display: grid !important;
+    grid-template-columns: minmax(0, 1fr) !important;
+    width: 100% !important;
+    height: auto !important;
+    min-height: 0 !important;
+    padding: 8px 0 !important;
+    border-top: none !important;
+  }
+
+  :global(.ds-table--auto) :global(.ant-table-tbody) > tr > td::before {
+    content: attr(data-label);
+    display: block;
+    margin-bottom: 4px;
+    color: var(--color-neutral-500);
+    font-family: "Inter", sans-serif;
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  :global(.ds-table--auto) :global(.ant-table-tbody) > tr > td[data-label=""]::before {
+    display: none !important;
+  }
 }
