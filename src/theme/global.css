@@ -267,33 +267,9 @@
 
 /* ============================================
    BUTTON — overrides nativos
+   Os overrides específicos do Button do design system foram movidos para
+   src/components/Button/index.module.css (scoped via classe .button).
    ============================================ */
-.ant-btn-icon {
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-
-.ant-btn-block:hover {
-  box-shadow: none !important;
-}
-
-.ant-btn:not(:disabled):focus-visible {
-  outline: 3px solid var(--color-neutral-300) !important;
-  outline-offset: -1px !important;
-}
-
-.ant-btn-variant-outlined.ant-btn:not(:disabled):not(.ant-btn-disabled):hover {
-  color: var(--color-neutral-800) !important;
-}
-
-.ant-btn-variant-outlined.ant-btn:not(:disabled):not(.ant-btn-disabled):active {
-  color: var(--color-neutral-800) !important;
-}
-
-.ant-btn.ant-btn-loading {
-  opacity: 1 !important;
-}
 
 /* ============================================
    SELECT — overrides nativos

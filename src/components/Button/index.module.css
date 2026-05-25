@@ -1,0 +1,40 @@
+/*
+  Estilos próprios do Button. Classes envoltas em `:global(...)` para que
+  permaneçam globais após a transformação do Vite (Storybook) e do
+  pós-processamento do `tsup` (ver `tsup.config.ts`).
+
+  A classe `.ds-button` é aplicada ao próprio elemento `<button>` (filho
+  do `ConfigProvider` local). Demais seletores referenciam classes do
+  Antd via composição.
+
+  Classes:
+    - `.ds-button` : wrapper aplicado ao Antd Button do design system.
+*/
+
+:global(.ds-button) {
+  line-height: 1.2;
+}
+
+:global(.ds-button .ant-btn-icon) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+:global(.ds-button.ant-btn-loading) {
+  opacity: 1 !important;
+}
+
+:global(.ds-button.ant-btn-block:hover) {
+  box-shadow: none !important;
+}
+
+:global(.ds-button:not(:disabled):focus-visible) {
+  outline: 3px solid var(--color-neutral-300) !important;
+  outline-offset: -1px !important;
+}
+
+:global(.ds-button.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover),
+:global(.ds-button.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):active) {
+  color: var(--color-neutral-800) !important;
+}
