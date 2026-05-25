@@ -48,48 +48,16 @@ describe("Checkbox", () => {
     expect(wrapper?.className).not.toMatch(/ds-checkbox--truncate/);
   });
 
-  it("applies max-width 240px by default when truncate is true and width is omitted", () => {
+  it("applies ds-checkbox--truncate class and no inline max-width (uses 100% via CSS)", () => {
     const { container } = render(<Checkbox truncate>Texto</Checkbox>);
     const wrapper = container.querySelector("label.ant-checkbox-wrapper") as HTMLElement | null;
-    expect(wrapper?.style.maxWidth).toBe("240px");
-  });
-
-  it("does not apply max-width when truncate=false and width is omitted", () => {
-    const { container } = render(<Checkbox>Texto</Checkbox>);
-    const wrapper = container.querySelector("label.ant-checkbox-wrapper") as HTMLElement | null;
     expect(wrapper?.style.maxWidth).toBe("");
+    expect(wrapper?.className).toMatch(/ds-checkbox--truncate/);
   });
 
-  it("accepts width as number (interpreted as pixels)", () => {
-    const { container } = render(<Checkbox width={320}>Texto</Checkbox>);
+  it("forwards consumer-provided style untouched", () => {
+    const { container } = render(<Checkbox style={{ marginTop: 8 }}>Texto</Checkbox>);
     const wrapper = container.querySelector("label.ant-checkbox-wrapper") as HTMLElement | null;
-    expect(wrapper?.style.maxWidth).toBe("320px");
-  });
-
-  it("accepts width as CSS string (used verbatim)", () => {
-    const { container } = render(<Checkbox width="50%">Texto</Checkbox>);
-    const wrapper = container.querySelector("label.ant-checkbox-wrapper") as HTMLElement | null;
-    expect(wrapper?.style.maxWidth).toBe("50%");
-  });
-
-  it("width takes precedence over truncate default", () => {
-    const { container } = render(
-      <Checkbox truncate width={180}>
-        Texto
-      </Checkbox>,
-    );
-    const wrapper = container.querySelector("label.ant-checkbox-wrapper") as HTMLElement | null;
-    expect(wrapper?.style.maxWidth).toBe("180px");
-  });
-
-  it("merges width with consumer-provided style", () => {
-    const { container } = render(
-      <Checkbox width={200} style={{ marginTop: 8 }}>
-        Texto
-      </Checkbox>,
-    );
-    const wrapper = container.querySelector("label.ant-checkbox-wrapper") as HTMLElement | null;
-    expect(wrapper?.style.maxWidth).toBe("200px");
     expect(wrapper?.style.marginTop).toBe("8px");
   });
 

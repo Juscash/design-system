@@ -15,7 +15,6 @@ const RICH_SECONDARY_CLASS = "ds-checkbox-rich__secondary";
 const GROUP_CLASS = "ds-checkbox-group";
 
 const CHECKBOX_BOX_SIZE = 16;
-const TRUNCATE_DEFAULT_WIDTH = 240;
 
 /**
  * Tokens da paleta padrão do Checkbox. Aplica a brand primary no estado
@@ -76,39 +75,21 @@ function buildRichContent(label: React.ReactNode, secondaryText: string | undefi
   return (
     <span className={RICH_CONTENT_CLASS}>
       <span className={RICH_LABEL_CLASS}>{label}</span>
-      {secondaryText ? <span className={RICH_SECONDARY_CLASS}>{secondaryText}</span> : null}
+      {secondaryText ?
+        <span className={RICH_SECONDARY_CLASS}>{secondaryText}</span>
+      : null}
     </span>
   );
-}
-
-/**
- * Resolve a largura máxima efetiva. Quando `width` é informado, usa o valor;
- * se for um número, vira pixels. Quando `width` é `undefined` e `truncate=true`,
- * aplica o default `TRUNCATE_DEFAULT_WIDTH` (240px). Caso contrário retorna
- * `undefined` (sem `max-width` aplicado).
- */
-function resolveMaxWidth(width: number | string | undefined, truncate: boolean): string | undefined {
-  const effective = width ?? (truncate ? TRUNCATE_DEFAULT_WIDTH : undefined);
-  if (effective === undefined) return undefined;
-  return typeof effective === "number" ? `${effective}px` : effective;
-}
-
-/**
- * Mescla o `style` externo com o `maxWidth` calculado a partir de `width` +
- * `truncate`. Não cria um objeto novo se nada precisar ser injetado.
- */
-function buildStyle(external: React.CSSProperties | undefined, maxWidth: string | undefined): React.CSSProperties | undefined {
-  if (maxWidth === undefined) return external;
-  return { ...external, maxWidth };
 }
 
 /**
  * Checkbox do design system. Props proprietárias:
  *
  * - `error` — paleta vermelha (`feedback.red.500`) para validação inválida.
- * - `truncate` — label com `...` quando texto excede a largura disponível.
- * - `width` — largura máxima do wrapper. Number = pixels, string = qualquer valor CSS.
- *   Quando `truncate=true` e `width` é `undefined`, usa 240px como default.
+ * - `truncate` — wrapper ocupa 100% do container pai; label trunca com `...`
+ *   dinamicamente quando excede o espaço disponível.
+ * - `rich` — card 240×44 com `label` + `secondaryText` opcional. Combine com
+ *   `truncate` para encurtar texto longo dentro do card.
  *
  * `Checkbox.Group` é exposto como sub-componente — wrapper que aplica
  * `.ds-checkbox-group` ao container e o `ConfigProvider` com os tokens.
@@ -116,7 +97,6 @@ function buildStyle(external: React.CSSProperties | undefined, maxWidth: string 
 function CheckboxInner({
   error,
   truncate,
-  width,
   rich,
   label,
   secondaryText,
@@ -126,11 +106,6 @@ function CheckboxInner({
   ...props
 }: CheckboxProps): React.ReactElement {
   const finalClassName = buildClassName(className, Boolean(error), Boolean(truncate), Boolean(rich));
-  // No modo rich, o card já ocupa 100% do container pai — `width`/`truncate`
-  // não aplicam `max-width` inline (que sobrescreveria os 100%). O truncate
-  // do label dentro do card vem das classes CSS `.ds-checkbox--truncate`.
-  const maxWidth = rich ? undefined : resolveMaxWidth(width, Boolean(truncate));
-  const finalStyle = buildStyle(style, maxWidth);
   const renderedChildren = rich ? buildRichContent(label ?? children, secondaryText) : children;
 
   return (
@@ -141,7 +116,7 @@ function CheckboxInner({
         },
       }}
     >
-      <AntdCheckbox {...props} className={finalClassName} style={finalStyle}>
+      <AntdCheckbox {...props} className={finalClassName} style={style}>
         {renderedChildren}
       </AntdCheckbox>
     </ConfigProvider>

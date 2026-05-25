@@ -36,32 +36,17 @@ describe("Radio", () => {
     expect(wrapper?.className).toMatch(/ds-radio--truncate/);
   });
 
-  it("applies max-width 240px by default when truncate is true and width is omitted", () => {
+  it("applies ds-radio--truncate class and no inline max-width (uses 100% via CSS)", () => {
     const { container } = render(<Radio truncate>Texto</Radio>);
     const wrapper = container.querySelector("label.ant-radio-wrapper") as HTMLElement | null;
-    expect(wrapper?.style.maxWidth).toBe("240px");
+    expect(wrapper?.style.maxWidth).toBe("");
+    expect(wrapper?.className).toMatch(/ds-radio--truncate/);
   });
 
-  it("accepts width as number (interpreted as pixels)", () => {
-    const { container } = render(<Radio width={320}>Texto</Radio>);
+  it("forwards consumer-provided style untouched", () => {
+    const { container } = render(<Radio style={{ marginTop: 8 }}>Texto</Radio>);
     const wrapper = container.querySelector("label.ant-radio-wrapper") as HTMLElement | null;
-    expect(wrapper?.style.maxWidth).toBe("320px");
-  });
-
-  it("accepts width as CSS string", () => {
-    const { container } = render(<Radio width="50%">Texto</Radio>);
-    const wrapper = container.querySelector("label.ant-radio-wrapper") as HTMLElement | null;
-    expect(wrapper?.style.maxWidth).toBe("50%");
-  });
-
-  it("width takes precedence over truncate default", () => {
-    const { container } = render(
-      <Radio truncate width={180}>
-        Texto
-      </Radio>,
-    );
-    const wrapper = container.querySelector("label.ant-radio-wrapper") as HTMLElement | null;
-    expect(wrapper?.style.maxWidth).toBe("180px");
+    expect(wrapper?.style.marginTop).toBe("8px");
   });
 
   it("calls onChange when clicked", () => {

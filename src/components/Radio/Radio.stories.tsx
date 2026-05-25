@@ -92,12 +92,7 @@ function Example() {
     },
     truncate: {
       control: "boolean",
-      description: "Aplica `...` no label quando o texto ultrapassa a largura disponível.",
-    },
-    width: {
-      control: { type: "number" },
-      description:
-        "Largura máxima do wrapper. Number = pixels; string = qualquer valor CSS. Default `240` quando `truncate=true`.",
+      description: "Wrapper ocupa 100% do container pai e label trunca com `...` dinamicamente.",
     },
     focus: {
       control: "boolean",
@@ -182,27 +177,20 @@ export const ErrorFocus: Story = {
 export const Truncate: Story = {
   args: {
     truncate: true,
-    children: "Texto de label bem mais longo que o limite imposto pelo width para forçar o ellipsis",
+    children: "Texto de label bem mais longo que o container — trunca dinamicamente conforme a largura do pai",
   },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 300, border: "1px dashed #d4d4d4", padding: 8 }}>
+        <Story />
+      </div>
+    ),
+  ],
   parameters: {
     docs: {
       description: {
-        story: "`truncate=true` sem `width` explícito usa o default `240` (240px).",
-      },
-    },
-  },
-};
-
-export const TruncateWidthCustom: Story = {
-  args: {
-    truncate: true,
-    width: 160,
-    children: "Texto de label mais longo que 160px",
-  },
-  parameters: {
-    docs: {
-      description: {
-        story: "`width=160` sobrescreve o default 240.",
+        story:
+          "`truncate=true` faz o wrapper preencher 100% do container pai (300px aqui). Label ganha `...` quando excede o espaço.",
       },
     },
   },
@@ -275,7 +263,9 @@ export const GroupList: Story = {
 export const RichUnchecked: Story = {
   args: { rich: true, label: "Opção Premium", secondaryText: "Inclui todos os benefícios" },
   parameters: {
-    docs: { description: { story: "`rich=true` envelopa o radio em card 240×44 com `label` + `secondaryText`. Estado: unchecked." } },
+    docs: {
+      description: { story: "`rich=true` envelopa o radio em card 240×44 com `label` + `secondaryText`. Estado: unchecked." },
+    },
   },
 };
 
@@ -296,7 +286,9 @@ export const RichGroup: Story = {
   ),
   parameters: {
     docs: {
-      description: { story: "`Radio.Group` coordena seleção exclusiva. Múltiplos `rich` empilhados — composição típica em formulários." },
+      description: {
+        story: "`Radio.Group` coordena seleção exclusiva. Múltiplos `rich` empilhados — composição típica em formulários.",
+      },
     },
   },
 };

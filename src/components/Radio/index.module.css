@@ -176,10 +176,13 @@
    TRUNCATE — ellipsis no label
    ============================================================ */
 
+/* Truncate dinâmico: o wrapper preenche 100% do container pai (a menos
+   que o consumidor passe `width` inline). Quando o texto excede a largura
+   disponível, recebe `...` automaticamente — sem precisar de `width` explícito. */
 :global(.ds-radio--truncate.ant-radio-wrapper) {
   display: inline-flex;
   align-items: center;
-  max-width: 100%;
+  width: 100%;
   min-width: 0;
 }
 

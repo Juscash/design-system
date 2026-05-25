@@ -17,7 +17,6 @@ const GROUP_CLASS = "ds-radio-group";
 const RADIO_SIZE = 16;
 const DOT_SIZE = 8;
 const FOCUS_OUTLINE_WIDTH = 3;
-const TRUNCATE_DEFAULT_WIDTH = 240;
 
 /**
  * Tokens base do Radio (variante sem erro). Inclui os campos `button*` por
@@ -99,44 +98,25 @@ function buildRichContent(label: React.ReactNode, secondaryText: string | undefi
   return (
     <span className={RICH_CONTENT_CLASS}>
       <span className={RICH_LABEL_CLASS}>{label}</span>
-      {secondaryText ? <span className={RICH_SECONDARY_CLASS}>{secondaryText}</span> : null}
+      {secondaryText ?
+        <span className={RICH_SECONDARY_CLASS}>{secondaryText}</span>
+      : null}
     </span>
   );
-}
-
-/**
- * Resolve a largura máxima efetiva (em string CSS). Quando `width` é número,
- * vira pixels. Quando `width` é undefined e `truncate=true`, usa o default.
- */
-function resolveMaxWidth(width: number | string | undefined, truncate: boolean): string | undefined {
-  const effective = width ?? (truncate ? TRUNCATE_DEFAULT_WIDTH : undefined);
-  if (effective === undefined) return undefined;
-  return typeof effective === "number" ? `${effective}px` : effective;
-}
-
-/**
- * Mescla o `style` externo com o `maxWidth` calculado a partir de `width` +
- * `truncate`. Retorna `undefined` quando não há nada para injetar.
- */
-function buildStyle(external: React.CSSProperties | undefined, maxWidth: string | undefined): React.CSSProperties | undefined {
-  if (maxWidth === undefined) return external;
-  return { ...external, maxWidth };
 }
 
 /**
  * Radio do design system. Props proprietárias:
  *
  * - `error` — paleta vermelha (`feedback.red.500`) para validação inválida.
- * - `truncate` — label com `...` quando excede a largura disponível.
- * - `width` — largura máxima do wrapper. Number = px; string = CSS livre.
+ * - `truncate` — wrapper ocupa 100% do container pai; label trunca com `...`
+ *   dinamicamente quando excede o espaço disponível.
+ * - `rich` — card 240×44 com `label` + `secondaryText` opcional. Combine com
+ *   `truncate` para encurtar texto longo dentro do card.
  */
 function RadioInner(props: RadioProps): React.ReactElement {
-  const { error, truncate, width, rich, label, secondaryText, className, style, children, ...rest } = props;
+  const { error, truncate, rich, label, secondaryText, className, style, children, ...rest } = props;
   const finalClassName = buildClassName(className, Boolean(error), Boolean(truncate), Boolean(rich));
-  // No modo rich o card já ocupa 100% do container pai — não aplicamos
-  // `max-width` inline. O truncate do label dentro do card vem do CSS.
-  const maxWidth = rich ? undefined : resolveMaxWidth(width, Boolean(truncate));
-  const finalStyle = buildStyle(style, maxWidth);
   const renderedChildren = rich ? buildRichContent(label ?? children, secondaryText) : children;
 
   return (
@@ -146,7 +126,7 @@ function RadioInner(props: RadioProps): React.ReactElement {
         token: getTokenOverrides(Boolean(error)),
       }}
     >
-      <AntdRadio {...rest} className={finalClassName} style={finalStyle}>
+      <AntdRadio {...rest} className={finalClassName} style={style}>
         {renderedChildren}
       </AntdRadio>
     </ConfigProvider>
