@@ -3,16 +3,25 @@ import { ConfigProvider, Switch as AntdSwitch } from "antd";
 import type { ComponentToken } from "antd/es/switch/style";
 import { designSystemColors, shadow, spacing } from "../../theme";
 import type { SwitchProps } from "../../types/components/Switch";
+import "./index.module.css";
 
-const TRACK_HEIGHT = 24;
-const TRACK_HEIGHT_SM = 20;
-const TRACK_MIN_WIDTH = 44;
-const TRACK_MIN_WIDTH_SM = 36;
+const BASE_CLASS = "ds-switch";
+const ERROR_CLASS = "ds-switch-error";
+
+const TRACK_HEIGHT = 18;
+const TRACK_HEIGHT_SM = 14;
+const TRACK_MIN_WIDTH = 33;
+const TRACK_MIN_WIDTH_SM = 26;
 const TRACK_PADDING = 2;
-const HANDLE_SIZE = 20;
-const HANDLE_SIZE_SM = 16;
+const HANDLE_SIZE = 14;
+const HANDLE_SIZE_SM = 10;
 
-const baseTokens: Partial<ComponentToken> = {
+/**
+ * Tokens do Switch alinhados ao Figma (track 33×18, handle 14, padding 2).
+ * `handleBg` é sempre `neutral.50` (branco quase). `handleShadow` usa
+ * `shadow.xs` para elevação sutil.
+ */
+const switchTokens: Partial<ComponentToken> = {
   trackHeight: TRACK_HEIGHT,
   trackHeightSM: TRACK_HEIGHT_SM,
   trackMinWidth: TRACK_MIN_WIDTH,
@@ -28,42 +37,56 @@ const baseTokens: Partial<ComponentToken> = {
   innerMaxMarginSM: spacing[2],
 };
 
-const baseTokenOverrides = {
-  colorPrimary: designSystemColors.brand.primary[600],
-  colorPrimaryHover: designSystemColors.brand.primary[700],
-  colorPrimaryActive: designSystemColors.brand.primary[800],
-  colorBorder: designSystemColors.neutral[300],
-  colorBgContainer: designSystemColors.neutral[200],
-  colorText: designSystemColors.neutral[50],
-};
-
-const errorTokenOverrides = {
-  colorPrimary: designSystemColors.feedback.red[500],
-  colorPrimaryHover: designSystemColors.feedback.red[900],
-  colorPrimaryActive: designSystemColors.feedback.red[900],
-  colorBorder: designSystemColors.neutral[300],
-  colorBgContainer: designSystemColors.neutral[200],
-  colorText: designSystemColors.neutral[50],
-};
+/**
+ * Tokens globais (cores) aplicados via `theme.token`. Hover/active recebem
+ * a mesma cor de `colorPrimary` — Figma define que o hover não muda visual.
+ *
+ * - `error=false` → verde `brand.primary.600`.
+ * - `error=true`  → vermelho `feedback.red.500`.
+ */
+function getTokenOverrides(error: boolean) {
+  if (error) {
+    return {
+      colorPrimary: designSystemColors.feedback.red[500],
+      colorPrimaryHover: designSystemColors.feedback.red[500],
+      colorPrimaryActive: designSystemColors.feedback.red[500],
+    };
+  }
+  return {
+    colorPrimary: designSystemColors.brand.primary[600],
+    colorPrimaryHover: designSystemColors.brand.primary[600],
+    colorPrimaryActive: designSystemColors.brand.primary[600],
+  };
+}
 
 /**
- * Switch do design system. Aceita `error` como prop proprietária, que aplica
- * a paleta vermelha aos estados.
+ * Compõe a className final: `.ds-switch` sempre presente, `.ds-switch-error`
+ * em erro, mais o className externo.
+ */
+function buildClassName(external: string | undefined, error: boolean): string {
+  return [BASE_CLASS, error ? ERROR_CLASS : "", external ?? ""].filter(Boolean).join(" ");
+}
+
+/**
+ * Switch do design system. Toggle on/off binário. Props proprietárias:
+ *
+ * - `error` — paleta vermelha (`feedback.red.500`) para validação inválida.
+ *
+ * Demais props (incluindo `loading`, `disabled`, `size`, `checkedChildren`,
+ * `unCheckedChildren`, `onChange`, `defaultChecked`) seguem a API do Antd.
  */
 export function Switch(props: SwitchProps): React.ReactElement {
-  const { error, ...rest } = props;
-  const tokenOverrides = error ? errorTokenOverrides : baseTokenOverrides;
+  const { error, className, ...rest } = props;
+  const finalClassName = buildClassName(className, Boolean(error));
 
   return (
     <ConfigProvider
       theme={{
-        components: {
-          Switch: baseTokens,
-        },
-        token: tokenOverrides,
+        components: { Switch: switchTokens },
+        token: getTokenOverrides(Boolean(error)),
       }}
     >
-      <AntdSwitch {...rest} />
+      <AntdSwitch {...rest} className={finalClassName} />
     </ConfigProvider>
   );
 }

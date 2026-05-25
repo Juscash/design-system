@@ -486,10 +486,8 @@
    SWITCH — overrides nativos
    (classes próprias .rich-switch-* vivem em components/RichSwitch/index.module.css)
    ============================================ */
-.ant-switch.pseudo-focus-visible {
-  box-shadow: var(--shadow-focus) !important;
-  outline: none !important;
-}
+/* Específicos do Switch foram movidos para
+   src/components/Switch/index.module.css (scoped via .ds-switch). */
 
 /* ============================================
    INPUT — overrides nativos
