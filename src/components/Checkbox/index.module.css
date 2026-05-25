@@ -1,7 +1,140 @@
 /*
-  Estilos próprios do Checkbox: variante de erro (a paleta vermelha já vem
-  via tokens do Antd; aqui ficam estados que tokens não cobrem).
+  Estilos próprios do Checkbox. Classes envoltas em `:global(...)` para
+  permanecerem globais após o processamento do Vite e do `tsup`.
+
+  Estratégia de scoping:
+    - `.ds-checkbox`         → checkbox standalone (passou pelo nosso wrapper)
+    - `.ds-checkbox-group`   → grupo do nosso wrapper; itens internos
+                                 renderizados pelo Antd via `options=[...]` ficam
+                                 sob `.ds-checkbox-group .ant-checkbox-wrapper`.
+    - `.ds-checkbox-error`   → modificador da variante de erro.
+
+  Cada regra é declarada duas vezes (uma para cada scope) para cobrir os dois
+  casos sem precisar duplicar logica no React.
 */
+
+/* ============================================================
+   FOCO E HOVER do Checkbox (padrão — sem erro)
+   ============================================================ */
+
+:global(.ds-checkbox:has(.ant-checkbox-input:focus-visible)) :global(.ant-checkbox-inner),
+:global(.ds-checkbox-group .ant-checkbox-wrapper:has(.ant-checkbox-input:focus-visible)) :global(.ant-checkbox-inner) {
+  box-shadow: var(--shadow-focus) !important;
+}
+
+:global(.ds-checkbox:hover:not(.ant-checkbox-wrapper-disabled)) :global(.ant-checkbox-inner),
+:global(.ds-checkbox-group .ant-checkbox-wrapper:hover:not(.ant-checkbox-wrapper-disabled)) :global(.ant-checkbox-inner) {
+  border-color: var(--color-neutral-300) !important;
+}
+
+/* Pseudo-states do Storybook (addon-pseudo-states). */
+:global(.ds-checkbox.pseudo-focus-visible) :global(.ant-checkbox-inner),
+:global(.ds-checkbox-group .pseudo-focus-visible.ant-checkbox-wrapper) :global(.ant-checkbox-inner) {
+  box-shadow: var(--shadow-focus) !important;
+}
+
+:global(.ds-checkbox.pseudo-active) :global(.ant-checkbox-inner),
+:global(.ds-checkbox-group .pseudo-active.ant-checkbox-wrapper) :global(.ant-checkbox-inner) {
+  border-color: var(--color-brand-primary-700) !important;
+}
+
+/* ============================================================
+   INDETERMINATE — caixa com traço branco
+   ============================================================ */
+
+:global(.ds-checkbox .ant-checkbox-indeterminate .ant-checkbox-inner::after),
+:global(.ds-checkbox-group .ant-checkbox-indeterminate .ant-checkbox-inner::after) {
+  display: none !important;
+}
+
+:global(.ds-checkbox .ant-checkbox-indeterminate .ant-checkbox-inner),
+:global(.ds-checkbox-group .ant-checkbox-indeterminate .ant-checkbox-inner) {
+  background-color: var(--color-brand-primary-600) !important;
+  border-color: var(--color-neutral-300) !important;
+}
+
+:global(.ds-checkbox .ant-checkbox-indeterminate .ant-checkbox-inner::before),
+:global(.ds-checkbox-group .ant-checkbox-indeterminate .ant-checkbox-inner::before) {
+  content: "" !important;
+  display: block !important;
+  position: absolute !important;
+  top: 50% !important;
+  left: 50% !important;
+  transform: translate(-50%, -50%) !important;
+  width: 12px !important;
+  height: 12px !important;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E") !important;
+  background-size: contain !important;
+  background-repeat: no-repeat !important;
+  background-position: center !important;
+}
+
+/* ============================================================
+   DISABLED — fundo cinza, ícone branco
+   ============================================================ */
+
+:global(.ds-checkbox.ant-checkbox-wrapper-disabled .ant-checkbox-checked .ant-checkbox-inner::after),
+:global(.ds-checkbox-group .ant-checkbox-wrapper-disabled .ant-checkbox-checked .ant-checkbox-inner::after) {
+  border-color: white !important;
+}
+
+:global(.ds-checkbox.ant-checkbox-wrapper-disabled .ant-checkbox-indeterminate .ant-checkbox-inner),
+:global(.ds-checkbox-group .ant-checkbox-wrapper-disabled .ant-checkbox-indeterminate .ant-checkbox-inner) {
+  background-color: var(--color-neutral-300) !important;
+  border-color: var(--color-neutral-300) !important;
+}
+
+:global(.ds-checkbox .ant-checkbox-disabled .ant-checkbox-inner),
+:global(.ds-checkbox-group .ant-checkbox-disabled .ant-checkbox-inner) {
+  background-color: var(--color-neutral-300) !important;
+  border-color: var(--color-neutral-300) !important;
+}
+
+:global(.ds-checkbox.ant-checkbox-wrapper-disabled .ant-checkbox-indeterminate .ant-checkbox-inner::before),
+:global(.ds-checkbox-group .ant-checkbox-wrapper-disabled .ant-checkbox-indeterminate .ant-checkbox-inner::before) {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E") !important;
+}
+
+/* ============================================================
+   LABEL — tipografia conforme foundations
+   ============================================================ */
+
+:global(.ds-checkbox.ant-checkbox-wrapper > span:last-child),
+:global(.ds-checkbox-group .ant-checkbox-wrapper > span:last-child),
+:global(.ds-checkbox .ant-checkbox-label),
+:global(.ds-checkbox-group .ant-checkbox-label) {
+  font-family: var(--font-primary) !important;
+  font-size: var(--font-body-2-size) !important;
+  font-weight: 400 !important;
+  color: var(--color-neutral-800) !important;
+}
+
+/* ============================================================
+   TRUNCATE — ellipsis no label quando o texto excede a largura
+   Aplicado via prop `truncate=true` (classe `.ds-checkbox--truncate`).
+   O consumidor precisa fornecer largura externa (max-width / width fixo
+   / container limitado) — sem container, não há o que truncar.
+   ============================================================ */
+
+:global(.ds-checkbox--truncate.ant-checkbox-wrapper) {
+  display: inline-flex;
+  align-items: center;
+  max-width: 100%;
+  min-width: 0;
+}
+
+:global(.ds-checkbox--truncate.ant-checkbox-wrapper > span:last-child),
+:global(.ds-checkbox--truncate .ant-checkbox-label) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+/* ============================================================
+   ERROR — paleta vermelha em foco e hover
+   ============================================================ */
 
 :global(.ds-checkbox-error:has(.ant-checkbox-input:focus-visible)) :global(.ant-checkbox-inner) {
   box-shadow: var(--shadow-focus-error) !important;
@@ -11,6 +144,6 @@
   border-color: var(--color-feedback-red-900) !important;
 }
 
-:global(.pseudo-focus-visible.ds-checkbox-error) :global(.ant-checkbox-inner) {
+:global(.ds-checkbox-error.pseudo-focus-visible) :global(.ant-checkbox-inner) {
   box-shadow: var(--shadow-focus-error) !important;
 }

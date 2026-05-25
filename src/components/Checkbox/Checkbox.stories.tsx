@@ -98,6 +98,15 @@ function Example() {
     error: {
       control: "boolean",
     },
+    truncate: {
+      control: "boolean",
+      description: "Aplica `...` no label quando o texto ultrapassa a largura disponível.",
+    },
+    width: {
+      control: { type: "number" },
+      description:
+        "Largura máxima do wrapper. Number = pixels, string = qualquer valor CSS. Default `240` quando `truncate=true`.",
+    },
 
     active: {
       control: "boolean",
@@ -194,6 +203,71 @@ export const Disabled: Story = {
   args: {
     disabled: true,
     children: "Disabled",
+  },
+};
+
+export const Truncate: StoryObj<CheckboxStoryProps> = {
+  args: {
+    truncate: true,
+    children: "Texto de label bem mais longo que o limite imposto pelo width para forçar o ellipsis",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "`truncate=true` sem `width` explícito usa o default `240` (240px). Aplica `...` quando o texto excede a largura.",
+      },
+    },
+  },
+};
+
+export const TruncateOff: StoryObj<CheckboxStoryProps> = {
+  args: {
+    children: "Texto de label bem mais longo do que o normal — sem truncate o texto quebra em múltiplas linhas",
+    width: 220,
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "Com `width=220` mas sem `truncate`: o texto quebra em múltiplas linhas em vez de truncar.",
+      },
+    },
+  },
+};
+
+export const TruncateWidthCustom: StoryObj<CheckboxStoryProps> = {
+  args: {
+    truncate: true,
+    width: 160,
+    children: "Texto de label mais longo que 160px",
+  },
+  parameters: {
+    docs: {
+      description: {
+        story: "`width` (number) sobrescreve o default 240. Aqui aplicamos `width=160` (160px).",
+      },
+    },
+  },
+};
+
+export const TruncateWidthPercentage: StoryObj<CheckboxStoryProps> = {
+  args: {
+    truncate: true,
+    width: "50%",
+    children: "Texto de label que excede 50% do container pai",
+  },
+  decorators: [
+    (Story) => (
+      <div style={{ width: 480, border: "1px dashed #d4d4d4", padding: 8 }}>
+        <Story />
+      </div>
+    ),
+  ],
+  parameters: {
+    docs: {
+      description: {
+        story: '`width` aceita string CSS — aqui `"50%"` em um container de 480px ⇒ checkbox ocupa no máximo 240px.',
+      },
+    },
   },
 };
 

@@ -503,75 +503,9 @@
 
 /* ============================================
    CHECKBOX — overrides nativos
-   (classes próprias .ds-checkbox-error vivem em components/Checkbox/index.module.css)
+   Específicos do Checkbox do design system foram movidos para
+   src/components/Checkbox/index.module.css (scoped via classe .ds-checkbox).
    ============================================ */
-.ant-checkbox-wrapper:has(.ant-checkbox-input:focus-visible) .ant-checkbox-inner,
-.ant-checkbox:has(.ant-checkbox-input:focus-visible) .ant-checkbox-inner {
-  box-shadow: var(--shadow-focus) !important;
-}
-
-.ant-checkbox-wrapper:hover:not(.ant-checkbox-wrapper-disabled) .ant-checkbox-inner,
-.ant-checkbox:hover:not(.ant-checkbox-disabled) .ant-checkbox-inner {
-  border-color: var(--color-neutral-300) !important;
-}
-
-.ant-checkbox-indeterminate .ant-checkbox-inner::after {
-  display: none !important;
-}
-
-.ant-checkbox-indeterminate .ant-checkbox-inner {
-  background-color: var(--color-brand-primary-600) !important;
-  border-color: var(--color-neutral-300) !important;
-}
-
-.ant-checkbox-indeterminate .ant-checkbox-inner::before {
-  content: "" !important;
-  display: block !important;
-  position: absolute !important;
-  top: 50% !important;
-  left: 50% !important;
-  transform: translate(-50%, -50%) !important;
-  width: 12px !important;
-  height: 12px !important;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E") !important;
-  background-size: contain !important;
-  background-repeat: no-repeat !important;
-  background-position: center !important;
-}
-
-.pseudo-focus-visible .ant-checkbox-inner {
-  box-shadow: var(--shadow-focus) !important;
-}
-
-.pseudo-active .ant-checkbox-inner {
-  border-color: var(--color-brand-primary-700) !important;
-}
-
-/* Disabled states do checkbox */
-.ant-checkbox-wrapper-disabled .ant-checkbox-checked .ant-checkbox-inner::after {
-  border-color: white !important;
-}
-
-.ant-checkbox-wrapper-disabled .ant-checkbox-indeterminate .ant-checkbox-inner {
-  background-color: var(--color-neutral-300) !important;
-  border-color: var(--color-neutral-300) !important;
-}
-
-.ant-checkbox-disabled .ant-checkbox-inner {
-  background-color: var(--color-neutral-300) !important;
-  border-color: var(--color-neutral-300) !important;
-}
-
-.ant-checkbox-wrapper-disabled .ant-checkbox-indeterminate .ant-checkbox-inner::before {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M5 12h14'/%3E%3C/svg%3E") !important;
-}
-
-.ant-checkbox-label {
-  font-family: var(--font-primary) !important;
-  font-size: 13px !important;
-  font-weight: 400 !important;
-  color: var(--color-neutral-800) !important;
-}
 
 /* ============================================
    SWITCH — overrides nativos
