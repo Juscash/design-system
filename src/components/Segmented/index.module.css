@@ -1,0 +1,83 @@
+/*
+  Estilos próprios do Segmented. Classes envoltas em `:global(...)` para
+  permanecerem globais após o processamento do Vite (Storybook) e do
+  pós-processamento do `tsup` (ver `tsup.config.ts`).
+
+  Classes:
+    - `.ds-segmented`             : raiz do componente (aplicada via `className`).
+    - `.ds-segmented__label`      : wrapper inline-flex de ícone + texto + counter.
+    - `.ds-segmented__icon`       : wrapper do ícone (alinhamento vertical).
+    - `.ds-segmented__text`       : texto da opção (font-size por size).
+    - `.ds-segmented__text--xs`   : modifier para o tamanho `xs` (font 10px).
+    - `.ds-segmented__counter`    : badge circular numérica.
+*/
+
+:global(.ds-segmented .ant-segmented-item-selected) {
+  font-weight: 700 !important;
+}
+
+/* Raio dos itens (selecionados/inativos) conforme spec do Figma:
+   - m / s usam radius/xl (8px) — Antd já aplica isso por default.
+   - xs usa radius/md (4px) — Antd default rende 2px no small; forçamos 4px. */
+:global(.ds-segmented.ant-segmented-sm .ant-segmented-item) {
+  border-radius: var(--radius-md) !important;
+}
+
+/* Centraliza verticalmente o conteúdo do item. O Antd renderiza
+   `.ant-segmented-item-label` como `display: block` com `height` fixo (ex.
+   28px no `m`), o que deixa o nosso span `.ds-segmented__label` (16px de
+   altura) grudado no topo. Forçamos `flex + align-items: center` para que
+   ícone, texto e counter fiquem alinhados verticalmente no centro. */
+:global(.ds-segmented .ant-segmented-item-label) {
+  align-items: center !important;
+  display: flex !important;
+  justify-content: center !important;
+}
+
+:global(.ds-segmented__label) {
+  align-items: center;
+  display: inline-flex;
+  gap: var(--spacing-1);
+}
+
+:global(.ds-segmented__icon) {
+  align-items: center;
+  display: inline-flex;
+}
+
+:global(.ds-segmented__text) {
+  font-size: var(--font-body-2-size);
+  line-height: var(--font-line-height);
+}
+
+:global(.ds-segmented__text--xs) {
+  font-size: var(--font-caption-size);
+}
+
+:global(.ds-segmented__counter) {
+  align-items: center;
+  background-color: var(--color-feedback-red-500);
+  border-radius: var(--radius-full);
+  color: var(--color-text-light);
+  display: inline-flex;
+  font-size: var(--font-caption-size);
+  font-weight: 400;
+  height: 14px;
+  justify-content: center;
+  min-width: 14px;
+  padding: 0 4px;
+}
+
+/* Visualmente oculto, mas exposto para leitores de tela. Usado pelo nome
+   acessível de opções icon-only. */
+:global(.ds-segmented__sr-only) {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}

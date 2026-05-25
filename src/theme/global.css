@@ -233,10 +233,9 @@
 
 /* ============================================
    SEGMENTED — overrides nativos
+   Específicos do Segmented do design system foram movidos para
+   src/components/Segmented/index.module.css (scoped via classe .ds-segmented).
    ============================================ */
-.ant-segmented-item-selected {
-  font-weight: 700 !important;
-}
 
 /* ============================================
    FORM — overrides nativos

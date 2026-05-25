@@ -1,14 +1,15 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { Grid, List } from "lucide-react";
 import { Description, Controls, Primary as DocsPrimary, Stories, Subtitle, Title } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 import { Segmented } from ".";
-import { designSystemColors } from "../../theme";
+import type { SegmentedSize } from "../../types/components/Segmented";
 
 const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4886-14656&m=dev";
 
-type SegmentedStoryProps = React.ComponentProps<typeof Segmented> & {};
+type SegmentedStoryProps = React.ComponentProps<typeof Segmented>;
+
+const SIZES: SegmentedSize[] = ["m", "s", "xs"];
 
 const meta: Meta<SegmentedStoryProps> = {
   title: "Components/Segmented",
@@ -20,13 +21,36 @@ const meta: Meta<SegmentedStoryProps> = {
       codePanel: true,
       description: {
         component: `
-Componente de controle segmentado baseado no [Ant Design Segmented](https://ant.design/components/segmented).
+Controle segmentado do design system Juscash. Embrulha o [Ant Design Segmented](https://ant.design/components/segmented)
+aplicando tokens proprietários via \`ConfigProvider\` local e enriquecendo cada opção com **ícone**, **texto** e **contador**.
 
-### Props:
-- **Extended (Ant Design)**: suporta propriedades nativas do AntD.
-- **Custom (Juscash)**:
-  - \`size\`: \`m\` | \`s\` | \`xs\` (altura do root conforme Figma).
-  - \`options\`: aceita \`state\`, \`counter\`, \`icon\`, \`text\`, \`bold\` e \`disabled\` por item.
+## Props proprietárias
+- **\`size\`** — \`m\` (36px) · \`s\` (32px) · \`xs\` (24px). Default \`m\`.
+- **\`options\`** — aceita primitivo (\`string|number\`), opção nativa Antd (\`{ value, label }\`) ou opção enriquecida (\`{ value, text, icon, counter, disabled }\`).
+
+## Props das opções enriquecidas
+- **\`value\`** — chave única (obrigatório).
+- **\`text\`** — string exibida.
+- **\`icon\`** — nome do Lucide (\`"Search"\`) ou \`ReactNode\`. Tamanho derivado do \`size\`.
+- **\`counter\`** — número ou string exibida como badge vermelho.
+- **\`disabled\`** — desabilita o item individualmente.
+
+## Props herdadas do Antd Segmented
+\`block\`, \`disabled\`, \`value\`, \`defaultValue\`, \`onChange\`, \`name\`, \`className\`, \`style\`.
+
+## Como usar
+\`\`\`tsx
+import { Segmented } from "@juscash/design-system";
+
+<Segmented
+  size="m"
+  defaultValue="grid"
+  options={[
+    { value: "list", text: "Lista", icon: "List" },
+    { value: "grid", text: "Grade", icon: "Grid" },
+  ]}
+/>
+\`\`\`
 `,
       },
       page: () => (
@@ -45,117 +69,162 @@ Componente de controle segmentado baseado no [Ant Design Segmented](https://ant.
       ),
     },
   },
-  args: {
-    size: "m",
-  },
   argTypes: {
-    size: {
-      control: "select",
-      options: ["m", "s", "xs"],
-      description: "Tamanho do componente",
-    },
-    options: {
-      control: "object",
-      description: "Lista de opcoes do segmented",
-    },
-    block: {
-      control: "boolean",
-      description: "Ajusta a largura para caber no container pai",
-    },
-    disabled: {
-      control: "boolean",
-      description: "Desabilita todo o componente",
-    },
+    size: { control: "select", options: SIZES },
+    options: { control: "object" },
+    block: { control: "boolean", description: "Distribui itens ocupando 100% da largura do pai." },
+    disabled: { control: "boolean", description: "Desabilita todo o componente." },
   },
+  args: { size: "m" },
   render: (args) => <Segmented {...args} />,
 };
 
 export default meta;
 type Story = StoryObj<SegmentedStoryProps>;
 
-const textOptions = ["Daily", "Weekly", "Monthly"];
+const textOptions = ["Diário", "Semanal", "Mensal"];
 
-const iconTextOptions = [
-  { value: "grid", text: "Grid", icon: <Grid size={16} /> },
-  { value: "list", text: "List", icon: <List size={16} /> },
+const enhancedOptions = [
+  { value: "list", text: "Lista", icon: "List" as const },
+  { value: "grid", text: "Grade", icon: "Grid" as const },
+  { value: "kanban", text: "Kanban", icon: "Columns3" as const },
 ];
 
-const iconOnlyOptions = [
-  { value: "grid", icon: <Grid size={16} />, bold: false },
-  { value: "list", icon: <List size={16} />, bold: false },
-];
+/** Playground com controls. Use os controls para experimentar combinações. */
+export const Playground: Story = {
+  args: { options: textOptions, defaultValue: "Diário" },
+};
 
-const primaryOptions = [
-  { value: "daily", text: "Daily", state: "active" as const },
-  { value: "weekly", text: "Weekly" },
-  { value: "grid", text: "Grid", icon: <Grid size={16} /> },
-  { value: "icon_only", icon: <List size={16} />, bold: false },
-  { value: "monthly", text: "Monthly", disabled: true, state: "inactive" as const },
-];
+/** Apenas texto — caso mais simples. Cada opção é uma string. */
+export const ApenasTexto: Story = {
+  args: { options: textOptions, defaultValue: "Diário" },
+};
 
-export const Primary: Story = {
+/** Texto + ícone — `icon` recebe o nome do Lucide como string. */
+export const ComIcone: Story = {
+  args: { options: enhancedOptions, defaultValue: "list" },
+};
+
+/** Icon-only — sem `text`, o item fica apenas com o ícone (alinhado ao centro). Use `ariaLabel` para acessibilidade. */
+export const SomenteIcone: Story = {
   args: {
-    size: "m",
-    options: primaryOptions,
+    options: [
+      { value: "grid", icon: "Grid", ariaLabel: "Visão em grade" },
+      { value: "list", icon: "List", ariaLabel: "Visão em lista" },
+      { value: "kanban", icon: "Columns3", ariaLabel: "Visão em kanban" },
+    ],
+    defaultValue: "grid",
   },
-  name: "Primary",
 };
 
-export const Default: Story = {
-  args: { options: ["Daily", "Weekly", "Monthly"], defaultValue: "Daily" },
-  name: "Label Only",
+/** Counter badge — número ao lado do texto, em destaque vermelho. */
+export const ComCounter: Story = {
+  args: {
+    options: [
+      { value: "all", text: "Tudo" },
+      { value: "alerts", text: "Alertas", counter: 7 },
+      { value: "archived", text: "Arquivados", counter: 128 },
+    ],
+    defaultValue: "alerts",
+  },
 };
 
-export const WithIcon: Story = {
-  args: { options: iconTextOptions, defaultValue: "grid" },
-  name: "Icon + Label",
-};
-
-export const IconOnly: Story = {
-  args: { options: iconOnlyOptions, defaultValue: "grid" },
-  name: "Icon Only",
-};
-
-export const SizeVariants: Story = {
+/** Todos os tamanhos lado a lado em `m`, `s` e `xs`. */
+export const Tamanhos: Story = {
   render: () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-      <div style={{ alignItems: "center", display: "flex", gap: 8 }}>
-        <span style={{ color: designSystemColors.neutral[500], fontSize: 12, width: 60 }}>M:</span>
-        <Segmented size="m" options={textOptions} defaultValue="Daily" />
-      </div>
-      <div style={{ alignItems: "center", display: "flex", gap: 8 }}>
-        <span style={{ color: designSystemColors.neutral[500], fontSize: 12, width: 60 }}>S:</span>
-        <Segmented size="s" options={textOptions} defaultValue="Daily" />
-      </div>
-      <div style={{ alignItems: "center", display: "flex", gap: 8 }}>
-        <span style={{ color: designSystemColors.neutral[500], fontSize: 12, width: 60 }}>XS:</span>
-        <Segmented size="xs" options={textOptions} defaultValue="Daily" />
-      </div>
+      {SIZES.map((s) => (
+        <Segmented key={s} size={s} options={textOptions} defaultValue="Diário" />
+      ))}
     </div>
   ),
-  name: "Sizes",
 };
 
+/** Estado disabled — componente inteiro ou opção individual. */
 export const Disabled: Story = {
-  args: { options: textOptions, defaultValue: "Daily", disabled: true },
+  render: () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <Segmented options={textOptions} defaultValue="Diário" disabled />
+      <Segmented
+        options={[
+          { value: "a", text: "Disponível" },
+          { value: "b", text: "Em breve", disabled: true },
+          { value: "c", text: "Disponível 2" },
+        ]}
+        defaultValue="a"
+      />
+    </div>
+  ),
 };
 
+/** `block` ocupa 100% da largura do pai distribuindo os itens igualmente. */
 export const Block: Story = {
-  args: { options: textOptions, defaultValue: "Weekly", block: true },
+  args: { block: true, options: textOptions, defaultValue: "Semanal" },
   render: (args) => (
-    <div style={{ width: 400 }}>
+    <div style={{ width: 480 }}>
       <Segmented {...args} />
     </div>
   ),
 };
 
-export const FigmaProps: Story = {
-  args: {
-    size: "m",
-    options: [
-      { value: "heart", text: "Label", icon: <Grid size={16} />, counter: "1", state: "active", bold: true },
-      { value: "list", text: "Label", icon: <List size={16} />, state: "inactive", bold: false },
-    ],
-  },
-  name: "Figma Props",
+/** Combinações reais — filtros de tela. */
+export const ExemplosReais: Story = {
+  render: () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      <Segmented
+        size="m"
+        defaultValue="todos"
+        options={[
+          { value: "todos", text: "Todos", counter: 42 },
+          { value: "ativos", text: "Ativos", counter: 18 },
+          { value: "arquivados", text: "Arquivados", counter: 24 },
+        ]}
+      />
+      <Segmented size="s" defaultValue="list" options={enhancedOptions} />
+      <Segmented
+        size="xs"
+        defaultValue="grid"
+        options={[
+          { value: "list", icon: "List", ariaLabel: "Lista" },
+          { value: "grid", icon: "Grid", ariaLabel: "Grade" },
+        ]}
+      />
+    </div>
+  ),
+};
+
+/** Matriz tamanho × tipo de opção — espelha a página Componentes do Figma. */
+export const MatrizCompleta: Story = {
+  name: "Matriz: tamanho × tipo",
+  render: () => (
+    <div
+      style={{
+        display: "grid",
+        gridTemplateColumns: "60px repeat(3, auto)",
+        gap: 16,
+        alignItems: "center",
+        justifyItems: "start",
+      }}
+    >
+      <span />
+      <span style={{ fontSize: 12, color: "#737373" }}>Texto</span>
+      <span style={{ fontSize: 12, color: "#737373" }}>Ícone + texto</span>
+      <span style={{ fontSize: 12, color: "#737373" }}>Counter</span>
+      {SIZES.map((s) => (
+        <React.Fragment key={s}>
+          <span style={{ fontSize: 12, color: "#525252", fontWeight: 600 }}>{`size=${s}`}</span>
+          <Segmented size={s} defaultValue="Diário" options={textOptions} />
+          <Segmented size={s} defaultValue="list" options={enhancedOptions.slice(0, 2)} />
+          <Segmented
+            size={s}
+            defaultValue="alerts"
+            options={[
+              { value: "all", text: "Tudo" },
+              { value: "alerts", text: "Alertas", counter: 7 },
+            ]}
+          />
+        </React.Fragment>
+      ))}
+    </div>
+  ),
 };

@@ -1,5 +1,6 @@
 import { render, screen } from "@testing-library/react";
 import { describe, expect, it } from "vitest";
+import { Plus } from "lucide-react";
 import { Segmented } from ".";
 
 describe("Segmented", () => {
@@ -10,65 +11,106 @@ describe("Segmented", () => {
     expect(screen.getByText("C")).toBeInTheDocument();
   });
 
-  it("does not force focus style on root by pseudo class", () => {
-    const { container } = render(<Segmented options={["A", "B"]} className="pseudo-focus-visible" />);
-    const segmentedRoot = container.querySelector(".ant-segmented");
-
-    expect(segmentedRoot).not.toBeNull();
-    expect(segmentedRoot).toHaveStyle({ boxShadow: "" });
-  });
-
-  it("supports only figma size aliases m, s and xs", () => {
+  it("maps size to antd size class (m=large, s=middle, xs=small)", () => {
     const { container, rerender } = render(<Segmented options={["A", "B"]} size="m" />);
-    let segmentedRoot = container.querySelector(".ant-segmented");
-
-    expect(segmentedRoot).toHaveClass("ant-segmented-lg");
+    let root = container.querySelector(".ant-segmented");
+    expect(root).toHaveClass("ant-segmented-lg");
 
     rerender(<Segmented options={["A", "B"]} size="s" />);
-    segmentedRoot = container.querySelector(".ant-segmented");
-    expect(segmentedRoot).not.toHaveClass("ant-segmented-lg");
-    expect(segmentedRoot).not.toHaveClass("ant-segmented-sm");
+    root = container.querySelector(".ant-segmented");
+    expect(root).not.toHaveClass("ant-segmented-lg");
+    expect(root).not.toHaveClass("ant-segmented-sm");
 
     rerender(<Segmented options={["A", "B"]} size="xs" />);
-    segmentedRoot = container.querySelector(".ant-segmented");
-    expect(segmentedRoot).toHaveClass("ant-segmented-sm");
+    root = container.querySelector(".ant-segmented");
+    expect(root).toHaveClass("ant-segmented-sm");
   });
 
-  it("uses active item from options state as default selected", () => {
-    const { container } = render(
+  it("applies the ds-segmented base class to the root", () => {
+    const { container } = render(<Segmented options={["A", "B"]} />);
+    const root = container.querySelector(".ant-segmented");
+    expect(root?.className).toMatch(/ds-segmented/);
+  });
+
+  it("renders enhanced option with text only", () => {
+    render(
       <Segmented
         options={[
-          { value: "one", text: "One", state: "inactive" },
-          { value: "two", text: "Two", state: "active" },
+          { value: "a", text: "Alpha" },
+          { value: "b", text: "Beta" },
         ]}
       />,
     );
-
-    const selectedItem = container.querySelector(".ant-segmented-item-selected");
-    expect(selectedItem).not.toBeNull();
-    expect(selectedItem).toHaveTextContent("Two");
+    expect(screen.getByText("Alpha")).toBeInTheDocument();
+    expect(screen.getByText("Beta")).toBeInTheDocument();
   });
 
-  it("renders counter and honors bold default true/false", () => {
+  it("renders counter badge alongside text", () => {
+    render(<Segmented options={[{ value: "a", text: "Alerts", counter: 3 }]} />);
+    expect(screen.getByText("Alerts")).toBeInTheDocument();
+    expect(screen.getByText("3")).toBeInTheDocument();
+  });
+
+  it("accepts icon as Lucide name string", () => {
+    const { container } = render(<Segmented options={[{ value: "a", text: "Add", icon: "Plus" }]} />);
+    const svg = container.querySelector(".ds-segmented__icon svg");
+    expect(svg).not.toBeNull();
+  });
+
+  it("accepts icon as ReactNode for backwards compatibility", () => {
+    const { container } = render(<Segmented options={[{ value: "a", text: "Add", icon: <Plus size={16} /> }]} />);
+    const svg = container.querySelector(".ds-segmented__icon svg");
+    expect(svg).not.toBeNull();
+  });
+
+  it("renders icon-only enhanced option (no text)", () => {
     const { container } = render(
       <Segmented
         options={[
-          { value: "one", text: "One", counter: "1" },
-          { value: "two", text: "Two", bold: false },
+          { value: "grid", icon: "Grid" },
+          { value: "list", icon: "List" },
         ]}
       />,
     );
+    expect(container.querySelectorAll(".ds-segmented__icon").length).toBe(2);
+  });
 
-    const oneText = screen.getByText("One");
-    const twoText = screen.getByText("Two");
-    const badge = screen.getByText("1");
+  it("supports the disabled flag on the whole component", () => {
+    const { container } = render(<Segmented options={["A", "B"]} disabled />);
+    const root = container.querySelector(".ant-segmented");
+    expect(root?.className).toMatch(/ant-segmented-disabled/);
+  });
 
-    expect(oneText).toHaveStyle({ fontWeight: "700" });
-    expect(twoText).toHaveStyle({ fontWeight: "400" });
-    expect(badge).toBeInTheDocument();
-    expect(badge).toHaveStyle({ borderRadius: "9999px" });
+  it("supports disabled at item level", () => {
+    const { container } = render(
+      <Segmented
+        options={[
+          { value: "a", text: "Alpha" },
+          { value: "b", text: "Beta", disabled: true },
+        ]}
+      />,
+    );
+    const items = container.querySelectorAll(".ant-segmented-item");
+    expect(items[1].className).toMatch(/ant-segmented-item-disabled/);
+  });
 
-    const firstLabel = container.querySelector(".ant-segmented-item-label");
-    expect(firstLabel).not.toBeNull();
+  it("honors defaultValue selecting the right item", () => {
+    const { container } = render(
+      <Segmented
+        defaultValue="b"
+        options={[
+          { value: "a", text: "Alpha" },
+          { value: "b", text: "Beta" },
+        ]}
+      />,
+    );
+    const selected = container.querySelector(".ant-segmented-item-selected");
+    expect(selected).toHaveTextContent("Beta");
+  });
+
+  it("renders block segmented spanning the container", () => {
+    const { container } = render(<Segmented block options={["A", "B"]} />);
+    const root = container.querySelector(".ant-segmented");
+    expect(root?.className).toMatch(/ant-segmented-block/);
   });
 });
