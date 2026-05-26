@@ -1,9 +1,43 @@
 import React from "react";
-import { Badge as AntdBadge, ConfigProvider } from "antd";
+import { Badge as AntdBadge, ConfigProvider, Tooltip as AntdTooltip } from "antd";
 import type { BadgeProps as AntdBadgeProps } from "antd";
 import type { ComponentToken } from "antd/es/badge/style";
-import { designSystemColors, radius, shadow, spacing } from "../../theme";
+import * as LucideIcons from "lucide-react";
+import { designSystemColors, radius, spacing } from "../../theme";
 import type { BadgeProps, BadgeStatusColor, BadgeVariant } from "../../types/components/Badge";
+import "./index.module.css";
+
+const BADGE_CONTENT_CLASS = "juscash-badge";
+
+const ICON_SIZE = 12;
+
+/**
+ * Resolve `leftIcon`/`rightIcon`: aceita `ReactNode` (passa direto) ou
+ * string com nome de ícone Lucide (instancia com tamanho 12px).
+ */
+function resolveBadgeIcon(icon: React.ReactNode | string | undefined): React.ReactNode {
+  if (icon === undefined || icon === null) return undefined;
+  if (typeof icon !== "string") return icon;
+  const registry = LucideIcons as unknown as Record<string, unknown>;
+  const Candidate = registry[icon];
+  if (typeof Candidate !== "function" && typeof Candidate !== "object") return icon;
+  const IconComponent = Candidate as React.ComponentType<{ size?: number }>;
+  return <IconComponent size={ICON_SIZE} />;
+}
+
+/**
+ * Quando `tooltip` é string, interpola placeholders `{value}` e `{label}`:
+ * - `{value}` → `count` (counter) ou `children` convertido em string.
+ * - `{label}` → `children` convertido em string.
+ *
+ * Para `ReactNode`, retorna sem alteração. Mantém compatível com o padrão
+ * usado em `KpiCard`.
+ */
+function interpolateBadgeTooltip(tooltip: React.ReactNode, value: React.ReactNode, label: string): React.ReactNode {
+  if (typeof tooltip !== "string") return tooltip;
+  const valueAsString = value === undefined || value === null ? "" : String(value);
+  return tooltip.replace(/\{value\}/g, valueAsString).replace(/\{label\}/g, label);
+}
 
 const COUNTER_MIN_SIZE = 16;
 const BADGE_HEIGHT = 24;
@@ -122,10 +156,11 @@ interface ResolveBadgeContentArgs {
   hasLabelOrIcon: boolean;
   hasLabel: boolean;
   count: BadgeProps["count"];
-  leftIcon: BadgeProps["leftIcon"];
-  rightIcon: BadgeProps["rightIcon"];
+  leftIcon: React.ReactNode;
+  rightIcon: React.ReactNode;
   children: BadgeProps["children"];
   contentStyles: React.CSSProperties;
+  tabIndex?: number;
 }
 
 /**
@@ -137,24 +172,31 @@ function resolveBadgeContent(args: ResolveBadgeContentArgs): React.ReactNode {
 
   if (args.isCounter) {
     if (!args.shouldShowCounter) return undefined;
-    return <span style={args.contentStyles}>{args.count}</span>;
+    return (
+      <span className={BADGE_CONTENT_CLASS} style={args.contentStyles} tabIndex={args.tabIndex}>
+        {args.count}
+      </span>
+    );
   }
 
   if (!args.hasLabelOrIcon) return undefined;
 
   return (
-    <span style={args.contentStyles}>
-      {args.leftIcon ? <span style={iconWrapperStyle}>{args.leftIcon}</span> : null}
-      {args.hasLabel ? <span>{args.children}</span> : null}
-      {args.rightIcon ? <span style={iconWrapperStyle}>{args.rightIcon}</span> : null}
+    <span className={BADGE_CONTENT_CLASS} style={args.contentStyles} tabIndex={args.tabIndex}>
+      {args.leftIcon ?
+        <span style={iconWrapperStyle}>{args.leftIcon}</span>
+      : null}
+      {args.hasLabel ?
+        <span>{args.children}</span>
+      : null}
+      {args.rightIcon ?
+        <span style={iconWrapperStyle}>{args.rightIcon}</span>
+      : null}
     </span>
   );
 }
 
-function mergeBadgeStyles(
-  styles: BadgeStylesProp | undefined,
-  indicatorStyles: React.CSSProperties,
-): BadgeStylesProp {
+function mergeBadgeStyles(styles: BadgeStylesProp | undefined, indicatorStyles: React.CSSProperties): BadgeStylesProp {
   if (!styles) {
     return { indicator: indicatorStyles };
   }
@@ -187,35 +229,66 @@ function mergeBadgeStyles(
  * sub-paletas em `secondary` via `statusColor`.
  */
 export function Badge(props: BadgeProps): React.ReactElement {
-  const { variant = "primary", statusColor, leftIcon, rightIcon, count, children, className, styles, showZero, ...rest } = props;
+  const {
+    variant = "primary",
+    statusColor,
+    leftIcon,
+    rightIcon,
+    count,
+    children,
+    className,
+    styles,
+    showZero,
+    tabIndex,
+    tooltip,
+    tooltipPlacement = "top",
+    ...rest
+  } = props;
 
   const isCounter = variant === "counter";
   const shouldShowCounter = typeof count === "number";
   const resolvedShowZero = isCounter ? count === 0 || showZero : showZero;
-  const hasFocusClass = className?.includes("pseudo-focus") || className?.includes("pseudo-focus-within");
+
+  const resolvedLeftIcon = resolveBadgeIcon(leftIcon);
+  const resolvedRightIcon = resolveBadgeIcon(rightIcon);
 
   const variantStyles = getVariantStyles(variant, statusColor);
   const contentStyles = {
     ...getContentBaseStyles(isCounter),
     ...variantStyles,
-    ...(hasFocusClass ? { boxShadow: shadow.focus } : null),
   } satisfies React.CSSProperties;
 
   const hasLabel = children !== undefined && children !== null;
-  const hasLabelOrIcon = Boolean(hasLabel || leftIcon || rightIcon);
+  const hasLabelOrIcon = Boolean(hasLabel || resolvedLeftIcon || resolvedRightIcon);
   const badgeContent = resolveBadgeContent({
     isCounter,
     shouldShowCounter,
     hasLabelOrIcon,
     hasLabel,
     count,
-    leftIcon,
-    rightIcon,
+    leftIcon: resolvedLeftIcon,
+    rightIcon: resolvedRightIcon,
     children,
     contentStyles,
+    tabIndex,
   });
 
   const indicatorStyles = getIndicatorResetStyles();
+
+  const badge = (
+    <AntdBadge
+      className={className}
+      count={badgeContent}
+      size={isCounter ? "small" : "default"}
+      showZero={resolvedShowZero}
+      styles={mergeBadgeStyles(styles, indicatorStyles)}
+      {...rest}
+    />
+  );
+
+  const tooltipValue = isCounter ? count : children;
+  const tooltipLabel = typeof children === "string" || typeof children === "number" ? String(children) : "";
+  const resolvedTooltip = interpolateBadgeTooltip(tooltip, tooltipValue, tooltipLabel);
 
   return (
     <ConfigProvider
@@ -225,18 +298,15 @@ export function Badge(props: BadgeProps): React.ReactElement {
         },
       }}
     >
-      <AntdBadge
-        className={className}
-        count={badgeContent}
-        size={isCounter ? "small" : "default"}
-        showZero={resolvedShowZero}
-        styles={mergeBadgeStyles(styles, indicatorStyles)}
-        {...rest}
-      />
+      {resolvedTooltip !== undefined && resolvedTooltip !== null ?
+        <AntdTooltip title={resolvedTooltip} placement={tooltipPlacement}>
+          {badge}
+        </AntdTooltip>
+      : badge}
     </ConfigProvider>
   );
 }
 
 Badge.displayName = "Badge";
 
-export type { BadgeProps, BadgeVariant, BadgeStatusColor } from "../../types/components/Badge";
+export type { BadgeProps, BadgeVariant, BadgeStatusColor, BadgeTooltipPlacement } from "../../types/components/Badge";
