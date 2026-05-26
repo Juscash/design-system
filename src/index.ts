@@ -4,6 +4,9 @@ export * from "./theme";
 export { LIST_IGNORE } from "antd/es/upload/Upload";
 export { type RcFile } from "antd/es/upload/interface";
 export * from "./components";
+export { applyMask } from "./utils/applyMask";
+export type { ApplyMaskResult, InputMask, MaskTransform } from "./types/utils/applyMask";
+export { BUILTIN_ERROR_MESSAGES, getBuiltinValidator, isValidCnj, isValidCpf, isValidEmail } from "./utils/validateInput";
 
 export {
   type UploadFile,

@@ -491,25 +491,11 @@
 
 /* ============================================
    INPUT — overrides nativos
+   Específicos do Input do design system foram movidos para
+   src/components/Input/index.module.css (scoped via .ds-input).
    ============================================ */
-.ant-input-outlined.pseudo-hover {
-  border-color: var(--color-neutral-300) !important;
-}
 
-.ant-input-outlined:hover {
-  border-color: var(--color-neutral-300) !important;
-}
-
-.ant-input-outlined.ant-input-status-error:not(.ant-input-disabled):hover {
-  border-color: var(--color-feedback-red-500) !important;
-}
-
-.ant-input-outlined.ant-input-disabled,
-.ant-input-outlined[disabled] {
-  border-color: var(--color-neutral-200) !important;
-}
-
-.ant-form-item:has(.ant-input-disabled) .ant-form-item-label label,
+/* Form labels associados a campos disabled (genérico — não específico Input). */
 .ant-form-item:has([disabled]) .ant-form-item-label label {
   color: var(--color-neutral-400) !important;
 }

@@ -41,10 +41,10 @@ Componente de área de texto (TextArea) baseado no [Ant Design Input.TextArea](h
 ### Como usar:
 
 \`\`\`tsx
-import { Input } from "@juscash/design-system";
+import { TextArea } from "@juscash/design-system";
 
 function Example() {
-  return <Input.TextArea rows={4} placeholder="Digite sua mensagem" />;
+  return <TextArea rows={4} placeholder="Digite sua mensagem" />;
 }
 \`\`\`
 `,

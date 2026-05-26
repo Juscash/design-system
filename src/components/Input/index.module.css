@@ -1,0 +1,57 @@
+/*
+  Estilos próprios do Input. Scoped via `.ds-input` aplicada ao elemento
+  `<input class="ant-input">` (ou ao wrapper `<span class="ant-input-affix-wrapper">`
+  quando há prefix/suffix).
+
+  Estratégia:
+  - Hover/focus mantêm a mesma cor de borda (`border.regular`) — Figma não
+    muda cor entre estados.
+  - Border disabled = `border.disabled` (neutral.200).
+  - Pseudo-classes do Storybook (`.pseudo-hover`) também mantêm o visual.
+*/
+
+:global(.ds-input.ant-input-outlined.pseudo-hover),
+:global(.ds-input-affix-wrapper.ant-input-outlined.pseudo-hover) {
+  border-color: var(--color-border-regular) !important;
+}
+
+:global(.ds-input.ant-input-outlined:hover),
+:global(.ds-input-affix-wrapper.ant-input-outlined:hover) {
+  border-color: var(--color-border-regular) !important;
+}
+
+/* Em estado error, hover continua vermelho (não vira cinza). */
+:global(.ds-input.ant-input-outlined.ant-input-status-error:not(.ant-input-disabled):hover),
+:global(.ds-input-affix-wrapper.ant-input-outlined.ant-input-status-error:not(.ant-input-affix-wrapper-disabled):hover) {
+  border-color: var(--color-feedback-red-500) !important;
+}
+
+/* Disabled — Figma define `border.disabled` (neutral.200, #e5e5e5).
+   Antd default usaria neutral.300; daí o override. */
+:global(.ds-input.ant-input-outlined.ant-input-disabled),
+:global(.ds-input.ant-input-outlined[disabled]),
+:global(.ds-input-affix-wrapper.ant-input-outlined.ant-input-affix-wrapper-disabled) {
+  border-color: var(--color-border-disabled) !important;
+}
+
+/* Form labels associados a inputs disabled ganham cor `text.disabled`. */
+:global(.ant-form-item:has(.ds-input.ant-input-disabled) .ant-form-item-label label),
+:global(.ant-form-item:has(.ds-input[disabled]) .ant-form-item-label label),
+:global(.ant-form-item:has(.ds-input-affix-wrapper-disabled) .ant-form-item-label label) {
+  color: var(--color-text-disabled) !important;
+}
+
+/* Wrapper que envolve o input + mensagem de erro abaixo. */
+:global(.ds-input-wrapper) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1, 4px);
+  width: 100%;
+}
+
+:global(.ds-input-error-message) {
+  font-family: var(--font-primary, "Inter", sans-serif);
+  font-size: 13px;
+  line-height: 1.2;
+  color: var(--color-feedback-red-500, #d2190b);
+}
