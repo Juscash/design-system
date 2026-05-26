@@ -14,6 +14,7 @@ export * from "./Drawer";
 export * from "./EmptyState";
 export * from "./FormItem";
 export * from "./Input";
+export * from "./KpiCard";
 export * from "./Loading";
 export * from "./Modal";
 export * from "./Notification";
