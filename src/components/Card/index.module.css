@@ -1,15 +1,23 @@
 /*
-  Estilos próprios do Card. Os tokens base (sombra default, borda) ainda
-  cascateiam via `.ant-card`, definidos globalmente em `theme/global.css`.
+  Estilos próprios do Card. Os tokens base (sombra default, borda, raio)
+  são aplicados via `ConfigProvider` local em `index.tsx`. Aqui ficam só
+  os estados interativos (`:hover`, `:focus-visible`) ativados quando o
+  consumer passa `clickable={true}` — regra do design (Figma 4069:6522):
+  "Inclua o hover e focus apenas em cards clicáveis".
+
+  A especificidade combinada `.ds-card-clickable.ant-card` é suficiente
+  para vencer o token interno do antd sem precisar de `!important`.
 */
 
 :global(.ds-card-clickable.ant-card-hoverable:hover) {
-  box-shadow: var(--shadow-m) !important;
-  border-color: var(--color-neutral-300) !important;
+  box-shadow: var(--shadow-m);
+  border-color: var(--color-neutral-300);
 }
 
-:global(.ds-card-clickable.ant-card:focus-visible) {
-  box-shadow: var(--shadow-focus) !important;
-  border-color: var(--color-neutral-300) !important;
-  outline: none !important;
+:global(.ds-card-clickable.ant-card:focus-visible),
+:global(.ds-card-clickable.ant-card:focus) {
+  box-shadow: var(--shadow-focus);
+  border-color: var(--color-neutral-300);
+  outline: none;
+  transition: box-shadow 120ms ease-out;
 }

@@ -1,6 +1,8 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Card } from ".";
+import { Button } from "../Button";
+import { Input } from "../Input";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
@@ -21,15 +23,21 @@ const meta: Meta<typeof Card> = {
         component: `
 Componente Card baseado no [Ant Design Card](https://ant.design/components/card).
 
-### Props:
-- **Extended (Ant Design)**: Suporta as propriedades padrão do AntD Card.
-- **Custom (Juscash)**:
-  - \`clickable\`: Quando verdadeiro, habilita efeito de hover (shadow.m), cursor pointer e estado de focus (focus ring).
+### Tokens (Figma 4069:6522)
+- **Background:** \`neutral/50\` (#fafafa)
+- **Border:** 1px \`neutral/300\` (#d4d4d4)
+- **Radius:** \`radius.xl\` (8)
+- **Padding interno:** \`spacing[6]\` (24)
+- **Shadow default:** \`shadow.xs\`
 
-### Estados (apenas para cards clicáveis):
-- **Default**: shadow.xs (sutil)
-- **Hover**: shadow.m (elevação média)
-- **Focus**: focus ring (3px neutral[300])
+### Props proprietárias (Juscash)
+- **\`clickable\`** — quando \`true\`, habilita hover (\`shadow.m\`), focus ring (\`shadow.focus\` = 3px \`neutral/300\`),
+  \`cursor: pointer\` e \`tabIndex={0}\`. Regra do design: **hover/focus só em cards clicáveis** que redirecionam ou disparam ação.
+
+### Estados interativos (somente \`clickable\`)
+- **Default:** \`shadow.xs\` (sutil)
+- **Hover:** \`shadow.m\` (elevação média)
+- **Focus visible:** ring 3px \`neutral/300\` via \`:focus-visible\` real (sem hack de classe simulada).
 `,
       },
       page: () => (
@@ -37,24 +45,12 @@ Componente Card baseado no [Ant Design Card](https://ant.design/components/card)
           <Title />
           <Subtitle />
           <Description />
-
           <Primary />
-
           <Controls />
-
           <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
-            <h3
-              style={{
-                marginBottom: "1rem",
-                fontSize: "1.2rem",
-                fontWeight: "bold",
-              }}
-            >
-              Figma Spec
-            </h3>
+            <h3 style={{ marginBottom: "1rem", fontSize: "1.2rem", fontWeight: "bold" }}>Figma Spec</h3>
             <Figma showLink url={FIGMA_URL} height="400px" />
           </div>
-
           <Stories />
         </>
       ),
@@ -64,7 +60,7 @@ Componente Card baseado no [Ant Design Card](https://ant.design/components/card)
   argTypes: {
     clickable: {
       control: "boolean",
-      description: "Habilita estados hover/focus e cursor pointer",
+      description: "Habilita estados hover/focus, cursor pointer e tabIndex=0.",
     },
   },
 };
@@ -72,247 +68,99 @@ Componente Card baseado no [Ant Design Card](https://ant.design/components/card)
 export default meta;
 type Story = StoryObj<typeof Card>;
 
-// ─── Default (apenas conteúdo) ───────────────────────────────────────────────
-
 export const Default: Story = {
   args: {
     children: "Card content",
   },
 };
 
-// ─── Com título ──────────────────────────────────────────────────────────────
-
-export const WithTitle: Story = {
-  name: "Com título",
-  args: {
-    title: "Card Title",
-    children: "Card content with a title",
-  },
-};
-
-// ─── Clicável ────────────────────────────────────────────────────────────────
-
 export const Clickable: Story = {
-  name: "Clicável",
+  name: "Clicável (hover + focus reais)",
   args: {
-    children: "Passe o mouse para ver hover e use Tab para focus.",
+    children: "Passe o mouse para ver hover. Use Tab para focar e ver o ring.",
     clickable: true,
     onClick: () => alert("Card clicked!"),
   },
 };
 
-// ─── Não clicável ────────────────────────────────────────────────────────────
-
 export const NonClickable: Story = {
   name: "Não clicável (container)",
   args: {
-    title: "Non-Clickable Card",
-    children: "This card behaves like a static container.",
+    children: "Card estático, sem hover/focus.",
     clickable: false,
   },
 };
 
-// ─── Figma: grid de variantes (default / hover / focus × 1–3 slots) ─────────
-
-const SlotBox = ({ height = 40 }: { height?: number }) => (
-  <div
-    style={{
-      border: "1px dashed #9747ff",
-      borderRadius: 8,
-      height,
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      color: "#c89dff",
-      fontSize: 14,
-      fontWeight: 500,
-    }}
-  >
-    Slot
-  </div>
-);
-
-export const VariantsGrid: Story = {
-  name: "Variantes — Figma (default / hover / focus)",
+export const SlotsGrid: Story = {
+  name: "Matriz de slots (1 / 2 / 3)",
+  parameters: { layout: "padded" },
   render: () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: 32 }}>
-      {/* Labels */}
-      <div style={{ display: "flex", gap: 24 }}>
-        <div style={{ width: 60 }} />
-        {["default", "hover", "focus"].map((label) => (
-          <div
-            key={label}
-            style={{
-              width: 280,
-              textAlign: "center",
-              fontSize: 11,
-              fontFamily: "monospace",
-              color: "#9747ff",
-              textTransform: "uppercase",
-            }}
-          >
-            {label}
-          </div>
-        ))}
-      </div>
-
-      {/* 1 slot */}
-      <div style={{ display: "flex", gap: 24, alignItems: "flex-start" }}>
-        <div style={{ width: 60, fontSize: 11, fontFamily: "monospace", color: "#9747ff", paddingTop: 12 }}>1 slot</div>
-        <Card style={{ width: 280 }}><SlotBox /></Card>
-        <Card clickable style={{ width: 280 }} className="pseudo-hover"><SlotBox /></Card>
-        <Card clickable style={{ width: 280 }} className="pseudo-focus-visible"><SlotBox /></Card>
-      </div>
-
-      {/* 2 slots */}
-      <div style={{ display: "flex", gap: 24, alignItems: "flex-start" }}>
-        <div style={{ width: 60, fontSize: 11, fontFamily: "monospace", color: "#9747ff", paddingTop: 12 }}>2 slots</div>
-        <Card style={{ width: 280 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <SlotBox />
-            <SlotBox />
-          </div>
-        </Card>
-        <Card clickable style={{ width: 280 }} className="pseudo-hover">
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <SlotBox />
-            <SlotBox />
-          </div>
-        </Card>
-        <Card clickable style={{ width: 280 }} className="pseudo-focus-visible">
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <SlotBox />
-            <SlotBox />
-          </div>
-        </Card>
-      </div>
-
-      {/* 3 slots */}
-      <div style={{ display: "flex", gap: 24, alignItems: "flex-start" }}>
-        <div style={{ width: 60, fontSize: 11, fontFamily: "monospace", color: "#9747ff", paddingTop: 12 }}>3 slots</div>
-        <Card style={{ width: 280 }}>
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <SlotBox />
-            <SlotBox />
-            <SlotBox />
-          </div>
-        </Card>
-        <Card clickable style={{ width: 280 }} className="pseudo-hover">
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <SlotBox />
-            <SlotBox />
-            <SlotBox />
-          </div>
-        </Card>
-        <Card clickable style={{ width: 280 }} className="pseudo-focus-visible">
-          <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-            <SlotBox />
-            <SlotBox />
-            <SlotBox />
-          </div>
-        </Card>
-      </div>
+    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
+      <Card style={{ width: 280 }}>
+        <p>Slot único</p>
+      </Card>
+      <Card style={{ width: 280 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <p>Slot 1</p>
+          <p>Slot 2</p>
+        </div>
+      </Card>
+      <Card style={{ width: 280 }}>
+        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+          <p>Slot 1</p>
+          <p>Slot 2</p>
+          <p>Slot 3</p>
+        </div>
+      </Card>
     </div>
   ),
 };
 
-// ─── Figma: Exemplo Login ────────────────────────────────────────────────────
-
 export const ExampleLogin: Story = {
-  name: "Exemplo — Login (Figma)",
+  name: "Exemplo — Login",
+  parameters: { layout: "centered" },
   render: () => (
     <Card style={{ width: 368 }}>
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         <div>
           <h2 style={{ fontSize: 31, fontWeight: 700, margin: 0, lineHeight: 1.2 }}>Boas-vindas!</h2>
-          <p style={{ fontSize: 16, color: "#6d6d6e", margin: "8px 0 0", lineHeight: 1.2 }}>
-            Bem-vindo ao Programa de Benefícios JusCash! Por favor, insira seus dados abaixo para realizar o login.
+          <p style={{ fontSize: 16, margin: "8px 0 0", lineHeight: 1.2 }}>
+            Insira seus dados abaixo para realizar o login.
           </p>
         </div>
         <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <div>
-            <label style={{ fontSize: 16, display: "block", marginBottom: 8 }}>E-mail</label>
-            <input
-              placeholder="seu@email.com"
-              style={{
-                width: "100%",
-                height: 36,
-                border: "1px solid #d4d4d4",
-                borderRadius: 8,
-                padding: "0 12px",
-                fontSize: 13,
-                background: "#fafafa",
-                boxSizing: "border-box",
-              }}
-            />
-          </div>
-          <div>
-            <label style={{ fontSize: 16, display: "block", marginBottom: 8 }}>Senha</label>
-            <input
-              type="password"
-              placeholder="Digite sua senha"
-              style={{
-                width: "100%",
-                height: 40,
-                border: "1px solid #d4d4d4",
-                borderRadius: 8,
-                padding: "0 12px",
-                fontSize: 13,
-                background: "#fafafa",
-                boxSizing: "border-box",
-              }}
-            />
-          </div>
-          <button
-            style={{
-              width: "100%",
-              height: 36,
-              backgroundColor: "#008633",
-              color: "#fafafa",
-              border: "none",
-              borderRadius: 8,
-              fontSize: 13,
-              cursor: "pointer",
-            }}
-          >
+          <label style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <span style={{ fontSize: 16 }}>E-mail</span>
+            <Input placeholder="seu@email.com" />
+          </label>
+          <label style={{ display: "flex", flexDirection: "column", gap: 8 }}>
+            <span style={{ fontSize: 16 }}>Senha</span>
+            <Input type="password" placeholder="Digite sua senha" />
+          </label>
+          <Button variant="primary" block>
             Entrar
-          </button>
-          <p style={{ fontSize: 13, textAlign: "center", textDecoration: "underline", cursor: "pointer" }}>
-            Esqueci minha senha
-          </p>
+          </Button>
         </div>
       </div>
     </Card>
   ),
 };
 
-// ─── Figma: Exemplo Feedback ─────────────────────────────────────────────────
-
 export const ExampleFeedback: Story = {
-  name: "Exemplo — Feedback (Figma)",
+  name: "Exemplo — Feedback",
+  parameters: { layout: "centered" },
   render: () => (
     <Card style={{ width: 368 }}>
       <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
         <div>
           <h3 style={{ fontSize: 20, fontWeight: 700, margin: 0, lineHeight: 1.2 }}>Queremos ouvir você!</h3>
-          <p style={{ fontSize: 16, color: "#6d6d6e", margin: "8px 0 0", lineHeight: 1.2 }}>
-            Sua experiência no nosso Programa de Benefícios é muito importante para a gente. O seu feedback pode fazer toda a diferença para construirmos um programa ainda mais completo e vantajoso para você.
+          <p style={{ fontSize: 16, margin: "8px 0 0", lineHeight: 1.2 }}>
+            Seu feedback pode fazer toda a diferença para construirmos um programa ainda mais completo.
           </p>
         </div>
-        <button
-          style={{
-            width: "100%",
-            height: 36,
-            backgroundColor: "#008633",
-            color: "#fafafa",
-            border: "none",
-            borderRadius: 8,
-            fontSize: 13,
-            cursor: "pointer",
-          }}
-        >
+        <Button variant="primary" block>
           Enviar feedback
-        </button>
+        </Button>
       </div>
     </Card>
   ),
