@@ -4,18 +4,19 @@ import type { SegmentedProps as AntdSegmentedProps, ThemeConfig } from "antd";
 import type { ComponentToken } from "antd/es/segmented/style/index";
 import * as LucideIcons from "lucide-react";
 import { designSystemColors, radius, shadow, spacing } from "../../theme";
+import { Tooltip } from "../Tooltip";
 import type { SegmentedInputOption, SegmentedOption, SegmentedProps, SegmentedSize } from "../../types/components/Segmented";
 import "./index.module.css";
 
 type ReactNode = React.ReactNode;
 
 const BASE_CLASS = "ds-segmented";
+const SIZE_XS_CLASS = "ds-segmented-xs";
 const LABEL_CLASS = "ds-segmented__label";
 const ICON_CLASS = "ds-segmented__icon";
 const TEXT_CLASS = "ds-segmented__text";
 const TEXT_XS_CLASS = "ds-segmented__text--xs";
 const COUNTER_CLASS = "ds-segmented__counter";
-const SR_ONLY_CLASS = "ds-segmented__sr-only";
 
 const FONT_SIZE_DEFAULT = 13;
 const FONT_SIZE_XS = 10;
@@ -101,16 +102,15 @@ function isEnhancedOption<T extends string | number>(option: SegmentedInputOptio
 }
 
 /**
- * Monta o conteúdo (label ReactNode) de uma opção enriquecida combinando
- * ícone, texto e counter via classes do CSS Module — sem inline styles.
+ * Monta o conteúdo bruto (label ReactNode) de uma opção enriquecida
+ * combinando ícone, texto e counter via classes do CSS Module — sem
+ * inline styles. Não inclui Tooltip: a envoltura ocorre em `wrapWithTooltip`.
  */
 function buildEnhancedLabel<T extends string | number>(option: SegmentedOption<T>, size: SegmentedSize): ReactNode {
   const text = option.text;
   const hasCounter = option.counter !== undefined && option.counter !== null;
   const textClassName = size === "xs" ? `${TEXT_CLASS} ${TEXT_XS_CLASS}` : TEXT_CLASS;
   const resolvedIcon = resolveIcon(option.icon, size);
-  const isIconOnly = resolvedIcon !== undefined && text === undefined;
-  const ariaLabel = isIconOnly ? (option.ariaLabel ?? String(option.value)) : undefined;
 
   return (
     <span className={LABEL_CLASS}>
@@ -123,17 +123,32 @@ function buildEnhancedLabel<T extends string | number>(option: SegmentedOption<T
       {hasCounter ?
         <span className={COUNTER_CLASS}>{option.counter}</span>
       : null}
-      {ariaLabel ?
-        <span className={SR_ONLY_CLASS}>{ariaLabel}</span>
-      : null}
     </span>
   );
 }
 
 /**
+ * Envolve um label icon-only em Tooltip do DS exibindo o nome acessível
+ * da ação. Spec Figma (`Tooltip support`): "Segmented de ícone sempre
+ * devem ter tooltip com o nome da ação, sem exceção".
+ *
+ * O Tooltip só é renderizado quando a opção é icon-only (tem `icon` e
+ * **não** tem `text`). Opções com texto não recebem Tooltip por padrão.
+ */
+function wrapWithTooltip<T extends string | number>(label: ReactNode, option: SegmentedOption<T>): ReactNode {
+  const hasIcon = option.icon !== undefined && option.icon !== null;
+  const hasText = option.text !== undefined && option.text !== null;
+  const isIconOnly = hasIcon && !hasText;
+  if (!isIconOnly) return label;
+  const tooltipTitle = option.ariaLabel ?? String(option.value);
+  return <Tooltip title={tooltipTitle}>{label}</Tooltip>;
+}
+
+/**
  * Normaliza a lista de opções: as enriquecidas são transformadas em
  * `{ value, label, disabled }` (formato Antd); strings/números e
- * `NativeLabeledOption` passam direto.
+ * `NativeLabeledOption` passam direto. Opções icon-only têm o label
+ * envolvido em Tooltip do DS via `wrapWithTooltip`.
  */
 function normalizeOptions<T extends string | number>(
   options: SegmentedInputOption<T>[] | undefined,
@@ -143,21 +158,25 @@ function normalizeOptions<T extends string | number>(
   const normalized = options.map((option) => {
     if (typeof option === "string" || typeof option === "number") return option;
     if (!isEnhancedOption(option)) return option;
+    const label = buildEnhancedLabel(option, size);
     return {
       value: option.value,
       disabled: option.disabled,
-      label: buildEnhancedLabel(option, size),
+      label: wrapWithTooltip(label, option),
     };
   });
   return normalized as AntdSegmentedProps<T>["options"];
 }
 
 /**
- * Compõe a className final aplicada ao Antd Segmented (`.ds-segmented` +
- * className externa, se fornecida).
+ * Compõe a className final aplicada ao Antd Segmented (`.ds-segmented`
+ * + modifier de size + className externa, se fornecida). O modifier
+ * `ds-segmented-xs` é necessário para o CSS Module aplicar tipografia
+ * caption no nível do `.ant-segmented-item-label`.
  */
-function buildClassName(external: string | undefined): string {
-  return [BASE_CLASS, external ?? ""].filter(Boolean).join(" ");
+function buildClassName(external: string | undefined, size: SegmentedSize): string {
+  const sizeModifier = size === "xs" ? SIZE_XS_CLASS : "";
+  return [BASE_CLASS, sizeModifier, external ?? ""].filter(Boolean).join(" ");
 }
 
 /**
@@ -178,7 +197,7 @@ export function Segmented<T extends string | number = string>(props: SegmentedPr
         components: { Segmented: segmentedTokens },
       }}
     >
-      <AntdSegmented className={buildClassName(className)} options={normalizedOptions ?? []} size={resolvedSize} {...rest} />
+      <AntdSegmented className={buildClassName(className, size)} options={normalizedOptions ?? []} size={resolvedSize} {...rest} />
     </ConfigProvider>
   );
 }

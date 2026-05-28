@@ -5,6 +5,7 @@
 
   Classes:
     - `.ds-segmented`             : raiz do componente (aplicada via `className`).
+    - `.ds-segmented-xs`          : modifier para tamanho xs (aplicado a `.ds-segmented`).
     - `.ds-segmented__label`      : wrapper inline-flex de ícone + texto + counter.
     - `.ds-segmented__icon`       : wrapper do ícone (alinhamento vertical).
     - `.ds-segmented__text`       : texto da opção (font-size por size).
@@ -21,6 +22,24 @@
    - xs usa radius/md (4px) — Antd default rende 2px no small; forçamos 4px. */
 :global(.ds-segmented.ant-segmented-sm .ant-segmented-item) {
   border-radius: var(--radius-md) !important;
+}
+
+/* Tipografia xs aplicada no nível do label do Antd. Garante que opções
+   primitivas (string/número) ou Antd nativas também renderizem em 10px
+   quando o size é `xs` — não apenas as opções enriquecidas via `.ds-segmented__text--xs`.
+   Spec Figma: caption (10px) em size=xs. */
+:global(.ds-segmented.ds-segmented-xs .ant-segmented-item-label) {
+  font-size: var(--font-caption-size);
+  line-height: var(--font-line-height);
+}
+
+/* Focus ring padronizado com o restante do DS: anel cinza neutral-300
+   `var(--shadow-focus)`, sobrescrevendo o outline verde claro default do
+   Antd. Cobre tanto o item selecionado quanto os não selecionados. */
+:global(.ds-segmented .ant-segmented-item:focus-visible),
+:global(.ds-segmented .ant-segmented-item-selected:focus-visible) {
+  outline: none !important;
+  box-shadow: var(--shadow-focus) !important;
 }
 
 /* Centraliza verticalmente o conteúdo do item. O Antd renderiza
