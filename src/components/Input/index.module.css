@@ -50,7 +50,6 @@
 }
 
 :global(.ds-input-error-message) {
-  font-family: var(--font-primary, "Inter", sans-serif);
   font-size: 13px;
   line-height: 1.2;
   color: var(--color-feedback-red-500, #d2190b);
