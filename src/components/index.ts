@@ -16,6 +16,7 @@ export * from "./EmptyState";
 export * from "./Input";
 export * from "./KpiCard";
 export * from "./Loading";
+export * from "./MenuCombobox";
 export * from "./Modal";
 export * from "./Notification";
 export * from "./PageHeader";
