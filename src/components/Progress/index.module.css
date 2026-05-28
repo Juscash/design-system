@@ -1,0 +1,35 @@
+/*
+  Estilos próprios do Progress. Scoped via `.ds-progress` aplicada ao
+  componente. Alinha o visual ao dump `figma/components/progress/`
+  (`4069:4392`): barra linear horizontal 342×8 com track full `neutral.300`,
+  fill `brand.primary.500` e raio `radius.2xl` (12px) nas pontas.
+
+  O Antd resolve a maior parte via `ConfigProvider` (`defaultColor`,
+  `remainingColor`, `lineBorderRadius`), mas os seletores `.ant-progress-bg`,
+  `.ant-progress-inner` e `.ant-progress-line` precisam de override explícito
+  para garantir cor e altura mesmo quando o consumidor sobrescreve tokens
+  globais por engano.
+*/
+
+/* Fill — área preenchida proporcional ao `percent`. */
+:global(.ds-progress .ant-progress-bg) {
+  background-color: var(--color-brand-primary-500) !important;
+}
+
+/* Track full — fundo do remanescente, sempre `neutral.300`. */
+:global(.ds-progress .ant-progress-inner) {
+  background-color: var(--color-neutral-300) !important;
+  border-radius: var(--radius-2xl) !important;
+}
+
+/* Altura fixa da barra horizontal (Figma define 8px). */
+:global(.ds-progress.ant-progress-line) {
+  height: 8px;
+}
+
+/* Garante que o nó `.ant-progress-line .ant-progress-inner` herde o raio
+   mesmo quando o Antd aplica seletores mais específicos durante o ciclo
+   de transição (0% → 100%). */
+:global(.ds-progress.ant-progress-line .ant-progress-inner) {
+  border-radius: var(--radius-2xl) !important;
+}

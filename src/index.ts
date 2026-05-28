@@ -58,8 +58,6 @@ export {
   type ColorPickerProps,
 
   // Exibição de dados
-  Progress,
-  type ProgressProps,
   Tree,
   type TreeProps,
   Timeline,

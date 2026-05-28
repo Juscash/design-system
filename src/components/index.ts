@@ -21,6 +21,7 @@ export * from "./Notification";
 export * from "./PageHeader";
 export * from "./Pagination";
 export * from "./Popover";
+export * from "./Progress";
 export * from "./Radio";
 export * from "./RangePicker";
 export * from "./Segmented";
