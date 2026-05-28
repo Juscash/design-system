@@ -33,6 +33,8 @@ pnpm-debug.log*
 Thumbs.db
 
 # Agent / tooling
-.claude
+.claude/settings.local.json
 .agent
 .context
+
+local-docs
