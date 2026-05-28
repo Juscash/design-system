@@ -27,9 +27,13 @@ Baseado no [Ant Design Carousel](https://ant.design/components/carousel).
 - **Extended (Ant Design)**: Props padrão do AntD Carousel.
 - **showArrows**: Exibe setas de navegação (24×24px, borda neutral[300]).
 
-### Estados:
-- **Dots**: Inativos = 6px circle neutral[400], ativo = 24px pill neutral[800]
-- **Setas**: 24×24, border 1px neutral[300], bg transparente, icon 14px
+### Dots (indicadores de página):
+- Todos os dots têm 6×6px (ativo e inativo têm mesmo tamanho).
+- Inativo: cor neutral[400]; Ativo: cor neutral[800].
+- Container: bg rgba(255,255,255,0.5), padding 4px, gap 4px, radius 8px.
+
+### Setas:
+- 24×24px, border 1px neutral[300], bg transparente, padding 4px 8px, radius 4px (radius.md), ícone 14px.
 `,
       },
       page: () => (
@@ -70,13 +74,12 @@ Baseado no [Ant Design Carousel](https://ant.design/components/carousel).
 export default meta;
 type Story = StoryObj<typeof Carousel>;
 
-// ─── Slot placeholder (como no Figma) ────────────────────────────────────────
-
+/** Slot placeholder representando um card do Figma (bg white, border, shadow, p-6, radius xl). */
 const SlotBox = ({ height = 200 }: { height?: number }) => (
   <div
     style={{
       height,
-      background: "#fafafa",
+      background: "#ffffff",
       borderRadius: 8,
       border: "1px solid #d4d4d4",
       boxShadow: "0px 1px 2px 0px rgba(0, 0, 0, 0.05)",
@@ -128,9 +131,12 @@ export const TwoSlides: Story = {
   render: () => (
     <div style={{ width: 460 }}>
       <Carousel showArrows dots slidesToShow={2} slidesToScroll={1}>
-        {Array.from({ length: 6 }).map((_, i) => (
-          <div key={i}><SlotBox height={160} /></div>
-        ))}
+        <div><SlotBox height={160} /></div>
+        <div><SlotBox height={160} /></div>
+        <div><SlotBox height={160} /></div>
+        <div><SlotBox height={160} /></div>
+        <div><SlotBox height={160} /></div>
+        <div><SlotBox height={160} /></div>
       </Carousel>
     </div>
   ),
@@ -143,9 +149,15 @@ export const ThreeSlides: Story = {
   render: () => (
     <div style={{ width: 684 }}>
       <Carousel showArrows dots slidesToShow={3} slidesToScroll={1}>
-        {Array.from({ length: 9 }).map((_, i) => (
-          <div key={i}><SlotBox height={200} /></div>
-        ))}
+        <div><SlotBox height={200} /></div>
+        <div><SlotBox height={200} /></div>
+        <div><SlotBox height={200} /></div>
+        <div><SlotBox height={200} /></div>
+        <div><SlotBox height={200} /></div>
+        <div><SlotBox height={200} /></div>
+        <div><SlotBox height={200} /></div>
+        <div><SlotBox height={200} /></div>
+        <div><SlotBox height={200} /></div>
       </Carousel>
     </div>
   ),
@@ -158,22 +170,34 @@ export const WithImage1Slide: Story = {
   render: () => (
     <div style={{ width: 342 }}>
       <Carousel showArrows dots>
-        {[1, 2, 3, 4].map((n) => (
-          <div key={n}>
-            <img
-              src={`https://picsum.photos/400/250?random=${n}`}
-              alt={`Slide ${n}`}
-              style={{
-                width: "100%",
-                borderRadius: 10,
-                border: "1px solid #d4d4d4",
-                boxShadow: "0px 1px 2px 0px rgba(0, 0, 0, 0.05)",
-                objectFit: "cover",
-                display: "block",
-              }}
-            />
-          </div>
-        ))}
+        <div>
+          <img
+            src="https://picsum.photos/400/250?random=1"
+            alt="Slide 1"
+            style={{ width: "100%", borderRadius: 10, boxShadow: "0px 1px 2px 0px rgba(0, 0, 0, 0.05)", objectFit: "cover", display: "block" }}
+          />
+        </div>
+        <div>
+          <img
+            src="https://picsum.photos/400/250?random=2"
+            alt="Slide 2"
+            style={{ width: "100%", borderRadius: 10, boxShadow: "0px 1px 2px 0px rgba(0, 0, 0, 0.05)", objectFit: "cover", display: "block" }}
+          />
+        </div>
+        <div>
+          <img
+            src="https://picsum.photos/400/250?random=3"
+            alt="Slide 3"
+            style={{ width: "100%", borderRadius: 10, boxShadow: "0px 1px 2px 0px rgba(0, 0, 0, 0.05)", objectFit: "cover", display: "block" }}
+          />
+        </div>
+        <div>
+          <img
+            src="https://picsum.photos/400/250?random=4"
+            alt="Slide 4"
+            style={{ width: "100%", borderRadius: 10, boxShadow: "0px 1px 2px 0px rgba(0, 0, 0, 0.05)", objectFit: "cover", display: "block" }}
+          />
+        </div>
       </Carousel>
     </div>
   ),
@@ -186,35 +210,36 @@ export const WithImage3Slides: Story = {
   render: () => (
     <div style={{ width: 684 }}>
       <Carousel showArrows dots slidesToShow={3} slidesToScroll={1}>
-        {[1, 2, 3, 4, 5, 6].map((n) => (
-          <div key={n}>
-            <img
-              src={`https://picsum.photos/250/350?random=${n + 10}`}
-              alt={`Slide ${n}`}
-              style={{
-                width: "100%",
-                height: 277,
-                borderRadius: 10,
-                border: "1px solid #d4d4d4",
-                boxShadow: "0px 1px 2px 0px rgba(0, 0, 0, 0.05)",
-                objectFit: "cover",
-                display: "block",
-              }}
-            />
-          </div>
-        ))}
+        <div>
+          <img src="https://picsum.photos/250/350?random=11" alt="Slide 1" style={{ width: "100%", height: 277, borderRadius: 10, boxShadow: "0px 1px 2px 0px rgba(0, 0, 0, 0.05)", objectFit: "cover", display: "block" }} />
+        </div>
+        <div>
+          <img src="https://picsum.photos/250/350?random=12" alt="Slide 2" style={{ width: "100%", height: 277, borderRadius: 10, boxShadow: "0px 1px 2px 0px rgba(0, 0, 0, 0.05)", objectFit: "cover", display: "block" }} />
+        </div>
+        <div>
+          <img src="https://picsum.photos/250/350?random=13" alt="Slide 3" style={{ width: "100%", height: 277, borderRadius: 10, boxShadow: "0px 1px 2px 0px rgba(0, 0, 0, 0.05)", objectFit: "cover", display: "block" }} />
+        </div>
+        <div>
+          <img src="https://picsum.photos/250/350?random=14" alt="Slide 4" style={{ width: "100%", height: 277, borderRadius: 10, boxShadow: "0px 1px 2px 0px rgba(0, 0, 0, 0.05)", objectFit: "cover", display: "block" }} />
+        </div>
+        <div>
+          <img src="https://picsum.photos/250/350?random=15" alt="Slide 5" style={{ width: "100%", height: 277, borderRadius: 10, boxShadow: "0px 1px 2px 0px rgba(0, 0, 0, 0.05)", objectFit: "cover", display: "block" }} />
+        </div>
+        <div>
+          <img src="https://picsum.photos/250/350?random=16" alt="Slide 6" style={{ width: "100%", height: 277, borderRadius: 10, boxShadow: "0px 1px 2px 0px rgba(0, 0, 0, 0.05)", objectFit: "cover", display: "block" }} />
+        </div>
       </Carousel>
     </div>
   ),
 };
 
-// ─── Default (autoplay) ─────────────────────────────────────────────────────
+// ─── Default (playground) ───────────────────────────────────────────────────
 
 export const Default: Story = {
   args: {
     showArrows: true,
     dots: true,
-    autoplay: true,
+    autoplay: false,
     children: (
       <>
         <div><SlotBox /></div>

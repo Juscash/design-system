@@ -1,15 +1,12 @@
 import React, { useRef } from "react";
 import { Carousel as AntdCarousel, ConfigProvider } from "antd";
 import type { CarouselRef } from "antd/es/carousel";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { designSystemColors, radius } from "../../theme";
+import { ArrowLeft, ArrowRight } from "lucide-react";
 import type { CarouselProps } from "../../types/components/Carousel";
 import "./index.module.css";
 
 const DOT_SIZE = 6;
-const DOT_ACTIVE_WIDTH = 24;
 const ARROW_BUTTON_OFFSET = -32;
-const ARROW_BUTTON_SIZE = 24;
 const ARROW_ICON_SIZE = 14;
 
 interface ArrowButtonProps {
@@ -17,30 +14,22 @@ interface ArrowButtonProps {
   onClick: () => void;
 }
 
+/** Botão de seta de navegação do carousel. */
 function ArrowButton({ direction, onClick }: ArrowButtonProps): React.ReactElement {
+  const positionStyle: React.CSSProperties = {
+    [direction]: ARROW_BUTTON_OFFSET,
+  };
+  const ariaLabel = direction === "left" ? "Slide anterior" : "Próximo slide";
+
   return (
     <button
+      type="button"
       onClick={onClick}
-      style={{
-        position: "absolute",
-        top: "50%",
-        transform: "translateY(calc(-50% - 15px))",
-        [direction]: ARROW_BUTTON_OFFSET,
-        zIndex: 10,
-        backgroundColor: "transparent",
-        border: `1px solid ${designSystemColors.neutral[300]}`,
-        borderRadius: radius.md,
-        width: ARROW_BUTTON_SIZE,
-        height: ARROW_BUTTON_SIZE,
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        cursor: "pointer",
-        padding: "4px 8px",
-        color: designSystemColors.neutral[800],
-      }}
+      className="ds-carousel-arrow"
+      style={positionStyle}
+      aria-label={ariaLabel}
     >
-      {direction === "left" ? <ChevronLeft size={ARROW_ICON_SIZE} /> : <ChevronRight size={ARROW_ICON_SIZE} />}
+      {direction === "left" ? <ArrowLeft size={ARROW_ICON_SIZE} /> : <ArrowRight size={ARROW_ICON_SIZE} />}
     </button>
   );
 }
@@ -69,12 +58,16 @@ export const Carousel: React.FC<CarouselProps> = ({ children, showArrows = true,
           Carousel: {
             dotWidth: DOT_SIZE,
             dotHeight: DOT_SIZE,
-            dotActiveWidth: DOT_ACTIVE_WIDTH,
           },
         },
       }}
     >
-      <div className="ds-carousel-root">
+      <div
+        className="ds-carousel-root"
+        role="region"
+        aria-roledescription="carrossel"
+        aria-label="Carrossel"
+      >
         {showArrows && <ArrowButton direction="left" onClick={handlePrev} />}
         <AntdCarousel ref={carouselRef} dots={dots} {...rest}>
           {children}
