@@ -57,19 +57,24 @@ function resolveSemanticValue<T extends object>(
 }
 
 /**
- * Context que propaga uma função "feche-se" do Tooltip ancestral mais
- * próximo. Quando um Tooltip filho abre, ele chama essa função, garantindo
- * que tooltips aninhados não convivam abertos ao mesmo tempo. Regra
- * pedida pelo usuário (não documentada no Figma) — registrada como
- * comportamento proprietário do wrapper Juscash.
+ * Controle de supressão/liberação propagado para o Tooltip ancestral mais
+ * próximo. Quando um Tooltip filho abre, o pai é **suprimido** (visualmente
+ * escondido sem perder o estado natural de hover do Antd); quando o filho
+ * fecha, o pai é **liberado** e volta a aparecer se o mouse ainda estiver
+ * sobre seu âncora. Regra pedida pelo usuário (não documentada no Figma).
  */
-const TooltipParentCloseContext = React.createContext<(() => void) | null>(null);
+type TooltipParentControl = {
+  suppress: () => void;
+  release: () => void;
+};
+
+const TooltipParentControlContext = React.createContext<TooltipParentControl | null>(null);
 
 /**
  * Tooltip do design system com fundo escuro `neutral[800]` e texto claro
  * `neutral[50]`, baseado no frame Figma `4041:9017` (matriz `side`).
- * Encadeia o auto-fechamento do ancestral via `TooltipParentCloseContext`
- * mesmo quando o consumidor não passa `open` (modo uncontrolled).
+ * Suprime ancestrais quando aberto e os libera quando fechado — ver
+ * `TooltipParentControlContext`.
  */
 export function Tooltip(props: TooltipProps): React.ReactElement {
   const {
@@ -85,25 +90,30 @@ export function Tooltip(props: TooltipProps): React.ReactElement {
     ...rest
   } = props;
 
-  const closeAncestor = React.useContext(TooltipParentCloseContext);
+  const ancestor = React.useContext(TooltipParentControlContext);
   const [internalOpen, setInternalOpen] = React.useState<boolean>(defaultOpen ?? false);
+  const [suppressed, setSuppressed] = React.useState<boolean>(false);
 
   const isControlled = openProp !== undefined;
-  const currentOpen = isControlled ? openProp : internalOpen;
+  const naturalOpen = isControlled ? openProp : internalOpen;
+  const effectiveOpen = suppressed ? false : naturalOpen;
 
   const handleOpenChange = React.useCallback(
     (next: boolean) => {
-      if (next && closeAncestor) closeAncestor();
+      if (next && ancestor) ancestor.suppress();
+      else if (!next && ancestor) ancestor.release();
       if (!isControlled) setInternalOpen(next);
       onOpenChangeProp?.(next);
     },
-    [closeAncestor, isControlled, onOpenChangeProp],
+    [ancestor, isControlled, onOpenChangeProp],
   );
 
-  const closeSelf = React.useCallback(() => {
-    if (!isControlled) setInternalOpen(false);
-    onOpenChangeProp?.(false);
-  }, [isControlled, onOpenChangeProp]);
+  const suppress = React.useCallback(() => setSuppressed(true), []);
+  const release = React.useCallback(() => setSuppressed(false), []);
+  const control = React.useMemo<TooltipParentControl>(
+    () => ({ suppress, release }),
+    [suppress, release],
+  );
 
   const resolvedClassNames = resolveSemanticValue<TooltipSemanticClassNames>(classNames, props) ?? {};
   const resolvedStyles = resolveSemanticValue<TooltipSemanticStyles>(styles, props) ?? {};
@@ -111,7 +121,7 @@ export function Tooltip(props: TooltipProps): React.ReactElement {
   const rootClassName = ["ds-tooltip", overlayClassName, resolvedClassNames.root].filter(Boolean).join(" ");
 
   return (
-    <TooltipParentCloseContext.Provider value={closeSelf}>
+    <TooltipParentControlContext.Provider value={control}>
       <ConfigProvider theme={getTooltipTheme()}>
         <AntdTooltip
           classNames={{ ...resolvedClassNames, root: rootClassName }}
@@ -120,14 +130,14 @@ export function Tooltip(props: TooltipProps): React.ReactElement {
             root: { maxWidth: MAX_TOOLTIP_WIDTH, ...overlayStyle, ...resolvedStyles.root },
             container: { ...overlayInnerStyle, ...resolvedStyles.container },
           }}
-          open={currentOpen}
+          open={effectiveOpen}
           onOpenChange={handleOpenChange}
           {...rest}
         >
           {children}
         </AntdTooltip>
       </ConfigProvider>
-    </TooltipParentCloseContext.Provider>
+    </TooltipParentControlContext.Provider>
   );
 }
 

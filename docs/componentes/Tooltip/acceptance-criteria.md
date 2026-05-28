@@ -72,7 +72,8 @@
 - [ ] O tooltip **não** abre por foco de teclado por padrão; para isso o consumidor deve passar `trigger={['hover', 'focus']}` explicitamente.
 - [ ] O tooltip fecha ao mover o cursor para fora do âncora após `mouseLeaveDelay`.
 - [ ] O tooltip é renderizado em portal (`document.body` por padrão, customizável via `getPopupContainer`).
-- [ ] **Regra aninhada (proprietária Juscash, não documentada no Figma):** quando um Tooltip filho abre dentro de um Tooltip pai (mesma árvore React), o pai é forçado a fechar automaticamente via `TooltipParentCloseContext`. Funciona com tooltips uncontrolled e respeita `onOpenChange` quando controlled.
+- [ ] **Regra aninhada (proprietária Juscash, não documentada no Figma):** quando um Tooltip filho abre dentro de um Tooltip pai (mesma árvore React), o pai é **suprimido** visualmente via `TooltipParentControlContext` enquanto o filho está aberto.
+- [ ] **Liberação de ancestral aninhado:** quando o filho fecha, o pai é **liberado** e volta a ser exibido automaticamente se o estado natural de hover do Antd ainda estiver `true` (cursor ainda sobre o âncora do pai). Funciona com tooltips uncontrolled e respeita `onOpenChange` quando controlled.
 
 ---
 

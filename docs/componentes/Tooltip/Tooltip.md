@@ -287,7 +287,7 @@ React-side. Os seletores aplicam:
 | Aparição em foco com teclado | Por default, tooltip abre apenas em `hover`. Para abertura por foco com teclado é necessário o consumidor passar `trigger={['hover', 'focus']}`. | Antd default |
 | Fecha ao perder hover/focus | Imediato após `mouseLeaveDelay` | Antd default              |
 | Renderização         | Portal em `document.body` (ou `getPopupContainer`) | Antd `Trigger` |
-| Fechamento automático de ancestral aninhado | Quando um Tooltip filho abre (qualquer profundidade), o(s) Tooltip(s) ancestral(is) na mesma árvore React fecha(m) automaticamente via `TooltipParentCloseContext`. Funciona com tooltips uncontrolled e respeita `onOpenChange` quando controlled. | **Proprietário Juscash** — regra de comportamento pedida pelo usuário, **não documentada no Figma**; implementada no wrapper para evitar empilhamento visual quando uma área hoverável contém outra. |
+| Supressão e liberação de ancestral aninhado | Quando um Tooltip filho abre, o(s) ancestral(is) na mesma árvore React são **suprimidos** (escondidos visualmente); o estado natural de hover do Antd continua sendo rastreado. Quando o filho fecha, o ancestral é **liberado** e volta a aparecer se o cursor ainda estiver sobre seu âncora. Implementação via `TooltipParentControlContext` (suppress/release); funciona com tooltips uncontrolled e respeita `onOpenChange` quando controlled. | **Proprietário Juscash** — regra pedida pelo usuário, **não documentada no Figma**; evita empilhamento visual em áreas hoveráveis aninhadas e preserva continuidade de hover ao sair de elementos internos. |
 
 ---
 

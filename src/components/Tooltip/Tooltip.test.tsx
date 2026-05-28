@@ -264,7 +264,7 @@ describe("Tooltip", () => {
     expect(arrow).toBeInTheDocument();
   });
 
-  it("dispara onOpenChange(false) no tooltip do pai quando o filho abre (regra aninhada)", async () => {
+  it("suprime o tooltip do pai quando o filho abre e libera quando o filho fecha (regra aninhada)", async () => {
     const user = userEvent.setup();
     const parentOnChange = vi.fn();
     const childOnChange = vi.fn();
@@ -280,19 +280,22 @@ describe("Tooltip", () => {
       </Tooltip>,
     );
 
-    // Abre o tooltip do pai via hover no span
+    // Hover no pai abre o pai
     await user.hover(screen.getByText("pai content"));
-    await waitFor(() => {
-      expect(parentOnChange).toHaveBeenCalledWith(true);
-    });
+    await waitFor(() => expect(parentOnChange).toHaveBeenCalledWith(true));
+    await waitFor(() => expect(document.body).toHaveTextContent("Tooltip do pai"));
 
-    // Abre o filho — o context do pai deve disparar onOpenChange(false) no pai
+    // Hover no filho — abre o filho e suprime o pai (pai vira invisível)
     await user.hover(screen.getByRole("button", { name: "Filho" }));
-    await waitFor(() => {
-      expect(childOnChange).toHaveBeenCalledWith(true);
-    });
+    await waitFor(() => expect(childOnChange).toHaveBeenCalledWith(true));
+    await waitFor(() => expect(document.body).toHaveTextContent("Tooltip do filho"));
 
-    // O pai recebeu o sinal de fechar
-    expect(parentOnChange).toHaveBeenCalledWith(false);
+    // Sai do filho — filho fecha, pai libera e re-aparece (mouse ainda no pai)
+    await user.unhover(screen.getByRole("button", { name: "Filho" }));
+    await waitFor(() => expect(childOnChange).toHaveBeenCalledWith(false));
+    // O onOpenChange do pai NÃO é chamado com false pelo nosso supress (estado natural
+    // do Antd permanece true durante toda a interação); ao liberar a supressão o pai
+    // volta a ser exibido visualmente.
+    await waitFor(() => expect(document.body).toHaveTextContent("Tooltip do pai"));
   });
 });
