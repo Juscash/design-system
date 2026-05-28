@@ -89,7 +89,6 @@
 }
 
 :global(.ds-switch-rich__label) {
-  font-family: var(--font-primary);
   font-size: var(--font-body-2-size);
   font-weight: 400;
   line-height: var(--font-line-height);
@@ -97,7 +96,6 @@
 }
 
 :global(.ds-switch-rich__secondary) {
-  font-family: var(--font-primary);
   font-size: var(--font-caption-size);
   font-weight: 400;
   line-height: var(--font-line-height);
