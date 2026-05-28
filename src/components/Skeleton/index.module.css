@@ -1,0 +1,79 @@
+/*
+  Estilos do Skeleton. Sem font-family (componente puramente visual). Tokens
+  e dimensões vêm do dump figma/components/skeleton/design-context-4080-20627.md:
+
+  - Composto (node 4080:20658) — flex, gap 12, width 100% (no dump é 320px,
+    mas aqui o componente é fluido para se adaptar ao container do consumer;
+    o consumer dimensiona via wrapper).
+  - Avatar (node 4080:20600) — 48x48, radius.full, neutral/100.
+  - Line   (node 4080:20604/20605) — 16px de altura, radius.xl (8px),
+    neutral/100, largura 100%.
+  - Object (node 4080:20608/20609) — 132px de altura, radius.xl, neutral/100,
+    largura 100%.
+  - Stack (node 4080:20652) — flex column, gap 12, flex: 1 para esticar.
+
+  Animação de pulse: 2s ease-in-out infinite (opacity 1 -> 0.5 -> 1). Quando
+  o usuário marca `prefers-reduced-motion: reduce`, removemos o keyframe.
+
+  Seletores em :global porque tsup pós-processa o CSS Module e o consumer
+  importa o CSS via "@juscash/design-system/dist/index.css".
+*/
+
+:global(.ds-skeleton) {
+  display: flex;
+  gap: var(--spacing-3);
+  width: 100%;
+}
+
+:global(.ds-skeleton-stack) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-3);
+  flex: 1;
+}
+
+:global(.ds-skeleton-base) {
+  background-color: var(--color-neutral-100);
+}
+
+:global(.ds-skeleton-avatar) {
+  background-color: var(--color-neutral-100);
+  width: 48px;
+  height: 48px;
+  border-radius: var(--radius-full);
+  flex-shrink: 0;
+}
+
+:global(.ds-skeleton-line) {
+  background-color: var(--color-neutral-100);
+  width: 100%;
+  height: 16px;
+  border-radius: var(--radius-xl);
+}
+
+:global(.ds-skeleton-object) {
+  background-color: var(--color-neutral-100);
+  width: 100%;
+  height: 132px;
+  border-radius: var(--radius-xl);
+}
+
+:global(.ds-skeleton-animated) {
+  animation: ds-skeleton-pulse 2s ease-in-out infinite;
+}
+
+@keyframes ds-skeleton-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.5;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  :global(.ds-skeleton-animated) {
+    animation: none;
+  }
+}
