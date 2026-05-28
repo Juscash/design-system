@@ -24,7 +24,14 @@ export type DSColor =
   | "disabled"
   | "info";
 
-type AntdTypographyAllProps = Partial<Omit<TitleProps, "level"> & TextProps & ParagraphProps>;
+/**
+ * Superset das props que o Antd Typography expõe nos três entrypoints
+ * (`Title`, `Text`, `Paragraph`). Usado como bag de pass-through após
+ * descontar as props proprietárias (`variant`, `color`, `style`).
+ */
+export type AntdTypographyAllProps = Partial<
+  Omit<TitleProps, "level"> & TextProps & ParagraphProps
+>;
 
 export type CustomTypographyProps = AntdTypographyAllProps & {
   variant?: TypographyVariant;

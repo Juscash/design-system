@@ -5,6 +5,7 @@ import type { TextProps } from "antd/es/typography/Text";
 import type { ParagraphProps } from "antd/es/typography/Paragraph";
 import { designSystemColors, typography as typographyToken } from "../../theme";
 import type {
+  AntdTypographyAllProps,
   BodyProps,
   CaptionProps,
   CustomTypographyProps,
@@ -96,7 +97,17 @@ const typographyVariants = {
   },
 } as const;
 
-function renderTypography(variant: TypographyVariant, baseStyle: React.CSSProperties, rest: object): React.ReactElement {
+/**
+ * Decide qual subcomponente do Antd Typography renderizar a partir da
+ * `variant`. Propaga os estilos base (margin/cor) e o resto das props do
+ * Antd, fazendo o cast pontual para o tipo do entrypoint específico
+ * (`Title`, `Paragraph` ou `Text`).
+ */
+function renderTypography(
+  variant: TypographyVariant,
+  baseStyle: React.CSSProperties,
+  rest: AntdTypographyAllProps,
+): React.ReactElement {
   switch (variant) {
     case "heading1":
       return <Title level={1} style={baseStyle} {...(rest as TitleProps)} />;
@@ -138,7 +149,17 @@ export function Typography(props: CustomTypographyProps): React.ReactElement {
   };
 
   const node = renderTypography(variant, baseStyle, rest);
-  return <ConfigProvider theme={{ token: { fontWeightStrong: FONT_WEIGHT, ...variantTheme } }}>{node}</ConfigProvider>;
+  return (
+    <ConfigProvider
+      theme={{
+        components: {
+          Typography: { fontWeightStrong: FONT_WEIGHT, ...variantTheme },
+        },
+      }}
+    >
+      {node}
+    </ConfigProvider>
+  );
 }
 
 Typography.displayName = "Typography";
