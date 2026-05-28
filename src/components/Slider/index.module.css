@@ -1,0 +1,73 @@
+/*
+  Estilos próprios do Slider. Scoped via `.ds-slider` aplicada ao componente.
+  Alinha o visual ao dump `figma/components/slider/` (`4069:5196`): track
+  full neutral.300, value fill brand.primary.500, marker 14×14 com borda
+  2px em brand.primary.500 e fill neutral.50.
+*/
+
+/* Track full (rail) — sobrescreve em todos os estados pois o token do
+   ConfigProvider só ataca o seletor base. */
+:global(.ds-slider .ant-slider-rail) {
+  background-color: var(--color-neutral-300) !important;
+}
+
+:global(.ds-slider:hover .ant-slider-rail) {
+  background-color: var(--color-neutral-300) !important;
+}
+
+/* Track value (fill) — área coberta entre o min e o handle (ou entre
+   os dois handles, no range). */
+:global(.ds-slider .ant-slider-track) {
+  background-color: var(--color-brand-primary-500) !important;
+}
+
+:global(.ds-slider:hover .ant-slider-track) {
+  background-color: var(--color-brand-primary-500) !important;
+}
+
+/* Marker (handle) — 14×14 com borda 2px brand.primary.500 e fill
+   neutral.50. O `::after` do Antd é a área que recebe a borda e o fundo;
+   `::before` é a sombra circular do hover (mantemos transparente para
+   preservar o visual `regular` do dump). */
+:global(.ds-slider .ant-slider-handle::after) {
+  background-color: var(--color-neutral-50) !important;
+  box-shadow: 0 0 0 2px var(--color-brand-primary-500) !important;
+  width: 14px !important;
+  height: 14px !important;
+}
+
+:global(.ds-slider .ant-slider-handle:hover::after),
+:global(.ds-slider .ant-slider-handle:focus::after),
+:global(.ds-slider .ant-slider-handle:focus-visible::after),
+:global(.ds-slider .ant-slider-handle.ant-slider-handle-dragging::after) {
+  background-color: var(--color-neutral-50) !important;
+  box-shadow: 0 0 0 2px var(--color-brand-primary-500) !important;
+}
+
+/* Foco real via teclado — aplica `shadow.focus` no halo do handle. */
+:global(.ds-slider .ant-slider-handle:focus-visible) {
+  outline: none;
+}
+
+:global(.ds-slider .ant-slider-handle:focus-visible::before) {
+  box-shadow: var(--shadow-focus) !important;
+  inset: -3px !important;
+}
+
+/* Pseudo-class do addon-pseudo-states (Storybook) reproduz o `focus-visible`. */
+:global(.ds-slider.pseudo-focus-visible .ant-slider-handle::before) {
+  box-shadow: var(--shadow-focus) !important;
+  inset: -3px !important;
+}
+
+/* Disabled — track value vira `neutral.400`; handle perde a borda
+   colorida. Mantém o ícone visualmente neutro conforme expectativa
+   do Antd e da camada Juscash. */
+:global(.ds-slider.ant-slider-disabled .ant-slider-track) {
+  background-color: var(--color-neutral-400) !important;
+}
+
+:global(.ds-slider.ant-slider-disabled .ant-slider-handle::after) {
+  box-shadow: 0 0 0 2px var(--color-neutral-400) !important;
+  background-color: var(--color-neutral-50) !important;
+}

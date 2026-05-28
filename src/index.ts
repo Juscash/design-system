@@ -48,7 +48,6 @@ export {
   type CalendarProps,
   Transfer,
   type TransferProps,
-  Slider,
   Rate,
   type RateProps,
   Mentions,
