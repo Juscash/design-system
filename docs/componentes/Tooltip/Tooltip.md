@@ -156,19 +156,32 @@ Todos os valores abaixo vieram de `get_design_context 4041:9017`,
 
 ### 3.3. Seta (Arrow)
 
-| Atributo            | Valor Figma | Foundation | Node-id origem |
-| ------------------- | ----------- | ---------- | -------------- |
-| Largura (top/bottom) | `11.5px`   | —          | `4041:9020`, `4041:9023` |
-| Altura (top/bottom)  | `5px`      | —          | `4041:9020`    |
-| Largura (left/right) | `5px`      | —          | inferido por rotação `-90deg`; verificar em `4041:9026`/`4041:9029` na próxima sessão MCP |
-| Altura (left/right)  | `11.5px`   | —          | inferido por rotação `-90deg`; verificar em `4041:9026`/`4041:9029` na próxima sessão MCP |
-| Cor                  | `#262626` (mesmo do container) | `neutral[800]` | inferido do CSS Module + `4041:9017` |
-| Asset                | SVG (`e55bb64bc340bda2b9d5f2b24efa614f5b2c4431.svg` em localhost MCP) | — | `4041:9017` |
+| Atributo            | Valor Figma | Implementação atual (Antd) | Node-id origem |
+| ------------------- | ----------- | -------------------------- | -------------- |
+| Largura (top/bottom) | `11.5px`   | `11.5px` (via `sizePopupArrow`) | `4041:9020`, `4041:9023` |
+| Altura (top/bottom)  | `5px`      | **`~8.13px`** (= `11.5 / √2`, computado pelo Antd) | `4041:9020`    |
+| Largura (left/right) | `5px`      | **`~8.13px`** (= mesma fórmula com eixo transposto) | inferido por rotação |
+| Altura (left/right)  | `11.5px`   | `11.5px` | inferido por rotação |
+| Cor                  | `#262626` (mesmo do container) | `neutral[800]` | `4041:9017` |
+| Asset                | SVG (`e55bb64bc340bda2b9d5f2b24efa614f5b2c4431.svg` em localhost MCP) | clip-path nativo do Antd | `4041:9017` |
 
-A seta é um **triângulo escaleno** (não isósceles): inset CSS retornado
-pelo `get_design_context` é `inset[0_0_6.51%_0]` na vertical — ou seja, a
-seta ocupa toda a largura mas deixa 6.51% de margem inferior, sugerindo
-ponta levemente "achatada" na base.
+> **Desvio conhecido em relação ao Figma:** a altura da seta no design é
+> `5px` (Figma), mas a implementação delega geometria/translação ao Antd via
+> `sizePopupArrow: 11.5` para garantir que o posicionamento por `placement`
+> (top/bottom/left/right) funcione consistentemente. O Antd força aspecto
+> `1 / √2`, resultando em altura `~8px` em vez de `5px`. **Tentativas de
+> override por CSS (`width`/`height` no wrapper + `clip-path` ou `scale` no
+> `::before`)** causaram gap visível entre a seta e o container quando o
+> wrapper era rotacionado em `left`/`right`, porque a translation matrix
+> do Antd é calibrada para a geometria padrão do token. O trade-off aceito:
+> altura levemente maior em troca de seta renderizando em todos os 4
+> placements sem buraco. Reavaliar quando o Antd expor `sizePopupArrowHeight`
+> como token independente, ou quando o Figma confirmar novo valor.
+
+A seta é um **triângulo escaleno** (não isósceles) no Figma: inset CSS
+retornado pelo `get_design_context` é `inset[0_0_6.51%_0]` na vertical — ou
+seja, a seta ocupa toda a largura mas deixa 6.51% de margem inferior,
+sugerindo ponta levemente "achatada" na base.
 
 ### 3.4. Estados
 
@@ -274,6 +287,7 @@ React-side. Os seletores aplicam:
 | Aparição em foco com teclado | Por default, tooltip abre apenas em `hover`. Para abertura por foco com teclado é necessário o consumidor passar `trigger={['hover', 'focus']}`. | Antd default |
 | Fecha ao perder hover/focus | Imediato após `mouseLeaveDelay` | Antd default              |
 | Renderização         | Portal em `document.body` (ou `getPopupContainer`) | Antd `Trigger` |
+| Fechamento automático de ancestral aninhado | Quando um Tooltip filho abre (qualquer profundidade), o(s) Tooltip(s) ancestral(is) na mesma árvore React fecha(m) automaticamente via `TooltipParentCloseContext`. Funciona com tooltips uncontrolled e respeita `onOpenChange` quando controlled. | **Proprietário Juscash** — regra de comportamento pedida pelo usuário, **não documentada no Figma**; implementada no wrapper para evitar empilhamento visual quando uma área hoverável contém outra. |
 
 ---
 

@@ -263,4 +263,36 @@ describe("Tooltip", () => {
     expect(container).toHaveStyle({ color: "rgb(0, 128, 0)", padding: "10px" });
     expect(arrow).toBeInTheDocument();
   });
+
+  it("dispara onOpenChange(false) no tooltip do pai quando o filho abre (regra aninhada)", async () => {
+    const user = userEvent.setup();
+    const parentOnChange = vi.fn();
+    const childOnChange = vi.fn();
+
+    render(
+      <Tooltip title="Tooltip do pai" onOpenChange={parentOnChange}>
+        <div>
+          <span>pai content</span>
+          <Tooltip title="Tooltip do filho" onOpenChange={childOnChange}>
+            <button>Filho</button>
+          </Tooltip>
+        </div>
+      </Tooltip>,
+    );
+
+    // Abre o tooltip do pai via hover no span
+    await user.hover(screen.getByText("pai content"));
+    await waitFor(() => {
+      expect(parentOnChange).toHaveBeenCalledWith(true);
+    });
+
+    // Abre o filho — o context do pai deve disparar onOpenChange(false) no pai
+    await user.hover(screen.getByRole("button", { name: "Filho" }));
+    await waitFor(() => {
+      expect(childOnChange).toHaveBeenCalledWith(true);
+    });
+
+    // O pai recebeu o sinal de fechar
+    expect(parentOnChange).toHaveBeenCalledWith(false);
+  });
 });

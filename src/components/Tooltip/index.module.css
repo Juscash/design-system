@@ -43,33 +43,14 @@
   word-break: break-word !important;
 }
 
-:global(.ds-tooltip.ant-tooltip-placement-top) :global(.ant-tooltip-arrow),
-:global(.ds-tooltip.ant-tooltip-placement-bottom) :global(.ant-tooltip-arrow) {
-  width: 11.5px !important;
-  height: 5px !important;
-}
-
-:global(.ds-tooltip.ant-tooltip-placement-left) :global(.ant-tooltip-arrow),
-:global(.ds-tooltip.ant-tooltip-placement-right) :global(.ant-tooltip-arrow) {
-  width: 5px !important;
-  height: 11.5px !important;
-}
-
+/*
+  Seta: cor de fundo. Geometria (largura/altura/translação por placement) é
+  delegada ao Antd via `sizePopupArrow: 11.5` no `getTooltipTheme()` — ele
+  recalcula tudo de forma consistente para os 4 placements.
+*/
 :global(.ds-tooltip) :global(.ant-tooltip-arrow::before) {
   background: var(--ds-tooltip-bg) !important;
   box-shadow: none !important;
-}
-
-:global(.ds-tooltip.ant-tooltip-placement-top) :global(.ant-tooltip-arrow::before),
-:global(.ds-tooltip.ant-tooltip-placement-bottom) :global(.ant-tooltip-arrow::before) {
-  scale: 0.71875 0.625;
-  transform-origin: center bottom;
-}
-
-:global(.ds-tooltip.ant-tooltip-placement-left) :global(.ant-tooltip-arrow::before),
-:global(.ds-tooltip.ant-tooltip-placement-right) :global(.ant-tooltip-arrow::before) {
-  scale: 0.625 0.71875;
-  transform-origin: center center;
 }
 
 :global(.ds-tooltip) :global(.ant-tooltip-arrow::after) {
