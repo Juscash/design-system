@@ -45,4 +45,4 @@ Rode `npx tsup --no-watch` (build + dts) e corrija qualquer erro antes de finali
 
 ## Saída
 
-Liste arquivos criados/alterados e como cada decisão se amarra ao dump (citando o `.md`/`.json` de `./figma/components/<slug>/` que motivou). Se algo do dump não puder ser implementado dentro das regras, **sinalize** em vez de improvisar.
+Liste arquivos criados/alterados e como cada decisão se amarra ao dump (citando o `.md`/`.json` de `./figma/components/<slug>/` que motivou). Não pare para revisão. Só sinalize ao orquestrador em caso de erro real impossível de resolver (ex.: requisito do dump conflita com gate do `.code-review.json` sem caminho de saída).

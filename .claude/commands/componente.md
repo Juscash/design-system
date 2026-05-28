@@ -41,7 +41,7 @@ Invoque cada agente abaixo via Task tool (`subagent_type` = nome do agente), um 
    - **Loop A:** enquanto houver FAIL por causa do código, devolve ao **implementer** com a lista e re-roda o checker com o mesmo checklist.
 5. **vitest-author** — recebe o checklist + dump e cria/atualiza `<Nome>.test.tsx`. Roda `npm run test:run`.
 6. **storybook-auditor** — audita a doc page do componente no Storybook via Chrome MCP, comparando contra `./figma/components/<slug>/`.
-   - **Loop B:** se a auditoria achar erro, identifique a etapa responsável (1 / 3 / 5), volte a ela com o relato e re-audite.
+   - **Loop B:** se a auditoria achar erro, identifique a etapa responsável (1 code-cleaner para item extra; 3 implementer para item ausente / token errado / estado interativo simulado), volte a ela com o relato e re-audite.
 7. **ds-tests-author** — cria/atualiza `design-system-tests/src/pages/<slug>/` com todas as variações via props.
 8. **Fechamento:**
    - Marque `"<slug>": true` em `design-system-tests/checklist.json` (preserve as demais chaves).
@@ -52,7 +52,9 @@ Invoque cada agente abaixo via Task tool (`subagent_type` = nome do agente), um 
 
 ## Critério de conclusão
 
-Só finalize quando todos os gates abaixo estiverem verdes:
+Encerre automaticamente assim que todos os gates abaixo estiverem verdes — **não** pare para revisão humana entre etapas nem ao final. Use os loops para resolver erros que cabem ao próprio pipeline; só interrompa em caso de erro real impossível de resolver (build/test quebrando com causa fora do escopo do componente, conflito explícito entre dump e gate do `.code-review.json` sem caminho de saída, servidor de dev que não sobe).
+
+Gates verdes:
 
 - Código sem itens fora do design.
 - Critérios de aceite 100% PASS.
@@ -62,4 +64,4 @@ Só finalize quando todos os gates abaixo estiverem verdes:
 - `design-system-tests/checklist.json` com `"<slug>": true`.
 - Commit + push feitos nos dois repositórios.
 
-Ao terminar, entregue um resumo: o que mudou em cada arquivo, o estado de cada gate e pendências `warning`/`info` do `.code-review.json` que sobraram para decisão humana.
+Ao concluir, entregue um resumo curto: o que mudou em cada arquivo e o estado de cada gate. Pendências `warning`/`info` do `.code-review.json` são apenas listadas; não bloqueiam a conclusão.

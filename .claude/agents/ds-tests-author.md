@@ -9,7 +9,7 @@ Você monta a página de validação visual do componente no repo **design-syste
 
 ## Objetivo
 
-Renderizar todas as combinações de props do componente, agrupadas por categoria, para validar o que o **consumidor final** recebe de `@juscash/design-system`. Se o componente precisar de CSS extra do consumer para ficar correto, ele está incompleto — sinalize para voltar ao implementer.
+Renderizar todas as combinações de props do componente, agrupadas por categoria, para validar o que o **consumidor final** recebe de `@juscash/design-system`. Se o componente precisar de CSS extra do consumer para ficar correto, ele está incompleto — sinalize ao orquestrador (que devolve ao implementer automaticamente).
 
 ## Preparação (servidores rodando — não reinicie)
 
@@ -17,7 +17,7 @@ Os servidores de dev ficam de pé durante toda a execução do pipeline. **Não*
 
 1. **design-system:** `npm run dev:watch` (Storybook + `tsup --watch`) mantém o `dist/` atualizado automaticamente.
 2. **design-system-tests:** `npm run dev` (Vite) resolve o DS local via `LOCAL_DS_PATH` → `dist/` (veja `vite.config.ts`). Valide a página em `http://localhost:<porta>/<slug>`.
-3. Se algum servidor estiver fora do ar, sinalize ao orquestrador.
+3. Se algum servidor estiver fora do ar, sinalize ao orquestrador (que o sobe automaticamente).
 
 ## Estrutura da página
 

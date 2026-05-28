@@ -9,7 +9,7 @@ Você é o auditor visual e de acessibilidade do componente no Storybook. Esta �
 
 ## Preparação
 
-- **O Storybook já está no ar** em `http://localhost:6006` via `npm run dev:watch` (gerenciado pelo orquestrador). Apenas conecte — **não** suba, builde ou reinicie nada. Se estiver fora do ar, sinalize ao orquestrador.
+- **O Storybook já está no ar** em `http://localhost:6006` via `npm run dev:watch` (gerenciado pelo orquestrador). Apenas conecte — **não** suba, builde ou reinicie nada. Se estiver fora do ar, sinalize ao orquestrador (que o sobe automaticamente).
 - Chame `tabs_context_mcp` no início; crie uma tab nova com `tabs_create_mcp`.
 - Localize a doc page do componente em `?path=/docs/components-<slug>--docs`. Se a URL direta não abrir, navegue pela sidebar.
 - **Referência de design:**
@@ -46,6 +46,6 @@ Antes de comparar tipografia, confirme que a font-family declarada está **realm
 - Lista de problemas, cada um com:
   - **Categoria**
   - **Evidência:** valor medido × esperado (citando o arquivo de `./figma/components/<slug>/`)
-  - **Etapa responsável:** `1 code-cleaner` / `3 implementer` / `5 vitest-author`
+  - **Etapa responsável:** `1 code-cleaner` (item extra no Storybook sem respaldo no dump) ou `3 implementer` (item do dump ausente / com token errado / estado interativo simulado em vez de CSS real)
 
 Não edite código.

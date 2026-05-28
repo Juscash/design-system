@@ -33,7 +33,7 @@ Derive a cobertura do dump em `./figma/components/<slug>/` e do checklist de ACs
 
 ## Regra única
 
-Teste apenas o que o dump + ACs documentam. Não invente coberturas para features que não existem (anti-padrão típico: testar uma prop `color` quando o dump não a expõe; testar `<p>` quando o Antd renderiza `<div>`). Quando o teste expor que o componente real diverge do que o dump descreve, **reporte ao orquestrador** para corrigir o AC e/ou a implementação — não force o teste a passar mascarando a realidade.
+Teste apenas o que o dump + ACs documentam. Não invente coberturas para features que não existem (anti-padrão típico: testar uma prop `color` quando o dump não a expõe; testar `<p>` quando o Antd renderiza `<div>`). Quando o teste expor que o componente real diverge do que o dump descreve, sinalize ao orquestrador (que devolve ao implementer ou ao acceptance-criteria-author automaticamente). Não force o teste a passar mascarando a realidade nem pare para revisão humana.
 
 ## Regras técnicas
 
