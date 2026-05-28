@@ -3,7 +3,6 @@ import React from "react";
 import { MoreHorizontal, Filter, Download } from "lucide-react";
 import { PageHeader } from ".";
 import { Button } from "../Button";
-import { Tag } from "../Tag";
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
@@ -322,26 +321,6 @@ export const SemDescricaoComAcoes: Story = {
   args: {
     title: "Dashboard",
     description: undefined,
-    actions: defaultActions,
-    variant: "default",
-    level: 2,
-  },
-};
-
-/**
- * Título acompanhado por um `Tag` à direita do texto — o slot `title` aceita
- * `ReactNode`, permitindo enriquecer com badges/tags.
- */
-export const TituloComTag: Story = {
-  name: "Título com Tag",
-  args: {
-    title: (
-      <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
-        Análise prospecção
-        <Tag success>Ativo</Tag>
-      </span>
-    ),
-    description: "Realize a análise de processos ou de carteiras de advogados e acompanhe os resultados.",
     actions: defaultActions,
     variant: "default",
     level: 2,
