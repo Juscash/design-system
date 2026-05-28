@@ -24,6 +24,7 @@ export * from "./Radio";
 export * from "./RangePicker";
 export * from "./Segmented";
 export * from "./Select";
+export * from "./Separator";
 export * from "./Skeleton";
 export * from "./Switch";
 export * from "./Table";

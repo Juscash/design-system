@@ -235,6 +235,16 @@
 }
 
 /* ============================================
+   BODY — família tipográfica global
+   Aplica a fonte primária (Inter) em toda a árvore para que
+   componentes e stories não precisem redeclarar `font-family`
+   localmente.
+   ============================================ */
+body {
+  font-family: var(--font-primary);
+}
+
+/* ============================================
    SEGMENTED — overrides nativos
    Específicos do Segmented do design system foram movidos para
    src/components/Segmented/index.module.css (scoped via classe .ds-segmented).
