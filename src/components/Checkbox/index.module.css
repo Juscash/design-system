@@ -103,7 +103,6 @@
 :global(.ds-checkbox-group .ant-checkbox-wrapper > span:last-child),
 :global(.ds-checkbox .ant-checkbox-label),
 :global(.ds-checkbox-group .ant-checkbox-label) {
-  font-family: var(--font-primary) !important;
   font-size: var(--font-body-2-size) !important;
   font-weight: 400 !important;
   color: var(--color-neutral-800) !important;
@@ -191,7 +190,6 @@
 }
 
 :global(.ds-checkbox-rich__label) {
-  font-family: var(--font-primary);
   font-size: var(--font-body-2-size);
   font-weight: 400;
   line-height: var(--font-line-height);
@@ -199,7 +197,6 @@
 }
 
 :global(.ds-checkbox-rich__secondary) {
-  font-family: var(--font-primary);
   font-size: var(--font-caption-size);
   font-weight: 400;
   line-height: var(--font-line-height);
