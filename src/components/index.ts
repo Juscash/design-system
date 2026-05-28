@@ -33,6 +33,7 @@ export * from "./Switch";
 export * from "./Table";
 export * from "./Tabs";
 export * from "./TextArea";
+export * from "./ToggleGroup";
 export * from "./Tooltip";
 export * from "./Typography";
 export * from "./Upload";

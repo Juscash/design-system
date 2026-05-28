@@ -1,0 +1,243 @@
+/*
+  Estilos próprios do ToggleGroup. Classes envoltas em `:global(...)` para
+  permanecerem globais após o processamento do Vite (Storybook) e do
+  pós-processamento do `tsup`.
+
+  Estrutura do Antd renderizado:
+    .ds-toggle-group.ant-radio-group
+      label.ant-radio-button-wrapper (item)
+        span.ant-radio-button (input wrapper)
+        span (label content)
+
+  Classes próprias:
+    .ds-toggle-group               - container raiz.
+    .ds-toggle-group--ghost        - variante ghost.
+    .ds-toggle-group--outlined     - variante outlined.
+    .ds-toggle-group--xs           - tamanho xs.
+    .ds-toggle-group--s            - tamanho s.
+    .ds-toggle-group--m            - tamanho m.
+    .ds-toggle-group__label        - wrapper inline-flex (ícone + texto).
+    .ds-toggle-group__icon         - wrapper do ícone (alinhamento).
+    .ds-toggle-group__text         - texto do item (font-size por size).
+    .ds-toggle-group__sr-only      - rótulo acessível em modo icon-only.
+*/
+
+/* ============================================================
+   CONTAINER — reset e radius do grupo (radius/xl, dump Figma)
+   ============================================================ */
+
+:global(.ds-toggle-group.ant-radio-group) {
+  display: inline-flex;
+  gap: 0;
+  border-radius: var(--radius-xl);
+  padding: 0;
+}
+
+/* ============================================================
+   GHOST — track cinza (neutral/200)
+   Item ativo recebe bg neutral/50 + radius/md.
+   ============================================================ */
+
+:global(.ds-toggle-group.ds-toggle-group--ghost) {
+  background-color: var(--color-neutral-200);
+  padding: var(--spacing-1);
+  gap: var(--spacing-1);
+}
+
+:global(.ds-toggle-group--ghost .ant-radio-button-wrapper) {
+  background-color: transparent;
+  border: none;
+  color: var(--color-text-soft);
+  border-radius: var(--radius-md);
+  padding-inline: var(--spacing-2);
+}
+
+:global(.ds-toggle-group--ghost .ant-radio-button-wrapper::before) {
+  display: none;
+}
+
+:global(.ds-toggle-group--ghost .ant-radio-button-wrapper-checked) {
+  background-color: var(--color-neutral-50);
+  color: var(--color-text-dark);
+  border-radius: var(--radius-md);
+}
+
+:global(.ds-toggle-group--ghost .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)) {
+  background-color: var(--color-neutral-50);
+  color: var(--color-text-dark);
+}
+
+:global(.ds-toggle-group--ghost .ant-radio-button-wrapper:hover) {
+  color: var(--color-text-dark);
+}
+
+/* ============================================================
+   OUTLINED — borda no grupo, divisores entre itens
+   Item ativo recebe bg neutral/50 + radius/md.
+   ============================================================ */
+
+:global(.ds-toggle-group--outlined) {
+  background-color: transparent;
+  border: 1px solid var(--color-border-regular);
+  padding: 0;
+}
+
+:global(.ds-toggle-group--outlined .ant-radio-button-wrapper) {
+  background-color: transparent;
+  border: none;
+  border-right: 1px solid var(--color-border-regular);
+  border-radius: 0;
+  color: var(--color-text-soft);
+  padding-inline: var(--spacing-2);
+}
+
+:global(.ds-toggle-group--outlined .ant-radio-button-wrapper:last-child) {
+  border-right: none;
+}
+
+:global(.ds-toggle-group--outlined .ant-radio-button-wrapper:first-child) {
+  border-start-start-radius: var(--radius-xl);
+  border-end-start-radius: var(--radius-xl);
+}
+
+:global(.ds-toggle-group--outlined .ant-radio-button-wrapper:last-child) {
+  border-start-end-radius: var(--radius-xl);
+  border-end-end-radius: var(--radius-xl);
+}
+
+:global(.ds-toggle-group--outlined .ant-radio-button-wrapper::before) {
+  display: none;
+}
+
+:global(.ds-toggle-group--outlined .ant-radio-button-wrapper-checked) {
+  background-color: var(--color-neutral-50);
+  color: var(--color-text-dark);
+  border-radius: var(--radius-md);
+}
+
+:global(.ds-toggle-group--outlined .ant-radio-button-wrapper-checked:not(.ant-radio-button-wrapper-disabled)) {
+  background-color: var(--color-neutral-50);
+  color: var(--color-text-dark);
+}
+
+:global(.ds-toggle-group--outlined .ant-radio-button-wrapper:hover) {
+  color: var(--color-text-dark);
+}
+
+/* ============================================================
+   SIZES — altura, font-size por size (dump Figma)
+   - m (default): item 50x36 (texto) / 36x36 (icon), font body/02 (13px).
+   - s:           item 50x32 (texto) / 32x32 (icon), font body/02 (13px).
+   - xs:          item 34x24 (texto) / 24x24 (icon), font caption (10px).
+   ============================================================ */
+
+:global(.ds-toggle-group--m .ant-radio-button-wrapper) {
+  height: 36px;
+  min-width: 36px;
+  line-height: 36px;
+}
+
+:global(.ds-toggle-group--s .ant-radio-button-wrapper) {
+  height: 32px;
+  min-width: 32px;
+  line-height: 32px;
+}
+
+:global(.ds-toggle-group--xs .ant-radio-button-wrapper) {
+  height: 24px;
+  min-width: 24px;
+  line-height: 24px;
+  padding-inline: var(--spacing-1);
+}
+
+/* Font-size do texto por size (Figma: m/s usam body/02; xs usa caption/01). */
+:global(.ds-toggle-group--m .ds-toggle-group__text),
+:global(.ds-toggle-group--s .ds-toggle-group__text) {
+  font-size: var(--font-body-2-size);
+  line-height: var(--font-line-height);
+}
+
+:global(.ds-toggle-group--xs .ds-toggle-group__text) {
+  font-size: var(--font-caption-size);
+  line-height: var(--font-line-height);
+}
+
+/* ============================================================
+   ITEM ATIVO — peso visual extra (Figma destaca selecionado).
+   ============================================================ */
+
+:global(.ds-toggle-group .ant-radio-button-wrapper-checked .ds-toggle-group__text) {
+  font-weight: 700;
+}
+
+/* ============================================================
+   FOCO — :focus-visible aplica shadow.focus (token Figma).
+   ============================================================ */
+
+:global(.ds-toggle-group .ant-radio-button-wrapper:focus-within) {
+  box-shadow: var(--shadow-focus);
+  outline: none;
+  z-index: 1;
+  border-radius: var(--radius-md);
+}
+
+:global(.ds-toggle-group .ant-radio-button-wrapper:has(input:focus-visible)) {
+  box-shadow: var(--shadow-focus);
+  outline: none;
+  z-index: 1;
+  border-radius: var(--radius-md);
+}
+
+/* ============================================================
+   DISABLED — texto cinza (text/disabled).
+   ============================================================ */
+
+:global(.ds-toggle-group .ant-radio-button-wrapper-disabled),
+:global(.ds-toggle-group .ant-radio-button-wrapper-disabled:hover) {
+  color: var(--color-text-disabled);
+  background-color: transparent;
+  cursor: not-allowed;
+}
+
+:global(.ds-toggle-group--ghost .ant-radio-button-wrapper-checked.ant-radio-button-wrapper-disabled) {
+  background-color: var(--color-neutral-100);
+  color: var(--color-text-disabled);
+}
+
+:global(.ds-toggle-group--outlined .ant-radio-button-wrapper-checked.ant-radio-button-wrapper-disabled) {
+  background-color: var(--color-neutral-100);
+  color: var(--color-text-disabled);
+}
+
+/* ============================================================
+   LABEL CONTENT — wrapper inline-flex ícone + texto.
+   ============================================================ */
+
+:global(.ds-toggle-group__label) {
+  align-items: center;
+  display: inline-flex;
+  gap: var(--spacing-1);
+  justify-content: center;
+}
+
+:global(.ds-toggle-group__icon) {
+  align-items: center;
+  display: inline-flex;
+  line-height: 0;
+}
+
+/* ============================================================
+   SR-ONLY — visualmente oculto, exposto para leitores de tela.
+   ============================================================ */
+
+:global(.ds-toggle-group__sr-only) {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
