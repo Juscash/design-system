@@ -24,7 +24,9 @@
   font-family: "Inter", sans-serif !important;
   font-size: 13px !important;
   line-height: 1.2 !important;
+  letter-spacing: 0 !important;
   color: var(--color-neutral-50) !important;
+  word-break: break-word !important;
 }
 
 :global(.ds-tooltip) :global(.ant-tooltip-inner) > p,
@@ -36,6 +38,9 @@
 :global(.ds-tooltip) :global(.ant-tooltip-container) :global(.ant-typography),
 :global(.ds-tooltip) :global(.ant-tooltip-container) :global(.ant-typography) p {
   margin: 0 !important;
+  flex: 1 1 0 !important;
+  min-width: 1px !important;
+  word-break: break-word !important;
 }
 
 :global(.ds-tooltip.ant-tooltip-placement-top) :global(.ant-tooltip-arrow),

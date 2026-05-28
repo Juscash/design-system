@@ -1,5 +1,6 @@
 import React from "react";
 import { Tooltip as AntdTooltip, ConfigProvider } from "antd";
+import type { ThemeConfig } from "antd";
 import { designSystemColors, radius } from "../../theme";
 import type {
   TooltipProps,
@@ -10,6 +11,33 @@ import "./index.module.css";
 
 const MAX_TOOLTIP_WIDTH = 200;
 const TOOLTIP_FONT_SIZE = 13;
+const TOOLTIP_LINE_HEIGHT = 1.2;
+const INTER_FONT_FAMILY = '"Inter", sans-serif';
+
+/**
+ * Tema local do Tooltip do design system. Mantém os tokens nativos do Antd
+ * alinhados com `neutral[800]` (fundo) e `neutral[50]` (texto), conforme o
+ * frame `4041:9017` do Figma. O CSS Module `index.module.css` complementa
+ * com regras de padding, gap, max-width e seta.
+ */
+function getTooltipTheme(): ThemeConfig {
+  return {
+    components: {
+      Tooltip: {
+        colorBgSpotlight: designSystemColors.neutral[800],
+        colorTextLightSolid: designSystemColors.neutral[50],
+        borderRadius: radius.xl,
+        fontFamily: INTER_FONT_FAMILY,
+        fontSize: TOOLTIP_FONT_SIZE,
+        lineHeight: TOOLTIP_LINE_HEIGHT,
+        colorBorder: designSystemColors.neutral[800],
+      },
+    },
+    token: {
+      fontFamily: INTER_FONT_FAMILY,
+    },
+  };
+}
 
 /**
  * Resolve um valor semântico do Antd Tooltip, que pode ser objeto literal ou
@@ -26,70 +54,25 @@ function resolveSemanticValue<T extends object>(
 }
 
 /**
- * Tooltip do design system com fundo escuro neutral[800] e texto claro
- * neutral[50], baseado no node Figma 4041:11954.
+ * Tooltip do design system com fundo escuro `neutral[800]` e texto claro
+ * `neutral[50]`, baseado no frame Figma `4041:9017` (matriz `side`).
  */
-export const Tooltip: React.FC<TooltipProps> = ({
-  children,
-  classNames,
-  styles,
-  overlayClassName,
-  overlayStyle,
-  overlayInnerStyle,
-  ...rest
-}) => {
-  const tooltipProps: TooltipProps = {
-    children,
-    classNames,
-    styles,
-    overlayClassName,
-    overlayStyle,
-    overlayInnerStyle,
-    ...rest,
-  };
+export function Tooltip(props: TooltipProps): React.ReactElement {
+  const { children, classNames, styles, overlayClassName, overlayStyle, overlayInnerStyle, ...rest } = props;
 
-  const resolvedClassNames = resolveSemanticValue<TooltipSemanticClassNames>(classNames, tooltipProps) ?? {};
-  const resolvedStyles = resolveSemanticValue<TooltipSemanticStyles>(styles, tooltipProps) ?? {};
+  const resolvedClassNames = resolveSemanticValue<TooltipSemanticClassNames>(classNames, props) ?? {};
+  const resolvedStyles = resolveSemanticValue<TooltipSemanticStyles>(styles, props) ?? {};
 
   const rootClassName = ["ds-tooltip", overlayClassName, resolvedClassNames.root].filter(Boolean).join(" ");
 
   return (
-    <ConfigProvider
-      theme={{
-        components: {
-          Tooltip: {
-            // Fundo escuro: neutral[800] (#262626)
-            colorBgSpotlight: designSystemColors.neutral[800],
-            // Texto claro: neutral[50] (#FAFAFA)
-            colorTextLightSolid: designSystemColors.neutral[50],
-            borderRadius: radius.xl,
-            fontFamily: '"Inter", sans-serif',
-            fontSize: TOOLTIP_FONT_SIZE,
-            lineHeight: 1.2,
-            colorBorder: designSystemColors.neutral[800],
-          },
-        },
-        token: {
-          fontFamily: '"Inter", sans-serif',
-        },
-      }}
-    >
+    <ConfigProvider theme={getTooltipTheme()}>
       <AntdTooltip
-        classNames={{
-          ...resolvedClassNames,
-          root: rootClassName,
-        }}
+        classNames={{ ...resolvedClassNames, root: rootClassName }}
         styles={{
           ...resolvedStyles,
-          root: {
-            maxWidth: MAX_TOOLTIP_WIDTH,
-            ...overlayStyle,
-            ...resolvedStyles.root,
-          },
-          container: {
-            ...overlayInnerStyle,
-            ...resolvedStyles.container,
-          },
+          root: { maxWidth: MAX_TOOLTIP_WIDTH, ...overlayStyle, ...resolvedStyles.root },
+          container: { ...overlayInnerStyle, ...resolvedStyles.container },
         }}
         {...rest}
       >
@@ -97,7 +80,7 @@ export const Tooltip: React.FC<TooltipProps> = ({
       </AntdTooltip>
     </ConfigProvider>
   );
-};
+}
 
 Tooltip.displayName = "Tooltip";
 

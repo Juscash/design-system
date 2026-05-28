@@ -1,9 +1,11 @@
-import { render, screen, waitFor } from "@testing-library/react";
+import React from "react";
+import { render, screen, waitFor, act } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import userEvent from "@testing-library/user-event";
 import { Tooltip, type TooltipProps } from ".";
 
-async function hoverTooltip() {
+/** Abre o tooltip via hover no botão "Hover me" e aguarda o conteúdo visível. */
+async function hoverTooltip(): Promise<void> {
   const user = userEvent.setup();
   const button = screen.getByRole("button", { name: "Hover me" });
 
@@ -15,7 +17,7 @@ async function hoverTooltip() {
 }
 
 describe("Tooltip", () => {
-  it("renders children correctly", () => {
+  it("renderiza o children corretamente", () => {
     render(
       <Tooltip title="Tooltip content">
         <button>Hover me</button>
@@ -24,7 +26,7 @@ describe("Tooltip", () => {
     expect(screen.getByText("Hover me")).toBeInTheDocument();
   });
 
-  it("shows tooltip content on hover", async () => {
+  it("exibe o conteúdo do tooltip ao hover", async () => {
     render(
       <Tooltip title="Tooltip content">
         <button>Hover me</button>
@@ -34,7 +36,148 @@ describe("Tooltip", () => {
     await hoverTooltip();
   });
 
-  it("merges object-form semantic props with legacy overlay props", async () => {
+  it("renderiza o conteúdo quando title é informado e open=true", async () => {
+    render(
+      <Tooltip title="Visible tooltip" open>
+        <button>Anchor</button>
+      </Tooltip>,
+    );
+
+    await waitFor(() => {
+      expect(document.body).toHaveTextContent("Visible tooltip");
+    });
+
+    const popup = document.body.querySelector(".ds-tooltip");
+    expect(popup).toBeInTheDocument();
+  });
+
+  it("placement top aplica ant-tooltip-placement-top no popup", async () => {
+    render(
+      <Tooltip title="Placement top" placement="top" open>
+        <button>Anchor</button>
+      </Tooltip>,
+    );
+
+    await waitFor(() => {
+      const popup = document.body.querySelector(".ds-tooltip");
+      expect(popup).toHaveClass("ant-tooltip-placement-top");
+    });
+  });
+
+  it("placement bottom aplica ant-tooltip-placement-bottom no popup", async () => {
+    render(
+      <Tooltip title="Placement bottom" placement="bottom" open>
+        <button>Anchor</button>
+      </Tooltip>,
+    );
+
+    await waitFor(() => {
+      const popup = document.body.querySelector(".ds-tooltip");
+      expect(popup).toHaveClass("ant-tooltip-placement-bottom");
+    });
+  });
+
+  it("placement left aplica ant-tooltip-placement-left no popup", async () => {
+    render(
+      <Tooltip title="Placement left" placement="left" open>
+        <button>Anchor</button>
+      </Tooltip>,
+    );
+
+    await waitFor(() => {
+      const popup = document.body.querySelector(".ds-tooltip");
+      expect(popup).toHaveClass("ant-tooltip-placement-left");
+    });
+  });
+
+  it("placement right aplica ant-tooltip-placement-right no popup", async () => {
+    render(
+      <Tooltip title="Placement right" placement="right" open>
+        <button>Anchor</button>
+      </Tooltip>,
+    );
+
+    await waitFor(() => {
+      const popup = document.body.querySelector(".ds-tooltip");
+      expect(popup).toHaveClass("ant-tooltip-placement-right");
+    });
+  });
+
+  it("trigger padrão é hover — foco via teclado não abre o tooltip", async () => {
+    const user = userEvent.setup();
+    render(
+      <Tooltip title="Hover only" mouseEnterDelay={0}>
+        <button>Anchor</button>
+      </Tooltip>,
+    );
+
+    await user.tab();
+
+    await act(async () => {
+      await new Promise<void>((resolve) => setTimeout(resolve, 300));
+    });
+
+    expect(document.body.querySelector(".ds-tooltip")).toBeNull();
+  });
+
+  it("trigger=focus abre o tooltip ao receber foco", async () => {
+    const user = userEvent.setup();
+    render(
+      <Tooltip title="Focus trigger" trigger="focus">
+        <button>Anchor</button>
+      </Tooltip>,
+    );
+
+    await user.tab();
+
+    await waitFor(() => {
+      expect(document.body).toHaveTextContent("Focus trigger");
+    });
+  });
+
+  it("mouseEnterDelay é repassado ao AntdTooltip sem erro", async () => {
+    render(
+      <Tooltip title="Delay prop" mouseEnterDelay={500} open>
+        <button>Anchor</button>
+      </Tooltip>,
+    );
+
+    await waitFor(() => {
+      expect(document.body).toHaveTextContent("Delay prop");
+    });
+
+    expect(document.body.querySelector(".ds-tooltip")).toBeInTheDocument();
+  });
+
+  it("getPopupContainer direciona o popup para o container customizado", async () => {
+    const customContainer = document.createElement("div");
+    customContainer.id = "custom-container";
+    document.body.appendChild(customContainer);
+
+    render(
+      <Tooltip
+        title="Custom container"
+        open
+        getPopupContainer={() => customContainer}
+      >
+        <button>Anchor</button>
+      </Tooltip>,
+    );
+
+    await waitFor(() => {
+      expect(customContainer).toHaveTextContent("Custom container");
+    });
+
+    expect(customContainer.querySelector(".ds-tooltip")).toBeInTheDocument();
+
+    customContainer.remove();
+  });
+
+  it("displayName é Tooltip", () => {
+    expect(Tooltip.displayName).toBe("Tooltip");
+  });
+
+  it("mescla props semânticas de objeto com props overlay legadas", async () => {
     render(
       <Tooltip
         title="Tooltip content"
@@ -67,7 +210,7 @@ describe("Tooltip", () => {
     expect(container).toHaveStyle({ color: "rgb(0, 0, 255)", padding: "10px" });
   });
 
-  it("supports function-form semantic props", async () => {
+  it("suporta props semânticas no formato função", async () => {
     const classNames = vi.fn(({ props }: { props: TooltipProps }) => ({
       root: props.overlayClassName === "legacy-root" ? "semantic-root" : undefined,
       container: props.title === "Tooltip content" ? "semantic-container" : undefined,
