@@ -129,6 +129,13 @@
   --color-button-destructive-hover-active: var(--color-feedback-red-900);
   --color-button-destructive-disabled: var(--color-neutral-300);
 
+  /* Chart - paleta para o módulo Charts (Figma 4098:12198). */
+  --color-chart-1: #f54a00;
+  --color-chart-2: #009689;
+  --color-chart-3: #104e64;
+  --color-chart-4: #ffb900;
+  --color-chart-5: #fe9a00;
+
   /* ============================================
      RADIUS
      ============================================ */

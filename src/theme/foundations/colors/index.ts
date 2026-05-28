@@ -115,6 +115,18 @@ const button = {
   },
 } as const;
 
+// Paleta de gráficos (Figma 4098:12198 — `figma/components/charts/`).
+// O dump variables-4098-12198.md descreve as 5 cores como literais hex
+// (não tokenizadas no Figma). Elevadas a tokens aqui conforme instrução
+// do orquestrador para o módulo Charts.
+const chart = {
+  1: "#f54a00",
+  2: "#009689",
+  3: "#104e64",
+  4: "#ffb900",
+  5: "#fe9a00",
+} as const;
+
 export const designSystemColors = {
   neutral,
   brand,
@@ -124,6 +136,7 @@ export const designSystemColors = {
   border,
   background,
   button,
+  chart,
 } as const;
 
 export type DesignSystemColors = typeof designSystemColors;

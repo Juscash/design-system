@@ -6,6 +6,7 @@ export * from "./Breadcrumb";
 export * from "./Button";
 export * from "./Card";
 export * from "./Carousel";
+export * from "./Charts";
 export * from "./Checkbox";
 export * from "./Collapse";
 export * from "./ConfirmModal";
