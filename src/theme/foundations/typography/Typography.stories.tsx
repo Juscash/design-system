@@ -50,12 +50,12 @@ export const Escala: StoryObj = {
     >
       <div style={{ maxWidth: 1024, margin: "0 auto" }}>
         <header style={{ marginBottom: spacing[8] }}>
-          <h1 style={{ fontSize: 49, lineHeight: 1.2, fontWeight: 400, margin: 0, color: designSystemColors.text.dark }}>
+          <h1 style={{ fontSize: 49, lineHeight: "58.8px", fontWeight: 400, margin: 0, color: designSystemColors.text.dark }}>
             Tipografia
           </h1>
-          <p style={{ fontSize: 16, lineHeight: 1.2, color: designSystemColors.text.soft, marginTop: spacing[3] }}>
+          <p style={{ fontSize: 16, lineHeight: "19.2px", color: designSystemColors.text.soft, marginTop: spacing[3] }}>
             Família <strong>{typography.fontFamily}</strong>, peso <strong>{typography.fontWeight}</strong>, line-height
-            <strong> {typography.lineHeight}</strong>, letter-spacing <strong>{typography.letterSpacing}</strong>.
+            <strong> = size × 1.2 (px absoluto)</strong>, letter-spacing <strong>{typography.letterSpacing}</strong>.
           </p>
         </header>
 
@@ -101,7 +101,7 @@ export const Escala: StoryObj = {
                     <div
                       style={{
                         fontSize: value.px,
-                        lineHeight: typography.lineHeight,
+                        lineHeight: `${value.lineHeightPx}px`,
                         fontWeight: typography.fontWeight,
                         color: designSystemColors.text.dark,
                       }}
@@ -119,7 +119,7 @@ export const Escala: StoryObj = {
                     <code>{value.rem}</code>
                   </td>
                   <td style={{ padding: spacing[3], verticalAlign: "middle" }}>
-                    <code>{typography.lineHeight}</code>
+                    <code>{value.lineHeightPx}px</code>
                   </td>
                   <td style={{ padding: spacing[3], verticalAlign: "middle", color: designSystemColors.text.soft }}>
                     {descriptions[key] ?? "—"}

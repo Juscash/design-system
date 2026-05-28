@@ -22,10 +22,25 @@ const meta: Meta<typeof Typography> = {
         component: `
 Componente baseado no [Ant Design Typography](https://ant.design/components/typography).
 
-### Features Juscash:
-- **Variantes**: \`heading1\` a \`heading6\`, \`body1\`, \`body2\`, \`caption\`.
-- **Cores**: \`primary\`, \`secondary\`, \`neutral\`, \`dark\`, \`error\`, \`warning\`, \`success\`, \`disabled\`, \`info\`.
-- **Componentes prontos**: \`Heading1..6\`, \`Body1\`, \`Body2\`, \`Caption\`.
+### Tokens do Figma:
+
+Frame canônico: **Tipografia** (\`4002:5004\`). Todas as variantes usam **Inter Regular 400**, **line-height 120%** e **letter-spacing 0** — não há outros eixos (sem prop \`color\`, sem prop \`weight\`).
+
+### Variantes:
+
+| Token | Tamanho |
+| ----- | ------- |
+| \`heading1\` | 61px |
+| \`heading2\` | 49px |
+| \`heading3\` | 39px |
+| \`heading4\` | 31px |
+| \`heading5\` | 25px |
+| \`heading6\` | 20px |
+| \`body1\` | 16px |
+| \`body2\` | 13px |
+| \`caption\` | 10px |
+
+### Componentes prontos: \`Heading1..6\`, \`Body1\`, \`Body2\`, \`Caption\`.
 
 ### Como usar:
 
@@ -36,8 +51,8 @@ function Example() {
   return (
     <>
       <Heading1>Title</Heading1>
-      <Body1 color="neutral">Texto de apoio</Body1>
-      <Typography variant="caption" color="disabled">Caption</Typography>
+      <Body1>Texto de apoio</Body1>
+      <Typography variant="caption">Caption</Typography>
     </>
   );
 }
@@ -77,10 +92,6 @@ function Example() {
       control: "select",
       options: ["heading1", "heading2", "heading3", "heading4", "heading5", "heading6", "body1", "body2", "caption"],
     },
-    color: {
-      control: "select",
-      options: ["primary", "secondary", "neutral", "dark", "error", "warning", "success", "disabled", "info"],
-    },
   },
 };
 
@@ -117,26 +128,9 @@ export const BodyVariants: Story = {
   ),
 };
 
-export const ColorVariants: Story = {
-  render: () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-      <Typography color="primary">Primary Color</Typography>
-      <Typography color="secondary">Secondary Color</Typography>
-      <Typography color="neutral">Neutral Color</Typography>
-      <Typography color="dark">Dark Color</Typography>
-      <Typography color="error">Error Color</Typography>
-      <Typography color="success">Success Color</Typography>
-      <Typography color="warning">Warning Color</Typography>
-      <Typography color="disabled">Disabled Color</Typography>
-      <Typography color="info">Info Color</Typography>
-    </div>
-  ),
-};
-
 export const Playground: Story = {
   args: {
     variant: "body1",
-    color: "dark",
     children: "Texto de exemplo controlado por args",
   },
 };

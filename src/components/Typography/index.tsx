@@ -1,165 +1,117 @@
 import React from "react";
-import { Typography as AntdTypography, ConfigProvider } from "antd";
+import { Typography as AntdTypography } from "antd";
 import type { TitleProps } from "antd/es/typography/Title";
 import type { TextProps } from "antd/es/typography/Text";
 import type { ParagraphProps } from "antd/es/typography/Paragraph";
-import { designSystemColors, typography as typographyToken } from "../../theme";
+import { typography as typographyToken, designSystemColors } from "../../theme";
 import type {
   AntdTypographyAllProps,
   BodyProps,
   CaptionProps,
   CustomTypographyProps,
-  DSColor,
   HeadingProps,
   TypographyVariant,
 } from "../../types/components/Typography";
 
 const { Title, Text, Paragraph } = AntdTypography;
 
-const HEADING1_SIZE = typographyToken.scale.heading1.px;
-const HEADING2_SIZE = typographyToken.scale.heading2.px;
-const HEADING3_SIZE = typographyToken.scale.heading3.px;
-const HEADING4_SIZE = typographyToken.scale.heading4.px;
-const HEADING5_SIZE = typographyToken.scale.heading5.px;
-const HEADING6_SIZE = typographyToken.scale.heading6.px;
-const BODY1_SIZE = typographyToken.scale.body1.px;
-const BODY2_SIZE = typographyToken.scale.body2.px;
-const CAPTION_SIZE = typographyToken.scale.caption1.px;
+// Tokens herdados da foundation (`Figma › Fundamentos › Tipografia 4002:5004`).
+// O Figma documenta `Inter Regular 400, letter-spacing 0` para as 9 variantes;
+// line-height é exposto em px absoluto (= size × 1.2) conforme o Inspect do
+// Figma. Sem outros eixos (sem `color`, sem `weight`).
+const FONT_FAMILY = typographyToken.fontFamily;
 const FONT_WEIGHT = typographyToken.fontWeight;
-const LINE_HEIGHT = typographyToken.lineHeight;
+const LETTER_SPACING = `${typographyToken.letterSpacing}px`;
+// Cor de texto padrão = token `text.dark` do Figma (= `#262626`). É a cor
+// que o Antd já aplicava por default antes da refatoração; mantida para
+// não mudar a aparência. O Figma documenta `text-black (#000)` nos samples
+// do frame Tipografia, mas instrução do usuário é ignorar essa diferença.
+const COLOR_DEFAULT = designSystemColors.text.dark;
 
-const colorMap: Record<DSColor, string> = {
-  primary: designSystemColors.brand.primary[600],
-  secondary: designSystemColors.brand.secondary[600],
-  neutral: designSystemColors.neutral[500],
-  dark: designSystemColors.neutral[800],
-  error: designSystemColors.feedback.red[500],
-  warning: designSystemColors.feedback.yellow[500],
-  success: designSystemColors.feedback.green[500],
-  disabled: designSystemColors.neutral[400],
-  info: designSystemColors.feedback.blue[500],
+type VariantToken = { px: number; lineHeightPx: number };
+
+const variantTokens: Record<TypographyVariant, VariantToken> = {
+  heading1: { px: typographyToken.scale.heading1.px, lineHeightPx: typographyToken.scale.heading1.lineHeightPx },
+  heading2: { px: typographyToken.scale.heading2.px, lineHeightPx: typographyToken.scale.heading2.lineHeightPx },
+  heading3: { px: typographyToken.scale.heading3.px, lineHeightPx: typographyToken.scale.heading3.lineHeightPx },
+  heading4: { px: typographyToken.scale.heading4.px, lineHeightPx: typographyToken.scale.heading4.lineHeightPx },
+  heading5: { px: typographyToken.scale.heading5.px, lineHeightPx: typographyToken.scale.heading5.lineHeightPx },
+  heading6: { px: typographyToken.scale.heading6.px, lineHeightPx: typographyToken.scale.heading6.lineHeightPx },
+  body1: { px: typographyToken.scale.body1.px, lineHeightPx: typographyToken.scale.body1.lineHeightPx },
+  body2: { px: typographyToken.scale.body2.px, lineHeightPx: typographyToken.scale.body2.lineHeightPx },
+  caption: { px: typographyToken.scale.caption1.px, lineHeightPx: typographyToken.scale.caption1.lineHeightPx },
 };
 
-const typographyVariants = {
-  heading1: {
-    fontSizeHeading1: HEADING1_SIZE,
-    lineHeightHeading1: LINE_HEIGHT,
-    fontWeightStrong: FONT_WEIGHT,
-    colorTextHeading: designSystemColors.text.dark,
-  },
-  heading2: {
-    fontSizeHeading2: HEADING2_SIZE,
-    lineHeightHeading2: LINE_HEIGHT,
-    fontWeightStrong: FONT_WEIGHT,
-    colorTextHeading: designSystemColors.text.dark,
-  },
-  heading3: {
-    fontSizeHeading3: HEADING3_SIZE,
-    lineHeightHeading3: LINE_HEIGHT,
-    fontWeightStrong: FONT_WEIGHT,
-    colorTextHeading: designSystemColors.text.dark,
-  },
-  heading4: {
-    fontSizeHeading4: HEADING4_SIZE,
-    lineHeightHeading4: LINE_HEIGHT,
-    fontWeightStrong: FONT_WEIGHT,
-    colorTextHeading: designSystemColors.text.dark,
-  },
-  heading5: {
-    fontSizeHeading5: HEADING5_SIZE,
-    lineHeightHeading5: LINE_HEIGHT,
-    fontWeightStrong: FONT_WEIGHT,
-    colorTextHeading: designSystemColors.text.dark,
-  },
-  // O Antd `Typography.Title` aceita `level` 1–5; "Heading 6" é renderizado
-  // como `level={5}` e usa propositalmente os tokens de heading5 sobrescritos
-  // com o tamanho HEADING6_SIZE (20px) para preservar a hierarquia visual.
-  heading6: {
-    fontSizeHeading5: HEADING6_SIZE,
-    colorTextHeading: designSystemColors.text.dark,
-    lineHeightHeading5: LINE_HEIGHT,
-    fontWeightStrong: FONT_WEIGHT,
-  },
-  body1: {
-    fontSize: BODY1_SIZE,
-    lineHeight: LINE_HEIGHT,
-    colorText: designSystemColors.text.dark,
-  },
-  body2: {
-    fontSize: BODY2_SIZE,
-    lineHeight: LINE_HEIGHT,
-    colorText: designSystemColors.text.dark,
-  },
-  caption: {
-    fontSize: CAPTION_SIZE,
-    lineHeight: LINE_HEIGHT,
-    colorText: designSystemColors.neutral[600],
-  },
-} as const;
+/**
+ * Monta o style inline aplicado a TODA variante. `font-size` e `line-height`
+ * variam por variante (em px absoluto); família/peso/letter-spacing são
+ * iguais para todas. Aplicamos via inline style — sem depender de tokens do
+ * Antd cujos defaults (ex.: `fontWeightStrong`, `lineHeightHeadingN`) podem
+ * divergir do Figma.
+ */
+function buildVariantStyle(variant: TypographyVariant, base: React.CSSProperties): React.CSSProperties {
+  const { px, lineHeightPx } = variantTokens[variant];
+  return {
+    fontFamily: FONT_FAMILY,
+    fontWeight: FONT_WEIGHT,
+    fontSize: `${px}px`,
+    lineHeight: `${lineHeightPx}px`,
+    letterSpacing: LETTER_SPACING,
+    color: COLOR_DEFAULT,
+    ...base,
+  };
+}
 
 /**
  * Decide qual subcomponente do Antd Typography renderizar a partir da
- * `variant`. Propaga os estilos base (margin/cor) e o resto das props do
- * Antd, fazendo o cast pontual para o tipo do entrypoint específico
- * (`Title`, `Paragraph` ou `Text`).
+ * `variant`. Aplica o style inline com os tokens da foundation, propaga
+ * margin/cor zerados e o resto das props do Antd via spread.
  */
 function renderTypography(
   variant: TypographyVariant,
   baseStyle: React.CSSProperties,
   rest: AntdTypographyAllProps,
 ): React.ReactElement {
+  const style = buildVariantStyle(variant, baseStyle);
   switch (variant) {
     case "heading1":
-      return <Title level={1} style={baseStyle} {...(rest as TitleProps)} />;
+      return <Title level={1} style={style} {...(rest as TitleProps)} />;
     case "heading2":
-      return <Title level={2} style={baseStyle} {...(rest as TitleProps)} />;
+      return <Title level={2} style={style} {...(rest as TitleProps)} />;
     case "heading3":
-      return <Title level={3} style={baseStyle} {...(rest as TitleProps)} />;
+      return <Title level={3} style={style} {...(rest as TitleProps)} />;
     case "heading4":
-      return <Title level={4} style={baseStyle} {...(rest as TitleProps)} />;
+      return <Title level={4} style={style} {...(rest as TitleProps)} />;
     case "heading5":
-      return <Title level={5} style={baseStyle} {...(rest as TitleProps)} />;
+      return <Title level={5} style={style} {...(rest as TitleProps)} />;
+    // Antd Title aceita level 1–5. Heading6 cai em <h5> com font-size 20px
+    // (token heading/06) preservando a hierarquia visual.
     case "heading6":
-      return <Title level={5} style={baseStyle} {...(rest as TitleProps)} />;
+      return <Title level={5} style={style} {...(rest as TitleProps)} />;
     case "body1":
-      return <Paragraph style={{ ...baseStyle, fontSize: BODY1_SIZE, lineHeight: LINE_HEIGHT }} {...(rest as ParagraphProps)} />;
+      return <Paragraph style={style} {...(rest as ParagraphProps)} />;
     case "body2":
-      return <Paragraph style={{ ...baseStyle, fontSize: BODY2_SIZE, lineHeight: LINE_HEIGHT }} {...(rest as ParagraphProps)} />;
+      return <Paragraph style={style} {...(rest as ParagraphProps)} />;
     case "caption":
-      return <Text style={baseStyle} {...(rest as TextProps)} />;
+      return <Text style={style} {...(rest as TextProps)} />;
     default:
-      return <Paragraph style={baseStyle} {...(rest as ParagraphProps)} />;
+      return <Paragraph style={style} {...(rest as ParagraphProps)} />;
   }
 }
 
 /**
  * Componente raiz de tipografia. Aplica `variant` (`heading1..6`, `body1|2`,
- * `caption`) e `color` (paleta DS) sobre o `Typography` do Antd usando os
- * tokens do design system (`Inter`, peso `400`, line-height `1.2`).
+ * `caption`) sobre o `Typography` do Antd usando os tokens do design system
+ * (`Inter`, peso `400`, line-height `120%`). Sem prop de cor — o Figma não
+ * documenta cor como eixo de Typography.
  */
 export function Typography(props: CustomTypographyProps): React.ReactElement {
-  const { variant = "body1", color = "dark", style, ...rest } = props;
-  const variantTheme = typographyVariants[variant as keyof typeof typographyVariants];
-  const textColor = color ? colorMap[color] : undefined;
-
+  const { variant = "body1", style, ...rest } = props;
   const baseStyle: React.CSSProperties = {
     margin: 0,
-    color: textColor,
     ...style,
   };
-
-  const node = renderTypography(variant, baseStyle, rest);
-  return (
-    <ConfigProvider
-      theme={{
-        components: {
-          Typography: { fontWeightStrong: FONT_WEIGHT, ...variantTheme },
-        },
-      }}
-    >
-      {node}
-    </ConfigProvider>
-  );
+  return renderTypography(variant, baseStyle, rest);
 }
 
 Typography.displayName = "Typography";
@@ -209,5 +161,4 @@ export type {
   BodyProps,
   CaptionProps,
   TypographyVariant,
-  DSColor,
 } from "../../types/components/Typography";

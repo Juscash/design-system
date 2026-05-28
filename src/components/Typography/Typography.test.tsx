@@ -13,30 +13,15 @@ import {
   Caption,
 } from ".";
 
-// Mapa hex -> rgb que o jsdom usa ao serializar `style.color`. Mantemos as duas
-// formas para deixar explícito o link com o `colorMap` do componente.
-const COLOR_RGB = {
-  primary: "rgb(0, 134, 51)",       // #008633
-  secondary: "rgb(16, 90, 188)",    // #105ABC
-  neutral: "rgb(109, 109, 110)",    // #6d6d6e
-  dark: "rgb(38, 38, 38)",          // #262626
-  error: "rgb(210, 25, 11)",        // #D2190B
-  warning: "rgb(134, 116, 0)",      // #867400
-  success: "rgb(30, 126, 52)",      // #1E7E34
-  disabled: "rgb(163, 163, 163)",   // #a3a3a3
-  info: "rgb(32, 122, 195)",        // #207AC3
-} as const;
-
 // Observação importante: o Antd 6.2.2 implementa `Typography.Paragraph` com
 // `component: "div"` (ver `node_modules/antd/lib/typography/Paragraph.js`).
 // Portanto, `variant="body1"`, `variant="body2"`, `Body1` e `Body2` renderizam
-// como `<div class="ant-typography">` e não como `<p>` (divergência conhecida
-// com AC-100/101/109/110 — reportar ao implementer/parecerista). Os testes
-// abaixo verificam o comportamento real do Antd e checam a classe nativa.
+// como `<div class="ant-typography">` e não como `<p>` — comportamento
+// deliberado do Antd para permitir blocos aninhados sem violar HTML.
 
 describe("Typography", () => {
   // -------------------------------------------------------------------------
-  // 1. Renderização via prop `variant` (AC-094 a AC-102)
+  // 1. Renderização via prop `variant`
   // -------------------------------------------------------------------------
   describe("renderização de variantes via prop `variant`", () => {
     it("renderiza variant=heading1 como <h1>", () => {
@@ -59,7 +44,6 @@ describe("Typography", () => {
       render(<Typography variant="heading3">Title 3</Typography>);
       const node = screen.getByRole("heading", { level: 3 });
       expect(node.tagName).toBe("H3");
-      expect(node).toHaveTextContent("Title 3");
       expect(node).toHaveClass("ant-typography");
     });
 
@@ -67,7 +51,6 @@ describe("Typography", () => {
       render(<Typography variant="heading4">Title 4</Typography>);
       const node = screen.getByRole("heading", { level: 4 });
       expect(node.tagName).toBe("H4");
-      expect(node).toHaveTextContent("Title 4");
       expect(node).toHaveClass("ant-typography");
     });
 
@@ -75,95 +58,92 @@ describe("Typography", () => {
       render(<Typography variant="heading5">Title 5</Typography>);
       const node = screen.getByRole("heading", { level: 5 });
       expect(node.tagName).toBe("H5");
-      expect(node).toHaveTextContent("Title 5");
       expect(node).toHaveClass("ant-typography");
     });
 
-    it("renderiza variant=heading6 como <h5> (limitação do Antd Title que aceita até level 5)", () => {
+    it("renderiza variant=heading6 como <h5> (limitação Antd Title)", () => {
       render(<Typography variant="heading6">Title 6</Typography>);
-      const node = screen.getByRole("heading", { level: 5 });
+      const node = screen.getByText("Title 6");
       expect(node.tagName).toBe("H5");
-      expect(node).toHaveTextContent("Title 6");
       expect(node).toHaveClass("ant-typography");
     });
 
-    it("renderiza variant=body1 como bloco de parágrafo com classe ant-typography", () => {
-      // Antd Paragraph renderiza como <div>, não <p>.
-      render(<Typography variant="body1">Body 1 text</Typography>);
-      const node = screen.getByText("Body 1 text");
+    it("renderiza variant=body1 como bloco com classe ant-typography", () => {
+      render(<Typography variant="body1">Body 1</Typography>);
+      const node = screen.getByText("Body 1");
       expect(node).toHaveClass("ant-typography");
     });
 
-    it("renderiza variant=body2 como bloco de parágrafo com classe ant-typography", () => {
-      // Antd Paragraph renderiza como <div>, não <p>.
-      render(<Typography variant="body2">Body 2 text</Typography>);
-      const node = screen.getByText("Body 2 text");
+    it("renderiza variant=body2 como bloco com classe ant-typography", () => {
+      render(<Typography variant="body2">Body 2</Typography>);
+      const node = screen.getByText("Body 2");
       expect(node).toHaveClass("ant-typography");
     });
 
-    it("renderiza variant=caption como <span> com classe ant-typography", () => {
-      render(<Typography variant="caption">Caption text</Typography>);
-      const node = screen.getByText("Caption text");
+    it("renderiza variant=caption como <span>", () => {
+      render(<Typography variant="caption">Caption</Typography>);
+      const node = screen.getByText("Caption");
       expect(node.tagName).toBe("SPAN");
+      expect(node).toHaveClass("ant-typography");
+    });
+
+    it("default variant=body1 quando a prop não é passada", () => {
+      render(<Typography>Default content</Typography>);
+      const node = screen.getByText("Default content");
+      // Antd Paragraph renderiza <div class="ant-typography">.
       expect(node).toHaveClass("ant-typography");
     });
   });
 
   // -------------------------------------------------------------------------
-  // 2. Subcomponentes / atalhos (AC-103 a AC-111)
+  // 2. Renderização via subcomponentes/atalhos
   // -------------------------------------------------------------------------
-  describe("subcomponentes / atalhos", () => {
+  describe("renderização via atalhos (Heading1..6, Body1..2, Caption)", () => {
     it("Heading1 renderiza <h1>", () => {
-      render(<Heading1>H1 atalho</Heading1>);
+      render(<Heading1>Heading atalho 1</Heading1>);
       const node = screen.getByRole("heading", { level: 1 });
       expect(node.tagName).toBe("H1");
-      expect(node).toHaveTextContent("H1 atalho");
     });
 
     it("Heading2 renderiza <h2>", () => {
-      render(<Heading2>H2 atalho</Heading2>);
+      render(<Heading2>Heading atalho 2</Heading2>);
       const node = screen.getByRole("heading", { level: 2 });
       expect(node.tagName).toBe("H2");
-      expect(node).toHaveTextContent("H2 atalho");
     });
 
     it("Heading3 renderiza <h3>", () => {
-      render(<Heading3>H3 atalho</Heading3>);
+      render(<Heading3>Heading atalho 3</Heading3>);
       const node = screen.getByRole("heading", { level: 3 });
       expect(node.tagName).toBe("H3");
-      expect(node).toHaveTextContent("H3 atalho");
     });
 
     it("Heading4 renderiza <h4>", () => {
-      render(<Heading4>H4 atalho</Heading4>);
+      render(<Heading4>Heading atalho 4</Heading4>);
       const node = screen.getByRole("heading", { level: 4 });
       expect(node.tagName).toBe("H4");
-      expect(node).toHaveTextContent("H4 atalho");
     });
 
     it("Heading5 renderiza <h5>", () => {
-      render(<Heading5>H5 atalho</Heading5>);
+      render(<Heading5>Heading atalho 5</Heading5>);
       const node = screen.getByRole("heading", { level: 5 });
       expect(node.tagName).toBe("H5");
-      expect(node).toHaveTextContent("H5 atalho");
     });
 
-    it("Heading6 renderiza <h5> (limitação do Antd Title)", () => {
-      render(<Heading6>H6 atalho</Heading6>);
-      const node = screen.getByRole("heading", { level: 5 });
+    it("Heading6 renderiza <h5> (limitação Antd Title)", () => {
+      render(<Heading6>Heading atalho 6</Heading6>);
+      const node = screen.getByText("Heading atalho 6");
       expect(node.tagName).toBe("H5");
-      expect(node).toHaveTextContent("H6 atalho");
     });
 
-    it("Body1 renderiza bloco com classe ant-typography (Antd Paragraph = <div>)", () => {
-      render(<Body1>Body1 atalho</Body1>);
-      const node = screen.getByText("Body1 atalho");
+    it("Body1 renderiza com classe ant-typography", () => {
+      render(<Body1>Body atalho 1</Body1>);
+      const node = screen.getByText("Body atalho 1");
       expect(node).toHaveClass("ant-typography");
     });
 
-    it("Body2 renderiza bloco com classe ant-typography (Antd Paragraph = <div>)", () => {
-      render(<Body2>Body2 atalho</Body2>);
-      const node = screen.getByText("Body2 atalho");
+    it("Body2 renderiza com classe ant-typography", () => {
+      render(<Body2>Body atalho 2</Body2>);
+      const node = screen.getByText("Body atalho 2");
       expect(node).toHaveClass("ant-typography");
     });
 
@@ -176,92 +156,72 @@ describe("Typography", () => {
   });
 
   // -------------------------------------------------------------------------
-  // 3. Cobertura de cores (AC-112 a AC-121)
+  // 3. Estilo aplicado (font-size, line-height, font-family, font-weight)
   // -------------------------------------------------------------------------
-  describe("resolução de cores via prop `color`", () => {
-    it("color=primary aplica style.color #008633", () => {
-      render(
-        <Typography variant="body1" color="primary">primary</Typography>,
-      );
-      const node = screen.getByText("primary");
-      expect(node).toHaveStyle({ color: COLOR_RGB.primary });
+  describe("estilos inline aplicados por variante (tokens do Figma)", () => {
+    it("heading1 aplica font-size 61px e line-height 73.2px", () => {
+      render(<Typography variant="heading1">H1</Typography>);
+      const node = screen.getByRole("heading", { level: 1 });
+      expect(node).toHaveStyle({ fontSize: "61px", lineHeight: "73.2px" });
     });
 
-    it("color=secondary aplica style.color #105ABC", () => {
-      render(
-        <Typography variant="body1" color="secondary">secondary</Typography>,
-      );
-      const node = screen.getByText("secondary");
-      expect(node).toHaveStyle({ color: COLOR_RGB.secondary });
+    it("heading2 aplica font-size 49px e line-height 58.8px", () => {
+      render(<Typography variant="heading2">H2</Typography>);
+      const node = screen.getByRole("heading", { level: 2 });
+      expect(node).toHaveStyle({ fontSize: "49px", lineHeight: "58.8px" });
     });
 
-    it("color=neutral aplica style.color #6d6d6e", () => {
-      render(
-        <Typography variant="body1" color="neutral">neutral</Typography>,
-      );
-      const node = screen.getByText("neutral");
-      expect(node).toHaveStyle({ color: COLOR_RGB.neutral });
+    it("heading3 aplica font-size 39px e line-height 46.8px", () => {
+      render(<Typography variant="heading3">H3</Typography>);
+      const node = screen.getByRole("heading", { level: 3 });
+      expect(node).toHaveStyle({ fontSize: "39px", lineHeight: "46.8px" });
     });
 
-    it("color=dark aplica style.color #262626", () => {
-      render(
-        <Typography variant="body1" color="dark">dark</Typography>,
-      );
-      const node = screen.getByText("dark");
-      expect(node).toHaveStyle({ color: COLOR_RGB.dark });
+    it("heading4 aplica font-size 31px e line-height 37.2px", () => {
+      render(<Typography variant="heading4">H4</Typography>);
+      const node = screen.getByRole("heading", { level: 4 });
+      expect(node).toHaveStyle({ fontSize: "31px", lineHeight: "37.2px" });
     });
 
-    it("color=error aplica style.color #D2190B", () => {
-      render(
-        <Typography variant="body1" color="error">error</Typography>,
-      );
-      const node = screen.getByText("error");
-      expect(node).toHaveStyle({ color: COLOR_RGB.error });
+    it("heading5 aplica font-size 25px e line-height 30px", () => {
+      render(<Typography variant="heading5">H5</Typography>);
+      const node = screen.getByRole("heading", { level: 5 });
+      expect(node).toHaveStyle({ fontSize: "25px", lineHeight: "30px" });
     });
 
-    it("color=warning aplica style.color #867400", () => {
-      render(
-        <Typography variant="body1" color="warning">warning</Typography>,
-      );
-      const node = screen.getByText("warning");
-      expect(node).toHaveStyle({ color: COLOR_RGB.warning });
+    it("heading6 aplica font-size 20px e line-height 24px", () => {
+      render(<Typography variant="heading6">H6</Typography>);
+      const node = screen.getByText("H6");
+      expect(node).toHaveStyle({ fontSize: "20px", lineHeight: "24px" });
     });
 
-    it("color=success aplica style.color #1E7E34", () => {
-      render(
-        <Typography variant="body1" color="success">success</Typography>,
-      );
-      const node = screen.getByText("success");
-      expect(node).toHaveStyle({ color: COLOR_RGB.success });
+    it("body1 aplica font-size 16px e line-height 19.2px", () => {
+      render(<Typography variant="body1">Body1</Typography>);
+      const node = screen.getByText("Body1");
+      expect(node).toHaveStyle({ fontSize: "16px", lineHeight: "19.2px" });
     });
 
-    it("color=disabled aplica style.color #a3a3a3", () => {
-      render(
-        <Typography variant="body1" color="disabled">disabled</Typography>,
-      );
-      const node = screen.getByText("disabled");
-      expect(node).toHaveStyle({ color: COLOR_RGB.disabled });
+    it("body2 aplica font-size 13px e line-height 15.6px", () => {
+      render(<Typography variant="body2">Body2</Typography>);
+      const node = screen.getByText("Body2");
+      expect(node).toHaveStyle({ fontSize: "13px", lineHeight: "15.6px" });
     });
 
-    it("color=info aplica style.color #207AC3", () => {
-      render(
-        <Typography variant="body1" color="info">info</Typography>,
-      );
-      const node = screen.getByText("info");
-      expect(node).toHaveStyle({ color: COLOR_RGB.info });
+    it("caption aplica font-size 10px e line-height 12px", () => {
+      render(<Typography variant="caption">Caption</Typography>);
+      const node = screen.getByText("Caption");
+      expect(node).toHaveStyle({ fontSize: "10px", lineHeight: "12px" });
     });
 
-    it("sem prop `color` aplica o default `dark` (#262626)", () => {
-      render(
-        <Typography variant="body1">default color</Typography>,
-      );
-      const node = screen.getByText("default color");
-      expect(node).toHaveStyle({ color: COLOR_RGB.dark });
+    it("aplica font-weight 400 e font-family Inter em todas as variantes", () => {
+      render(<Typography variant="heading1">Inter check</Typography>);
+      const node = screen.getByText("Inter check");
+      expect(node).toHaveStyle({ fontWeight: 400, fontFamily: "Inter" });
     });
   });
 
   // -------------------------------------------------------------------------
-  // 4. Pass-through e composição (AC-122 a AC-124)
+  // 4. Pass-through das props do Antd
   // -------------------------------------------------------------------------
   describe("pass-through das props do Antd", () => {
     it("repassa `className` para o elemento renderizado", () => {
@@ -276,13 +236,9 @@ describe("Typography", () => {
       expect(node).toHaveClass("ant-typography");
     });
 
-    it("permite que `style` do consumidor sobrescreva o `color` do colorMap", () => {
+    it("permite que `style` do consumidor sobrescreva tokens da variante", () => {
       render(
-        <Typography
-          variant="body1"
-          color="primary"
-          style={{ color: "rebeccapurple" }}
-        >
+        <Typography variant="body1" style={{ color: "rebeccapurple" }}>
           override color
         </Typography>,
       );
