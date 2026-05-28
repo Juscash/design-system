@@ -99,11 +99,7 @@ export const OneSlot: Story = {
   args: {
     slotNo: "1 slot",
     trigger: "click",
-    mainSlot: (
-      <div style={{ padding: 16 }}>
-        <span>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
-      </div>
-    ),
+    mainSlot: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
   },
   render: (args) => decorate(
     <Popover {...args}>
@@ -121,23 +117,21 @@ export const TwoSlots: Story = {
     slotNo: "2 slots",
     trigger: "click",
     headerSlot: (
-      <div style={{ display: "flex", alignItems: "center", gap: 8, padding: 16 }}>
+      <>
         <strong style={{ flex: 1, fontSize: 20 }}>Notificações</strong>
         <button aria-label="Fechar" style={{ background: "transparent", border: "none", cursor: "pointer" }}>
           <X size={16} />
         </button>
-      </div>
+      </>
     ),
     mainSlot: (
-      <div style={{ padding: "8px 16px 16px 16px" }}>
-        <div style={{ display: "flex", gap: 8 }}>
-          <Info size={16} />
-          <div>
-            <p style={{ margin: 0, fontWeight: 700, fontSize: 16 }}>Lorem ipsum</p>
-            <p style={{ margin: 0, fontSize: 13 }}>
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-            </p>
-          </div>
+      <div style={{ display: "flex", gap: 8 }}>
+        <Info size={16} />
+        <div>
+          <p style={{ margin: 0, fontWeight: 700, fontSize: 16 }}>Lorem ipsum</p>
+          <p style={{ margin: 0, fontSize: 13 }}>
+            Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          </p>
         </div>
       </div>
     ),
@@ -159,25 +153,19 @@ export const ThreeSlots: Story = {
     showArrow: true,
     trigger: "click",
     headerSlot: (
-      <div style={{ display: "flex", alignItems: "center", gap: 8, padding: 16 }}>
+      <>
         <Info size={16} />
-        <strong style={{ flex: 1, fontSize: 13 }}>Novidade!</strong>
+        <strong style={{ flex: 1 }}>Novidade!</strong>
         <button aria-label="Fechar" style={{ background: "transparent", border: "none", cursor: "pointer" }}>
           <X size={16} />
         </button>
-      </div>
+      </>
     ),
-    mainSlot: (
-      <div style={{ padding: "0 16px" }}>
-        <span style={{ fontSize: 13 }}>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</span>
-      </div>
-    ),
+    mainSlot: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
     footerSlot: (
-      <div style={{ display: "flex", justifyContent: "flex-end", padding: 16 }}>
-        <Button size="xs" type="outline">
-          Fechar
-        </Button>
-      </div>
+      <Button size="xs" type="outline">
+        Fechar
+      </Button>
     ),
   },
   render: (args) => decorate(
@@ -196,7 +184,7 @@ export const WithArrow: Story = {
     slotNo: "1 slot",
     showArrow: true,
     trigger: "click",
-    mainSlot: <div style={{ padding: 16 }}>Lorem ipsum dolor sit amet.</div>,
+    mainSlot: "Lorem ipsum dolor sit amet.",
   },
   render: (args) => decorate(
     <Popover {...args}>
@@ -212,8 +200,8 @@ export const Playground: Story = {
     showArrow: false,
     trigger: "click",
     placement: "bottom",
-    headerSlot: <div style={{ padding: 16, fontWeight: 700 }}>Título do Popover</div>,
-    mainSlot: <div style={{ padding: "0 16px 16px 16px", fontSize: 13 }}>Conteúdo do popover.</div>,
+    headerSlot: "Título do Popover",
+    mainSlot: "Conteúdo do popover.",
   },
   argTypes: {
     slotNo: {

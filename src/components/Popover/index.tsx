@@ -65,10 +65,15 @@ function hasFooter(slotNo: PopoverSlotNo): boolean {
   return slotNo === "3 slots";
 }
 
-/** Renderiza o slot ou um placeholder quando o conteúdo não é informado. */
-function renderSlot(content: ReactNode | null | undefined): React.ReactElement {
-  if (content) return <>{content}</>;
-  return <SlotPlaceholder />;
+/**
+ * Renderiza o slot envolvendo o conteúdo em um container com a tipografia e
+ * o espaçamento padrão da camada Juscash (definidos em `index.module.css`).
+ * Quando não há conteúdo, exibe o placeholder de desenvolvimento — que tem
+ * estilo próprio e por isso não recebe o wrapper.
+ */
+function renderSlot(content: ReactNode | null | undefined, wrapperClassName: string): React.ReactElement {
+  if (!content) return <SlotPlaceholder />;
+  return <div className={wrapperClassName}>{content}</div>;
 }
 
 /**
@@ -83,9 +88,9 @@ function PopoverPanel({ slotNo, headerSlot, mainSlot, footerSlot, ariaLabel }: P
   const panelClassName = ["ds-popover-panel", isOneSlot ? "ds-popover-panel--gap" : ""].filter(Boolean).join(" ");
   return (
     <div className={panelClassName} role="dialog" aria-label={ariaLabel}>
-      {hasHeader(slotNo) && renderSlot(headerSlot)}
-      {renderSlot(mainSlot)}
-      {hasFooter(slotNo) && renderSlot(footerSlot)}
+      {hasHeader(slotNo) && renderSlot(headerSlot, "ds-popover-header")}
+      {renderSlot(mainSlot, "ds-popover-body")}
+      {hasFooter(slotNo) && renderSlot(footerSlot, "ds-popover-footer")}
     </div>
   );
 }

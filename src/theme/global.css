@@ -505,16 +505,6 @@
 }
 
 /* ============================================
-   CARD — overrides nativos (sombra default + borda)
-   (.ds-card-clickable vive em components/Card/index.module.css)
-   ============================================ */
-.ant-card {
-  box-shadow: var(--shadow-xs) !important;
-  border: 1px solid var(--color-neutral-300) !important;
-  transition: box-shadow 0.2s ease-in-out !important;
-}
-
-/* ============================================
    COLLAPSE — overrides nativos
    ============================================ */
 .ant-collapse-header:hover {

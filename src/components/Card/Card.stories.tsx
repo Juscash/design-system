@@ -1,8 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Card } from ".";
-import { Button } from "../Button";
-import { Input } from "../Input";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
@@ -89,79 +87,4 @@ export const NonClickable: Story = {
     children: "Card estático, sem hover/focus.",
     clickable: false,
   },
-};
-
-export const SlotsGrid: Story = {
-  name: "Matriz de slots (1 / 2 / 3)",
-  parameters: { layout: "padded" },
-  render: () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-      <Card style={{ width: 280 }}>
-        <p>Slot único</p>
-      </Card>
-      <Card style={{ width: 280 }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <p>Slot 1</p>
-          <p>Slot 2</p>
-        </div>
-      </Card>
-      <Card style={{ width: 280 }}>
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <p>Slot 1</p>
-          <p>Slot 2</p>
-          <p>Slot 3</p>
-        </div>
-      </Card>
-    </div>
-  ),
-};
-
-export const ExampleLogin: Story = {
-  name: "Exemplo — Login",
-  parameters: { layout: "centered" },
-  render: () => (
-    <Card style={{ width: 368 }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-        <div>
-          <h2 style={{ fontSize: 31, fontWeight: 700, margin: 0, lineHeight: 1.2 }}>Boas-vindas!</h2>
-          <p style={{ fontSize: 16, margin: "8px 0 0", lineHeight: 1.2 }}>
-            Insira seus dados abaixo para realizar o login.
-          </p>
-        </div>
-        <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
-          <label style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            <span style={{ fontSize: 16 }}>E-mail</span>
-            <Input placeholder="seu@email.com" />
-          </label>
-          <label style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-            <span style={{ fontSize: 16 }}>Senha</span>
-            <Input type="password" placeholder="Digite sua senha" />
-          </label>
-          <Button variant="primary" block>
-            Entrar
-          </Button>
-        </div>
-      </div>
-    </Card>
-  ),
-};
-
-export const ExampleFeedback: Story = {
-  name: "Exemplo — Feedback",
-  parameters: { layout: "centered" },
-  render: () => (
-    <Card style={{ width: 368 }}>
-      <div style={{ display: "flex", flexDirection: "column", gap: 24 }}>
-        <div>
-          <h3 style={{ fontSize: 20, fontWeight: 700, margin: 0, lineHeight: 1.2 }}>Queremos ouvir você!</h3>
-          <p style={{ fontSize: 16, margin: "8px 0 0", lineHeight: 1.2 }}>
-            Seu feedback pode fazer toda a diferença para construirmos um programa ainda mais completo.
-          </p>
-        </div>
-        <Button variant="primary" block>
-          Enviar feedback
-        </Button>
-      </div>
-    </Card>
-  ),
 };

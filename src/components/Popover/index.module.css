@@ -67,6 +67,39 @@
   word-break: break-word;
 }
 
+/*
+  Containers padrão de cada slot. A estilização do conteúdo do popover —
+  tipografia, espaçamento e separadores — vive aqui no design system; os
+  consumidores passam apenas o conteúdo bruto (texto ou subelementos) e o
+  wrapper aplica os defaults.
+*/
+:global(.ds-popover-header) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-4);
+  border-bottom: 1px solid var(--color-border-regular);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  line-height: 1.5;
+}
+
+:global(.ds-popover-body) {
+  padding: var(--spacing-3) var(--spacing-4);
+  font-size: var(--font-body-2-size);
+  color: var(--color-neutral-700);
+  line-height: 1.5;
+}
+
+:global(.ds-popover-footer) {
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--spacing-2) var(--spacing-4);
+  border-top: 1px solid var(--color-border-regular);
+}
+
 /* Foco visível no painel. */
 :global(.ds-popover-root) :global(.ant-popover-container):focus-visible,
 :global(.ds-popover-panel):focus-visible {
