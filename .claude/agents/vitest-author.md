@@ -21,9 +21,14 @@ Você escreve testes Vitest + Testing Library para componentes do Juscash Design
 - ClassNames/atributos/aria que o componente promete (inclusive `tabIndex` quando aplicável).
 - Subcomponentes, se houver.
 
+## Disciplina — teste o que existe, não o que poderia existir
+
+Cobertura vem do parecer e dos ACs. Não escreva testes para features que o parecer não documenta (anti-padrão típico: testar uma prop `color` quando o parecer não a expõe; testar `<p>` quando o Antd renderiza `<div>`). Quando o teste expor que o componente real diverge do que o parecer descreve, **reporte ao orquestrador** para corrigir o parecer/AC — não force o teste a passar mascarando a realidade.
+
 ## Regras
 
 - Sem `any`. Testes determinísticos. Renderize dentro do provider quando o componente exigir tema/locale.
+- Asserções de tamanho/line-height usam o valor exato em px do parecer (ex.: `lineHeight: "73.2px"`), não o multiplicador.
 - Rode `npm run test:run` e garanta verde. Se um teste revelar bug de implementação, **reporte** (não mascare o teste para passar).
 
 ## Saída

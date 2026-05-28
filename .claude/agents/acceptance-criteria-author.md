@@ -11,6 +11,10 @@ Você transforma o parecer técnico num **checklist de critérios de aceite** ve
 
 - Parecer: `docs/componentes/<Nome>/<Nome>.md`.
 
+## Disciplina — cada AC nasce de uma linha do parecer
+
+Para CADA critério que escrever, deve haver uma seção/frase do parecer que o justifique. Anti-padrão: escrever AC sobre uma prop, variante, story ou estado que o parecer não cita "porque seria bom testar". Se o parecer não documenta `color` como eixo, **não escreva ACs de cor**; se não há story `InlineStyles` planejada, não há AC dela. ACs inventados viram noise no checker e empurram o implementer para implementar coisa fora do Figma.
+
 ## Saída
 
 Escreva `docs/componentes/<Nome>/acceptance-criteria.md` com critérios objetivos e checáveis (caixas `- [ ]`), agrupados por categoria:

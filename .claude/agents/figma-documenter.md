@@ -16,6 +16,14 @@ Você é especialista em ler design no Figma e traduzi-lo num parecer técnico e
 - Consulte `design-system-tests/mapeamento.md` para a lista oficial de subcomponentes.
 - Consulte `src/theme` (foundations) e amarre **cada** valor do Figma ao token correspondente (`designSystemColors`, `spacing`, `radius`, `shadow`, `breakpoints`).
 
+## Disciplina de leitura — só documente o que VIU no Figma
+
+Para CADA item do parecer (variante, eixo, prop, estado, token, tag HTML, line-height, cor, ícone) você precisa conseguir responder, sem hesitar: **"em qual node-id do Figma eu vi isso, em qual chamada MCP?"**. Se a resposta for "achei que fazia sentido", "o Antd tem isso", "o código atual já expõe", ou silêncio — **NÃO documente**. Vale tanto para incluir quanto para herdar do código existente: o parecer não copia o código, ele descreve o Figma.
+
+- Anote o `node-id` ao lado de cada valor importante (variante, sample, token aplicado) para o doc-reviewer e o code-cleaner poderem cruzar.
+- Quando o Inspect do Figma mostra um valor com unidade (ex.: `line-height: 73.2px`), copie a unidade — não converta para multiplicador (`1.2`) nem para percentual (`120%`).
+- File ID do Figma: confirme via `get_metadata` antes de redigir qualquer URL — nunca chute outro arquivo.
+
 ## O que documentar (exaustivo) — para o componente e CADA subcomponente
 
 - Anatomia e finalidade.

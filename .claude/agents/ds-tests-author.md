@@ -29,14 +29,22 @@ design-system-tests/src/pages/<slug>/
 
 **Registro e rota são automáticos:** `src/components.ts` (`NAMES`) já lista os componentes e `App.tsx` faz `import.meta.glob('./pages/*/index.tsx')`. Basta criar `src/pages/<slug>/index.tsx` com `export default`. O `slug` segue o `toSlug` do projeto (minúsculas; `/` e espaços viram `-`). Se o nome **não** estiver em `NAMES`, adicione-o lá. **Não** marque o `checklist.json` — isso é o passo final do orquestrador, só quando todos os gates estão verdes.
 
+## Disciplina — a página espelha o parecer, nada mais
+
+Renderize APENAS o que o parecer documenta. Cada variante/tamanho/estado/sub-componente do parecer vira um bloco JSX explícito na página; nada que esteja fora do parecer entra. Não invente seções (`InlineStyles`, `Override de style.color`, `Hierarquia uso real`, `Parágrafo longo`, comparativos atalho-vs-prop, exemplos de domínio) — são noise que esconde o que o consumidor recebe.
+
 ## Regras estritas (substituem qualquer exemplo)
 
 1. **Características visuais 100% via props.** Proibido `style={...}` sobre o componente do DS ou wrapper estilizado que altere o visual dele. Variant, size, icon, block, disabled, loading, iconPosition, shape — tudo via prop.
-2. **CSS só para layout do preview** (gap entre seções/rows, borda/padding de seção, grid da matriz de variantes), em `index.module.css` consumido via `import styles from "./index.module.css"`.
-3. **Ícones via string** (`icon="Search"`), nunca importando `lucide-react` no consumer. Se o componente ainda não aceita string, **amplie a API do componente** no design-system (e documente no parecer) antes de quebrar a regra.
-4. **`style={...}` inline banido na página inteira**, mesmo em `<div>`. Tags semânticas (`<h1>`, `<section>`, `<p>`) podem usar o default do browser.
-5. **Sem `as React.CSSProperties`** espalhado.
-6. Para demonstrar foco, use `tabIndex={0}` **real** (Tab/clique) — nunca classe simulada `pseudo-focus`.
+2. **CSS só para layout do preview** (gap entre seções/rows, borda/padding de seção, grid da matriz de variantes), em `index.module.css` consumido via `import styles from "./index.module.css"`. **Use seletores 100% por classe** (`.row`, `.metaLabel`, …). **Proibido descendant tag selector** (`.section h2 { … }`, `.row p { … }`) — ele vaza no `<h2>`/`<p>` que o componente DS renderiza por dentro e corrompe a aparência.
+3. **Cada variação é JSX explícito.** Proibido `.map()`, `.forEach`, arrays de configuração ou componente wrapper que renderiza a partir de dados — escreva os N blocos repetidos no JSX, mesmo que pareça verboso. Validar o que o consumidor recebe exige que o consumidor escreva cada chamada.
+4. **Sample text = Lorem Ipsum** (`Lorem ipsum dolor sit amet, consectetur adipiscing elit.` ou fragmento clássico). Sem `The quick brown fox`, sem texto de domínio inventado.
+5. **Nada de anotações de tamanho/tokens no texto visível** (`'61 px · lh 73.2 px'`, `'Heading 1 — 61 px'`, etc.). Tabelas/labels podem indicar o nome da variante (`heading1`), nada mais. Medidas vivem em devtools.
+6. **Ícones via string** (`icon="Search"`), nunca importando `lucide-react` no consumer. Se o componente ainda não aceita string, **amplie a API do componente** no design-system (e documente no parecer) antes de quebrar a regra.
+7. **`style={...}` inline banido na página inteira**, mesmo em `<div>`. Tags semânticas (`<h1>`, `<section>`, `<p>`) podem usar o default do browser.
+8. **Sem `as React.CSSProperties`** espalhado.
+9. Para demonstrar foco, use `tabIndex={0}` **real** (Tab/clique) — nunca classe simulada `pseudo-focus`.
+10. **Font-family declarada pelo DS precisa estar carregada de verdade no app.** Antes de comparar visualmente com o Figma, confirme que a fonte está disponível (ex.: `<link>` Google Fonts no `index.html` quando o DS espera Inter). Sem isso o browser cai em fallback sans-serif e parece diferente do design.
 
 ## Cobertura
 
