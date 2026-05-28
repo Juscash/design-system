@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Heart } from "lucide-react";
 import { Select } from ".";
-import { FormItem } from "../FormItem";
 import { Form } from "antd";
 import { designSystemColors } from "../../theme";
 
@@ -138,9 +137,9 @@ function Example() {
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
 
     return (
-      <FormItem label="Label">
+      <Form.Item label="Label">
         <Select {...props} className={mergedClassName} />
-      </FormItem>
+      </Form.Item>
     );
   },
 };
@@ -216,9 +215,9 @@ export const Filled: Story = {
 
 export const WithHelperText: Story = {
   render: () => (
-    <FormItem label="Label" extra="Helper text">
+    <Form.Item label="Label" extra="Helper text">
       <Select placeholder="Selecione um item" options={options} />
-    </FormItem>
+    </Form.Item>
   ),
   decorators: [(Story) => <Story />],
 };
@@ -226,18 +225,18 @@ export const WithHelperText: Story = {
 export const SizeVariants: Story = {
   render: () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 16, width: 300 }}>
-      <FormItem label="Size XS">
+      <Form.Item label="Size XS">
         <Select dsSize="xs" placeholder="XS Size" options={options} />
-      </FormItem>
-      <FormItem label="Size S">
+      </Form.Item>
+      <Form.Item label="Size S">
         <Select dsSize="s" placeholder="S Size" options={options} />
-      </FormItem>
-      <FormItem label="Size M (Default)">
+      </Form.Item>
+      <Form.Item label="Size M (Default)">
         <Select dsSize="m" placeholder="M Size" options={options} />
-      </FormItem>
-      <FormItem label="Size L">
+      </Form.Item>
+      <Form.Item label="Size L">
         <Select dsSize="l" placeholder="L Size" options={options} />
-      </FormItem>
+      </Form.Item>
     </div>
   ),
   decorators: [(Story) => <Story />],
@@ -273,49 +272,49 @@ export const FigmaGrid: Story = {
         {/* Placeholder */}
         <div style={{ fontSize: 11, color: "#9747ff", fontFamily: "monospace", textAlign: "right" }}>Placeholder</div>
         {sizes.map((s) => (
-          <FormItem key={s.dsSize} label="Label" style={{ marginBottom: 0, width: "100%" }}>
+          <Form.Item key={s.dsSize} label="Label" style={{ marginBottom: 0, width: "100%" }}>
             <Select dsSize={s.dsSize} placeholder="Selecione um item" options={options} style={{ width: "100%" }} />
-          </FormItem>
+          </Form.Item>
         ))}
 
         {/* Value */}
         <div style={{ fontSize: 11, color: "#9747ff", fontFamily: "monospace", textAlign: "right" }}>Value</div>
         {sizes.map((s) => (
-          <FormItem key={s.dsSize} label="Label" style={{ marginBottom: 0, width: "100%" }}>
+          <Form.Item key={s.dsSize} label="Label" style={{ marginBottom: 0, width: "100%" }}>
             <Select dsSize={s.dsSize} defaultValue="option1" options={options} style={{ width: "100%" }} />
-          </FormItem>
+          </Form.Item>
         ))}
 
         {/* Focus */}
         <div style={{ fontSize: 11, color: "#9747ff", fontFamily: "monospace", textAlign: "right" }}>Focus</div>
         {sizes.map((s) => (
-          <FormItem key={s.dsSize} label="Label" style={{ marginBottom: 0, width: "100%" }}>
+          <Form.Item key={s.dsSize} label="Label" style={{ marginBottom: 0, width: "100%" }}>
             <Select dsSize={s.dsSize} placeholder="Selecione um item" className="pseudo-focus-visible" options={options} style={{ width: "100%" }} />
-          </FormItem>
+          </Form.Item>
         ))}
 
         {/* Error */}
         <div style={{ fontSize: 11, color: "#9747ff", fontFamily: "monospace", textAlign: "right" }}>Error</div>
         {sizes.map((s) => (
-          <FormItem key={s.dsSize} label="Label" style={{ marginBottom: 0, width: "100%" }}>
+          <Form.Item key={s.dsSize} label="Label" style={{ marginBottom: 0, width: "100%" }}>
             <Select dsSize={s.dsSize} placeholder="Selecione um item" status="error" options={options} style={{ width: "100%" }} />
-          </FormItem>
+          </Form.Item>
         ))}
 
         {/* Error Focus */}
         <div style={{ fontSize: 11, color: "#9747ff", fontFamily: "monospace", textAlign: "right" }}>Error focus</div>
         {sizes.map((s) => (
-          <FormItem key={s.dsSize} label="Label" style={{ marginBottom: 0, width: "100%" }}>
+          <Form.Item key={s.dsSize} label="Label" style={{ marginBottom: 0, width: "100%" }}>
             <Select dsSize={s.dsSize} placeholder="Selecione um item" status="error" className="pseudo-focus-visible" options={options} style={{ width: "100%" }} />
-          </FormItem>
+          </Form.Item>
         ))}
 
         {/* Disabled */}
         <div style={{ fontSize: 11, color: "#9747ff", fontFamily: "monospace", textAlign: "right" }}>Disabled</div>
         {sizes.map((s) => (
-          <FormItem key={s.dsSize} label="Label" style={{ marginBottom: 0, width: "100%" }}>
+          <Form.Item key={s.dsSize} label="Label" style={{ marginBottom: 0, width: "100%" }}>
             <Select dsSize={s.dsSize} placeholder="Selecione um item" disabled options={options} style={{ width: "100%" }} />
-          </FormItem>
+          </Form.Item>
         ))}
     </div>
   ),
@@ -338,7 +337,7 @@ export const FigmaExamples: Story = {
     <div style={{ display: "flex", gap: 48, alignItems: "flex-start", padding: 32, width: "fit-content" }}>
       {/* Exemplo 1: dropdown aberto com search + group label */}
       <div style={{ width: 240, flex: "0 0 240px" }}>
-        <FormItem label="Label" style={{ marginBottom: 0, width: "100%" }}>
+        <Form.Item label="Label" style={{ marginBottom: 0, width: "100%" }}>
           <Select
             placeholder="Selecione um item"
             showSearch
@@ -347,12 +346,12 @@ export const FigmaExamples: Story = {
             getPopupContainer={(trigger) => trigger.parentElement!}
             style={{ width: "100%" }}
           />
-        </FormItem>
+        </Form.Item>
       </div>
 
       {/* Exemplo 2: com valor selecionado + helper text */}
       <div style={{ width: 240, flex: "0 0 240px" }}>
-        <FormItem
+        <Form.Item
           label="Label"
           extra={<span style={{ fontSize: 13, lineHeight: 1.2, color: designSystemColors.neutral[500] }}>Helper text</span>}
           style={{ marginBottom: 0, width: "100%" }}
@@ -363,7 +362,7 @@ export const FigmaExamples: Story = {
             prefix={<Heart size={16} color={designSystemColors.neutral[800]} />}
             style={{ width: "100%" }}
           />
-        </FormItem>
+        </Form.Item>
       </div>
     </div>
   ),

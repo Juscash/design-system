@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Select } from ".";
-import { FormItem } from "../FormItem";
 import { Form } from "antd";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
@@ -135,9 +134,9 @@ function Example() {
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
 
     return (
-      <FormItem label="Label">
+      <Form.Item label="Label">
         <Select {...props} className={mergedClassName} />
-      </FormItem>
+      </Form.Item>
     );
   },
 };
@@ -218,24 +217,24 @@ export const SizeVariants: Story = {
   render: () => (
     <div style={{ display: "flex", flexDirection: "column", gap: 16, width: 300 }}>
       {/* XS Size */}
-      <FormItem label="Size XS">
+      <Form.Item label="Size XS">
         <Select dsSize="xs" mode="multiple" placeholder="XS Size" options={options} defaultValue={["option1"]} />
-      </FormItem>
+      </Form.Item>
 
       {/* S Size */}
-      <FormItem label="Size S">
+      <Form.Item label="Size S">
         <Select dsSize="s" mode="multiple" placeholder="S Size" options={options} defaultValue={["option1"]} />
-      </FormItem>
+      </Form.Item>
 
       {/* M Size */}
-      <FormItem label="Size M (Default)">
+      <Form.Item label="Size M (Default)">
         <Select dsSize="m" mode="multiple" placeholder="M Size" options={options} defaultValue={["option1"]} />
-      </FormItem>
+      </Form.Item>
 
       {/* L Size */}
-      <FormItem label="Size L">
+      <Form.Item label="Size L">
         <Select dsSize="l" mode="multiple" placeholder="L Size" options={options} defaultValue={["option1"]} />
-      </FormItem>
+      </Form.Item>
     </div>
   ),
   decorators: [(Story) => <Story />],

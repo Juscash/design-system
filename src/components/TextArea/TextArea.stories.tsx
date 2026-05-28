@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Input } from "../Input";
 import type { TextAreaProps } from "../../types/components/TextArea";
-import { FormItem } from "../FormItem";
 import { Form } from "antd";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
@@ -127,9 +126,9 @@ function Example() {
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
 
     return (
-      <FormItem label="Label">
+      <Form.Item label="Label">
         <TextArea {...props} className={mergedClassName} />
-      </FormItem>
+      </Form.Item>
     );
   },
 };

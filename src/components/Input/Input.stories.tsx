@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Input } from ".";
-import { FormItem } from "../FormItem";
 import { Form } from "antd";
 import { shadow } from "../../theme";
 import { Search } from "lucide-react";
@@ -124,9 +123,9 @@ function Example() {
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
 
     return (
-      <FormItem label="Label" size={props.size}>
+      <Form.Item label="Label">
         <Input {...props} style={style} className={mergedClassName} />
-      </FormItem>
+      </Form.Item>
     );
   },
 };
@@ -185,9 +184,9 @@ export const Error: Story = {
       mergedStyle.borderColor = "transparent";
     }
     return (
-      <FormItem label="Label" size={props.size} validateStatus="error" help="Error message">
+      <Form.Item label="Label" validateStatus="error" help="Error message">
         <Input {...props} style={mergedStyle} className={mergedClassName} />
-      </FormItem>
+      </Form.Item>
     );
   },
 };
@@ -208,9 +207,9 @@ export const ErrorFocus: Story = {
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
 
     return (
-      <FormItem label="Label" size={props.size} validateStatus="error" help="Error message">
+      <Form.Item label="Label" validateStatus="error" help="Error message">
         <Input {...props} style={style} className={mergedClassName} />
-      </FormItem>
+      </Form.Item>
     );
   },
 };
@@ -244,9 +243,9 @@ export const WithHelperText: Story = {
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
 
     return (
-      <FormItem label="Label" size={props.size} help="Helper text">
+      <Form.Item label="Label" help="Helper text">
         <Input {...props} style={style} className={mergedClassName} />
-      </FormItem>
+      </Form.Item>
     );
   },
 };
@@ -265,9 +264,9 @@ export const WithIconAndHelperText: Story = {
     const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
 
     return (
-      <FormItem label="Label" size={props.size} help="Helper text">
+      <Form.Item label="Label" help="Helper text">
         <Input {...props} style={style} className={mergedClassName} />
-      </FormItem>
+      </Form.Item>
     );
   },
 };

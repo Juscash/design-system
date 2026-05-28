@@ -13,7 +13,6 @@ export * from "./ConfirmModal";
 export * from "./DatePicker";
 export * from "./Drawer";
 export * from "./EmptyState";
-export * from "./FormItem";
 export * from "./Input";
 export * from "./KpiCard";
 export * from "./Loading";

@@ -2,7 +2,6 @@ import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Form } from "antd";
 import { Upload } from ".";
-import { FormItem } from "../FormItem";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
@@ -176,9 +175,9 @@ function Example() {
     });
 
     return (
-      <FormItem label="Upload Label">
+      <Form.Item label="Upload Label">
         <Upload {...props} className={mergedClassName} />
-      </FormItem>
+      </Form.Item>
     );
   },
 };

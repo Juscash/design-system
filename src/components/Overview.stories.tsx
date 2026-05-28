@@ -25,7 +25,6 @@ import {
   Circle as IconRadio,
   ToggleRight as IconSwitch,
   UploadCloud as IconUpload,
-  FormInput as IconFormItem,
   CreditCard as IconCard,
   ChevronsDownUp as IconCollapse,
   LayoutPanelTop as IconPageHeader,
@@ -94,7 +93,6 @@ const categories: Category[] = [
       { name: "Radio", description: "Botão de opção mutuamente exclusivo.", icon: IconRadio },
       { name: "Switch", description: "Interruptor de estado (on/off).", icon: IconSwitch },
       { name: "Upload", description: "Campo de upload de arquivos com drag-and-drop.", icon: IconUpload },
-      { name: "FormItem", description: "Wrapper de campo de formulário com label e erro.", icon: IconFormItem },
     ],
   },
   {
