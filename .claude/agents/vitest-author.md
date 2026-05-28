@@ -16,13 +16,13 @@ Você escreve testes Vitest + Testing Library para componentes do Juscash Design
 
 - **Fonte de verdade oficial:** `.md` e `.json` em `./figma/components/<slug>/` — define o que precisa ser coberto.
 - **Apoio visual:** `./figma/components/<slug>/screenshot.png` — referência de layout.
-- **Critérios de aceite:** `docs/componentes/<Nome>/acceptance-criteria.md` — checklist gerado a partir do dump.
+- **Critérios de aceite:** recebidos do orquestrador como texto inline.
 
 Em qualquer divergência entre dump textual e screenshot, **o dump (`.md`/`.json`) vence**.
 
 ## Cobertura mínima
 
-Derive a cobertura do dump em `./figma/components/<slug>/` e dos critérios em `docs/componentes/<Nome>/acceptance-criteria.md`:
+Derive a cobertura do dump em `./figma/components/<slug>/` e do checklist de ACs recebido:
 
 - Render da variante default.
 - Todas as variantes proprietárias (`type`/`variant`/`size`).

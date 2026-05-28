@@ -9,7 +9,7 @@ Componente alvo: **$ARGUMENTS**
 
 ## Convenções de nome
 
-- Use o nome exatamente como recebido (PascalCase) para o componente, o tipo e a pasta `docs/componentes/$ARGUMENTS/`.
+- Use o nome exatamente como recebido (PascalCase) para o componente, o tipo e a pasta em `src/components/$ARGUMENTS/`.
 - Derive o `slug` (kebab-case) para localizar a pasta do design e a rota: `BackToTop` → `back-to-top`, `DatePicker` → `date-picker`, `KPICard` → `kpi-card`. Se a derivação não bater com nenhum diretório, liste `./figma/components/` e use o nome real da pasta.
 
 ## Fontes de verdade
@@ -35,11 +35,11 @@ Os agentes `storybook-auditor` e `ds-tests-author` **assumem** que esses servido
 Invoque cada agente abaixo via Task tool (`subagent_type` = nome do agente), um de cada vez, passando: nome do componente, `slug`, caminho da pasta do design (`./figma/components/<slug>/`) e o resultado do agente anterior.
 
 1. **code-cleaner** — se o componente já existe no código, remove props/CSS/stories que não têm respaldo em `./figma/components/<slug>/`.
-2. **acceptance-criteria-author** — gera `docs/componentes/$ARGUMENTS/acceptance-criteria.md` a partir do design.
-3. **implementer** — implementa o componente (código, tipos, CSS module, stories) fiel ao design e aos ACs.
-4. **acceptance-criteria-checker** — verifica cada AC contra o código.
-   - **Loop A:** enquanto houver FAIL por causa do código, devolve ao **implementer** com a lista e re-roda o checker.
-5. **vitest-author** — cria/atualiza `<Nome>.test.tsx` e roda `npm run test:run`.
+2. **acceptance-criteria-author** — gera o checklist de critérios de aceite a partir do design e **retorna o texto na resposta** (sem escrever em disco). Guarde esse texto para passar adiante.
+3. **implementer** — implementa o componente (código, tipos, CSS module, stories) fiel ao design e ao checklist recebido como input.
+4. **acceptance-criteria-checker** — recebe o checklist do passo 2 como input e verifica cada item contra o código.
+   - **Loop A:** enquanto houver FAIL por causa do código, devolve ao **implementer** com a lista e re-roda o checker com o mesmo checklist.
+5. **vitest-author** — recebe o checklist + dump e cria/atualiza `<Nome>.test.tsx`. Roda `npm run test:run`.
 6. **storybook-auditor** — audita a doc page do componente no Storybook via Chrome MCP, comparando contra `./figma/components/<slug>/`.
    - **Loop B:** se a auditoria achar erro, identifique a etapa responsável (1 / 3 / 5), volte a ela com o relato e re-audite.
 7. **ds-tests-author** — cria/atualiza `design-system-tests/src/pages/<slug>/` com todas as variações via props.
@@ -48,6 +48,7 @@ Invoque cada agente abaixo via Task tool (`subagent_type` = nome do agente), um 
    - Commit + push nos **dois** repositórios, seguindo o estilo de cada um, terminando com:
      `Co-Authored-By: Claude Opus 4.7 (1M context) <noreply@anthropic.com>`
    - Se o repo estiver em `main`, crie uma branch de feature antes do commit.
+   - Os artefatos comitados ficam em: `src/components/<Nome>/`, `src/types/components/<Nome>/`, e a página em `design-system-tests/src/pages/<slug>/`. A documentação do design vive em `./figma/components/<slug>/` (já comitada).
 
 ## Critério de conclusão
 

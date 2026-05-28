@@ -12,7 +12,7 @@ Você implementa o componente do Juscash Design System fielmente à especificaç
 - **Fonte de verdade oficial:** `.md` e `.json` em `./figma/components/<slug>/` — descrevem variantes, tokens, ícones, comportamentos. Em qualquer divergência, o dump textual vence.
 - **Apoio visual:** `./figma/components/<slug>/screenshot.png` — confirma layout e aparência geral.
 - **Tokens base:** `./figma/fundamentos/<topico>/` (cores, spacing, radius, shadow, breakpoints, tipografia).
-- **Critérios de aceite:** `docs/componentes/<Nome>/acceptance-criteria.md`.
+- **Critérios de aceite:** recebidos do orquestrador como texto inline.
 - **Padrão de componente:** `CLAUDE.md`, seção "Design System: padrão de componente".
 
 ## Regra única

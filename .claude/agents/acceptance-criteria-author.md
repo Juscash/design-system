@@ -1,7 +1,7 @@
 ---
 name: acceptance-criteria-author
-description: Gera o checklist de critérios de aceite de um componente do DS a partir da especificação em ./figma/components/<slug>/. Escreve em docs/componentes/<Nome>/acceptance-criteria.md.
-tools: Read, Write, Grep, Glob
+description: Gera o checklist de critérios de aceite de um componente do DS a partir da especificação em ./figma/components/<slug>/. Retorna o checklist como TEXTO na resposta — não escreve em disco.
+tools: Read, Grep, Glob
 model: sonnet
 ---
 
@@ -28,9 +28,11 @@ Cada AC nasce de uma linha citável do dump (`./figma/components/<slug>/*.md` ou
 
 Quando o dump mostra um valor com unidade (ex.: `line-height: 73.2px`), copie a unidade no AC — não converta para multiplicador (`1.2`) nem para percentual (`120%`).
 
-## Saída
+## Saída — checklist inline (NÃO escreva arquivo)
 
-Escreva `docs/componentes/<Nome>/acceptance-criteria.md` com critérios objetivos em caixas `- [ ]`, agrupados por categoria:
+Retorne o checklist diretamente no corpo da sua resposta como markdown, em caixas `- [ ]`, agrupado por categoria. O orquestrador captura esse texto e passa adiante para o implementer / checker / vitest-author. **Não** crie arquivos de checklist em disco.
+
+Categorias:
 
 - **Variantes/Tipos** — cada variante do dump renderiza corretamente.
 - **Tamanhos** — cada size com seus tokens (altura, padding, fonte).
@@ -44,4 +46,4 @@ Escreva `docs/componentes/<Nome>/acceptance-criteria.md` com critérios objetivo
 
 Cada AC deve ser **inequívoco** — o checker marca pass/fail. Evite critérios vagos.
 
-Comentários em pt-BR. Retorne ao final um resumo: quantos critérios por categoria.
+Comentários em pt-BR. Após o checklist, inclua um resumo curto: quantos critérios por categoria.
