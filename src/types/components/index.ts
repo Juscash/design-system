@@ -22,6 +22,7 @@ export * from "./Pagination";
 export * from "./Popover";
 export * from "./Radio";
 export * from "./RangePicker";
+export * from "./ScrollArea";
 export * from "./Segmented";
 export * from "./Select";
 export * from "./Separator";
