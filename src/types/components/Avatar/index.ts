@@ -4,8 +4,8 @@ import type { AvatarProps as AntdAvatarProps } from "antd";
 /** Tamanho do Avatar (igual ao Figma). `small` 32px · `regular` 40px. */
 export type AvatarSize = "small" | "regular";
 
-/** Forma do Avatar. `round` (círculo) ou `roundrect` (radius xl). */
-export type AvatarRoundness = "round" | "roundrect";
+/** Forma do Avatar. Apenas `round` (círculo) — conforme Figma. */
+export type AvatarRoundness = "round";
 
 type CleanAntdAvatarProps = Omit<AntdAvatarProps, "icon">;
 
@@ -18,7 +18,7 @@ export interface AvatarProps extends CleanAntdAvatarProps {
   icon?: ReactNode | string;
   /** Tamanho discreto do design system. Default `regular`. */
   dsSize?: AvatarSize;
-  /** Forma — círculo (`round`, default) ou retângulo arredondado (`roundrect`). */
+  /** Forma — sempre círculo (`round`). Prop mantida para compatibilidade de API; só aceita `"round"`. */
   roundness?: AvatarRoundness;
   /**
    * Quando `true`, renderiza o avatar como botão com `ChevronDown` ao lado,

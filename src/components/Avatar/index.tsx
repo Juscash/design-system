@@ -2,7 +2,7 @@ import React from "react";
 import { Avatar as AntdAvatar, ConfigProvider } from "antd";
 import { ChevronDown } from "lucide-react";
 import * as LucideIcons from "lucide-react";
-import { designSystemColors, radius } from "../../theme";
+import { designSystemColors } from "../../theme";
 import type { AvatarProps, AvatarSize } from "../../types/components/Avatar";
 import "./index.module.css";
 
@@ -65,13 +65,13 @@ function resolveIcon(icon: React.ReactNode | string | undefined, size: AvatarSiz
 /**
  * Estilo inline aplicado ao Avatar do Antd. Reúne tokens do Figma: bg
  * `neutral/200`, border 1px `neutral/50`, color `text/dark`, Inter Bold 13px.
- * `borderRadius` muda conforme `roundness` — `50%` ou `radius.xl` (8px).
+ * `borderRadius` fixado em `50%` — conforme Figma, a única forma é `round`.
+ * A fonte é herdada do `body` global via `theme/global.css`.
  */
-function buildAvatarStyle(roundness: AvatarProps["roundness"], external?: React.CSSProperties): React.CSSProperties {
+function buildAvatarStyle(external?: React.CSSProperties): React.CSSProperties {
   return {
     ...external,
-    borderRadius: roundness === "round" ? "50%" : radius.xl,
-    fontFamily: '"Inter", sans-serif',
+    borderRadius: "50%",
     fontSize: TEXT_FONT_SIZE,
     fontWeight: 700,
     backgroundColor: designSystemColors.neutral[200],
@@ -85,13 +85,13 @@ function buildAvatarStyle(roundness: AvatarProps["roundness"], external?: React.
 
 /**
  * Avatar do design system. Suporta 3 tipos de conteúdo (initials/icon/picture),
- * 2 tamanhos (`small`/`regular`), 2 roundness (`round`/`roundrect`) e a
- * variante "avatar menu" (botão com ChevronDown ao lado, conforme Figma).
+ * 2 tamanhos (`small`/`regular`), forma fixa `round` (círculo) e a variante
+ * "avatar menu" (botão com ChevronDown ao lado, conforme Figma).
  */
 export function Avatar(props: AvatarProps): React.ReactElement {
   const {
     dsSize = "regular",
-    roundness = "round",
+    roundness: _roundnessIgnored = "round",
     avatarMenu = false,
     menuOpen,
     onMenuOpenChange,
@@ -106,7 +106,7 @@ export function Avatar(props: AvatarProps): React.ReactElement {
 
   const effectiveSize = avatarMenu ? MENU_AVATAR_SIZE : dsSize;
   const currentSize = SIZE_MAP[effectiveSize];
-  const avatarStyle = buildAvatarStyle(roundness, style);
+  const avatarStyle = buildAvatarStyle(style);
   const [imageError, setImageError] = React.useState(false);
   // Quando a imagem cai em erro, voltamos para children/icon (sem renderizar
   // o <img> interno). Reset automático se o `src` mudar.
@@ -130,7 +130,6 @@ export function Avatar(props: AvatarProps): React.ReactElement {
             textFontSizeLG: TEXT_FONT_SIZE,
           },
         },
-        token: { fontFamily: '"Inter", sans-serif' },
       }}
     >
       <AntdAvatar
