@@ -165,8 +165,8 @@
 - [ ] **AC-083** Existe uma story `HeadingVariants` que renderiza as 6 variantes `heading1..heading6` simultaneamente.
 - [ ] **AC-084** Existe uma story `BodyVariants` que renderiza `body1`, `body2` e `caption` simultaneamente.
 - [ ] **AC-085** Existe uma story `ColorVariants` que renderiza todas as 9 cores (`primary`, `secondary`, `neutral`, `dark`, `error`, `warning`, `success`, `disabled`, `info`).
-- [ ] **AC-086** Existe uma story `InlineStyles` que demonstra `strong`, `italic`, `underline`, `delete`, `code` (props booleanas de ênfase do Antd) com label/descrição indicando que é "feature do Antd, não do design Juscash".
-- [ ] **AC-087** Existe uma story `ParagraphExample` que demonstra `Body1`/`Body2` em parágrafos completos.
+- [ ] **AC-086** ~~Story `InlineStyles`~~ — **REMOVIDA**. O Figma não documenta inline styles (`strong`, `italic`, `underline`, `delete`, `code`); essas props existem apenas como pass-through do Antd via `...rest` e não devem ser demonstradas como feature do DS. Critério não se aplica.
+- [ ] **AC-087** ~~Story `ParagraphExample`~~ — **REMOVIDA**. Era redundante com a story `BodyVariants` (que já cobre `Body1`/`Body2`/`Caption`). Critério não se aplica.
 - [ ] **AC-088** Existe uma story `Playground` com controles (`argTypes`) para `variant` e `color`.
 
 ### 6.2. Metadata

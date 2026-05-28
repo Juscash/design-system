@@ -133,40 +133,6 @@ export const ColorVariants: Story = {
   ),
 };
 
-export const InlineStyles: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story:
-          "As props `strong`, `italic`, `underline`, `delete`, `mark`, `code`, `keyboard`, `editable`, `copyable` e `ellipsis` vêm do Antd Typography e ficam disponíveis via spread. NÃO são tokens oficiais do Design System Juscash — o Figma só publica Inter Regular 400 como variável tipográfica.",
-      },
-    },
-  },
-  render: () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-      <Typography strong>Texto com bold</Typography>
-      <Typography italic>Texto com italic</Typography>
-      <Typography underline>Texto com underline</Typography>
-      <Typography delete>Texto com delete</Typography>
-      <Typography code>Texto com code</Typography>
-    </div>
-  ),
-};
-
-export const ParagraphExample: Story = {
-  render: () => (
-    <div style={{ maxWidth: 520 }}>
-      <Typography variant="body1">
-        Este e um exemplo de paragrafo com comprimento maior para avaliar leitura, espacamento e contraste. Use Body1 para
-        textos principais e Body2 para textos secundarios.
-      </Typography>
-      <Typography variant="body2" color="neutral">
-        Texto secundario com cor neutral para reduzir enfase visual.
-      </Typography>
-    </div>
-  ),
-};
-
 export const Playground: Story = {
   args: {
     variant: "body1",
