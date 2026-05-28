@@ -1,159 +1,150 @@
 import { render, screen } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import userEvent from "@testing-library/user-event";
+import { describe, it, expect, vi } from "vitest";
 import { Popover } from ".";
 import { Button } from "../Button";
-import { Info } from "lucide-react";
+
 
 describe("Popover", () => {
-  it("renderiza com conteúdo simples", () => {
+  it("renderiza sem crashar (default)", () => {
     render(
-      <Popover content="Conteúdo do popover" open>
+      <Popover>
         <Button>Trigger</Button>
       </Popover>,
     );
-    expect(screen.getByText("Conteúdo do popover")).toBeInTheDocument();
+    expect(screen.getByRole("button", { name: /trigger/i })).toBeInTheDocument();
   });
 
-  it("renderiza com title do Antd", () => {
+  it("slotNo=1 slot renderiza somente o mainSlot", () => {
     render(
-      <Popover title="Título" content="Conteúdo" open>
+      <Popover slotNo="1 slot" mainSlot={<span>Conteúdo principal</span>} open>
         <Button>Trigger</Button>
       </Popover>,
     );
-    expect(screen.getByText("Título")).toBeInTheDocument();
-    expect(screen.getByText("Conteúdo")).toBeInTheDocument();
-  });
-
-  it("renderiza com header customizado (2 slots)", () => {
-    render(
-      <Popover header="Header Customizado" content="Conteúdo principal" open>
-        <Button>Trigger</Button>
-      </Popover>,
-    );
-    expect(screen.getByText("Header Customizado")).toBeInTheDocument();
     expect(screen.getByText("Conteúdo principal")).toBeInTheDocument();
   });
 
-  it("renderiza com footer customizado (3 slots)", () => {
+  it("slotNo=1 slot não renderiza headerSlot mesmo quando informado", () => {
     render(
       <Popover
-        header="Header"
-        content="Conteúdo"
-        footer="Footer Customizado"
+        slotNo="1 slot"
+        headerSlot={<span>Não deve aparecer</span>}
+        mainSlot={<span>Corpo</span>}
         open
       >
         <Button>Trigger</Button>
       </Popover>,
     );
-    expect(screen.getByText("Header")).toBeInTheDocument();
-    expect(screen.getByText("Conteúdo")).toBeInTheDocument();
-    expect(screen.getByText("Footer Customizado")).toBeInTheDocument();
+    expect(screen.queryByText("Não deve aparecer")).not.toBeInTheDocument();
+    expect(screen.getByText("Corpo")).toBeInTheDocument();
   });
 
-  it("renderiza com ícone customizado no header", () => {
+  it("slotNo=2 slots renderiza headerSlot e mainSlot", () => {
     render(
       <Popover
-        header="Header com ícone"
-        content="Conteúdo"
-        icon={<Info data-testid="custom-icon" size={16} />}
-        open
-      >
-        <Button>Trigger</Button>
-      </Popover>,
-    );
-    expect(screen.getByTestId("custom-icon")).toBeInTheDocument();
-    expect(screen.getByText("Header com ícone")).toBeInTheDocument();
-  });
-
-  it("renderiza apenas conteúdo quando não há header ou footer", () => {
-    render(
-      <Popover content="Apenas conteúdo" open>
-        <Button>Trigger</Button>
-      </Popover>,
-    );
-    expect(screen.getByText("Apenas conteúdo")).toBeInTheDocument();
-  });
-
-  it("prioriza header customizado sobre title do Antd", () => {
-    render(
-      <Popover
-        header="Header Customizado"
-        title="Título Antd"
-        content="Conteúdo"
-        open
-      >
-        <Button>Trigger</Button>
-      </Popover>,
-    );
-    // Header customizado deve aparecer
-    expect(screen.getByText("Header Customizado")).toBeInTheDocument();
-    // Title do Antd não deve aparecer quando header está presente
-    expect(screen.queryByText("Título Antd")).not.toBeInTheDocument();
-  });
-
-  it("renderiza trigger corretamente", () => {
-    render(
-      <Popover content="Conteúdo">
-        <Button>Clique aqui</Button>
-      </Popover>,
-    );
-    expect(
-      screen.getByRole("button", { name: /clique aqui/i }),
-    ).toBeInTheDocument();
-  });
-
-  it("aceita props do Antd (placement)", () => {
-    render(
-      <Popover content="Conteúdo" placement="bottom" open>
-        <Button>Trigger</Button>
-      </Popover>,
-    );
-    // Antd renderiza o popover em portal, fora do container do trigger.
-    expect(document.querySelector(".ant-popover")).toBeInTheDocument();
-  });
-
-  it("aceita props do Antd (trigger)", () => {
-    render(
-      <Popover content="Conteúdo" trigger="click">
-        <Button>Trigger</Button>
-      </Popover>,
-    );
-    expect(screen.getByRole("button")).toBeInTheDocument();
-  });
-
-  it("renderiza com footer contendo botões", () => {
-    render(
-      <Popover
-        header="Cabeçalho"
-        content="Tem certeza?"
-        footer={
-          <div>
-            <Button>Cancelar</Button>
-            <Button>Confirmar</Button>
-          </div>
-        }
+        slotNo="2 slots"
+        headerSlot={<span>Cabeçalho</span>}
+        mainSlot={<span>Corpo</span>}
         open
       >
         <Button>Trigger</Button>
       </Popover>,
     );
     expect(screen.getByText("Cabeçalho")).toBeInTheDocument();
-    expect(screen.getByText("Tem certeza?")).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /cancelar/i }),
-    ).toBeInTheDocument();
-    expect(
-      screen.getByRole("button", { name: /confirmar/i }),
-    ).toBeInTheDocument();
+    expect(screen.getByText("Corpo")).toBeInTheDocument();
   });
 
-  it("renderiza apenas header e content (sem footer)", () => {
+  it("slotNo=2 slots não renderiza footerSlot mesmo quando informado", () => {
     render(
-      <Popover header="Apenas Header" content="E conteúdo" open>
+      <Popover
+        slotNo="2 slots"
+        headerSlot={<span>Cabeçalho</span>}
+        mainSlot={<span>Corpo</span>}
+        footerSlot={<span>Rodapé não deve aparecer</span>}
+        open
+      >
         <Button>Trigger</Button>
       </Popover>,
     );
-    expect(screen.getByText("Apenas Header")).toBeInTheDocument();
-    expect(screen.getByText("E conteúdo")).toBeInTheDocument();
+    expect(screen.queryByText("Rodapé não deve aparecer")).not.toBeInTheDocument();
+  });
+
+  it("slotNo=3 slots renderiza headerSlot, mainSlot e footerSlot", () => {
+    render(
+      <Popover
+        slotNo="3 slots"
+        headerSlot={<span>Cabeçalho</span>}
+        mainSlot={<span>Corpo</span>}
+        footerSlot={<span>Rodapé</span>}
+        open
+      >
+        <Button>Trigger</Button>
+      </Popover>,
+    );
+    expect(screen.getByText("Cabeçalho")).toBeInTheDocument();
+    expect(screen.getByText("Corpo")).toBeInTheDocument();
+    expect(screen.getByText("Rodapé")).toBeInTheDocument();
+  });
+
+  it("placeholder interno aparece quando mainSlot é omitido (1 slot)", () => {
+    render(
+      <Popover slotNo="1 slot" open>
+        <Button>Trigger</Button>
+      </Popover>,
+    );
+    expect(screen.getAllByTestId("ds-popover-slot-placeholder").length).toBeGreaterThanOrEqual(1);
+  });
+
+  it("placeholder aparece para headerSlot omitido em 2 slots", () => {
+    render(
+      <Popover slotNo="2 slots" mainSlot={<span>Corpo</span>} open>
+        <Button>Trigger</Button>
+      </Popover>,
+    );
+    expect(screen.getByTestId("ds-popover-slot-placeholder")).toBeInTheDocument();
+  });
+
+  it("placeholders aparecem para header e footer omitidos em 3 slots", () => {
+    render(
+      <Popover slotNo="3 slots" mainSlot={<span>Corpo</span>} open>
+        <Button>Trigger</Button>
+      </Popover>,
+    );
+    expect(screen.getAllByTestId("ds-popover-slot-placeholder")).toHaveLength(2);
+  });
+
+  it("showArrow=true repassa arrow ao AntdPopover", () => {
+    render(
+      <Popover slotNo="1 slot" mainSlot={<span>Conteúdo</span>} showArrow open>
+        <Button>Trigger</Button>
+      </Popover>,
+    );
+    expect(document.querySelector(".ant-popover-arrow")).toBeInTheDocument();
+  });
+
+  it("showArrow=false omite a seta do AntdPopover", () => {
+    render(
+      <Popover slotNo="1 slot" mainSlot={<span>Conteúdo</span>} showArrow={false} open>
+        <Button>Trigger</Button>
+      </Popover>,
+    );
+    expect(document.querySelector(".ant-popover-arrow")).not.toBeInTheDocument();
+  });
+
+  it("fecha ao pressionar Escape quando aberto (dispara onOpenChange(false))", async () => {
+    const user = userEvent.setup();
+    const onOpenChange = vi.fn();
+    render(
+      <Popover slotNo="1 slot" mainSlot={<span>Conteúdo</span>} open onOpenChange={onOpenChange}>
+        <Button>Trigger</Button>
+      </Popover>,
+    );
+    expect(screen.getByText("Conteúdo")).toBeInTheDocument();
+    await user.keyboard("{Escape}");
+    expect(onOpenChange).toHaveBeenCalledWith(false);
+  });
+
+  it("displayName === Popover", () => {
+    expect(Popover.displayName).toBe("Popover");
   });
 });

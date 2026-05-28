@@ -88,6 +88,10 @@
   --color-opacities-light-0-01: #ffffff00;
   --color-opacities-light-50: #ffffff80;
 
+  /* Slot placeholder (modo desenvolvedor — Figma) */
+  --color-slot-border: #9747ff;
+  --color-slot-label: #c89dff;
+
   /* Text - alias semântico */
   --color-text-dark: var(--color-neutral-800);
   --color-text-disabled: var(--color-neutral-400);
