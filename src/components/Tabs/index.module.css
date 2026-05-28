@@ -91,7 +91,10 @@
   font-weight: 700 !important;
 }
 
+:global(.ds-tabs) :global(.ant-tabs-tab:focus-visible),
+:global(.ds-tabs) :global(.ant-tabs-tab-btn:focus-visible),
 :global(.ds-tabs) :global(.ant-tabs-tab.pseudo-focus-visible) {
+  outline: none !important;
   background: var(--color-neutral-50) !important;
   border-radius: 8px 8px 0 0 !important;
   box-shadow: var(--shadow-focus) !important;
