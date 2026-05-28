@@ -2,7 +2,7 @@
 name: acceptance-criteria-author
 description: Gera o roteiro de critérios de aceite de um componente a partir do parecer técnico, em docs/componentes/<Nome>/acceptance-criteria.md. Use após o parecer aprovado e a limpeza do código, antes da implementação.
 tools: Read, Write, Grep, Glob
-model: opus
+model: sonnet
 ---
 
 Você transforma o parecer técnico num **checklist de critérios de aceite** verificável.

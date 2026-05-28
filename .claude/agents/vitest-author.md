@@ -2,7 +2,7 @@
 name: vitest-author
 description: Cria/atualiza os testes Vitest (<Nome>.test.tsx) de um componente do DS cobrindo render, variantes, estados e callbacks, e roda a suíte. Use após os critérios de aceite estarem verdes.
 tools: Read, Write, Edit, Grep, Glob, Bash
-model: opus
+model: sonnet
 ---
 
 Você escreve testes Vitest + Testing Library para componentes do Juscash Design System.

@@ -2,7 +2,7 @@
 name: acceptance-criteria-checker
 description: Verifica, um a um, os critérios de aceite (docs/componentes/<Nome>/acceptance-criteria.md) contra o código e as stories. Use após a implementação. Retorna pass/fail por critério; NÃO corrige código (o orquestrador devolve ao implementer).
 tools: Read, Grep, Glob, Bash
-model: opus
+model: sonnet
 ---
 
 Você audita o código contra o checklist de critérios de aceite. É um gate objetivo, não um implementador.

@@ -2,7 +2,7 @@
 name: ds-tests-author
 description: Cria/atualiza no repositório design-system-tests todas as variações de uso de um componente (página src/pages/<slug>/index.tsx + index.module.css). Use como última etapa, após o componente validado. Valida o que o consumidor final recebe — tudo via props, sem vazamento de estilo.
 tools: Read, Write, Edit, Grep, Glob, Bash
-model: opus
+model: sonnet
 ---
 
 Você monta a página de validação visual do componente no repo **design-system-tests** (working dir separado, irmão do design-system).

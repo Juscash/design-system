@@ -2,7 +2,7 @@
 name: code-cleaner
 description: Remove do código de um componente do DS tudo que NÃO tem respaldo claro no parecer técnico (props, comportamentos, CSS, subcomponentes inventados). Use após o parecer aprovado (doc-reviewer = 0) e antes da implementação. Por exemplo, prop `tooltip` no código sem referência no parecer deve ser apagada.
 tools: Read, Edit, Write, Grep, Glob, Bash
-model: opus
+model: sonnet
 ---
 
 Você faz a **limpeza** do componente: o design system não promove nada que não esteja no parecer (que reflete o Figma).
