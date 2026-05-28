@@ -1,0 +1,74 @@
+/*
+  Estilos próprios do Pagination. Tokens alinhados ao Figma `4080:17825`.
+
+  Estrutura:
+  - .ds-pagination: classe raiz aplicada ao <AntdPagination> (envolto em <nav>).
+  - .ds-pagination-arrow: botões prev/next (`Anterior`/`Próximo`) min-h 32, padding 4 12,
+     border-radius xl (8px), Inter Regular 13, com ícone de 12px.
+  - .ds-pagination-page: botões numerados w 32, min-h 32, padding 4 12, radius xl.
+     `.ds-pagination-page--active` recebe a borda regular (neutral/300).
+  - .ds-pagination-ellipsis: container 36x36 com radius 8 para o ícone Ellipsis 16px.
+*/
+
+:global(.ds-pagination-arrow),
+:global(.ds-pagination-page) {
+  min-height: 32px;
+  padding: 4px 12px;
+  border-radius: var(--radius-xl);
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--color-text-dark);
+  background: transparent;
+  border: 1px solid transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  justify-content: center;
+}
+
+:global(.ds-pagination-page) {
+  width: 32px;
+}
+
+:global(.ds-pagination-page--active) {
+  border-color: var(--color-border-regular);
+}
+
+:global(.ds-pagination-ellipsis) {
+  width: 36px;
+  height: 36px;
+  border-radius: var(--radius-xl);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-dark);
+}
+
+/* Foco visível — usa o token de sombra de foco em todos os botões. */
+:global(.ds-pagination-arrow:focus-visible),
+:global(.ds-pagination-page:focus-visible),
+:global(.ds-pagination-ellipsis:focus-visible) {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+/* Estado disabled vindo do Antd — aplicamos opacidade aos botões internos. */
+:global(.ds-pagination .ant-pagination-disabled .ds-pagination-arrow),
+:global(.ds-pagination .ant-pagination-disabled .ds-pagination-page),
+:global(.ds-pagination .ant-pagination-disabled .ds-pagination-ellipsis) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Quando o Pagination inteiro está disabled, todos os botões herdam o estado. */
+:global(.ds-pagination.ant-pagination-disabled .ds-pagination-arrow),
+:global(.ds-pagination.ant-pagination-disabled .ds-pagination-page),
+:global(.ds-pagination.ant-pagination-disabled .ds-pagination-ellipsis) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}

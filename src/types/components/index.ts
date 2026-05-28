@@ -19,6 +19,7 @@ export * from "./Loading";
 export * from "./Modal";
 export * from "./Notification";
 export * from "./PageHeader";
+export * from "./Pagination";
 export * from "./Popover";
 export * from "./Radio";
 export * from "./RangePicker";

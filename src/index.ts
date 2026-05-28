@@ -30,8 +30,6 @@ export {
   // Navegação
   Menu,
   type MenuProps,
-  Pagination,
-  type PaginationProps,
   Steps,
   type StepsProps,
   Anchor,
@@ -130,6 +128,8 @@ export {
   type DrawerProps as AntDrawerProps,
   Modal as AntModal,
   type ModalProps as AntModalProps,
+  Pagination as AntPagination,
+  type PaginationProps as AntPaginationProps,
   Popover as AntPopover,
   type PopoverProps as AntPopoverProps,
   Skeleton as AntSkeleton,
