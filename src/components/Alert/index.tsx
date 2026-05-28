@@ -1,182 +1,108 @@
 import React from "react";
-import { Alert as AntdAlert, ConfigProvider } from "antd";
-import type { AlertProps as AntdAlertProps } from "antd";
-import type { ComponentToken } from "antd/es/alert/style";
-import { CircleCheck, CircleX, AlertCircle, Info } from "lucide-react";
-import { designSystemColors, radius, spacing } from "../../theme";
-import { Body1, Body2 } from "../Typography";
-import type { CustomTypographyProps } from "../../types/components/Typography";
-import type { AlertProps, AlertVariant } from "../../types/components/Alert";
+import * as LucideIcons from "lucide-react";
+import type { AlertProps } from "../../types/components/Alert";
+import "./index.module.css";
 
 const ICON_SIZE = 16;
 
-type AlertComponentToken = Partial<ComponentToken> & Record<string, unknown>;
-
-function getNeutralTokens(): AlertComponentToken {
-  return {
-    colorInfoBg: designSystemColors.neutral[50],
-    colorInfoBorder: designSystemColors.neutral[300],
-    colorTextCount: designSystemColors.neutral[500],
-    colorTextHeading: designSystemColors.neutral[800],
-    colorText: designSystemColors.neutral[500],
-    colorIcon: designSystemColors.neutral[800],
-    colorInfo: designSystemColors.neutral[800],
-  };
-}
-
-function getErrorTokens(): AlertComponentToken {
-  return {
-    colorErrorBg: designSystemColors.neutral[50],
-    colorErrorBorder: designSystemColors.neutral[300],
-    colorTextHeading: designSystemColors.feedback.red[500],
-    colorText: designSystemColors.feedback.red[500],
-    colorError: designSystemColors.feedback.red[500],
-  };
-}
-
-function getSuccessTokens(): AlertComponentToken {
-  return {
-    colorSuccessBg: designSystemColors.neutral[50],
-    colorSuccessBorder: designSystemColors.neutral[300],
-    colorTextHeading: designSystemColors.feedback.green[500],
-    colorText: designSystemColors.feedback.green[500],
-    colorSuccess: designSystemColors.feedback.green[500],
-  };
-}
-
-function getInfoTokens(): AlertComponentToken {
-  return {
-    colorInfoBg: designSystemColors.neutral[50],
-    colorInfoBorder: designSystemColors.neutral[300],
-    colorTextHeading: designSystemColors.feedback.blue[500],
-    colorText: designSystemColors.feedback.blue[500],
-    colorInfo: designSystemColors.feedback.blue[500],
-  };
-}
-
-function getWarningTokens(): AlertComponentToken {
-  return {
-    colorWarningBg: designSystemColors.neutral[50],
-    colorWarningBorder: designSystemColors.neutral[300],
-    colorTextHeading: designSystemColors.feedback.yellow[500],
-    colorText: designSystemColors.feedback.yellow[500],
-    colorWarning: designSystemColors.feedback.yellow[500],
-  };
-}
-
-function getVariantTokens(type: AlertVariant): AlertComponentToken {
-  switch (type) {
-    case "neutral":
-      return getNeutralTokens();
-    case "error":
-      return getErrorTokens();
-    case "success":
-      return getSuccessTokens();
-    case "info":
-      return getInfoTokens();
-    case "warning":
-      return getWarningTokens();
-    default:
-      return {};
-  }
-}
-
-function getDefaultIcon(type: AlertVariant): React.ReactElement {
-  const iconProps = { size: ICON_SIZE } as const;
-  switch (type) {
-    case "success":
-      return <CircleCheck {...iconProps} />;
-    case "info":
-      return <Info {...iconProps} />;
-    case "warning":
-      return <AlertCircle {...iconProps} />;
-    case "error":
-      return <CircleX {...iconProps} />;
-    case "neutral":
-    default:
-      return <Info {...iconProps} />;
-  }
-}
-
-function resolveAntdType(type: AlertVariant): AntdAlertProps["type"] {
-  return type === "neutral" ? "info" : (type as AntdAlertProps["type"]);
-}
-
-function resolveTypographyColor(type: AlertVariant): CustomTypographyProps["color"] {
-  return type === "neutral" ? "dark" : (type as CustomTypographyProps["color"]);
-}
-
-function resolveDescriptionColor(type: AlertVariant): CustomTypographyProps["color"] {
-  return type === "neutral" ? "neutral" : (type as CustomTypographyProps["color"]);
-}
-
-type IconElement = React.ReactElement<{ style?: React.CSSProperties }>;
-
 /**
- * Aplica os estilos compostos (margin-top quando há descrição, cor neutra
- * quando o `type` é `neutral`) sobre o ícone resolvido. Retorna `null`/o
- * próprio nó quando o ícone não é um elemento React clonável.
+ * Resolve a prop de ícone em um `ReactNode`. Quando o valor é uma string,
+ * busca o componente correspondente em `lucide-react` (ex.: `"Check"` →
+ * `<Check size={16} />`). Para `ReactNode`, retorna como está.
  */
-function buildIconNode(resolvedIcon: React.ReactNode, type: AlertVariant, hasDescription: boolean): React.ReactNode {
-  if (!resolvedIcon || !React.isValidElement(resolvedIcon)) {
-    return resolvedIcon;
-  }
-  const icon = resolvedIcon as IconElement;
-  const iconColorStyle = type === "neutral" ? { color: designSystemColors.neutral[800] } : {};
-  return React.cloneElement(icon, {
-    style: {
-      ...(hasDescription ? { marginTop: 4 } : {}),
-      ...iconColorStyle,
-      ...(icon.props.style || {}),
-    },
-  });
+function resolveAlertIcon(icon: React.ReactNode | string | null | undefined): React.ReactNode {
+  if (icon === undefined || icon === null) return null;
+  if (typeof icon !== "string") return icon;
+  const registry = LucideIcons as unknown as Record<string, unknown>;
+  const Candidate = registry[icon];
+  if (typeof Candidate !== "function" && typeof Candidate !== "object") return null;
+  const IconComponent = Candidate as React.ComponentType<{ size?: number }>;
+  return <IconComponent size={ICON_SIZE} />;
 }
 
-function buildAlertTheme(type: AlertVariant): NonNullable<React.ComponentProps<typeof ConfigProvider>["theme"]> {
-  return {
-    components: {
-      Alert: {
-        ...getVariantTokens(type),
-        paddingContentVertical: spacing[4],
-        paddingContentHorizontal: spacing[4],
-        borderRadiusLG: radius.xl,
-        withDescriptionIconSize: ICON_SIZE,
-        defaultPadding: `${spacing[4]}px ${spacing[4]}px`,
-        withDescriptionPadding: `${spacing[4]}px ${spacing[4]}px`,
-      },
-    },
-  };
+const ROOT_CLASS = "ds-alert";
+const ROOT_ERROR_CLASS = "ds-alert--error";
+const CONTENT_CLASS = "ds-alert-content";
+const ICON_CLASS = "ds-alert-icon";
+const TEXT_CLASS = "ds-alert-text";
+const LINE_1_CLASS = "ds-alert-line1";
+const LINE_2_CLASS = "ds-alert-line2";
+const BUTTON_CLASS = "ds-alert-button";
+const RIGHT_ICON_CLASS = "ds-alert-right-icon";
+
+const DEFAULT_BUTTON_LABEL = "Label";
+
+/**
+ * Compõe o `className` raiz do componente, agregando a classe base, a
+ * classe modificadora da variante de cor e o `className` extra do consumer.
+ */
+function composeRootClassName(type: AlertProps["type"], extra: string | undefined): string {
+  const classes = [ROOT_CLASS];
+  if (type === "error") {
+    classes.push(ROOT_ERROR_CLASS);
+  }
+  if (extra) {
+    classes.push(extra);
+  }
+  return classes.join(" ");
 }
 
 /**
- * Alert do design system. Aceita as variantes proprietárias `neutral`,
- * `error`, `success`, `info` e `warning`, todas com fundo neutral[50] e
- * borda neutral[300]; o `type` afeta apenas cor do título, descrição e ícone.
+ * Componente `Alert` do design system. Renderiza um container `<div>` com
+ * `role="alert"` contendo: aligner de ícone à esquerda (opcional), bloco
+ * de texto com duas linhas (linha 2 opcional), botão à direita (opcional)
+ * e aligner de ícone à direita (opcional). Conforme dump
+ * `figma/components/alert/design-context-4077-7402.md` (frame 4077:7402).
+ *
+ * Não embrulha o `Alert` do Antd: o `antd/Alert` traz seu próprio header
+ * com fundo colorido, ícones built-in e botão de fechar, que não casam
+ * com o desenho do Figma. O componente é um primitivo visual `<div>`
+ * próprio, com estilo definido em `index.module.css`.
  */
 export function Alert(props: AlertProps): React.ReactElement {
-  const { type = "neutral", showLine2, showButton, showLeftIcon, ...rest } = props;
-  void showButton;
+  const {
+    type = "neutral",
+    children,
+    line2,
+    showLine2 = false,
+    showLeftIcon = true,
+    showRightIcon = false,
+    showButton = false,
+    leftIcon = null,
+    rightIcon = null,
+    buttonLabel = DEFAULT_BUTTON_LABEL,
+    onButtonClick,
+    className,
+    ...rest
+  } = props;
 
-  const finalShowIcon = rest.showIcon ?? showLeftIcon;
-  const hasDescription = !!(rest.description || showLine2);
-  const resolvedIcon = rest.icon || (finalShowIcon ? getDefaultIcon(type) : null);
-  const iconNode = buildIconNode(resolvedIcon, type, hasDescription);
+  const resolvedLeftIcon = resolveAlertIcon(leftIcon);
+  const resolvedRightIcon = resolveAlertIcon(rightIcon);
 
   return (
-    <ConfigProvider theme={buildAlertTheme(type)}>
-      <AntdAlert
-        {...rest}
-        type={resolveAntdType(type)}
-        showIcon={finalShowIcon}
-        icon={iconNode}
-        message={rest.message ? <Body1 color={resolveTypographyColor(type)}>{rest.message}</Body1> : undefined}
-        description={
-          rest.description ? <Body2 color={resolveDescriptionColor(type)}>{rest.description}</Body2> : undefined
-        }
-        className={type === "neutral" ? "ant-alert-neutral" : ""}
-        style={{ ...rest.style }}
-      />
-    </ConfigProvider>
+    <div {...rest} role="alert" className={composeRootClassName(type, className)}>
+      <div className={CONTENT_CLASS}>
+        {showLeftIcon ? (
+          <div className={ICON_CLASS} aria-hidden="true">
+            {resolvedLeftIcon}
+          </div>
+        ) : null}
+        <div className={TEXT_CLASS}>
+          <p className={LINE_1_CLASS}>{children}</p>
+          {showLine2 ? <p className={LINE_2_CLASS}>{line2}</p> : null}
+        </div>
+      </div>
+      {showButton ? (
+        <button className={BUTTON_CLASS} type="button" onClick={onButtonClick}>
+          {buttonLabel}
+        </button>
+      ) : null}
+      {showRightIcon ? (
+        <div className={RIGHT_ICON_CLASS} aria-hidden="true">
+          {resolvedRightIcon}
+        </div>
+      ) : null}
+    </div>
   );
 }
 
