@@ -34,7 +34,7 @@ const meta: Meta<typeof Avatar> = {
     },
     roundness: {
       control: "radio",
-      options: ["round", "roundrect"],
+      options: ["round"],
       description: "Formato do avatar",
     },
     src: {
@@ -77,17 +77,15 @@ export const VariantsGrid: Story = {
         <Avatar dsSize="small" roundness="round" icon={<User size={16} />} />
         <Avatar dsSize="small" roundness="round" src={SAMPLE_IMAGE} />
       </div>
-      {/* Regular roundrect */}
       <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
-        <Avatar dsSize="regular" roundness="roundrect">CN</Avatar>
-        <Avatar dsSize="regular" roundness="roundrect" icon={<User size={20} />} />
-        <Avatar dsSize="regular" roundness="roundrect" src={SAMPLE_IMAGE} />
+        <Avatar dsSize="regular" >CN</Avatar>
+        <Avatar dsSize="regular"  icon={<User size={20} />} />
+        <Avatar dsSize="regular"  src={SAMPLE_IMAGE} />
       </div>
-      {/* Small roundrect */}
       <div style={{ display: "flex", gap: 16, alignItems: "center" }}>
-        <Avatar dsSize="small" roundness="roundrect">CN</Avatar>
-        <Avatar dsSize="small" roundness="roundrect" icon={<User size={16} />} />
-        <Avatar dsSize="small" roundness="roundrect" src={SAMPLE_IMAGE} />
+        <Avatar dsSize="small" >CN</Avatar>
+        <Avatar dsSize="small"  icon={<User size={16} />} />
+        <Avatar dsSize="small"  src={SAMPLE_IMAGE} />
       </div>
     </div>
   ),

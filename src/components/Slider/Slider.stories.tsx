@@ -89,7 +89,7 @@ function Example() {
       table: { category: "Pseudo States" },
     },
   },
-  render: (args) => {
+  render: (args: SliderStoryProps) => {
     const { focus, ...props } = args;
     const pseudoClasses = [focus && "pseudo-focus-visible"].filter(Boolean).join(" ");
     return (
@@ -119,7 +119,7 @@ export const HorizontalRange: Story = {
       },
     },
   },
-  render: (args) => (
+  render: (args: SliderStoryProps) => (
     <div style={{ width: 240, padding: 16 }}>
       <Slider {...(args as React.ComponentProps<typeof Slider>)} />
     </div>
@@ -131,7 +131,7 @@ export const Vertical: Story = {
   parameters: {
     docs: { description: { story: "Slider vertical default — 16×240 com handle em 50%." } },
   },
-  render: (args) => (
+  render: (args: SliderStoryProps) => (
     <div style={{ height: 240, padding: 16 }}>
       <Slider {...(args as React.ComponentProps<typeof Slider>)} />
     </div>
@@ -143,7 +143,7 @@ export const VerticalRange: Story = {
   parameters: {
     docs: { description: { story: "Slider vertical em modo range — dois markers com trilho colorido entre eles." } },
   },
-  render: (args) => (
+  render: (args: SliderStoryProps) => (
     <div style={{ height: 240, padding: 16 }}>
       <Slider {...(args as React.ComponentProps<typeof Slider>)} />
     </div>
