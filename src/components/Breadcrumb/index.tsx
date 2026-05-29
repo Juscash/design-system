@@ -109,7 +109,7 @@ export function Breadcrumb(props: BreadcrumbProps): React.ReactElement {
             colorBgTextHover: "transparent",
           },
         },
-        token: { fontFamily: '"Inter", sans-serif' },
+        token: {},
       }}
     >
       <AntdBreadcrumb
