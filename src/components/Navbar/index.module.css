@@ -1,0 +1,63 @@
+/*
+  Estilos do Navbar. Tokens e dimensões vêm do dump
+  `figma/components/navbar/variables-4146-12875.md` e do JSX espelhado em
+  `design-context-4146-12875.json`:
+
+  - Container: bg `color/neutral/50` (#fafafa), border-bottom 1px
+    `color/border/regular` (#d4d4d4), padding `4 → 16` (web)
+    com `flex / items-center / justify-between`. Em mobile o dump usa
+    `px-[var(--2,8px)] py-[var(--4,16px)]`; reproduzimos via media query
+    no breakpoint `xxs` (320px) conforme tabela de variáveis.
+  - Slots: `logo/button` (left) e `actions` (right) — ambos com
+    `gap-[var(--2,8px)]` e `items-center` no dump.
+  - Sem `font-family` própria — herda do body global (Inter via
+    `theme/global.css`), respeitando a regra "font-family só no global".
+*/
+
+/* Container raiz */
+:global(.ds-navbar) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--spacing-4);
+  background-color: var(--color-neutral-50);
+  border-bottom: 1px solid var(--color-border-regular);
+  box-sizing: border-box;
+  gap: var(--spacing-4);
+}
+
+/* Lado esquerdo (logo + slot extra) */
+:global(.ds-navbar__left) {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  min-width: 0;
+}
+
+/* Brand (logo) — wrapper que mantém o logo alinhado dentro do slot esquerdo */
+:global(.ds-navbar__brand) {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+}
+
+/* Lado direito (actions) */
+:global(.ds-navbar__right) {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  flex-shrink: 0;
+}
+
+/*
+  Mobile: o dump descreve `px-[var(--2,8px)] py-[var(--4,16px)]` no
+  breakpoint `xxs` (320px). Aplicamos abaixo de 480px para acompanhar a
+  primeira faixa do design.
+*/
+@media (max-width: 479px) {
+  :global(.ds-navbar) {
+    padding: var(--spacing-4) var(--spacing-2);
+    gap: var(--spacing-2);
+  }
+}

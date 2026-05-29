@@ -16,6 +16,7 @@ export * from "./EmptyState";
 export * from "./Input";
 export * from "./Loading";
 export * from "./Modal";
+export * from "./Navbar";
 export * from "./Notification";
 export * from "./PageHeader";
 export * from "./Pagination";
