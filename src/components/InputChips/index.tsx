@@ -3,11 +3,14 @@ import { X } from "lucide-react";
 import type { InputChipsProps, InputChipsSize } from "../../types/components/InputChips";
 import "./index.module.css";
 
-const BASE_CLASS = "juscash-input-chips";
+const BASE_CLASS = "ds-input-chips";
+const ROW_CLASS = `${BASE_CLASS}__row`;
 const FIELD_CLASS = `${BASE_CLASS}__field`;
+const CHIPS_CLASS = `${BASE_CLASS}__chips`;
 const CHIP_CLASS = `${BASE_CLASS}__chip`;
 const DEFAULT_PLACEHOLDER = "Digite e aperte enter";
 const REMOVE_ICON_SIZE = 12;
+const REMOVE_ICON_SIZE_SMALL = 10;
 
 interface UseChipsResult {
   chips: string[];
@@ -89,22 +92,37 @@ function useHandlers(args: UseHandlersArgs): HandlersResult {
   return { handleKeyDown, removeAt };
 }
 
+interface ChipRenderArgs {
+  label: string;
+  index: number;
+  size: InputChipsSize;
+  disabled: boolean;
+  onRemove: (index: number) => void;
+}
+
 /**
  * Renderiza um chip individual com botão de remoção (aria-label "Remover {chip}").
+ * O modificador de tamanho garante que o chip acompanhe a altura do input —
+ * regra do Figma `8292:10349`: "As versões X e XS dos chips são ajustadas
+ * para acompanhar a altura do input."
  */
-function renderChip(label: string, index: number, disabled: boolean, onRemove: (index: number) => void): React.ReactElement {
-  const chipClass = [CHIP_CLASS, disabled ? `${CHIP_CLASS}--disabled` : ""].filter(Boolean).join(" ");
+function renderChip(args: ChipRenderArgs): React.ReactElement {
+  const { label, index, size, disabled, onRemove } = args;
+  const chipClass = [CHIP_CLASS, `${CHIP_CLASS}--${size}`, disabled ? `${CHIP_CLASS}--disabled` : ""]
+    .filter(Boolean)
+    .join(" ");
+  const iconSize = size === "xs" ? REMOVE_ICON_SIZE_SMALL : REMOVE_ICON_SIZE;
   return (
     <span key={`${label}-${index}`} className={chipClass}>
-      <span>{label}</span>
+      <span className={`${CHIP_CLASS}-label`}>{label}</span>
       <button
         type="button"
-        className={`${BASE_CLASS}__chip-remove`}
+        className={`${CHIP_CLASS}-remove`}
         aria-label={`Remover ${label}`}
         disabled={disabled}
         onClick={() => onRemove(index)}
       >
-        <X size={REMOVE_ICON_SIZE} aria-hidden="true" />
+        <X size={iconSize} aria-hidden="true" />
       </button>
     </span>
   );
@@ -114,8 +132,10 @@ function renderChip(label: string, index: number, disabled: boolean, onRemove: (
  * `InputChips` — campo de entrada que cria chips ao pressionar Enter.
  * Cada chip pode ser removido pelo botão `X` ou via Backspace com input vazio.
  *
- * Spec Figma `8292:10349` — label Inter Regular 16 `text/dark` acima do input;
- * field 36h, bg `neutral/50`, border `border/regular`, radius `xl` (8),
+ * Spec Figma `8292:10349` — label Inter Regular 16 `text/dark` acima do
+ * conjunto; em seguida uma linha (flex row) com o input à esquerda e os
+ * chips como irmãos à direita. Os chips NÃO ficam dentro do input.
+ * Field 36h, bg `neutral/50`, border `border/regular`, radius `xl` (8),
  * padding `spacing/2 spacing/3`. Placeholder `body/02 text/soft`.
  */
 export function InputChips(props: InputChipsProps): React.ReactElement {
@@ -138,8 +158,7 @@ export function InputChips(props: InputChipsProps): React.ReactElement {
   const { handleKeyDown, removeAt } = useHandlers({ chips, setChips, inputValue, setInputValue, disabled });
 
   const rootClassName = [BASE_CLASS, className].filter(Boolean).join(" ");
-  const sizeModifier: InputChipsSize = size;
-  const fieldClassName = [FIELD_CLASS, `${FIELD_CLASS}--${sizeModifier}`, disabled ? `${FIELD_CLASS}--disabled` : ""]
+  const fieldClassName = [FIELD_CLASS, `${FIELD_CLASS}--${size}`, disabled ? `${FIELD_CLASS}--disabled` : ""]
     .filter(Boolean)
     .join(" ");
 
@@ -150,18 +169,24 @@ export function InputChips(props: InputChipsProps): React.ReactElement {
           {label}
         </label>
       : null}
-      <div className={fieldClassName}>
-        {chips.map((chip, index) => renderChip(chip, index, disabled, removeAt))}
-        <input
-          id={inputId}
-          type="text"
-          className={`${BASE_CLASS}__input`}
-          placeholder={placeholder}
-          value={inputValue}
-          disabled={disabled}
-          onChange={(event) => setInputValue(event.target.value)}
-          onKeyDown={handleKeyDown}
-        />
+      <div className={ROW_CLASS}>
+        <div className={fieldClassName}>
+          <input
+            id={inputId}
+            type="text"
+            className={`${BASE_CLASS}__input`}
+            placeholder={placeholder}
+            value={inputValue}
+            disabled={disabled}
+            onChange={(event) => setInputValue(event.target.value)}
+            onKeyDown={handleKeyDown}
+          />
+        </div>
+        {chips.length > 0 ?
+          <div className={CHIPS_CLASS}>
+            {chips.map((chip, index) => renderChip({ label: chip, index, size, disabled, onRemove: removeAt }))}
+          </div>
+        : null}
       </div>
     </div>
   );

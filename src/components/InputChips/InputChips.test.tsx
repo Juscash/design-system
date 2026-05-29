@@ -94,10 +94,26 @@ describe("InputChips", () => {
     const sizes = ["xs", "s", "m", "l"] as const;
     for (const size of sizes) {
       const { container, unmount } = render(<InputChips size={size} />);
-      const field = container.querySelector(`.juscash-input-chips__field--${size}`);
+      const field = container.querySelector(`.ds-input-chips__field--${size}`);
       expect(field).not.toBeNull();
       unmount();
     }
+  });
+
+  it("applies the size modifier on chips so they follow the input height", () => {
+    const { container } = render(<InputChips size="xs" defaultValue={["a"]} />);
+    const chip = container.querySelector(".ds-input-chips__chip--xs");
+    expect(chip).not.toBeNull();
+  });
+
+  it("renders chips as a SIBLING of the input field (not inside it)", () => {
+    const { container } = render(<InputChips defaultValue={["a"]} />);
+    const field = container.querySelector(".ds-input-chips__field");
+    const chips = container.querySelector(".ds-input-chips__chips");
+    expect(field).not.toBeNull();
+    expect(chips).not.toBeNull();
+    expect(field?.contains(chips ?? null)).toBe(false);
+    expect(field?.parentElement).toBe(chips?.parentElement);
   });
 
   it("supports controlled mode (value + onChange)", () => {
@@ -139,7 +155,7 @@ describe("InputChips", () => {
 
   it("applies a custom className to the root", () => {
     const { container } = render(<InputChips className="custom-cls" />);
-    const root = container.querySelector(".juscash-input-chips");
+    const root = container.querySelector(".ds-input-chips");
     expect(root?.className).toMatch(/custom-cls/);
   });
 

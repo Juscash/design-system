@@ -20,6 +20,7 @@ export * from "./KpiCard";
 export * from "./Loading";
 export * from "./MenuCombobox";
 export * from "./Modal";
+export * from "./NavigationMenu";
 export * from "./Notification";
 export * from "./PageHeader";
 export * from "./Pagination";
