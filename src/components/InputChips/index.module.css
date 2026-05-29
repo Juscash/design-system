@@ -1,0 +1,179 @@
+/*
+  Estilos próprios do InputChips. Classes envoltas em `:global(...)` para
+  permanecerem globais após o processamento do Vite (Storybook) e do
+  pós-processamento do `tsup` (ver `tsup.config.ts`).
+
+  Estrutura (Figma 8292:10349):
+    .ds-input-chips                : raiz (coluna: label + row).
+    .ds-input-chips__label         : label Inter 16 text/dark.
+    .ds-input-chips__row           : flex row — input + chips IRMÃOS.
+    .ds-input-chips__field         : wrapper do input (bg neutral/50, border, radius xl).
+    .ds-input-chips__field--xs|s|m|l
+    .ds-input-chips__field--disabled
+    .ds-input-chips__input         : input nativo (sem borda, transparente).
+    .ds-input-chips__chips         : container dos chips (irmão do field).
+    .ds-input-chips__chip          : chip individual (acompanha altura do field).
+    .ds-input-chips__chip--xs|s|m|l
+    .ds-input-chips__chip--disabled
+    .ds-input-chips__chip-remove   : botão X interno do chip.
+*/
+
+:global(.ds-input-chips) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  width: 100%;
+}
+
+:global(.ds-input-chips__label) {
+  color: var(--color-text-dark);
+  font-size: var(--font-body-1-size);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height);
+}
+
+:global(.ds-input-chips__row) {
+  align-items: center;
+  display: flex;
+  flex-wrap: nowrap;
+  gap: var(--spacing-2);
+  width: 100%;
+}
+
+:global(.ds-input-chips__field) {
+  align-items: center;
+  background-color: var(--color-neutral-50);
+  border: 1px solid var(--color-border-regular);
+  border-radius: var(--radius-xl);
+  display: flex;
+  flex: 1 1 0;
+  min-width: 0;
+  padding: var(--spacing-2) var(--spacing-3);
+  transition: box-shadow 0.2s ease;
+}
+
+:global(.ds-input-chips__field--xs) {
+  height: 24px;
+  padding: 0 var(--spacing-3);
+}
+
+:global(.ds-input-chips__field--s) {
+  height: 32px;
+}
+
+:global(.ds-input-chips__field--m) {
+  height: 36px;
+}
+
+:global(.ds-input-chips__field--l) {
+  height: 40px;
+}
+
+:global(.ds-input-chips__field:focus-within) {
+  box-shadow: var(--shadow-focus);
+}
+
+:global(.ds-input-chips__field--disabled) {
+  background-color: var(--color-neutral-50);
+  border-color: var(--color-border-disabled);
+  cursor: not-allowed;
+}
+
+:global(.ds-input-chips__field--disabled:focus-within) {
+  box-shadow: none;
+}
+
+:global(.ds-input-chips__input) {
+  background: transparent;
+  border: 0;
+  color: var(--color-text-dark);
+  flex: 1 1 auto;
+  font-size: var(--font-body-2-size);
+  line-height: var(--font-line-height);
+  min-width: 0;
+  outline: none;
+  padding: 0;
+  width: 100%;
+}
+
+:global(.ds-input-chips__input::placeholder) {
+  color: var(--color-text-soft);
+}
+
+:global(.ds-input-chips__input:disabled) {
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
+
+:global(.ds-input-chips__chips) {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1);
+}
+
+:global(.ds-input-chips__chip) {
+  align-items: center;
+  background-color: var(--color-neutral-50);
+  border: 1px solid var(--color-border-regular);
+  border-radius: var(--radius-xl);
+  color: var(--color-text-dark);
+  display: inline-flex;
+  font-size: var(--font-body-2-size);
+  gap: var(--spacing-1);
+  line-height: 1;
+  padding: 0 var(--spacing-2);
+}
+
+:global(.ds-input-chips__chip--xs) {
+  font-size: 11px;
+  height: 24px;
+  padding: 0 var(--spacing-1);
+}
+
+:global(.ds-input-chips__chip--s) {
+  font-size: 12px;
+  height: 24px;
+}
+
+:global(.ds-input-chips__chip--m) {
+  font-size: var(--font-body-2-size);
+  height: 28px;
+}
+
+:global(.ds-input-chips__chip--l) {
+  font-size: var(--font-body-2-size);
+  height: 32px;
+}
+
+:global(.ds-input-chips__chip--disabled) {
+  border-color: var(--color-border-disabled);
+  color: var(--color-text-disabled);
+}
+
+:global(.ds-input-chips__chip-label) {
+  white-space: nowrap;
+}
+
+:global(.ds-input-chips__chip-remove) {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-md);
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  height: 16px;
+  justify-content: center;
+  padding: 0;
+  width: 16px;
+}
+
+:global(.ds-input-chips__chip-remove:focus-visible) {
+  box-shadow: var(--shadow-focus);
+  outline: none;
+}
+
+:global(.ds-input-chips__chip-remove:disabled) {
+  cursor: not-allowed;
+}

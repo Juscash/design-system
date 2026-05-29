@@ -1,0 +1,99 @@
+/*
+  Estilos próprios do Carousel da JusCash. Os seletores `:global(...)` são
+  necessários porque o Antd renderiza o slick em uma árvore que escapa do
+  CSS Module por escopo, e as classes do wrapper (ds-carousel-root,
+  ds-carousel-arrow) são aplicadas como strings literais no componente.
+*/
+
+:global(.ds-carousel-root) {
+  position: relative;
+  margin: 0 40px;
+  padding-bottom: 30px;
+}
+
+:global(.ds-carousel-arrow) {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 10;
+  background-color: transparent;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  padding: 4px 8px;
+  color: var(--color-neutral-800);
+}
+
+:global(.ds-carousel-arrow:hover) {
+  background-color: var(--color-neutral-50);
+}
+
+:global(.ds-carousel-arrow:focus-visible) {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+:global(.ant-carousel) :global(.slick-slide) {
+  text-align: center;
+  height: auto;
+  background: transparent;
+  overflow: hidden;
+}
+
+:global(.ant-carousel) :global(.slick-slide) > div {
+  padding: 0 8px;
+}
+
+/*
+  Container da paginação (dots): conforme dump 4260:12032 — padding 4, gap 4,
+  background color/opacities/light/50%, radius xl (8).
+*/
+:global(.ds-carousel-root) :global(.slick-dots) {
+  position: absolute;
+  bottom: -25px !important;
+  left: 0;
+  right: 0;
+  display: inline-flex !important;
+  justify-content: center;
+  align-items: center;
+  padding: var(--spacing-1);
+  margin: 0 auto;
+  list-style: none;
+  background: var(--color-opacities-light-50);
+  border-radius: var(--radius-xl);
+  width: fit-content;
+  gap: var(--spacing-1);
+}
+
+/* Dots — todos 6×6, conforme dump (size-[6px] em todos os 4 estados). */
+:global(.ds-carousel-root) :global(.slick-dots li),
+:global(.ds-carousel-root) :global(.slick-dots li button) {
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+}
+
+:global(.ds-carousel-root) :global(.slick-dots li) {
+  margin: 0;
+  display: inline-block;
+}
+
+:global(.ds-carousel-root) :global(.slick-dots li button) {
+  background: var(--color-neutral-400) !important;
+  opacity: 1 !important;
+  transition: background 0.3s;
+  border: none;
+}
+
+:global(.ds-carousel-root) :global(.slick-dots li.slick-active) {
+  width: 6px;
+}
+
+:global(.ds-carousel-root) :global(.slick-dots li.slick-active button) {
+  background: var(--color-neutral-800) !important;
+}

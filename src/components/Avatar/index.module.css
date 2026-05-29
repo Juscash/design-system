@@ -1,0 +1,64 @@
+/*
+  Estilos próprios do Avatar e Avatar Menu. As classes vivem aqui (não em
+  theme/global.css) seguindo a regra do CLAUDE.md.
+
+  Estrutura:
+    - .ds-avatar               : avatar (puro, sem menu)
+    - .ds-avatar-menu          : botão wrapper (variante avatarMenu)
+    - .ds-avatar-menu--open    : modificador aplicado quando o menu está aberto
+*/
+
+:global(.ds-avatar-menu) {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 2px;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  border-radius: var(--radius-full, 9999px);
+  color: var(--color-text-dark, #262626);
+  font: inherit;
+  transition:
+    box-shadow 120ms ease-out,
+    background 120ms ease-out;
+}
+
+:global(.ds-avatar-menu:focus-visible) {
+  background: var(--color-neutral-50, #fafafa);
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-neutral-300, #d4d4d4);
+}
+
+/*
+  Avatar de overflow do AvatarGroup ("+N") — Antd usa cinza translúcido com
+  texto branco (contraste insuficiente, 1.89:1). Aqui alinhamos ao restante
+  dos avatares: bg neutral/200 + text/dark, garantindo contraste AA.
+*/
+:global(.ant-avatar-group) :global(.ant-popover-open),
+:global(.ant-avatar-group) :global(.ant-avatar-group-popover-open) {
+  background-color: var(--color-neutral-200, #e5e5e5) !important;
+  color: var(--color-text-dark, #262626) !important;
+  border: 1px solid var(--color-neutral-50, #fafafa) !important;
+  font-weight: 700;
+}
+
+/* Versão mais ampla para pegar o "+N" do AvatarGroup independentemente da
+   classe Antd em uso. Atinge qualquer .ant-avatar dentro do group que
+   contenha apenas texto sem prefixo (last child). */
+:global(.ant-avatar-group) > :global(.ant-avatar):last-child {
+  background-color: var(--color-neutral-200, #e5e5e5) !important;
+  color: var(--color-text-dark, #262626) !important;
+  border: 1px solid var(--color-neutral-50, #fafafa) !important;
+}
+
+/* Apenas o chevron — não afeta outros SVGs (ex.: ícone User dentro do avatar). */
+:global(.ds-avatar-menu__chevron) {
+  transition: transform 150ms ease-out;
+  color: var(--color-text-dark, #262626);
+}
+
+/* Quando o menu está aberto, o chevron rotaciona 180deg. */
+:global(.ds-avatar-menu--open) :global(.ds-avatar-menu__chevron) {
+  transform: rotate(180deg);
+}

@@ -1,0 +1,281 @@
+/*
+  Estilos do Sidebar. Tokens e dimensões vêm do dump
+  `figma/components/sidebar/sparse-metadata-4080-13321.md`:
+
+  - Sidebar container: 240px expanded, 72px collapsed (matriz 4080:14598).
+  - Sidebar item 1st level: padding 8 12, radius xl, font body/02 (13).
+  - Sidebar item collapsed: 88x144 — ícone centralizado.
+  - Sidebar item 2nd level: 208x136, radius xl.
+  - Sidebar group label: text/soft 13 (caps no expanded, separador no collapsed).
+  - Sidebar mini button: 32x32, radius md.
+
+  Sem `font-family` própria — herda do body global (Inter via global.css).
+*/
+
+/* ============================================
+   CONTAINER (<aside>)
+   ============================================ */
+:global(.ds-sidebar) {
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  padding: var(--spacing-3);
+  background-color: var(--color-neutral-50);
+  border-right: 1px solid var(--color-border-regular);
+  box-sizing: border-box;
+  transition: width 200ms ease-in-out;
+}
+
+:global(.ds-sidebar--collapsed) {
+  width: 72px;
+  padding: var(--spacing-3) var(--spacing-2);
+  align-items: center;
+}
+
+/* Variantes — diferenciadas por borda/cor de fundo conforme dump */
+:global(.ds-sidebar--juscash) {
+  background-color: var(--color-neutral-50);
+}
+
+:global(.ds-sidebar--sij) {
+  background-color: var(--color-neutral-50);
+  border-right-color: var(--color-neutral-200);
+}
+
+:global(.ds-sidebar--prompt-tester) {
+  background-color: var(--color-neutral-100);
+  border-right-color: var(--color-neutral-300);
+}
+
+:global(.ds-sidebar__list) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+/* ============================================
+   ITEM (1º nível)
+   padding 8 12, radius xl, font body/02 (13).
+   ============================================ */
+:global(.ds-sidebar-item__wrapper) {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+:global(.ds-sidebar-item) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-2);
+  width: 100%;
+  min-height: 32px;
+  padding: var(--spacing-2) var(--spacing-3);
+  border-radius: var(--radius-xl);
+  background: transparent;
+  border: none;
+  font-size: var(--font-body-2-size);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height);
+  color: var(--color-text-dark);
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  outline: none;
+  box-sizing: border-box;
+  transition: background-color 120ms ease-in-out, box-shadow 120ms ease-in-out;
+}
+
+:global(.ds-sidebar-item):hover {
+  background-color: var(--color-neutral-100);
+}
+
+:global(.ds-sidebar-item):focus-visible {
+  box-shadow: var(--shadow-focus);
+}
+
+:global(.ds-sidebar-item--active) {
+  background-color: var(--color-neutral-100);
+  color: var(--color-text-dark);
+}
+
+/* Variante colapsada — 88x144 (ícone empilhado + tooltip via title) */
+:global(.ds-sidebar-item--collapsed) {
+  flex-direction: column;
+  justify-content: center;
+  width: 48px;
+  height: 48px;
+  min-height: 48px;
+  padding: var(--spacing-2);
+  gap: 0;
+}
+
+:global(.ds-sidebar-item__icon) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: currentColor;
+}
+
+:global(.ds-sidebar-item__label) {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+:global(.ds-sidebar-item__badge) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 20px;
+  padding: 0 var(--spacing-2);
+  border-radius: var(--radius-full);
+  background-color: var(--color-brand-primary-600);
+  color: var(--color-text-light);
+  font-size: var(--font-caption-size);
+  font-weight: 500;
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+:global(.ds-sidebar-item__chevron) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: currentColor;
+  transition: transform 120ms ease-in-out;
+}
+
+:global(.ds-sidebar-item__chevron--open) {
+  transform: rotate(180deg);
+}
+
+/* ============================================
+   SUBMENU (2º nível) — Sidebar item expanded 2nd level (4080:10277)
+   ============================================ */
+:global(.ds-sidebar-item__submenu) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  list-style: none;
+  margin: var(--spacing-1) 0 0 0;
+  padding: 0 0 0 var(--spacing-6);
+}
+
+:global(.ds-sidebar-subitem__wrapper) {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+:global(.ds-sidebar-subitem) {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  min-height: 28px;
+  padding: var(--spacing-1) var(--spacing-3);
+  border: none;
+  background: transparent;
+  border-radius: var(--radius-xl);
+  font-size: var(--font-body-2-size);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height);
+  color: var(--color-text-soft);
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  outline: none;
+  box-sizing: border-box;
+  transition: background-color 120ms ease-in-out, color 120ms ease-in-out, box-shadow 120ms ease-in-out;
+}
+
+:global(.ds-sidebar-subitem):hover {
+  background-color: var(--color-neutral-100);
+  color: var(--color-text-dark);
+}
+
+:global(.ds-sidebar-subitem):focus-visible {
+  box-shadow: var(--shadow-focus);
+}
+
+:global(.ds-sidebar-subitem--active) {
+  color: var(--color-text-dark);
+  font-weight: 500;
+}
+
+:global(.ds-sidebar-subitem__label) {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================
+   GROUP LABEL (Sidebar group label 4080:10290)
+   ============================================ */
+:global(.ds-sidebar-group-label) {
+  list-style: none;
+  margin: var(--spacing-2) 0 var(--spacing-1) 0;
+  padding: 0 var(--spacing-3);
+}
+
+:global(.ds-sidebar-group-label__text) {
+  display: inline-block;
+  font-size: var(--font-caption-size);
+  font-weight: 500;
+  line-height: var(--font-line-height);
+  color: var(--color-text-soft);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+:global(.ds-sidebar-group-label--collapsed) {
+  width: 32px;
+  margin: var(--spacing-2) auto;
+  padding: 0;
+  border-top: 1px solid var(--color-border-regular);
+}
+
+/* ============================================
+   TOGGLE BUTTON (Sidebar mini button 4080:10304)
+   32x32, radius md.
+   ============================================ */
+:global(.ds-sidebar-toggle) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: 1px solid var(--color-border-regular);
+  border-radius: var(--radius-md);
+  background-color: var(--color-neutral-50);
+  color: var(--color-text-dark);
+  cursor: pointer;
+  outline: none;
+  box-sizing: border-box;
+  transition: background-color 120ms ease-in-out, box-shadow 120ms ease-in-out;
+}
+
+:global(.ds-sidebar-toggle):hover {
+  background-color: var(--color-neutral-100);
+}
+
+:global(.ds-sidebar-toggle):focus-visible {
+  box-shadow: var(--shadow-focus);
+}
+
+:global(.ds-sidebar-toggle):active {
+  background-color: var(--color-neutral-200);
+}

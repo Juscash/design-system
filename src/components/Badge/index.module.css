@@ -1,0 +1,13 @@
+/*
+  Estilos próprios do Badge. Foco real no `<span>` interno
+  (`.juscash-badge`) — aplica-se em qualquer foco (clique, Tab,
+  programático). O consumer torna o badge focável passando `tabIndex={0}`
+  ou envolvendo em `<button>`/`<a>`.
+*/
+
+:global(.juscash-badge:focus),
+:global(.juscash-badge:focus-visible) {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-neutral-300, #d4d4d4);
+  transition: box-shadow 120ms ease-out;
+}

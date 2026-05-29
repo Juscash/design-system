@@ -1,0 +1,111 @@
+/*
+  Estilos próprios do Switch. Scoped via `.ds-switch` aplicada ao componente.
+*/
+
+/* Background do track unchecked — Figma define `neutral.200` (#e5e5e5).
+   Antd default usa `colorTextQuaternary` (#bfbfbf), daí o override. */
+:global(.ds-switch:not(.ant-switch-checked):not(.ant-switch-disabled)) {
+  background-color: var(--color-neutral-200) !important;
+}
+
+/* Os labels internos (`checkedChildren`/`unCheckedChildren`) não fazem
+   parte da especificação do Figma — são props nativas do Antd herdadas.
+   Quando usados, sofrem contraste insuficiente sobre o track claro:
+   este override força cor escura nos inner labels enquanto unchecked
+   para que, se usados, ainda passem WCAG 4.5:1. */
+:global(.ds-switch:not(.ant-switch-checked) .ant-switch-inner-unchecked),
+:global(.ds-switch:not(.ant-switch-checked) .ant-switch-inner-checked) {
+  color: var(--color-neutral-700) !important;
+}
+
+/* Foco visual via pseudo-class do Storybook (addon-pseudo-states). */
+:global(.ds-switch.pseudo-focus-visible) {
+  box-shadow: var(--shadow-focus) !important;
+  outline: none !important;
+}
+
+/* Foco real via teclado — alinha ao mesmo visual da pseudo-class. */
+:global(.ds-switch:not(.ant-switch-disabled):focus-visible) {
+  box-shadow: var(--shadow-focus) !important;
+  outline: none !important;
+}
+
+/* ============================================================
+   RICH — card 240×44 com label e secondary text (Figma 4062:5434)
+   `.ds-switch-rich` é aplicado a um `<label>` wrapper externo. O
+   click no label propaga para o `<button class="ant-switch">` interno
+   via JS no componente (label nativo só funciona com <input>).
+   ============================================================ */
+
+:global(.ds-switch-rich) {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  padding: 6px var(--spacing-3);
+  border: 1px solid var(--color-border-regular);
+  border-radius: var(--radius-xl);
+  background-color: var(--color-neutral-50);
+  transition: background-color 0.15s ease-in-out;
+  cursor: pointer;
+  width: 100%;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+
+/* Quando há `secondaryText` (duas linhas), alinha pelo topo. */
+:global(.ds-switch-rich:has(.ds-switch-rich__secondary)) {
+  align-items: flex-start;
+}
+
+:global(.ds-switch-rich:hover) {
+  background-color: var(--color-neutral-100);
+}
+
+:global(.ds-switch-rich:has(.ant-switch.ant-switch-checked)) {
+  background-color: var(--color-neutral-100);
+}
+
+:global(.ds-switch-rich--disabled) {
+  border-color: var(--color-border-disabled);
+  cursor: not-allowed;
+}
+
+/* Apenas com secondary text empurra o switch para alinhar com a primeira linha. */
+:global(.ds-switch-rich:has(.ds-switch-rich__secondary) .ant-switch) {
+  margin-top: 4px;
+}
+
+:global(.ds-switch-rich .ant-switch) {
+  flex: 0 0 auto;
+}
+
+:global(.ds-switch-rich__content) {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+:global(.ds-switch-rich__label) {
+  font-size: var(--font-body-2-size);
+  font-weight: 400;
+  line-height: var(--font-line-height);
+  color: var(--color-text-dark);
+}
+
+:global(.ds-switch-rich__secondary) {
+  font-size: var(--font-caption-size);
+  font-weight: 400;
+  line-height: var(--font-line-height);
+  color: var(--color-text-soft);
+}
+
+/* Truncate dinâmico do label e secondary no modo rich + truncate. */
+:global(.ds-switch-rich--truncate .ds-switch-rich__label),
+:global(.ds-switch-rich--truncate .ds-switch-rich__secondary) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

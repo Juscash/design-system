@@ -1,0 +1,100 @@
+/*
+  Estilos próprios do PageHeader. As classes vivem aqui (não em
+  `theme/global.css`) seguindo a regra do `CLAUDE.md`.
+
+  Convenção do projeto: `index.module.css` é processado pelo Vite (no
+  Storybook) e por um plugin esbuild em `tsup.config.ts` que remove o
+  wrapper `:global(...)` quando a lib é publicada. Por isso é seguro
+  declarar os seletores envoltos em `:global(...)` — em ambos os
+  ambientes o seletor interno é mantido global.
+
+  Classes:
+    - `.ds-page-header-card`         : raiz (passada ao Card).
+    - `.ds-page-header`              : wrapper interno do conteúdo.
+    - `.ds-page-header__title-area`  : coluna com título + descrição.
+    - `.ds-page-header__title`       : heading com tokens do DS.
+    - `.ds-page-header__description` : parágrafo de subtítulo.
+    - `.ds-page-header__actions`     : slot de ações.
+    - `.ds-page-header--stacked`     : modificador layout empilhado.
+    - `.ds-page-header--responsive`  : modificador layout responsivo.
+*/
+
+/*
+  Background do card raiz: usa `--color-neutral-50` (#fafafa) — a foundation
+  mais próxima de #ffffff disponível. Não há token sólido `#ffffff` no
+  design system; quando a UX adicionar um, basta trocar esta variável.
+*/
+:global(.ds-page-header-card.ant-card) {
+  background-color: var(--color-neutral-50);
+}
+
+:global(.ds-page-header-card.ant-card) :global(.ant-card-body) {
+  background-color: var(--color-neutral-50);
+}
+
+:global(.ds-page-header) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-4);
+  width: 100%;
+}
+
+:global(.ds-page-header__title-area) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+:global(.ds-page-header__title) {
+  margin: 0;
+  font-size: var(--font-heading-6-size);
+  line-height: var(--font-line-height);
+  font-weight: 700;
+  color: var(--color-text-dark);
+  letter-spacing: var(--font-letter-spacing);
+  word-break: break-word;
+}
+
+:global(.ds-page-header__description) {
+  margin: 0;
+  font-size: var(--font-body-1-size);
+  line-height: var(--font-line-height);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-dark);
+  letter-spacing: var(--font-letter-spacing);
+  word-break: break-word;
+}
+
+:global(.ds-page-header__actions) {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  flex: 0 0 auto;
+}
+
+/* Layout empilhado: ações no topo, conteúdo embaixo. */
+:global(.ds-page-header--stacked) {
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--spacing-4);
+}
+
+:global(.ds-page-header--stacked .ds-page-header__actions) {
+  order: -1;
+}
+
+/* Responsivo: aplica o empilhamento somente abaixo do breakpoint `s` (768px). */
+@media (max-width: 767px) {
+  :global(.ds-page-header--responsive) {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--spacing-4);
+  }
+
+  :global(.ds-page-header--responsive .ds-page-header__actions) {
+    order: -1;
+  }
+}

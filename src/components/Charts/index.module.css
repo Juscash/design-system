@@ -1,0 +1,124 @@
+/*
+  Estilos do Charts — só o `Charts.Tooltip` (card visual) tem CSS próprio.
+  Os wrappers de gráficos delegam visual ao `@ant-design/plots`; a única
+  customização é a paleta de cores via prop `scale.color.range`.
+
+  Spec: figma/components/charts/design-context-4098-12198.md
+  - Container: bg neutral/50 + border regular + radius 8 + px-12 py-8.
+  - Variant 1: w-128 flex-col, gap 8 entre título e linhas, gap 4 entre linhas.
+  - Variant 2: w-128 flex-row gap-8 items-center, indicator square 10×10.
+  - Variant 3: w-124 flex-row gap-12 items-center, divider 3×32.
+*/
+
+:global(.juscash-charts-tooltip) {
+  background-color: var(--color-neutral-50);
+  border: 1px solid var(--color-border-regular);
+  border-radius: var(--radius-xl);
+  padding: var(--spacing-2) var(--spacing-3);
+  display: flex;
+  box-sizing: border-box;
+}
+
+:global(.juscash-charts-tooltip--v1) {
+  width: 128px;
+  flex-direction: column;
+  gap: var(--spacing-2);
+}
+
+:global(.juscash-charts-tooltip--v2) {
+  width: 128px;
+  flex-direction: row;
+  gap: var(--spacing-2);
+  align-items: center;
+}
+
+:global(.juscash-charts-tooltip--v3) {
+  width: 124px;
+  flex-direction: row;
+  gap: var(--spacing-3);
+  align-items: center;
+}
+
+/* Título — body/02 13 bold */
+:global(.juscash-charts-tooltip__title) {
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-text-dark);
+  margin: 0;
+}
+
+/* Lista de linhas da variant 1 (column stack). */
+:global(.juscash-charts-tooltip__rows) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+}
+
+/* Cada linha label+value alinhada à esquerda com indicador vertical. */
+:global(.juscash-charts-tooltip__row) {
+  display: flex;
+  align-items: center;
+  gap: var(--spacing-2);
+}
+
+/* Indicador 3×11 (vertical bar) — variant 1. */
+:global(.juscash-charts-tooltip__bar) {
+  flex-shrink: 0;
+  width: 3px;
+  height: 11px;
+  border-radius: var(--radius-md);
+}
+
+/* Indicador square 10×10 — variant 2. */
+:global(.juscash-charts-tooltip__square) {
+  flex-shrink: 0;
+  width: 10px;
+  height: 10px;
+  border-radius: 2px;
+}
+
+/* Divider 3×32 — variant 3 (lado esquerdo). */
+:global(.juscash-charts-tooltip__divider) {
+  flex-shrink: 0;
+  width: 3px;
+  height: 32px;
+  border-radius: var(--radius-md);
+}
+
+/* Stack vertical de title + label + value usado na variant 3. */
+:global(.juscash-charts-tooltip__stack) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  flex: 1;
+  min-width: 0;
+}
+
+/* Linha label+value na variant 2/3 — texto 10. */
+:global(.juscash-charts-tooltip__label) {
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--color-text-soft);
+  flex: 1;
+  min-width: 0;
+}
+
+/* Value — caption/01 10 bold. */
+:global(.juscash-charts-tooltip__value) {
+  font-size: 10px;
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-text-dark);
+}
+
+/* Variant 2: label + value lado a lado, alinhados pela baseline. */
+:global(.juscash-charts-tooltip--v2 .juscash-charts-tooltip__label) {
+  flex: 0 0 auto;
+}
+
+/* Variant 3: dentro do stack, label e value em coluna. */
+:global(.juscash-charts-tooltip--v3 .juscash-charts-tooltip__stack .juscash-charts-tooltip__label) {
+  flex: 0 0 auto;
+}

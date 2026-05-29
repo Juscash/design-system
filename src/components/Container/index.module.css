@@ -1,0 +1,42 @@
+/*
+  Estilos do Container — área útil de conteúdo dentro do layout
+  (logo após sidebar/header). Fonte: dump
+  figma/fundamentos/container/design-context-8347-11528.json e
+  src/theme/foundations/container/index.ts.
+
+  - Padding horizontal e superior: 24px em todos os modos (token
+    container.{system,site}.paddingX e .paddingTop).
+  - Variante "product" (Demais produtos): fluido até 1919px; a partir
+    de 1920px assume max-width 1800px (container.system.maxWidth).
+  - Variante "site": fluido até 1365px; a partir de 1366px assume
+    max-width 1086px (container.site.maxWidth).
+  - margin-left/right: auto centraliza o conteúdo quando o max-width
+    é atingido.
+
+  Seletores em :global porque o bundle do design system é consumido
+  por apps Next.js (App Router) — manter classes simples e globais
+  evita hashes que mudam entre builds. O hook do tsup remove o
+  wrapper :global() no pós-build (ver tsup.config.ts).
+*/
+
+:global(.ds-container) {
+  width: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  padding-left: var(--spacing-6);
+  padding-right: var(--spacing-6);
+  padding-top: var(--spacing-6);
+  box-sizing: border-box;
+}
+
+@media (min-width: 1366px) {
+  :global(.ds-container--site) {
+    max-width: 1086px;
+  }
+}
+
+@media (min-width: 1920px) {
+  :global(.ds-container--product) {
+    max-width: 1800px;
+  }
+}
