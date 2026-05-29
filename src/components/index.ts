@@ -15,6 +15,7 @@ export * from "./DatePicker";
 export * from "./Drawer";
 export * from "./EmptyState";
 export * from "./Input";
+export * from "./InputChips";
 export * from "./KpiCard";
 export * from "./Loading";
 export * from "./MenuCombobox";

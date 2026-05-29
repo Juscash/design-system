@@ -1,0 +1,139 @@
+/*
+  Estilos próprios do InputChips. Classes envoltas em `:global(...)` para
+  permanecerem globais após o processamento do Vite (Storybook) e do
+  pós-processamento do `tsup` (ver `tsup.config.ts`).
+
+  Classes:
+    - `.juscash-input-chips`            : raiz (flex coluna com label).
+    - `.juscash-input-chips__label`     : label Inter 16 text/dark.
+    - `.juscash-input-chips__field`     : wrapper do input + chips (border, bg, radius).
+    - `.juscash-input-chips__field--xs`
+    - `.juscash-input-chips__field--s`
+    - `.juscash-input-chips__field--m`
+    - `.juscash-input-chips__field--l`
+    - `.juscash-input-chips__field--disabled`
+    - `.juscash-input-chips__input`     : input nativo (sem borda, transparente).
+    - `.juscash-input-chips__chip`      : chip individual.
+    - `.juscash-input-chips__chip-remove`
+*/
+
+:global(.juscash-input-chips) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  width: 100%;
+}
+
+:global(.juscash-input-chips__label) {
+  color: var(--color-text-dark);
+  font-size: var(--font-body-1-size);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height);
+}
+
+:global(.juscash-input-chips__field) {
+  align-items: center;
+  background-color: var(--color-neutral-50);
+  border: 1px solid var(--color-border-regular);
+  border-radius: var(--radius-xl);
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--spacing-1);
+  padding: var(--spacing-2) var(--spacing-3);
+  transition: box-shadow 0.2s ease;
+  width: 100%;
+}
+
+:global(.juscash-input-chips__field--xs) {
+  min-height: 24px;
+  padding: 2px var(--spacing-3);
+}
+
+:global(.juscash-input-chips__field--s) {
+  min-height: 32px;
+}
+
+:global(.juscash-input-chips__field--m) {
+  min-height: 36px;
+}
+
+:global(.juscash-input-chips__field--l) {
+  min-height: 40px;
+}
+
+:global(.juscash-input-chips__field:focus-within) {
+  box-shadow: var(--shadow-focus);
+}
+
+:global(.juscash-input-chips__field--disabled) {
+  background-color: var(--color-neutral-50);
+  border-color: var(--color-border-disabled);
+  cursor: not-allowed;
+}
+
+:global(.juscash-input-chips__field--disabled:focus-within) {
+  box-shadow: none;
+}
+
+:global(.juscash-input-chips__input) {
+  background: transparent;
+  border: 0;
+  color: var(--color-text-dark);
+  flex: 1 1 80px;
+  font-size: var(--font-body-2-size);
+  line-height: var(--font-line-height);
+  min-width: 80px;
+  outline: none;
+  padding: 0;
+}
+
+:global(.juscash-input-chips__input::placeholder) {
+  color: var(--color-text-soft);
+}
+
+:global(.juscash-input-chips__input:disabled) {
+  color: var(--color-text-disabled);
+  cursor: not-allowed;
+}
+
+:global(.juscash-input-chips__chip) {
+  align-items: center;
+  background-color: transparent;
+  border: 1px solid var(--color-border-regular);
+  border-radius: var(--radius-xl);
+  color: var(--color-text-dark);
+  display: inline-flex;
+  font-size: var(--font-body-2-size);
+  gap: var(--spacing-1);
+  height: 24px;
+  line-height: var(--font-line-height);
+  padding: 2px var(--spacing-2);
+}
+
+:global(.juscash-input-chips__chip--disabled) {
+  border-color: var(--color-border-disabled);
+  color: var(--color-text-disabled);
+}
+
+:global(.juscash-input-chips__chip-remove) {
+  align-items: center;
+  background: transparent;
+  border: 0;
+  border-radius: var(--radius-md);
+  color: inherit;
+  cursor: pointer;
+  display: inline-flex;
+  height: 16px;
+  justify-content: center;
+  padding: 0;
+  width: 16px;
+}
+
+:global(.juscash-input-chips__chip-remove:focus-visible) {
+  box-shadow: var(--shadow-focus);
+  outline: none;
+}
+
+:global(.juscash-input-chips__chip-remove:disabled) {
+  cursor: not-allowed;
+}
