@@ -1,0 +1,23 @@
+/*
+  Estilos do SearchBar. Fonte de verdade:
+  `figma/components/search-bar/design-context-4125-10367.md`
+
+  "Input field 320 wide, h-36 bg neutral/50 border regular rounded radius/xl 8.
+   AL com icon/search 16px à esquerda + placeholder Inter Regular 13 text/soft
+   'Pesquise...'".
+
+  A largura default é a única customização exclusiva do SearchBar — todos os
+  demais tokens (altura, bg, border, radius, padding interno, tipografia do
+  placeholder/value) já são providos pelo Input base do DS (size="m").
+
+  Como o `Input` aplica o `className` ao affix-wrapper quando há prefix, a
+  largura é definida no próprio `.ant-input-affix-wrapper` portador da classe
+  `.ds-search-bar`.
+
+  Seletor em :global porque o tsup pós-processa o CSS Module e o consumer
+  importa o CSS via "@juscash/design-system/dist/index.css".
+*/
+
+:global(.ds-search-bar.ant-input-affix-wrapper) {
+  width: 320px;
+}

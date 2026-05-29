@@ -27,6 +27,7 @@ export * from "./Progress";
 export * from "./Radio";
 export * from "./RangePicker";
 export * from "./ScrollArea";
+export * from "./SearchBar";
 export * from "./Segmented";
 export * from "./Select";
 export * from "./Separator";
