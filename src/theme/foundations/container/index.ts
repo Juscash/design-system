@@ -22,5 +22,5 @@ export const container = {
   },
 } as const;
 
-export type Container = typeof container;
-export type ContainerVariant = keyof typeof container;
+export type ContainerTokens = typeof container;
+export type ContainerProduct = keyof typeof container;

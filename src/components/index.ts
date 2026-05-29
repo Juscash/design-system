@@ -11,6 +11,7 @@ export * from "./Charts";
 export * from "./Checkbox";
 export * from "./Collapse";
 export * from "./ConfirmModal";
+export * from "./Container";
 export * from "./DatePicker";
 export * from "./Drawer";
 export * from "./EmptyState";
