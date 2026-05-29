@@ -1,0 +1,59 @@
+/*
+  Estilos do BackToTop. Tokens e dimensões vêm do dump
+  `figma/components/back-to-top/design-context-4237-10399.md`:
+
+  - Icon button neutral default: bg `color/button/neutral/default` (#e5e5e5),
+    size 36x36, padding 8px 16px, radius xl (8), gap-2.
+  - Posição absoluta `bottom-24 right-24` (desktop) e `bottom-16 right-16`
+    (mobile, viewport 430).
+  - Sombra `shadow/xl` conforme bloco "Styles" do dump.
+  - Tooltip horizontal (placement left) obrigatório.
+
+  Seletores em :global porque o tsup pós-processa o CSS Module e o consumer
+  importa o CSS via "@juscash/design-system/dist/index.css".
+*/
+
+:global(.ds-back-to-top) {
+  position: fixed;
+  bottom: var(--spacing-6);
+  right: var(--spacing-6);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  width: 36px;
+  height: 36px;
+  min-height: 36px;
+  padding: var(--spacing-2) var(--spacing-4);
+  border: none;
+  border-radius: var(--radius-xl);
+  background: var(--color-button-neutral-default);
+  color: var(--color-text-dark);
+  box-shadow: var(--shadow-xl);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.2s ease, visibility 0.2s ease, background-color 0.2s ease;
+  z-index: 1000;
+}
+
+:global(.ds-back-to-top--visible) {
+  opacity: 1;
+  visibility: visible;
+}
+
+:global(.ds-back-to-top:hover) {
+  background: var(--color-button-neutral-hover-active);
+}
+
+:global(.ds-back-to-top:focus-visible) {
+  outline: none;
+  box-shadow: var(--shadow-xl), var(--shadow-focus);
+}
+
+@media (max-width: 767px) {
+  :global(.ds-back-to-top) {
+    bottom: var(--spacing-4);
+    right: var(--spacing-4);
+  }
+}

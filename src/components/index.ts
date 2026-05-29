@@ -1,6 +1,7 @@
 export * from "./Alert";
 export * from "./Avatar";
 export * from "./AvatarMenu";
+export * from "./BackToTop";
 export * from "./Badge";
 export * from "./Breadcrumb";
 export * from "./Button";
