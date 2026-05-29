@@ -104,7 +104,6 @@
   padding: 0 12px !important;
 }
 :global(.ds-datepicker.ant-picker) :global(.ant-picker-input) > input {
-  font-family: "Inter", sans-serif !important;
   font-size: 13px !important;
   font-weight: 400 !important;
   color: var(--color-neutral-800) !important;
