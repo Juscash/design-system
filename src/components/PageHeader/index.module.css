@@ -50,7 +50,6 @@
 
 :global(.ds-page-header__title) {
   margin: 0;
-  font-family: var(--font-primary);
   font-size: var(--font-heading-6-size);
   line-height: var(--font-line-height);
   font-weight: 700;
@@ -61,7 +60,6 @@
 
 :global(.ds-page-header__description) {
   margin: 0;
-  font-family: var(--font-primary);
   font-size: var(--font-body-1-size);
   line-height: var(--font-line-height);
   font-weight: var(--font-weight-regular);
