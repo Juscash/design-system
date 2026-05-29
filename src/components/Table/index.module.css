@@ -74,7 +74,6 @@
   border-inline-end: none !important;
   background: var(--color-neutral-50) !important;
   color: var(--color-neutral-800) !important;
-  font-family: "Inter", sans-serif !important;
   font-size: 13px !important;
   font-weight: 700 !important;
   /*
@@ -138,7 +137,6 @@
   border-inline-end: none !important;
   background: var(--color-neutral-50) !important;
   color: var(--color-neutral-800) !important;
-  font-family: "Inter", sans-serif !important;
   font-size: 13px !important;
   line-height: 1.2 !important;
   vertical-align: middle !important;
@@ -277,7 +275,6 @@
 :global(.ds-table.ant-table-wrapper) :global(.ant-pagination-total-text) {
   margin-right: auto !important;
   color: var(--color-neutral-800) !important;
-  font-family: "Inter", sans-serif !important;
   font-size: 13px !important;
   line-height: 1.2 !important;
 }
@@ -322,7 +319,6 @@
   height: 100% !important;
   padding: 0 !important;
   color: var(--color-neutral-800) !important;
-  font-family: "Inter", sans-serif !important;
   font-size: 13px !important;
   font-weight: 400 !important;
   line-height: 1.2 !important;
@@ -340,7 +336,6 @@
 :global(.ds-table.ant-table-wrapper) :global(.ant-pagination-next),
 :global(.ds-table.ant-table-wrapper) :global(.ant-pagination-prev) :global(.ant-pagination-item-link),
 :global(.ds-table.ant-table-wrapper) :global(.ant-pagination-next) :global(.ant-pagination-item-link) {
-  font-family: "Inter", sans-serif !important;
   font-size: 13px !important;
   font-weight: 400 !important;
   line-height: 1.2 !important;
@@ -412,7 +407,6 @@
   align-items: center !important;
   min-height: 100% !important;
   color: var(--color-neutral-800) !important;
-  font-family: "Inter", sans-serif !important;
   font-size: 13px !important;
   line-height: 1.2 !important;
 }
@@ -471,7 +465,6 @@
   display: block;
   margin-bottom: 4px;
   color: var(--color-neutral-500);
-  font-family: "Inter", sans-serif;
   font-size: 13px;
   font-weight: 700;
   line-height: 1.2;
@@ -530,7 +523,6 @@
     display: block;
     margin-bottom: 4px;
     color: var(--color-neutral-500);
-    font-family: "Inter", sans-serif;
     font-size: 13px;
     font-weight: 700;
     line-height: 1.2;
