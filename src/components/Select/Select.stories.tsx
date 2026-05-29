@@ -97,7 +97,7 @@ function Example() {
     },
     status: {
       control: "select",
-      options: ["", "error", "warning"],
+      options: ["", "error"],
       description: "Estado de validação",
     },
     active: {

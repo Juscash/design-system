@@ -2,25 +2,23 @@
   Estilos próprios do Select (chips do MultiSelect, dropdown e tokens de tamanho via CSS variable).
 */
 
-:global(.ds-input-outline) {
+:global(.ds-select) {
   transition: all 0.2s ease-in-out !important;
 }
 
-:global(.ds-input-outline) :global(.ant-select-selector) {
+:global(.ds-select) :global(.ant-select-selector) {
   border-color: transparent !important;
   box-shadow: none !important;
 }
 
-:global(.ds-input-outline:not(.ant-select-disabled):not(.ant-select-status-error):hover),
-:global(.ds-input-outline.ant-select-focused:not(.ant-select-status-error)) {
+:global(.ds-select:not(.ant-select-disabled):not(.ant-select-status-error):hover),
+:global(.ds-select.ant-select-focused:not(.ant-select-status-error)) {
   box-shadow: var(--shadow-focus) !important;
-  border-color: transparent !important;
 }
 
-:global(.ds-input-outline.ant-select-status-error:hover),
-:global(.ds-input-outline.ant-select-status-error.ant-select-focused) {
+:global(.ds-select.ant-select-status-error:hover),
+:global(.ds-select.ant-select-status-error.ant-select-focused) {
   box-shadow: var(--shadow-focus-error) !important;
-  border-color: transparent !important;
 }
 
 :global(.ds-select-search-container) {
