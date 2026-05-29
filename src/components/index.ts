@@ -33,6 +33,7 @@ export * from "./SearchBar";
 export * from "./Segmented";
 export * from "./Select";
 export * from "./Separator";
+export * from "./Sidebar";
 export * from "./Skeleton";
 export * from "./Slider";
 export * from "./Switch";
