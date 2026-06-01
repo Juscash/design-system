@@ -129,7 +129,10 @@ function CheckboxInner({
   ...props
 }: CheckboxProps): React.ReactElement {
   const finalClassName = buildClassName(className, Boolean(error), Boolean(truncate), Boolean(rich));
-  const renderedChildren = rich ? buildRichContent(label ?? children, secondaryText) : children;
+  // Em modo não-rich, `label` funciona como alternativa a `children` (API
+  // unificada com o Switch que também aceita `label`). Toda a estilização
+  // do texto vive na DS (`.ant-checkbox-label`).
+  const renderedChildren = rich ? buildRichContent(label ?? children, secondaryText) : (children ?? label);
 
   // Compõe o handler de teclado: aplica o toggle por `Enter` e em seguida
   // delega para o `onKeyDown` do consumidor (se existir). O `onKeyDown` que

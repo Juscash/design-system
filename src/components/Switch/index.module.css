@@ -45,6 +45,27 @@
 }
 
 /* ============================================================
+   FIELD — switch + label visível na mesma linha (sem rich)
+   `.ds-switch-field` é o `<label>` wrapper gerado pelo componente
+   quando a prop `label` é passada sem `rich`. Toda a estilização do
+   span do label vive aqui (não no consumidor).
+   ============================================================ */
+
+:global(.ds-switch-field) {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  cursor: pointer;
+}
+
+:global(.ds-switch-field__label) {
+  font-size: var(--font-body-2-size);
+  font-weight: 400;
+  line-height: var(--font-line-height);
+  color: var(--color-neutral-800);
+}
+
+/* ============================================================
    RICH — card 240×44 com label e secondary text (Figma 4062:5434)
    `.ds-switch-rich` é aplicado a um `<label>` wrapper externo. O
    click no label propaga para o `<button class="ant-switch">` interno

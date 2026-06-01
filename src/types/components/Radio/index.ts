@@ -15,7 +15,12 @@ export type RadioProps = AntdRadioProps & {
    * do radio. Cliques em qualquer ponto do card selecionam o item.
    */
   rich?: boolean;
-  /** Texto principal exibido ao lado do radio no modo `rich`. Quando ausente, usa `children`. */
+  /**
+   * Texto exibido ao lado do radio. No modo `rich` é o título principal
+   * (acompanhado de `secondaryText` opcional). No modo padrão, funciona como
+   * alternativa a `children` — útil quando o consumidor prefere passar o
+   * texto via prop em vez de children (API unificada com Switch e Checkbox).
+   */
   label?: string;
   /** Texto secundário (`caption/01 - 10px`) abaixo do `label` no modo `rich`. */
   secondaryText?: string;

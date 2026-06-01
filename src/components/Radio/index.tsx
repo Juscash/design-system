@@ -155,7 +155,10 @@ function handleGroupEnterToToggle(event: React.KeyboardEvent<HTMLDivElement>): v
 function RadioInner(props: RadioProps): React.ReactElement {
   const { error, truncate, rich, label, secondaryText, className, style, children, onKeyDown, ...rest } = props;
   const finalClassName = buildClassName(className, Boolean(error), Boolean(truncate), Boolean(rich));
-  const renderedChildren = rich ? buildRichContent(label ?? children, secondaryText) : children;
+  // Em modo não-rich, `label` funciona como alternativa a `children` (API
+  // unificada com Switch e Checkbox). Toda a estilização do texto vive na DS
+  // (`.ant-radio-label`).
+  const renderedChildren = rich ? buildRichContent(label ?? children, secondaryText) : (children ?? label);
 
   const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
     handleEnterToToggle(event);
