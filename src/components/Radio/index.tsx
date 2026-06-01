@@ -21,7 +21,8 @@ const FOCUS_OUTLINE_WIDTH = 3;
 /**
  * Tokens base do Radio (variante sem erro). Inclui os campos `button*` por
  * herança (caso o consumidor use `Radio.Button`, embora o padrão JusCash
- * seja usar `Segmented` nesse caso).
+ * seja usar `Segmented` nesse caso). Hover do `Radio.Button` selecionado
+ * escurece para `brand.primary[800]` — mesmo padrão do Checkbox/Button.
  */
 const baseTokens: ComponentToken = {
   radioSize: RADIO_SIZE,
@@ -36,19 +37,20 @@ const baseTokens: ComponentToken = {
   buttonCheckedColorDisabled: designSystemColors.neutral[400],
   buttonSolidCheckedColor: designSystemColors.neutral[50],
   buttonSolidCheckedBg: designSystemColors.brand.primary[600],
-  buttonSolidCheckedHoverBg: designSystemColors.brand.primary[600],
-  buttonSolidCheckedActiveBg: designSystemColors.brand.primary[600],
+  buttonSolidCheckedHoverBg: designSystemColors.brand.primary[800],
+  buttonSolidCheckedActiveBg: designSystemColors.brand.primary[800],
 };
 
 /**
  * Tokens da variante `error`. Substitui as cores primary/solid pelo vermelho
- * `feedback.red.500`. Mantém o hover/active sem mudança visual.
+ * `feedback.red.500` e escurece para `red.900` no hover/active (alinhado com
+ * o Checkbox).
  */
 const errorTokens: ComponentToken = {
   ...baseTokens,
   buttonSolidCheckedBg: designSystemColors.feedback.red[500],
-  buttonSolidCheckedHoverBg: designSystemColors.feedback.red[500],
-  buttonSolidCheckedActiveBg: designSystemColors.feedback.red[500],
+  buttonSolidCheckedHoverBg: designSystemColors.feedback.red[900],
+  buttonSolidCheckedActiveBg: designSystemColors.feedback.red[900],
 };
 
 /**
@@ -63,8 +65,9 @@ function getTokenOverrides(error: boolean) {
       borderRadiusSM: radius.md,
       colorBorder: designSystemColors.feedback.red[500],
       colorPrimary: designSystemColors.feedback.red[500],
-      colorPrimaryHover: designSystemColors.feedback.red[500],
-      colorPrimaryActive: designSystemColors.feedback.red[500],
+      // Hover escurece para `red.900` — mesmo padrão do Checkbox.
+      colorPrimaryHover: designSystemColors.feedback.red[900],
+      colorPrimaryActive: designSystemColors.feedback.red[900],
       controlOutlineWidth: FOCUS_OUTLINE_WIDTH,
       controlOutlineColor: designSystemColors.feedback.red[50],
     };
@@ -73,8 +76,9 @@ function getTokenOverrides(error: boolean) {
     borderRadiusSM: radius.md,
     colorBorder: designSystemColors.border.regular,
     colorPrimary: designSystemColors.brand.primary[600],
-    colorPrimaryHover: designSystemColors.brand.primary[600],
-    colorPrimaryActive: designSystemColors.brand.primary[600],
+    // Hover escurece para `brand.primary[800]` — mesmo padrão do Checkbox/Button.
+    colorPrimaryHover: designSystemColors.brand.primary[800],
+    colorPrimaryActive: designSystemColors.brand.primary[800],
     controlOutlineWidth: FOCUS_OUTLINE_WIDTH,
     controlOutlineColor: designSystemColors.neutral[300],
   };
@@ -106,6 +110,38 @@ function buildRichContent(label: React.ReactNode, secondaryText: string | undefi
 }
 
 /**
+ * Handler de teclado que aceita `Enter` para selecionar o radio (além do
+ * `Space` nativo). O Antd Radio repassa `onKeyDown` (via `restProps`) para
+ * o `<input>` interno, então `event.currentTarget` é o próprio input.
+ */
+function handleEnterToToggle(event: React.KeyboardEvent<HTMLInputElement>): void {
+  if (event.key !== "Enter") return;
+  if (event.defaultPrevented) return;
+  const input = event.currentTarget;
+  if (input.disabled) return;
+  event.preventDefault();
+  input.click();
+}
+
+/**
+ * Handler delegado para o `Radio.Group`. Quando `Enter` é pressionado em
+ * qualquer `.ant-radio-input` interno do grupo, dispara um `click()` no
+ * input — aciona o `onChange` do antd e propaga pro estado do grupo
+ * (necessário porque o Group renderiza itens via `options=[...]` usando
+ * o `Radio` raw, sem passar por `RadioInner`).
+ */
+function handleGroupEnterToToggle(event: React.KeyboardEvent<HTMLDivElement>): void {
+  if (event.key !== "Enter") return;
+  if (event.defaultPrevented) return;
+  const target = event.target as HTMLElement;
+  if (!target.classList.contains("ant-radio-input")) return;
+  const input = target as HTMLInputElement;
+  if (input.disabled) return;
+  event.preventDefault();
+  input.click();
+}
+
+/**
  * Radio do design system. Props proprietárias:
  *
  * - `error` — paleta vermelha (`feedback.red.500`) para validação inválida.
@@ -113,11 +149,18 @@ function buildRichContent(label: React.ReactNode, secondaryText: string | undefi
  *   dinamicamente quando excede o espaço disponível.
  * - `rich` — card 240×44 com `label` + `secondaryText` opcional. Combine com
  *   `truncate` para encurtar texto longo dentro do card.
+ *
+ * `Enter` seleciona o radio (além do `Space` nativo do input).
  */
 function RadioInner(props: RadioProps): React.ReactElement {
-  const { error, truncate, rich, label, secondaryText, className, style, children, ...rest } = props;
+  const { error, truncate, rich, label, secondaryText, className, style, children, onKeyDown, ...rest } = props;
   const finalClassName = buildClassName(className, Boolean(error), Boolean(truncate), Boolean(rich));
   const renderedChildren = rich ? buildRichContent(label ?? children, secondaryText) : children;
+
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+    handleEnterToToggle(event);
+    (onKeyDown as ((e: React.KeyboardEvent<HTMLInputElement>) => void) | undefined)?.(event);
+  };
 
   return (
     <ConfigProvider
@@ -126,7 +169,7 @@ function RadioInner(props: RadioProps): React.ReactElement {
         token: getTokenOverrides(Boolean(error)),
       }}
     >
-      <AntdRadio {...rest} className={finalClassName} style={style}>
+      <AntdRadio {...rest} className={finalClassName} style={style} onKeyDown={handleKeyDown}>
         {renderedChildren}
       </AntdRadio>
     </ConfigProvider>
@@ -142,11 +185,19 @@ RadioInner.displayName = "Radio";
  * recebam a mesma identidade visual dos itens criados via `<Radio>` filhos.
  */
 const RadioGroupInner = ((props) => {
-  const { className, ...rest } = props as { className?: string } & Record<string, unknown>;
+  const { className, onKeyDown: consumerKeyDown, ...rest } = props as {
+    className?: string;
+    onKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
+  } & Record<string, unknown>;
   const finalClassName = [GROUP_CLASS, typeof className === "string" ? className : ""].filter(Boolean).join(" ");
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+    handleGroupEnterToToggle(event);
+    consumerKeyDown?.(event);
+  };
+  const groupProps = { ...rest, className: finalClassName, onKeyDown: handleKeyDown } as Record<string, unknown>;
   return (
     <ConfigProvider theme={{ components: { Radio: baseTokens } }}>
-      {React.createElement(AntdRadio.Group, { ...rest, className: finalClassName })}
+      {React.createElement(AntdRadio.Group, groupProps)}
     </ConfigProvider>
   );
 }) as typeof AntdRadio.Group;
