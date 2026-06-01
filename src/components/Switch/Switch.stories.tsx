@@ -86,10 +86,6 @@ function Example() {
       control: "boolean",
       description: "Estado de erro",
     },
-    loading: {
-      control: "boolean",
-      description: "Estado de carregamento",
-    },
 
     focus: {
       control: "boolean",

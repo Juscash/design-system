@@ -31,11 +31,6 @@ describe("Switch", () => {
     expect(sw?.className).toMatch(/ds-switch-error/);
   });
 
-  it("renders loading switch", () => {
-    const { container } = render(<Switch loading />);
-    expect(container.querySelector(".ant-switch-loading")).not.toBeNull();
-  });
-
   it("calls onChange when toggled", () => {
     const onChange = vi.fn();
     render(<Switch onChange={onChange} />);

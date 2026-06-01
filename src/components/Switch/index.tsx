@@ -42,21 +42,22 @@ const switchTokens: Partial<ComponentToken> = {
 };
 
 /**
- * Tokens globais (cores) aplicados via `theme.token`. Hover/active recebem
- * a mesma cor de `colorPrimary` — Figma define que o hover não muda visual.
+ * Tokens globais (cores) aplicados via `theme.token`. Hover/active escurecem
+ * a cor do track quando o switch está ligado — mesmo padrão do Button,
+ * Checkbox e Radio (default → `brand.primary[800]`, error → `red.900`).
  */
 function getTokenOverrides(error: boolean) {
   if (error) {
     return {
       colorPrimary: designSystemColors.feedback.red[500],
-      colorPrimaryHover: designSystemColors.feedback.red[500],
-      colorPrimaryActive: designSystemColors.feedback.red[500],
+      colorPrimaryHover: designSystemColors.feedback.red[900],
+      colorPrimaryActive: designSystemColors.feedback.red[900],
     };
   }
   return {
     colorPrimary: designSystemColors.brand.primary[600],
-    colorPrimaryHover: designSystemColors.brand.primary[600],
-    colorPrimaryActive: designSystemColors.brand.primary[600],
+    colorPrimaryHover: designSystemColors.brand.primary[800],
+    colorPrimaryActive: designSystemColors.brand.primary[800],
   };
 }
 
