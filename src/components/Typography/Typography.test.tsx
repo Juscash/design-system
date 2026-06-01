@@ -68,13 +68,13 @@ describe("Typography", () => {
       expect(node).toHaveClass("ant-typography");
     });
 
-    it("renderiza variant=body1 como bloco com classe ant-typography", () => {
+    it("renderiza variant=body1 (sem `component`) como bloco com classe ant-typography", () => {
       render(<Typography variant="body1">Body 1</Typography>);
       const node = screen.getByText("Body 1");
       expect(node).toHaveClass("ant-typography");
     });
 
-    it("renderiza variant=body2 como bloco com classe ant-typography", () => {
+    it("renderiza variant=body2 (sem `component`) como bloco com classe ant-typography", () => {
       render(<Typography variant="body2">Body 2</Typography>);
       const node = screen.getByText("Body 2");
       expect(node).toHaveClass("ant-typography");
@@ -135,16 +135,25 @@ describe("Typography", () => {
       expect(node.tagName).toBe("H5");
     });
 
-    it("Body1 renderiza com classe ant-typography", () => {
+    it("Body1 renderiza como <p> nativo por padrão", () => {
       render(<Body1>Body atalho 1</Body1>);
       const node = screen.getByText("Body atalho 1");
-      expect(node).toHaveClass("ant-typography");
+      expect(node.tagName).toBe("P");
+      // Default `component="p"` usa renderização nativa — sem classes do Antd.
+      expect(node).not.toHaveClass("ant-typography");
     });
 
-    it("Body2 renderiza com classe ant-typography", () => {
+    it("Body2 renderiza como <p> nativo por padrão", () => {
       render(<Body2>Body atalho 2</Body2>);
       const node = screen.getByText("Body atalho 2");
-      expect(node).toHaveClass("ant-typography");
+      expect(node.tagName).toBe("P");
+      expect(node).not.toHaveClass("ant-typography");
+    });
+
+    it("Body1 com `component` explícito troca a tag (ex.: span)", () => {
+      render(<Body1 component="span">Body span</Body1>);
+      const node = screen.getByText("Body span");
+      expect(node.tagName).toBe("SPAN");
     });
 
     it("Caption renderiza <span>", () => {
@@ -258,6 +267,102 @@ describe("Typography", () => {
       const strongNode = container.querySelector("strong");
       expect(strongNode).not.toBeNull();
       expect(strongNode).toHaveTextContent("texto forte");
+    });
+  });
+
+  // -------------------------------------------------------------------------
+  // 5. Prop `component` — renderiza tag HTML nativa preservando variant
+  // -------------------------------------------------------------------------
+  describe("prop `component` (renderização em tag HTML nativa)", () => {
+    it("renderiza <span> com style da variant body1", () => {
+      render(
+        <Typography variant="body1" component="span">
+          Texto inline
+        </Typography>,
+      );
+      const node = screen.getByText("Texto inline");
+      expect(node.tagName).toBe("SPAN");
+      expect(node).toHaveStyle({ fontSize: "16px", lineHeight: "19.2px", fontFamily: "Inter", fontWeight: 400 });
+      // Não passa pelo Antd Typography — sem a classe `ant-typography`.
+      expect(node).not.toHaveClass("ant-typography");
+    });
+
+    it("renderiza <h2> com style da variant heading1 (style != semântica)", () => {
+      render(
+        <Typography variant="heading1" component="h2">
+          Título
+        </Typography>,
+      );
+      const node = screen.getByRole("heading", { level: 2 });
+      expect(node.tagName).toBe("H2");
+      expect(node).toHaveStyle({ fontSize: "61px", lineHeight: "73.2px" });
+    });
+
+    it("renderiza <h6> com style da variant heading6", () => {
+      render(
+        <Typography variant="heading6" component="h6">
+          Título h6
+        </Typography>,
+      );
+      const node = screen.getByRole("heading", { level: 6 });
+      expect(node.tagName).toBe("H6");
+      expect(node).toHaveStyle({ fontSize: "20px", lineHeight: "24px" });
+    });
+
+    it("preserva margin: 0 e merge com style recebido", () => {
+      render(
+        <Typography variant="body1" component="p" style={{ color: "rebeccapurple" }}>
+          merged style
+        </Typography>,
+      );
+      const node = screen.getByText("merged style");
+      expect(node).toHaveStyle({ margin: "0px", color: "rgb(102, 51, 153)" });
+    });
+
+    it("repassa children, className, id, data-* e aria-*", () => {
+      render(
+        <Typography
+          variant="caption"
+          component="span"
+          id="t1"
+          className="meu-css"
+          data-testid="custom-cap"
+          aria-label="rótulo a11y"
+        >
+          full passthrough
+        </Typography>,
+      );
+      const node = screen.getByTestId("custom-cap");
+      expect(node.tagName).toBe("SPAN");
+      expect(node).toHaveAttribute("id", "t1");
+      expect(node).toHaveAttribute("aria-label", "rótulo a11y");
+      expect(node).toHaveClass("meu-css");
+      expect(node).toHaveTextContent("full passthrough");
+    });
+
+    it("repassa event handlers (onClick) para a tag nativa", () => {
+      let clicks = 0;
+      render(
+        <Typography variant="body2" component="span" onClick={() => { clicks += 1; }}>
+          clicável
+        </Typography>,
+      );
+      const node = screen.getByText("clicável");
+      node.click();
+      expect(clicks).toBe(1);
+    });
+
+    it("ignora props específicas do Antd quando `component` está setada (`strong` não vira <strong>)", () => {
+      const { container } = render(
+        <Typography variant="body1" component="span" strong>
+          plain span
+        </Typography>,
+      );
+      // No modo `component`, props Antd como `strong` são descartadas — o
+      // wrapper <strong> que o Antd Paragraph injeta NÃO deve existir.
+      expect(container.querySelector("strong")).toBeNull();
+      const span = screen.getByText("plain span");
+      expect(span.tagName).toBe("SPAN");
     });
   });
 });
