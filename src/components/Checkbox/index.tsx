@@ -30,9 +30,12 @@ const CHECKBOX_BOX_SIZE = 16;
  */
 const checkboxTokens: Partial<ComponentToken> = {
   colorPrimary: designSystemColors.brand.primary[600],
-  colorPrimaryHover: designSystemColors.brand.primary[600],
+  // Hover do checkbox marcado escurece para `brand.primary[800]` (#005C12)
+  // — mesmo padrão usado no Button (600 → 800). Sem este escurecimento, o
+  // hover ficava idêntico ao default, sem feedback visual.
+  colorPrimaryHover: designSystemColors.brand.primary[800],
   colorPrimaryBorder: designSystemColors.brand.primary[600],
-  colorPrimaryBorderHover: designSystemColors.brand.primary[600],
+  colorPrimaryBorderHover: designSystemColors.brand.primary[800],
   colorBgContainer: designSystemColors.neutral[50],
   colorText: designSystemColors.neutral[800],
   colorTextDisabled: designSystemColors.neutral[400],
@@ -83,6 +86,25 @@ function buildRichContent(label: React.ReactNode, secondaryText: string | undefi
 }
 
 /**
+ * Handler de teclado que aceita `Enter` como segunda tecla de seleção do
+ * checkbox (além do `Space` nativo do input). Antd Checkbox / DOM nativo
+ * só togglam com `Space` por default — o usuário pediu `Enter` também.
+ *
+ * O `onKeyDown` passado ao `<Checkbox>` do Antd é forwardado para o
+ * `<input class="ant-checkbox-input">` interno (via `restProps` spread em
+ * `@rc-component/checkbox`). Logo, `event.currentTarget` é o próprio input.
+ * Chamamos `input.click()` programático, o que dispara `onChange` normalmente.
+ */
+function handleEnterToToggle(event: React.KeyboardEvent<HTMLInputElement>): void {
+  if (event.key !== "Enter") return;
+  if (event.defaultPrevented) return;
+  const input = event.currentTarget;
+  if (input.disabled) return;
+  event.preventDefault();
+  input.click();
+}
+
+/**
  * Checkbox do design system. Props proprietárias:
  *
  * - `error` — paleta vermelha (`feedback.red.500`) para validação inválida.
@@ -103,10 +125,19 @@ function CheckboxInner({
   className,
   style,
   children,
+  onKeyDown,
   ...props
 }: CheckboxProps): React.ReactElement {
   const finalClassName = buildClassName(className, Boolean(error), Boolean(truncate), Boolean(rich));
   const renderedChildren = rich ? buildRichContent(label ?? children, secondaryText) : children;
+
+  // Compõe o handler de teclado: aplica o toggle por `Enter` e em seguida
+  // delega para o `onKeyDown` do consumidor (se existir). O `onKeyDown` que
+  // o Antd repassa para `restProps` cai no `<input>` interno.
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLInputElement>): void => {
+    handleEnterToToggle(event);
+    (onKeyDown as ((e: React.KeyboardEvent<HTMLInputElement>) => void) | undefined)?.(event);
+  };
 
   return (
     <ConfigProvider
@@ -116,7 +147,7 @@ function CheckboxInner({
         },
       }}
     >
-      <AntdCheckbox {...props} className={finalClassName} style={style}>
+      <AntdCheckbox {...props} className={finalClassName} style={style} onKeyDown={handleKeyDown}>
         {renderedChildren}
       </AntdCheckbox>
     </ConfigProvider>
@@ -124,6 +155,27 @@ function CheckboxInner({
 }
 
 CheckboxInner.displayName = "Checkbox";
+
+/**
+ * Handler de teclado delegado para o wrapper do `Checkbox.Group`. Quando o
+ * usuário pressiona `Enter` em qualquer `.ant-checkbox-input` interno do
+ * grupo, dispara um `click()` programático no input — o que aciona o
+ * `onChange` do antd e propaga pro estado do grupo.
+ *
+ * Necessário porque o Antd 6 renderiza os itens do grupo via `options=[...]`
+ * usando seu `Checkbox` raw (não o nosso `CheckboxInner`), bypassando o
+ * `handleEnterToToggle` que adicionamos no wrapper standalone.
+ */
+function handleGroupEnterToToggle(event: React.KeyboardEvent<HTMLDivElement>): void {
+  if (event.key !== "Enter") return;
+  if (event.defaultPrevented) return;
+  const target = event.target as HTMLElement;
+  if (!target.classList.contains("ant-checkbox-input")) return;
+  const input = target as HTMLInputElement;
+  if (input.disabled) return;
+  event.preventDefault();
+  input.click();
+}
 
 /**
  * Wrapper do `Checkbox.Group` do Antd. Aplica a classe `.ds-checkbox-group`
@@ -134,13 +186,25 @@ CheckboxInner.displayName = "Checkbox";
  * Sem este wrapper, `<Checkbox.Group options={...}>` gerava itens sem a
  * classe `.ds-checkbox` — os overrides de hover/focus/indeterminate/disabled
  * (scoped via `:global(.ds-checkbox …)` no `index.module.css`) não aplicavam.
+ *
+ * Adiciona `onKeyDown` delegado para suportar `Enter` como alternativa ao
+ * `Space` nativo, mantendo o comportamento consistente com o `Checkbox`
+ * standalone — mesmo nos itens gerados via `options=[...]`.
  */
 const CheckboxGroupInner = ((props) => {
-  const { className, ...rest } = props as { className?: string } & Record<string, unknown>;
+  const { className, onKeyDown: consumerKeyDown, ...rest } = props as {
+    className?: string;
+    onKeyDown?: (event: React.KeyboardEvent<HTMLDivElement>) => void;
+  } & Record<string, unknown>;
   const finalClassName = [GROUP_CLASS, typeof className === "string" ? className : ""].filter(Boolean).join(" ");
+  const handleKeyDown = (event: React.KeyboardEvent<HTMLDivElement>): void => {
+    handleGroupEnterToToggle(event);
+    consumerKeyDown?.(event);
+  };
+  const groupProps = { ...rest, className: finalClassName, onKeyDown: handleKeyDown } as Record<string, unknown>;
   return (
     <ConfigProvider theme={{ components: { Checkbox: checkboxTokens } }}>
-      {React.createElement(AntdCheckbox.Group, { ...rest, className: finalClassName })}
+      {React.createElement(AntdCheckbox.Group, groupProps)}
     </ConfigProvider>
   );
 }) as typeof AntdCheckbox.Group;
