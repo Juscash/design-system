@@ -1,5 +1,6 @@
 import type { ReactNode } from "react";
 import type { SegmentedProps as AntdSegmentedProps } from "antd";
+import type { TooltipProps } from "../Tooltip";
 
 export type SegmentedSize = "m" | "s" | "xs";
 
@@ -21,6 +22,16 @@ export type SegmentedOption<T extends string | number = string> = {
    * claro sempre que possível.
    */
   ariaLabel?: string;
+  /**
+   * Tooltip exibido ao passar o mouse na opção. Aceita string (atalho para
+   * `{ title: string }`) ou o objeto completo de `TooltipProps`.
+   *
+   * **Opcional** para opções com `text`. **Obrigatório** para opções
+   * icon-only (regra do Figma) — quando não passado em icon-only, cai
+   * automaticamente em `ariaLabel` (ou `value.toString()` como último
+   * recurso).
+   */
+  tooltip?: string | TooltipProps;
 };
 
 /**
