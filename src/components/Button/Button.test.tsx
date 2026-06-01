@@ -146,9 +146,9 @@ describe("Button", () => {
     expect(button.className).toMatch(/ant-btn-loading/);
   });
 
-  it("supports iconPosition end", () => {
+  it("supports iconPlacement end", () => {
     render(
-      <Button icon={<Plus size={16} />} iconPosition="end" variant="primary">
+      <Button icon={<Plus size={16} />} iconPlacement="end" variant="primary">
         Próximo
       </Button>,
     );

@@ -23,6 +23,9 @@
 
 :global(.ds-button.ant-btn-loading) {
   opacity: 1 !important;
+  /* Loading desabilita interação — sem hover, focus visível nem cursor de clique. */
+  pointer-events: none;
+  cursor: default;
 }
 
 :global(.ds-button.ant-btn-block:hover) {
