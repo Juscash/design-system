@@ -2,8 +2,8 @@ import React from "react";
 import { Avatar as AntdAvatar, ConfigProvider } from "antd";
 import { ChevronDown } from "lucide-react";
 import * as LucideIcons from "lucide-react";
-import { designSystemColors } from "../../theme";
-import type { AvatarProps, AvatarSize } from "../../types/components/Avatar";
+import { designSystemColors, radius } from "../../theme";
+import type { AvatarProps, AvatarRoundness, AvatarSize } from "../../types/components/Avatar";
 import "./index.module.css";
 
 const SIZE_MAP: Record<AvatarSize, number> = {
@@ -65,13 +65,13 @@ function resolveIcon(icon: React.ReactNode | string | undefined, size: AvatarSiz
 /**
  * Estilo inline aplicado ao Avatar do Antd. Reúne tokens do Figma: bg
  * `neutral/200`, border 1px `neutral/50`, color `text/dark`, Inter Bold 13px.
- * `borderRadius` fixado em `50%` — conforme Figma, a única forma é `round`.
- * A fonte é herdada do `body` global via `theme/global.css`.
+ * `borderRadius` varia conforme `roundness`: `50%` (round) ou `radius.xl`
+ * (8px — roundrect). A fonte é herdada do `body` global via `theme/global.css`.
  */
-function buildAvatarStyle(external?: React.CSSProperties): React.CSSProperties {
+function buildAvatarStyle(roundness: AvatarRoundness, external?: React.CSSProperties): React.CSSProperties {
   return {
     ...external,
-    borderRadius: "50%",
+    borderRadius: roundness === "round" ? "50%" : radius.xl,
     fontSize: TEXT_FONT_SIZE,
     fontWeight: 700,
     backgroundColor: designSystemColors.neutral[200],
@@ -85,13 +85,13 @@ function buildAvatarStyle(external?: React.CSSProperties): React.CSSProperties {
 
 /**
  * Avatar do design system. Suporta 3 tipos de conteúdo (initials/icon/picture),
- * 2 tamanhos (`small`/`regular`), forma fixa `round` (círculo) e a variante
+ * 2 tamanhos (`small`/`regular`), 2 formas (`round`/`roundrect`) e a variante
  * "avatar menu" (botão com ChevronDown ao lado, conforme Figma).
  */
 export function Avatar(props: AvatarProps): React.ReactElement {
   const {
     dsSize = "regular",
-    roundness: _roundnessIgnored = "round",
+    roundness = "round",
     avatarMenu = false,
     menuOpen,
     onMenuOpenChange,
@@ -106,13 +106,24 @@ export function Avatar(props: AvatarProps): React.ReactElement {
 
   const effectiveSize = avatarMenu ? MENU_AVATAR_SIZE : dsSize;
   const currentSize = SIZE_MAP[effectiveSize];
-  const avatarStyle = buildAvatarStyle(style);
+  const avatarStyle = buildAvatarStyle(roundness, style);
   const [imageError, setImageError] = React.useState(false);
   // Quando a imagem cai em erro, voltamos para children/icon (sem renderizar
   // o <img> interno). Reset automático se o `src` mudar.
   React.useEffect(() => {
     setImageError(false);
   }, [src]);
+  // Quando o avatar é standalone (sem `avatarMenu`), tornamos o `<span>`
+  // raiz focável no click via `tabIndex=-1` — antd não expõe `tabIndex` no
+  // tipo `AvatarProps`, então setamos via ref diretamente no DOM. Permite
+  // que `.ds-avatar:focus` ative o anel cinza em qualquer interação.
+  const avatarRef = React.useRef<HTMLSpanElement>(null);
+  React.useEffect(() => {
+    const node = avatarRef.current;
+    if (!node) return;
+    if (avatarMenu) node.removeAttribute("tabindex");
+    else node.tabIndex = -1;
+  }, [avatarMenu]);
   const resolvedSrc = imageError ? undefined : resolveSrc(src, alt, () => setImageError(true));
   const resolvedIcon = resolveIcon(icon, effectiveSize);
   const finalClassName = [BASE_CLASS, className].filter(Boolean).join(" ");
@@ -133,6 +144,7 @@ export function Avatar(props: AvatarProps): React.ReactElement {
       }}
     >
       <AntdAvatar
+        ref={avatarRef}
         size={currentSize}
         style={avatarStyle}
         src={resolvedSrc}
