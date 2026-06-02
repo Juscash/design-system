@@ -1,4 +1,5 @@
 import type { MouseEventHandler, ReactNode } from "react";
+import type { BadgeStatusColor } from "../Badge";
 
 /** Tamanho do KpiCard quando há ícone — afeta o container do ícone e padding. */
 export type KpiCardSize = "m" | "l";
@@ -6,7 +7,7 @@ export type KpiCardSize = "m" | "l";
 /** Alinhamento horizontal do conteúdo. Aplica-se apenas ao KpiCard sem ícone. */
 export type KpiCardAlign = "left" | "center";
 
-/** Direção da tendência exibida no badge. Define o ícone Lucide interno. */
+/** Direção da tendência exibida no badge. Define o ícone Lucide default. */
 export type KpiCardTrendDirection = "up" | "down";
 
 /**
@@ -22,12 +23,58 @@ export type KpiCardTrendDirection = "up" | "down";
  */
 export type KpiCardTone = "primary" | "secondary" | "neutral";
 
-/** Descrição do badge de tendência exibido ao lado do valor. */
+/**
+ * Paleta do badge — reutiliza exatamente os mesmos presets do componente
+ * `Badge` do design system (`BadgeStatusColor`), garantindo consistência
+ * visual entre o KpiCard e o Badge standalone. Valores permitidos:
+ *
+ * - `success` — verde (`brand.primary.50` / `brand.primary.900`).
+ * - `error` — vermelho (`feedback.red.50` / `feedback.red.900`).
+ * - `warning` — laranja (`feedback.orange.50` / `feedback.orange.900`).
+ * - `caution` — amarelo (`feedback.yellow.50` / `feedback.yellow.900`).
+ * - `info` — azul (`feedback.blue.50` / `feedback.blue.900`).
+ *
+ * Cores arbitrárias não são suportadas — a regra é manter o badge dentro
+ * da paleta semântica oficial.
+ */
+export type KpiCardBadgeColor = BadgeStatusColor;
+
+/**
+ * Descrição do badge exibido ao lado do valor.
+ *
+ * Renderizado internamente pelo componente `Badge` do design system —
+ * herda APENAS o que o `Badge` aceita (mesmas paletas, mesmas regras
+ * tipográficas). Cores e ícones arbitrários NÃO são suportados.
+ *
+ * Customizações:
+ * - `direction` (default `"up"`) define o ícone e a paleta padrão:
+ *   up → `TrendingUp` + `success` (verde), down → `TrendingDown` +
+ *   `error` (vermelho).
+ * - `icon` sobrescreve o ícone padrão. Aceita apenas o NOME de um ícone
+ *   do `lucide-react` (string). Use `null` para esconder o ícone.
+ * - `color` sobrescreve a paleta padrão. Aceita apenas um dos presets
+ *   semânticos definidos em `KpiCardBadgeColor`.
+ */
 export interface KpiCardBadge {
-  /** Texto curto (ex.: "+12%"). */
+  /** Texto curto (ex.: "+12%", "novo", "alerta"). */
   value: string;
-  /** Direção da tendência — define o ícone interno (TrendingUp / TrendingDown). */
-  direction: KpiCardTrendDirection;
+  /**
+   * Direção da tendência — define o ícone e cor default quando `icon` e
+   * `color` não são passados. Default `"up"`.
+   */
+  direction?: KpiCardTrendDirection;
+  /**
+   * Nome de um ícone do `lucide-react` (ex.: `"Award"`, `"Check"`). Use
+   * `null` para omitir o ícone. Quando ausente, usa o default da
+   * `direction` (`TrendingUp` / `TrendingDown`). `ReactNode` NÃO é aceito
+   * — Lucide é o único provedor de ícones do design system.
+   */
+  icon?: string | null;
+  /**
+   * Paleta do badge. Preset semântico (mesmo set do `Badge`). Quando
+   * ausente, usa o default da `direction`.
+   */
+  color?: KpiCardBadgeColor;
 }
 
 /**

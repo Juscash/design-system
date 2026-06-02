@@ -1,9 +1,12 @@
 import React from "react";
-import { TrendingDown, TrendingUp } from "lucide-react";
-import { Tooltip } from "../../../Tooltip";
-import type { KpiCardBadge } from "../../../../types/components/KpiCard";
+import { Badge } from "../../../Badge";
+import type { BadgeStatusColor } from "../../../../types/components/Badge";
+import type { KpiCardBadge, KpiCardTrendDirection } from "../../../../types/components/KpiCard";
 
-const BADGE_ICON_SIZE = 12;
+const UP_ICON = "TrendingUp";
+const DOWN_ICON = "TrendingDown";
+const UP_COLOR: BadgeStatusColor = "success";
+const DOWN_COLOR: BadgeStatusColor = "error";
 
 interface KpiCardBadgeViewProps {
   badge: KpiCardBadge;
@@ -12,23 +15,48 @@ interface KpiCardBadgeViewProps {
 }
 
 /**
- * Badge de tendência exibido ao lado do valor do KpiCard. Background
- * `brand.primary.50`, texto `brand.primary.900`, com ícone Lucide
- * `TrendingUp` ou `TrendingDown` conforme `direction`. Tooltip é opcional
- * — só renderiza quando o consumer passa `tooltip`.
+ * Resolve o nome do ícone Lucide do badge:
+ * - `null` → undefined (sem ícone).
+ * - string → o próprio nome.
+ * - ausente → default da `direction` (TrendingUp / TrendingDown).
+ */
+function resolveBadgeIcon(icon: KpiCardBadge["icon"], direction: KpiCardTrendDirection | undefined): string | undefined {
+  if (icon === null) return undefined;
+  if (typeof icon === "string") return icon;
+  return direction === "down" ? DOWN_ICON : UP_ICON;
+}
+
+/**
+ * Resolve a paleta do badge (`statusColor` do `Badge`):
+ * - `color` explícito vence.
+ * - Sem `color`, cai no default da `direction` (`success` para up,
+ *   `error` para down).
+ */
+function resolveBadgeColor(
+  color: KpiCardBadge["color"],
+  direction: KpiCardTrendDirection | undefined,
+): BadgeStatusColor {
+  if (color !== undefined) return color;
+  return direction === "down" ? DOWN_COLOR : UP_COLOR;
+}
+
+/**
+ * Badge do KpiCard. Renderiza internamente o componente `Badge` do
+ * design system (`variant="secondary"` + `statusColor`), garantindo que o
+ * visual seja idêntico ao Badge standalone. Aceita apenas ícones Lucide
+ * (string) ou `null` para esconder — `ReactNode` arbitrário não é
+ * suportado.
  */
 export function KpiCardBadgeView({ badge, tooltip }: KpiCardBadgeViewProps): React.ReactElement {
-  const Icon = badge.direction === "up" ? TrendingUp : TrendingDown;
-  const ariaLabel = badge.direction === "up" ? `Tendência de alta: ${badge.value}` : `Tendência de baixa: ${badge.value}`;
-  const className = `ds-kpi-card__badge ds-kpi-card__badge--${badge.direction}`;
-  const inner = (
-    <span className={className} aria-label={ariaLabel}>
-      <Icon size={BADGE_ICON_SIZE} aria-hidden="true" />
-      <span>{badge.value}</span>
-    </span>
+  const direction = badge.direction;
+  const leftIcon = resolveBadgeIcon(badge.icon, direction);
+  const statusColor = resolveBadgeColor(badge.color, direction);
+
+  return (
+    <Badge variant="secondary" statusColor={statusColor} leftIcon={leftIcon} tooltip={tooltip}>
+      {badge.value}
+    </Badge>
   );
-  if (tooltip === undefined) return inner;
-  return <Tooltip title={tooltip}>{inner}</Tooltip>;
 }
 
 KpiCardBadgeView.displayName = "KpiCardBadgeView";

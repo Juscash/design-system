@@ -100,12 +100,15 @@ export function Tooltip(props: TooltipProps): React.ReactElement {
 
   const handleOpenChange = React.useCallback(
     (next: boolean) => {
+      const title = typeof rest.title === "string" ? rest.title.slice(0, 30) : "?";
+      // eslint-disable-next-line no-console
+      console.log(`[DS Tooltip "${title}"] handleOpenChange(${next}), ancestor=${ancestor ? "Y" : "N"}`);
       if (next && ancestor) ancestor.suppress();
       else if (!next && ancestor) ancestor.release();
       if (!isControlled) setInternalOpen(next);
       onOpenChangeProp?.(next);
     },
-    [ancestor, isControlled, onOpenChangeProp],
+    [ancestor, isControlled, onOpenChangeProp, rest.title],
   );
 
   const suppress = React.useCallback(() => setSuppressed(true), []);
@@ -119,6 +122,11 @@ export function Tooltip(props: TooltipProps): React.ReactElement {
   const resolvedStyles = resolveSemanticValue<TooltipSemanticStyles>(styles, props) ?? {};
 
   const rootClassName = ["ds-tooltip", overlayClassName, resolvedClassNames.root].filter(Boolean).join(" ");
+
+  // eslint-disable-next-line no-console
+  console.log(
+    `[DS Tooltip RENDER "${typeof rest.title === "string" ? rest.title.slice(0, 30) : "?"}"] effectiveOpen=${effectiveOpen}, suppressed=${suppressed}, internalOpen=${internalOpen}, isControlled=${isControlled}, ancestor=${ancestor ? "Y" : "N"}`,
+  );
 
   return (
     <TooltipParentControlContext.Provider value={control}>

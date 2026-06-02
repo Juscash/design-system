@@ -44,16 +44,16 @@ describe("KpiCard", () => {
     expect(container.firstElementChild?.className).toMatch(/ds-kpi-card--size-m/);
   });
 
-  it("renders badge with up direction", () => {
-    render(<KpiCard label="X" value={1} badge={{ value: "+12%", direction: "up" }} />);
+  it("renders badge with up direction (TrendingUp icon, success palette)", () => {
+    const { container } = render(<KpiCard label="X" value={1} badge={{ value: "+12%", direction: "up" }} />);
     expect(screen.getByText("+12%")).toBeInTheDocument();
-    expect(screen.getByLabelText(/Tendência de alta/)).toBeInTheDocument();
+    expect(container.querySelector(".lucide-trending-up")).not.toBeNull();
   });
 
-  it("renders badge with down direction", () => {
-    render(<KpiCard label="X" value={1} badge={{ value: "-4%", direction: "down" }} />);
+  it("renders badge with down direction (TrendingDown icon, error palette)", () => {
+    const { container } = render(<KpiCard label="X" value={1} badge={{ value: "-4%", direction: "down" }} />);
     expect(screen.getByText("-4%")).toBeInTheDocument();
-    expect(screen.getByLabelText(/Tendência de baixa/)).toBeInTheDocument();
+    expect(container.querySelector(".lucide-trending-down")).not.toBeNull();
   });
 
   it("renders subtitle when provided and has icon", () => {

@@ -106,10 +106,14 @@
 }
 
 /* No size=m, o value+badge ficam alinhados à direita (não ocupam toda a
-   largura como no size=l). */
+   largura como no size=l). `flex: 0 1 auto` permite que o conjunto encolha
+   quando o label for longo — o `.ds-kpi-card__value` interno tem
+   `text-overflow: ellipsis`, então o NÚMERO ganha o `...` (não o label).
+   `min-width: 0` é obrigatório pra o flexbox respeitar o ellipsis interno. */
 :global(.ds-kpi-card--with-icon.ds-kpi-card--size-m) :global(.ds-kpi-card__value-row) {
   width: auto;
-  flex: 0 0 auto;
+  flex: 0 1 auto;
+  min-width: 0;
   justify-content: flex-end;
 }
 
@@ -131,6 +135,16 @@
   font-size: 16px;
 }
 
+/* size=m usa flex-row no .info — label compete com value+badge pela linha.
+   O label NUNCA recebe `...` (regra de produto): exibe o texto inteiro,
+   quebrando em espaços quando necessário. Quem encolhe é o valor — daí
+   `flex: 1 1 auto` no label (prioridade pra crescer) e `min-width: 0` pra
+   permitir que o flexbox respeite o `text-wrap`. */
+:global(.ds-kpi-card--with-icon.ds-kpi-card--size-m) :global(.ds-kpi-card__label) {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
 :global(.ds-kpi-card__value-row) {
   display: flex;
   gap: 8px;
@@ -143,8 +157,10 @@
   min-width: 0;
 }
 
-:global(.ds-kpi-card__badge) {
-  /* Badge nunca encolhe — o valor é quem trunca quando falta espaço. */
+/* O Badge do DS é renderizado dentro do `.ds-kpi-card__value-row`. Para
+   garantir que o badge NUNCA encolha (o valor é quem trunca), travamos
+   `flex-shrink: 0` no wrapper que o antd injeta (`.ant-badge`). */
+:global(.ds-kpi-card__value-row) > :global(.ant-badge) {
   flex-shrink: 0;
 }
 
@@ -199,33 +215,9 @@
   display: block;
 }
 
-:global(.ds-kpi-card__badge) {
-  background: var(--color-brand-primary-50, #aaffbe);
-  color: var(--color-brand-primary-900, #004706);
-  border-radius: var(--radius-xl, 8px);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 4px;
-  min-height: 24px;
-  padding: 4px 8px;
-  font-size: 13px;
-  line-height: 1.2;
-  font-weight: 400;
-}
-
-:global(.ds-kpi-card__badge) svg {
-  width: 12px;
-  height: 12px;
-  stroke-width: 2;
-}
-
-/* Badge negativo (direction=down) — fundo vermelho claro + texto/ícone
-   vermelho, conforme o Figma do dashboard "Resumo" quando há queda. */
-:global(.ds-kpi-card__badge--down) {
-  background: var(--color-feedback-red-50, #fef2ec);
-  color: var(--color-feedback-red-500, #d2190b);
-}
+/* Visual do badge (background/color, padding, radius, ícone 12 px) é
+   fornecido pelo próprio componente `Badge` do DS — nenhuma regra é
+   necessária aqui. */
 
 /* Estados interativos — só quando .ds-kpi-card--clickable. */
 :global(.ds-kpi-card--clickable) {
