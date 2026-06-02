@@ -78,7 +78,8 @@ function renderPage(page: number, active: boolean): React.ReactElement {
 
 /**
  * Renderiza o botão de salto (jump-prev/jump-next). Container 36x36 com o
- * ícone `Ellipsis` de 16px da `lucide-react`.
+ * ícone `Ellipsis` de 16px da `lucide-react`. Clique dispara o salto padrão
+ * do antd (5 páginas para frente/trás).
  */
 function renderJump(type: "jump-prev" | "jump-next"): React.ReactElement {
   const ariaLabel = type === "jump-prev" ? "Saltar para páginas anteriores" : "Saltar para próximas páginas";
