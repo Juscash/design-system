@@ -62,7 +62,7 @@ function getContentBaseStyles(isCounter: boolean): React.CSSProperties {
     return {
       minWidth: COUNTER_MIN_SIZE,
       height: COUNTER_MIN_SIZE,
-      paddingInline: 0,
+      paddingInline: spacing[1],
       paddingBlock: 0,
       borderRadius: radius.full,
       display: "inline-flex",
