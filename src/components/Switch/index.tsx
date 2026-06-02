@@ -74,14 +74,25 @@ function buildClassName(external: string | undefined, error: boolean): string {
 /**
  * Forwarda o click do wrapper para o `<button class="ant-switch">` interno.
  * Ignora cliques que já caem no botão (evita duplo toggle). Usado tanto pelo
- * wrapper rich quanto pelo wrapper de field (label sem rich).
+ * wrapper rich quanto pelo wrapper de field (sem rich).
+ *
+ * Importante: o wrapper é um `<div>` (não `<label>`) porque o `<label>`
+ * dispara "click forwarding" nativo para form-controls descendentes — com
+ * um `<button>` dentro, isso causa duplo toggle (browser dispara o click
+ * uma vez no botão direto e outra via label, cancelando o efeito).
+ *
+ * Após o toggle, força foco no button para que teclas subsequentes (`Enter`,
+ * `Space`) continuem operando no switch — sem este `focus()`, o foco fica
+ * no `<body>` e o usuário precisa clicar diretamente no botão pra interagir
+ * por teclado.
  */
-function handleWrapperClick(event: React.MouseEvent<HTMLLabelElement>): void {
+function handleWrapperClick(event: React.MouseEvent<HTMLDivElement>): void {
   const target = event.target as HTMLElement;
   if (target.closest(".ant-switch")) return;
   const button = event.currentTarget.querySelector<HTMLButtonElement>(".ant-switch");
   if (!button || button.disabled) return;
   button.click();
+  button.focus();
 }
 
 /**
@@ -100,12 +111,17 @@ export function Switch(props: SwitchProps): React.ReactElement {
   const { error, rich, label, secondaryText, truncate, className, disabled, ...rest } = props;
   const finalClassName = buildClassName(className, Boolean(error));
 
+  // `wave={{ disabled: true }}` suprime o ripple/onda que o antd v6 emite ao
+  // clicar no switch (monta um `<div class="ant-wave">` no body com keyframe
+  // de `box-shadow` animado). O design system não usa esse feedback visual —
+  // mantemos apenas o anel de `:focus-visible`.
   const antdSwitch = (
     <ConfigProvider
       theme={{
         components: { Switch: switchTokens },
         token: getTokenOverrides(Boolean(error)),
       }}
+      wave={{ disabled: true }}
     >
       <AntdSwitch {...rest} disabled={disabled} className={finalClassName} />
     </ConfigProvider>
@@ -121,24 +137,25 @@ export function Switch(props: SwitchProps): React.ReactElement {
       .join(" ");
 
     return (
-      <label className={wrapperClassName} onClick={handleWrapperClick}>
+      <div className={wrapperClassName} onClick={handleWrapperClick} role="presentation">
         {antdSwitch}
         <span className={RICH_CONTENT_CLASS}>
           {label !== undefined ? <span className={RICH_LABEL_CLASS}>{label}</span> : null}
           {secondaryText !== undefined ? <span className={RICH_SECONDARY_CLASS}>{secondaryText}</span> : null}
         </span>
-      </label>
+      </div>
     );
   }
 
-  // Sem rich, mas com `label` — wrapper inline `<label>` com switch + texto
-  // na mesma linha. A estilização do span do label vive na DS (não no consumidor).
+  // Sem rich, mas com `label` — wrapper inline com switch + texto na mesma
+  // linha. A estilização do span do label vive na DS (não no consumidor).
+  // Usamos `<div>` (não `<label>`) — ver explicação em `handleWrapperClick`.
   if (label !== undefined) {
     return (
-      <label className={FIELD_WRAPPER_CLASS} onClick={handleWrapperClick}>
+      <div className={FIELD_WRAPPER_CLASS} onClick={handleWrapperClick} role="presentation">
         {antdSwitch}
         <span className={FIELD_LABEL_CLASS}>{label}</span>
-      </label>
+      </div>
     );
   }
 

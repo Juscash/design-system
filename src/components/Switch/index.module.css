@@ -24,6 +24,16 @@
   color: var(--color-neutral-700) !important;
 }
 
+/* Remove o "stretch" do handle no `:active` (efeito padrão do Antd que
+   estica o `::before` 30% além do handle e cria a impressão de uma
+   sombra que se expande na transição entre checked/unchecked). Mantemos
+   o handle como círculo limpo — só o foco real (`:focus-visible`)
+   gera anel visível. */
+:global(.ds-switch:not(.ant-switch-disabled):active .ant-switch-handle::before),
+:global(.ds-switch:not(.ant-switch-disabled):active.ant-switch-checked .ant-switch-handle::before) {
+  inset-inline: 0 0 !important;
+}
+
 /* Foco visual via pseudo-class do Storybook (addon-pseudo-states). */
 :global(.ds-switch.pseudo-focus-visible) {
   box-shadow: var(--shadow-focus) !important;
