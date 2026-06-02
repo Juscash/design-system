@@ -1,186 +1,38 @@
-import React, { useMemo } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 import { ConfigProvider, Table as AntdTable } from "antd";
-import type { ColumnsType, ColumnType, TablePaginationConfig } from "antd/es/table/interface";
+import type { TablePaginationConfig } from "antd/es/table/interface";
 import type { TableProps as AntdTableProps } from "antd/es/table";
-import { ChevronLeft, ChevronRight, ChevronsUpDown } from "lucide-react";
-import { Tooltip } from "../Tooltip";
 import { designSystemColors, radius, spacing } from "../../theme";
-import type { TableProps, TableResponsiveMode } from "../../types/components/Table";
+import { useMediaQuery } from "../../hooks/useMediaQuery";
+import type {
+  TableProps,
+  TableResponsiveMode,
+  TableSkeletonConfig,
+  TableEmptyState,
+} from "../../types/components/Table";
+import { buildColumns } from "./utils/buildColumns";
+import { BulkActionBar } from "./parts/BulkActionBar";
+import { TableEmptyStateRenderer } from "./parts/EmptyState";
+import { TablePagination } from "./parts/TablePagination";
+import { SkeletonRows } from "./parts/SkeletonRows";
+import { MobileCards } from "./parts/MobileCards";
 import "./index.module.css";
 
-const PAGINATION_DEFAULT_SIZE = 5;
-const ICON_SIZE = 12;
-const SORTER_ICON_SIZE = 16;
 const FONT_SIZE_DEFAULT = 13;
 const OPTION_HEIGHT = 28;
 const PAGINATION_ITEM_SIZE = 32;
-const SINGULAR_COUNT = 1;
-const TABLE_FONT_FAMILY = "Inter, sans-serif";
+const CHECKBOX_INTERACTIVE_SIZE = 16;
+const DEFAULT_RESPONSIVE_MODE: TableResponsiveMode = "auto";
+const DEFAULT_SKELETON_ROWS = 5;
 const COLOR_TRANSPARENT_WHITE_HIGHER = "rgba(255, 255, 255, 0.01)";
 const COLOR_TRANSPARENT_WHITE_FULL = "rgba(255, 255, 255, 0)";
-const PAGINATION_GAP = 4;
-const CHECKBOX_INTERACTIVE_SIZE = 16;
-const DEFAULT_RESPONSIVE_MODE: TableResponsiveMode = "scroll";
 
 const RESPONSIVE_CLASS_MAP: Record<TableResponsiveMode, string | undefined> = {
   scroll: undefined,
-  blocks: "ds-table--blocks",
+  cards: "ds-table--cards",
+  blocks: "ds-table--cards", // alias deprecated
   auto: "ds-table--auto",
 };
-
-const DEFAULT_LOCALE = {
-  emptyText: "Nenhum registro encontrado.",
-};
-
-interface DefaultPaginationArgs {
-  pagination: TablePaginationConfig | false | undefined;
-}
-
-const totalTextStyle: React.CSSProperties = {
-  fontFamily: TABLE_FONT_FAMILY,
-  fontSize: FONT_SIZE_DEFAULT,
-  lineHeight: "1.2",
-  fontWeight: 400,
-  color: designSystemColors.neutral[800],
-};
-
-const paginationItemStyle: React.CSSProperties = {
-  display: "inline-flex",
-  alignItems: "center",
-  gap: PAGINATION_GAP,
-  fontFamily: TABLE_FONT_FAMILY,
-  fontSize: FONT_SIZE_DEFAULT,
-  lineHeight: "1.2",
-  fontWeight: 400,
-  color: designSystemColors.neutral[800],
-};
-
-function renderTotalText(total: number): React.ReactNode {
-  const label = total === SINGULAR_COUNT ? "item" : "itens";
-  return <span style={totalTextStyle}>{total} {label}</span>;
-}
-
-function renderPaginationItem(type: "prev" | "next"): React.ReactNode {
-  const isPrev = type === "prev";
-  return (
-    <span style={paginationItemStyle}>
-      {isPrev && <ChevronLeft size={ICON_SIZE} aria-hidden="true" />}
-      {isPrev ? "Anterior" : "Próximo"}
-      {!isPrev && <ChevronRight size={ICON_SIZE} aria-hidden="true" />}
-    </span>
-  );
-}
-
-function buildPagination({ pagination }: DefaultPaginationArgs): TablePaginationConfig | false {
-  if (pagination === false) return false;
-
-  return {
-    ...pagination,
-    locale: {
-      ...pagination?.locale,
-      items_per_page: "",
-    },
-    ...(!pagination?.defaultPageSize && { defaultPageSize: PAGINATION_DEFAULT_SIZE }),
-    ...(!pagination?.pageSizeOptions && {
-      pageSizeOptions: ["5", "10", "25", "50", "100"],
-    }),
-    ...(!pagination?.showTotal && {
-      showTotal: renderTotalText,
-    }),
-    ...(!pagination?.itemRender && {
-      itemRender: (_current: number, type: string, originalElement: React.ReactNode) => {
-        if (type === "prev") return renderPaginationItem("prev");
-        if (type === "next") return renderPaginationItem("next");
-        return originalElement;
-      },
-    }),
-  };
-}
-
-function renderSortIcon(): React.ReactElement {
-  return (
-    <span
-      className="ds-table-sort-icon"
-      style={{ display: "inline-flex", alignItems: "center", justifyContent: "center" }}
-    >
-      <ChevronsUpDown size={SORTER_ICON_SIZE} strokeWidth={1.75} />
-    </span>
-  );
-}
-
-const cellContentStyle: React.CSSProperties = {
-  display: "block",
-  margin: 0,
-  overflow: "hidden",
-  textOverflow: "ellipsis",
-  whiteSpace: "nowrap",
-  fontFamily: TABLE_FONT_FAMILY,
-  fontSize: FONT_SIZE_DEFAULT,
-  lineHeight: 1.2,
-  fontWeight: 400,
-  color: designSystemColors.neutral[800],
-};
-
-function renderCellContent(value: unknown): React.ReactNode {
-  if (typeof value === "string" || typeof value === "number") {
-    return (
-      <Tooltip title={value}>
-        <span style={cellContentStyle}>{value}</span>
-      </Tooltip>
-    );
-  }
-  return value as React.ReactNode;
-}
-
-const columnTitleStyle: React.CSSProperties = {
-  margin: 0,
-  fontSize: FONT_SIZE_DEFAULT,
-  lineHeight: 1.2,
-  fontWeight: 700,
-};
-
-/**
- * Extrai uma string descritiva do `title` da coluna, usada como
- * `data-label` na td (necessária no modo `blocks`/`auto` que troca o
- * cabeçalho horizontal por rótulos repetidos em cada célula).
- */
-function extractColumnLabel<T>(col: ColumnType<T>): string {
-  if (typeof col.title === "string") return col.title;
-  if (typeof col.title === "number") return String(col.title);
-  return "";
-}
-
-function buildColumns<T>(columns: ColumnsType<T> | undefined): ColumnsType<T> | undefined {
-  return columns?.map((col) => {
-    const label = extractColumnLabel(col as ColumnType<T>);
-    const existingOnCell = (col as ColumnType<T>).onCell;
-    return {
-      ...col,
-      ...(!col.showSorterTooltip && {
-        showSorterTooltip: { target: "sorter-icon" },
-      }),
-      ...(col.sorter && !col.sortIcon && { sortIcon: renderSortIcon }),
-      title:
-        typeof col.title === "string" ? (
-          <Tooltip title={col.title}>
-            <span style={columnTitleStyle}>{col.title}</span>
-          </Tooltip>
-        ) : (
-          col.title
-        ),
-      onCell: (record: T, index?: number) => {
-        const base = existingOnCell ? existingOnCell(record, index) : {};
-        return { ...base, "data-label": label };
-      },
-      render: (value: unknown, record: T, index: number) => {
-        if (col.render) {
-          return col.render(value, record, index);
-        }
-        return renderCellContent(value);
-      },
-    };
-  });
-}
 
 const tableThemeBaseToken = {
   fontSize: FONT_SIZE_DEFAULT,
@@ -237,17 +89,21 @@ const tableCheckboxTokens = {
 
 const tableTableTokens = {
   cellPaddingBlock: spacing[2],
-  cellPaddingInline: spacing[2],
-  headerBg: designSystemColors.neutral[50],
+  cellPaddingInline: spacing[3], // 12px conforme Figma (era 8px)
+  headerBg: designSystemColors.neutral[100], // neutral-100 (#f5f5f5) conforme Figma (era neutral-50)
   headerColor: designSystemColors.neutral[800],
   colorBgContainer: designSystemColors.neutral[50],
   colorBorderSecondary: designSystemColors.neutral[300],
   borderRadius: radius.xl,
+  rowHoverBg: designSystemColors.neutral[100],
   rowSelectedBg: designSystemColors.neutral[200],
   rowSelectedHoverBg: designSystemColors.neutral[200],
   headerSortActiveBg: designSystemColors.neutral[100],
   headerSortHoverBg: designSystemColors.neutral[100],
-  bodySortBg: designSystemColors.neutral[50],
+  // bodySortBg DEVE ser transparent — senão a coluna ordenada renderiza
+  // bg `neutral-50` enquanto as outras pegam `neutral-100` no hover, criando
+  // um "buraco" visível na linha (parece padding/inset estranho).
+  bodySortBg: "transparent",
   headerSplitColor: "transparent",
 };
 
@@ -263,62 +119,321 @@ function getTableThemeTokens(): NonNullable<React.ComponentProps<typeof ConfigPr
   };
 }
 
-/**
- * Compõe a lista de classes do `ds-table` a partir da prop `responsive`.
- */
 function buildResponsiveClassName(responsive: TableResponsiveMode): string | undefined {
   return RESPONSIVE_CLASS_MAP[responsive];
 }
 
 /**
- * Table do design system. Aplica tokens próprios via `ConfigProvider` local,
- * adiciona pagination customizada (i18n "Anterior"/"Próximo", contagem total
- * em pt-BR "{N} itens", page-size options) e envolve células de
- * string/number em `Tooltip` para truncamento legível.
+ * Resolve a quantidade de rows do skeleton a partir da prop polimórfica.
+ * Aceita `true` (default 5), número (N) ou objeto com `rows`.
+ */
+function resolveSkeletonRows(config: TableSkeletonConfig | undefined): number {
+  if (typeof config === "number") return config;
+  if (typeof config === "object" && config !== null && typeof config.rows === "number") {
+    return config.rows;
+  }
+  return DEFAULT_SKELETON_ROWS;
+}
+
+/**
+ * Resolve a flag de animation do skeleton. Default `true`.
+ */
+function resolveSkeletonAnimated(config: TableSkeletonConfig | undefined): boolean {
+  if (typeof config === "object" && config !== null && typeof config.animated === "boolean") {
+    return config.animated;
+  }
+  return true;
+}
+
+interface ResolveEmptyArgs {
+  emptyState: TableEmptyState | undefined;
+  hasData: boolean;
+}
+
+function resolveEmptyText(args: ResolveEmptyArgs): React.ReactNode | undefined {
+  if (!args.hasData && args.emptyState !== undefined) {
+    return <TableEmptyStateRenderer config={args.emptyState} />;
+  }
+  return undefined;
+}
+
+interface ResolveSelectionCountArgs<T> {
+  rowSelection: AntdTableProps<T>["rowSelection"];
+}
+
+function resolveSelectionCount<T>(args: ResolveSelectionCountArgs<T>): number {
+  const keys = args.rowSelection?.selectedRowKeys;
+  return Array.isArray(keys) ? keys.length : 0;
+}
+
+const SELECTION_HEADER_CLASS = "ds-table-selection-header";
+const SELECTION_HEADER_LABEL_CLASS = "ds-table-selection-header__label";
+const DS_CHECKBOX_CLASS = "ds-checkbox";
+
+/**
+ * Aplica a classe `.ds-checkbox` no `originNode` (Checkbox do antd) sem
+ * mudar o componente — apenas para que as regras de visual do Checkbox
+ * standalone do DS (single border, indeterminate dash, focus ring) sejam
+ * herdadas via CSS global, evitando regras duplicadas no Table.
+ */
+function withDsCheckboxClass(node: React.ReactNode): React.ReactNode {
+  if (!React.isValidElement(node)) return node;
+  const props = node.props as { className?: string };
+  const className = [DS_CHECKBOX_CLASS, props.className].filter(Boolean).join(" ");
+  return React.cloneElement(node as React.ReactElement<{ className?: string }>, { className });
+}
+
+/**
+ * Aplica `.ds-checkbox` em todos os checkboxes do antd Table (header
+ * "selecionar todos" + checkbox de cada linha) via `columnTitle` /
+ * `renderCell`. Em modo `cards/auto` ainda compõe `<span label>{checkbox}`
+ * para que a barra "Selecionar todos" mostre o controle ao lado do label.
  *
- * Suporta duas estratégias de responsividade via prop `responsive`:
- *   - `scroll` (default): tabela horizontal com `scroll.x` quando estreita.
- *   - `blocks`: cada linha vira um cartão com label da coluna acima do valor.
- *   - `auto`: comportamento de `scroll` em ≥ 768 px e `blocks` em < 768 px.
+ * Estado indeterminate ("-") do master checkbox é nativo do antd; o visual
+ * (traço branco) vem das regras de `.ds-checkbox` no Checkbox standalone.
+ */
+function wrapSelectionColumnTitle<T>(
+  rowSelection: AntdTableProps<T>["rowSelection"],
+  responsive: TableResponsiveMode,
+): AntdTableProps<T>["rowSelection"] {
+  if (!rowSelection) return rowSelection;
+  const cardsLike = responsive === "cards" || responsive === "auto" || responsive === "blocks";
+  const original = rowSelection.columnTitle;
+  const wrappedTitle =
+    cardsLike && typeof original === "string"
+      ? (checkboxNode: React.ReactNode): React.ReactNode => (
+          <span className={SELECTION_HEADER_CLASS}>
+            <span className={SELECTION_HEADER_LABEL_CLASS}>{original}</span>
+            {withDsCheckboxClass(checkboxNode)}
+          </span>
+        )
+      : typeof original === "function"
+        ? (checkboxNode: React.ReactNode): React.ReactNode => original(withDsCheckboxClass(checkboxNode))
+        : (checkboxNode: React.ReactNode): React.ReactNode => withDsCheckboxClass(checkboxNode);
+
+  const userRenderCell = rowSelection.renderCell;
+  const wrappedRenderCell: NonNullable<AntdTableProps<T>["rowSelection"]>["renderCell"] = (
+    checked,
+    record,
+    index,
+    originNode,
+  ) => {
+    const base = userRenderCell ? userRenderCell(checked, record, index, originNode) : originNode;
+    return withDsCheckboxClass(base as React.ReactNode);
+  };
+
+  return {
+    ...rowSelection,
+    columnTitle: wrappedTitle,
+    renderCell: wrappedRenderCell,
+  };
+}
+
+/**
+ * Lê os valores iniciais de página e tamanho a partir da config do consumidor.
+ * Prioriza `defaultCurrent`/`current` e `defaultPageSize`/`pageSize`.
+ */
+function resolveInitialPaging(config: TablePaginationConfig | undefined): { page: number; pageSize: number } {
+  const page = config?.defaultCurrent ?? config?.current ?? 1;
+  const pageSize = config?.defaultPageSize ?? config?.pageSize ?? 5;
+  return { page, pageSize };
+}
+
+/**
+ * Aplica paginação client-side ao `dataSource`. Quando `total` é fornecido pelo
+ * consumidor (server-side), retorna `dataSource` inalterado (consumidor já
+ * cortou). Caso contrário, fatia conforme `page`/`pageSize`.
+ */
+function applyClientPaging<T>(
+  dataSource: readonly T[] | undefined,
+  page: number,
+  pageSize: number,
+  serverTotal: number | undefined,
+): readonly T[] | undefined {
+  if (!dataSource) return dataSource;
+  if (serverTotal !== undefined) return dataSource;
+  const start = (page - 1) * pageSize;
+  return dataSource.slice(start, start + pageSize);
+}
+
+/**
+ * Table do design system. Aplica tokens próprios via `ConfigProvider` local,
+ * usa o `Skeleton` para o estado de carregamento, `EmptyState` para o estado
+ * vazio e o `Pagination` (DS) para a navegação por página — sem reimplementar
+ * comportamento que já existe no DS. Adiciona barra de bulk action
+ * (`bulkActions`) e modo responsive como cards (Figma `4143:12201`).
  */
 export function Table<T>(props: TableProps<T>): React.ReactElement {
   const {
     columns,
+    dataSource,
     bordered = false,
     className,
-    tableLayout = "fixed",
+    tableLayout,
     scroll = undefined,
     pagination,
     locale,
     responsive = DEFAULT_RESPONSIVE_MODE,
+    responsiveBreakpoint = 768,
+    cardRender: _cardRenderIgnored,
+    cardLayout,
+    rowKey,
+    emptyState,
+    bulkActions,
+    skeleton,
+    sortIcons,
+    rowSelection,
+    loading,
     ...rest
   } = props;
 
-  const mergedPagination = useMemo(
-    () => buildPagination({ pagination: pagination as TablePaginationConfig | false | undefined }),
-    [pagination],
+  const paginationConfig = (pagination === false ? undefined : (pagination as TablePaginationConfig | undefined));
+  const paginationEnabled = pagination !== false;
+
+  // Detecção de modo cards: `responsive='cards'` força sempre; `'auto'`
+  // depende do viewport (<= breakpoint - 1 px). `'scroll'` jamais ativa
+  // cards. `'blocks'` é alias deprecated de `'cards'`.
+  const mobileMatches = useMediaQuery(`(max-width: ${responsiveBreakpoint - 1}px)`);
+  const isCardsMode =
+    responsive === "cards" ||
+    responsive === "blocks" ||
+    (responsive === "auto" && mobileMatches);
+
+  const showSkeleton = Boolean(skeleton) || Boolean(loading);
+  const skeletonRowsCount = useMemo(() => resolveSkeletonRows(skeleton), [skeleton]);
+  const skeletonAnimated = useMemo(() => resolveSkeletonAnimated(skeleton), [skeleton]);
+
+  const initialPaging = useMemo(() => resolveInitialPaging(paginationConfig), [paginationConfig]);
+  const [internalPage, setInternalPage] = useState<number>(initialPaging.page);
+  const [internalPageSize, setInternalPageSize] = useState<number>(initialPaging.pageSize);
+
+  // Modo controlled exige BOTH valor + onChange (padrão React de inputs
+  // controlados). Sem `onChange`, `current`/`pageSize` viram apenas valores
+  // iniciais — caso contrário o size changer e a paginação ficariam travados
+  // no valor inicial sem forma de mudar.
+  const hasOnChange = typeof paginationConfig?.onChange === "function";
+  const isPageControlled = paginationConfig?.current !== undefined && hasOnChange;
+  const isPageSizeControlled = paginationConfig?.pageSize !== undefined && hasOnChange;
+  const currentPage = isPageControlled ? (paginationConfig?.current as number) : internalPage;
+  const currentPageSize = isPageSizeControlled ? (paginationConfig?.pageSize as number) : internalPageSize;
+
+  const customColumns = useMemo(
+    () => buildColumns<T>({ columns, sortIcons }),
+    [columns, sortIcons],
   );
 
-  const customColumns = useMemo(() => buildColumns<T>(columns), [columns]);
+  // Loading: substitui a tabela INTEIRA pela seção de skeleton (Figma
+  // `8733:10563`/`8733:11508`). Sem header, sem container border, sem
+  // pagination — só N barras `neutral/100` empilhadas com gap 8 px.
+  if (showSkeleton) {
+    return (
+      <ConfigProvider theme={getTableThemeTokens()}>
+        <SkeletonRows rows={skeletonRowsCount} animated={skeletonAnimated} />
+      </ConfigProvider>
+    );
+  }
+
+  const rawDataSource = dataSource as readonly T[] | undefined;
+  const totalRecords = paginationConfig?.total ?? rawDataSource?.length ?? 0;
+  const visibleData = paginationEnabled
+    ? applyClientPaging(rawDataSource, currentPage, currentPageSize, paginationConfig?.total)
+    : rawDataSource;
+  const hasData = Array.isArray(rawDataSource) && rawDataSource.length > 0;
+
   const mergedClassName = ["ds-table", buildResponsiveClassName(responsive), className].filter(Boolean).join(" ");
-  const mergedLocale = { ...DEFAULT_LOCALE, ...locale };
+
+  const resolvedEmptyText = resolveEmptyText({ emptyState, hasData });
+  const mergedLocale = {
+    emptyText: "Nenhum registro encontrado.",
+    ...(resolvedEmptyText !== undefined && { emptyText: resolvedEmptyText }),
+    ...locale,
+  };
+
+  const selectionCount = resolveSelectionCount<T>({ rowSelection });
+  const showBulkBar = bulkActions !== undefined && selectionCount > 0;
+  const finalRowSelection = wrapSelectionColumnTitle<T>(rowSelection, responsive);
+
+  const handlePaginationChange = (nextPage: number, nextSize: number): void => {
+    if (!isPageControlled) setInternalPage(nextPage);
+    if (!isPageSizeControlled) setInternalPageSize(nextSize);
+    paginationConfig?.onChange?.(nextPage, nextSize);
+  };
+
+  // Antd v6 reinjeta `title=<string>` em `<th>`s com ellipsis+sorter mesmo
+  // após `ellipsis.showTitle: false` + `onHeaderCell({title: ''})`. Para
+  // garantir que o tooltip nativo do browser NUNCA dispare, observamos o
+  // wrapper e limpamos qualquer `title` remanescente em cells com ellipsis.
+  // O `Tooltip` do DS continua sendo a única fonte de tooltip quando o
+  // consumidor opta via `render`.
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+    const cleanTitles = (): void => {
+      wrapper.querySelectorAll(".ant-table-cell-ellipsis[title]").forEach((cell) => {
+        const t = cell.getAttribute("title");
+        if (t !== null && t !== "") cell.setAttribute("title", "");
+      });
+    };
+    cleanTitles();
+    const observer = new MutationObserver(cleanTitles);
+    observer.observe(wrapper, { subtree: true, attributes: true, attributeFilter: ["title"] });
+    return () => observer.disconnect();
+  });
 
   return (
     <ConfigProvider theme={getTableThemeTokens()}>
-      <AntdTable
-        {...(rest as AntdTableProps<T>)}
-        pagination={mergedPagination}
-        tableLayout={tableLayout}
-        scroll={scroll}
-        bordered={bordered}
-        columns={customColumns}
-        className={mergedClassName}
-        locale={mergedLocale}
-      />
+      <div ref={wrapperRef} className={isCardsMode ? "ds-table-wrapper--cards" : undefined}>
+      {showBulkBar && <BulkActionBar count={selectionCount} config={bulkActions} />}
+      {isCardsMode ? (
+        <MobileCards
+          data={visibleData}
+          columns={columns}
+          cardLayout={cardLayout}
+          rowSelection={rowSelection}
+          rowKey={rowKey}
+          emptyState={emptyState}
+        />
+      ) : (
+        <AntdTable
+          {...(rest as AntdTableProps<T>)}
+          rowKey={rowKey}
+          rowSelection={finalRowSelection}
+          dataSource={visibleData as AntdTableProps<T>["dataSource"]}
+          pagination={false}
+          tableLayout={tableLayout}
+          scroll={scroll}
+          bordered={bordered}
+          columns={customColumns}
+          className={mergedClassName}
+          locale={mergedLocale}
+          loading={false}
+        />
+      )}
+      {paginationEnabled && hasData && (
+        <TablePagination
+          current={currentPage}
+          pageSize={currentPageSize}
+          total={totalRecords}
+          showSizeChanger={Boolean(paginationConfig?.showSizeChanger)}
+          pageSizeOptions={(paginationConfig?.pageSizeOptions as string[] | undefined) ?? undefined}
+          showTotal={paginationConfig?.showTotal}
+          onChange={handlePaginationChange}
+          cardsMode={isCardsMode}
+        />
+      )}
+      </div>
     </ConfigProvider>
   );
 }
 
 Table.displayName = "Table";
 
-export type { TableProps, TableResponsiveMode } from "../../types/components/Table";
+export type {
+  TableProps,
+  TableResponsiveMode,
+  TableEmptyState,
+  TableBulkActions,
+  TableSkeletonConfig,
+  TableSortIcons,
+} from "../../types/components/Table";

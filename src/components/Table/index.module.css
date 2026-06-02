@@ -1,16 +1,20 @@
 /*
-  Estilos próprios do Table (linhas, header, paginação, sort icon).
+  Estilos próprios do Table (linhas, header, paginação, sort icon, skeleton,
+  bulk bar, empty state, modo cards).
 
   As medidas são extraídas direto do Figma (`node-id=4069-6603`):
     - heading row .................. 32px
     - data row ..................... 44px
-    - cell padding ................. 8px (vertical 0 + vertical-align middle)
+    - cell padding ................. 8px vertical / 12px inline (spacing 2/3)
     - container border ............. 1px solid neutral-300, radius xl (8px)
-    - background ................... neutral-50 (#fafafa)
+    - background container ......... neutral-50 (#fafafa)
+    - header bg .................... neutral-100 (#f5f5f5)
     - selected row bg .............. neutral-200 (#e5e5e5)
     - hover row bg ................. neutral-100 (#f5f5f5)
     - typography ................... Inter 13/1.2 (700 no header, 400 nas células)
     - pagination row ............... 36px, gap uniforme de 4px entre itens
+    - mobile card .................. 320px wide, gap 8px entre cards, border + radius xl
+    - bulk bar ..................... 56px alto, padding-left 12, label esq + actions dir
 */
 
 /* ── Wrapper externo ────────────────────────────────────────────────────── */
@@ -18,6 +22,19 @@
 :global(.ds-table.ant-table-wrapper),
 :global(.ds-table.ant-table-wrapper) :global(.ant-table) {
   background: transparent !important;
+}
+
+/*
+  Todas as variações da Table ocupam 100% do container — incluindo as que
+  usam colunas com `width` fixo/% e `ellipsis`. Sem este override, o antd
+  por vezes renderiza a `<table>` interna com `width: max-content`, criando
+  uma tabela mais estreita que o card pai.
+*/
+:global(.ds-table.ant-table-wrapper),
+:global(.ds-table.ant-table-wrapper) :global(.ant-table),
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-container),
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-content) > table {
+  width: 100% !important;
 }
 
 :global(.ds-table.ant-table-wrapper) :global(.ant-table-container) {
@@ -69,10 +86,10 @@
 :global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr > th,
 :global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr > td {
   height: 32px !important;
-  padding: 8px !important;
+  padding: 8px 12px !important;
   border-bottom: 1px solid var(--color-neutral-300) !important;
   border-inline-end: none !important;
-  background: var(--color-neutral-50) !important;
+  background: var(--color-neutral-100) !important;
   color: var(--color-neutral-800) !important;
   font-size: 13px !important;
   font-weight: 700 !important;
@@ -130,9 +147,14 @@
   line-height: 1 !important;
 }
 
+/*
+  `height: 44px` em `<td>` (display: table-cell) age como ALTURA MÍNIMA pelo
+  algoritmo de layout de tabela — o conteúdo pode esticar a célula, mas o
+  mínimo é 44 px. `min-height` é ignorado em table-cell por spec.
+*/
 :global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr > td {
   height: 44px !important;
-  padding: 10px 8px !important;
+  padding: 2px 8px !important;
   border-top: 1px solid var(--color-neutral-300) !important;
   border-inline-end: none !important;
   background: var(--color-neutral-50) !important;
@@ -143,7 +165,14 @@
   box-sizing: border-box !important;
 }
 
-:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr:hover > td {
+/*
+  Hover row: aplicamos o bg neutral-100 em TODAS as células do tr, incluindo
+  a classe interna `.ant-table-cell-row-hover` que o antd usa pra pintar o
+  hover via JS (sem ela, a coluna ordenada continuava com bg distinto e
+  parecia haver um "padding" cinza na linha — buraco visual no hover).
+*/
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr:hover > td,
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr > td:global(.ant-table-cell-row-hover) {
   background: var(--color-neutral-100) !important;
 }
 
@@ -183,35 +212,28 @@
 }
 
 /*
-  Selection column comprime padding-block para o checkbox (16px) caber
-  dentro do `height: 32px` declarado no Figma sem inflar a row toda.
-  Sem este ajuste, o checkbox força a heading row a ~36px porque
-  16 (checkbox) + 16 (padding 8+8) + 1 (border) excede 32.
+  Selection column tem padding-inline FIXO de 8 px (Figma cell mobile) e
+  padding-block compactado pra 4 px. Sem o padding-inline explícito, o th
+  herdava 12 px e o td 8 px (das regras de row-level), causando
+  desalinhamento horizontal entre o checkbox master no header e os
+  checkboxes nas rows.
 */
 :global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr > th:global(.ant-table-selection-column),
 :global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr > td:global(.ant-table-selection-column) {
   padding-block: 4px !important;
+  padding-inline: 8px !important;
 }
 
 /* ── Checkbox dentro da Table ───────────────────────────────────────────── */
 
 /*
-  Bug fix: ao passar o mouse pela linha (bg neutral-100), o fundo do
-  checkbox (neutral-50) ficava muito próximo do bg da linha, fazendo o
-  controle "sumir" visualmente. Mantemos a borda forte e o fundo neutro
-  mesmo no hover.
-
-  Antd v6 renderiza o checkbox visível diretamente no `.ant-checkbox`
-  (sem `.ant-checkbox-inner` como em versões anteriores).
+  O Table herda o visual completo do Checkbox standalone — o `Table` injeta
+  `.ds-checkbox` em todos os checkboxes (`rowSelection.columnTitle` +
+  `rowSelection.renderCell` em `index.tsx`). Aqui mantemos apenas regras
+  específicas de tabela: line-height do wrapper (para que a célula do
+  thead não infle) e alinhamento da `.ant-table-selection`.
 */
 
-/*
-  O `.ant-checkbox-wrapper` herda `line-height: 21px` do <body>, gerando
-  um strut de 21px que infla a célula da seleção (e por consequência
-  TODA a row do thead vai a 38px). Travamos line-height 1 para que o
-  wrapper se ajuste ao tamanho do checkbox visível (16px) e respeite o
-  height 32px definido na th.
-*/
 :global(.ds-table.ant-table-wrapper) :global(.ant-checkbox-wrapper) {
   line-height: 1 !important;
   align-items: center !important;
@@ -221,35 +243,6 @@
   display: inline-flex !important;
   align-items: center !important;
   line-height: 1 !important;
-}
-
-:global(.ds-table.ant-table-wrapper) :global(.ant-checkbox) {
-  background-color: var(--color-neutral-50) !important;
-  border: 1px solid var(--color-neutral-400) !important;
-  border-radius: var(--radius-md) !important;
-  transition: border-color 0.15s ease, background-color 0.15s ease !important;
-}
-
-:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr:hover :global(.ant-checkbox) {
-  border-color: var(--color-neutral-500) !important;
-  background-color: var(--color-neutral-50) !important;
-}
-
-:global(.ds-table.ant-table-wrapper) :global(.ant-checkbox-wrapper:hover) :global(.ant-checkbox),
-:global(.ds-table.ant-table-wrapper) :global(.ant-checkbox:hover) {
-  border-color: var(--color-neutral-800) !important;
-  background-color: var(--color-neutral-50) !important;
-}
-
-:global(.ds-table.ant-table-wrapper) :global(.ant-checkbox-checked) {
-  background-color: var(--color-brand-primary-600) !important;
-  border-color: var(--color-brand-primary-600) !important;
-}
-
-:global(.ds-table.ant-table-wrapper) :global(.ant-checkbox-checked:hover),
-:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr:hover :global(.ant-checkbox-checked) {
-  background-color: var(--color-brand-primary-700) !important;
-  border-color: var(--color-brand-primary-700) !important;
 }
 
 /* ── Paginação ──────────────────────────────────────────────────────────── */
@@ -422,113 +415,393 @@
   color: var(--color-neutral-800) !important;
 }
 
-/* ── Modo responsivo "blocks" (cards) ───────────────────────────────────── */
+/* ── Modo responsivo "cards" (Figma Prospecção 5101:54788) ──────────────── */
 
 /*
-  A variante `responsive="blocks"` (`.ds-table--blocks`) transforma cada
-  linha em um cartão vertical empilhando as células — cada cell exibe o
-  rótulo da coluna acima do valor, conforme o frame `table cell mobile`
-  do Figma (`4791:12172`). Use quando a tabela precisar ser legível em
-  viewports estreitos sem scroll horizontal.
+  A variante `responsive="cards"` (e o alias deprecated `"blocks"`) substitui
+  o antd Table inteiro por uma lista de cards custom renderizados pelo
+  componente `MobileCards`. Cada card tem 3 NÍVEIS:
+
+  - **Header** (`.ds-card__header`): cells de `cardLayout.header` + checkbox
+    de seleção (quando há rowSelection). Border-bottom 1 px tocando as
+    bordas laterais do card.
+  - **Body** (`.ds-card__body`): cells restantes, stacked sem separadores
+    internos. Padding vertical de cada field dá o respiro.
+  - **Footer** (`.ds-card__footer`): cells de `cardLayout.footer` (ações).
+    Border-top 1 px tocando as bordas laterais.
+
+  Card outer não tem padding — cada section tem `padding: 4 px 8 px` interno.
+  Isso garante que os dividers `border-bottom/border-top` cubram toda a
+  largura do card (não ficam insetados).
+
+  Em modo `"auto"`, o `useMediaQuery` no Table troca para `MobileCards`
+  automaticamente em viewports `< responsiveBreakpoint` (default 768 px).
 */
 
-:global(.ds-table--blocks) :global(.ant-table-thead) {
-  display: none !important;
+/* Wrapper externo no modo cards — sem border/radius (o wrapper do antd não
+   é usado nesse modo; renderizamos `MobileCards` diretamente). */
+:global(.ds-table-wrapper--cards) {
+  width: 100%;
 }
 
-:global(.ds-table--blocks) :global(.ant-table-tbody) > tr {
-  display: flex !important;
-  flex-direction: column !important;
-  width: 100% !important;
-  height: auto !important;
-  padding: 16px !important;
-  border-top: 1px solid var(--color-neutral-300) !important;
-  background: var(--color-neutral-50) !important;
+/* Container da lista de cards — vertical stack com gap 8 px. */
+:global(.ds-table-cards) {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
 }
 
-:global(.ds-table--blocks) :global(.ant-table-tbody) > tr:first-child {
-  border-top: none !important;
+/* Header "Selecionar todos" — barra full-width, mesmo radius/border dos cards.
+   Padding interno 8 px (cell mobile Figma) pra alinhar o checkbox master
+   com os checkboxes de cada card (que ficam a 8 px da borda direita do card). */
+:global(.ds-table-cards__select-all) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 40px;
+  padding: 0 8px;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-xl);
+  background: var(--color-neutral-50);
+  box-sizing: border-box;
 }
 
-:global(.ds-table--blocks) :global(.ant-table-tbody) > tr > td {
-  display: grid !important;
-  grid-template-columns: minmax(0, 1fr) !important;
-  width: 100% !important;
-  height: auto !important;
-  min-height: 0 !important;
-  padding: 8px 0 !important;
-  border-top: none !important;
-}
-
-:global(.ds-table--blocks) :global(.ant-table-tbody) > tr > td::before {
-  content: attr(data-label);
-  display: block;
-  margin-bottom: 4px;
-  color: var(--color-neutral-500);
+:global(.ds-table-cards__select-all-label) {
+  color: var(--color-neutral-800);
+  font-family: "Inter", sans-serif;
   font-size: 13px;
-  font-weight: 700;
+  font-weight: 400;
+  line-height: 1.2;
+  /* Padding-left extra alinha o texto "Selecionar todos" com a primeira
+     coluna do card (cells têm padding 4 px 8 px — total esquerda = 8 px). */
+  padding-left: 0;
+}
+
+:global(.ds-table-cards__select-all-checkbox) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Card individual (`.ds-card`) ────────────────────────────────────────── */
+
+/*
+  Card outer: border 1 px regular, radius xl, SEM padding (cada section tem
+  seu próprio `padding`). `overflow: hidden` garante que os border-bottom/
+  border-top das sections respeitem o border-radius do card (sem "escapar"
+  no canto).
+*/
+:global(.ds-card) {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-xl);
+  background: var(--color-neutral-50);
+  overflow: hidden;
+  box-sizing: border-box;
+  transition: background-color 0.12s ease-in-out;
+}
+
+:global(.ds-card:hover) {
+  background: var(--color-neutral-100);
+}
+
+:global(.ds-card--selected),
+:global(.ds-card--selected:hover) {
+  background: var(--color-neutral-200);
+}
+
+/* Header: flex-row (campos à esquerda + checkbox à direita).
+   Border-bottom dá o divider que toca as bordas laterais do card. */
+:global(.ds-card__header) {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  border-bottom: 1px solid var(--color-neutral-300);
+}
+
+:global(.ds-card__header-fields) {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding: 4px 8px;
+  justify-content: center;
+}
+
+:global(.ds-card__header-checkbox) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  flex: 0 0 auto;
+}
+
+/* Body: stack vertical de fields, SEM separadores internos. Cada field tem
+   padding próprio (4 px 8 px), suficiente pra criar respiro entre eles. */
+:global(.ds-card__body) {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Footer: cells de actions/etc. Border-top dá o divider antes do footer. */
+:global(.ds-card__footer) {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 4px 8px;
+  border-top: 1px solid var(--color-neutral-300);
+}
+
+/* ── Card field (label / value) ──────────────────────────────────────────── */
+
+:global(.ds-card-field) {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* No header.fields o padding vive no parent (.ds-card__header-fields), então
+   suprimimos o padding do field interno. */
+:global(.ds-card__header-fields) :global(.ds-card-field),
+/* No footer o padding vive no parent (.ds-card__footer), idem. */
+:global(.ds-card__footer) :global(.ds-card-field) {
+  padding: 0;
+  width: auto;
+}
+
+:global(.ds-card-field__label) {
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--color-neutral-500);
+  word-break: break-word;
+}
+
+:global(.ds-card-field__value) {
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--color-neutral-800);
+  word-break: break-word;
+}
+
+/* ── Skeleton (loading) ─────────────────────────────────────────────────── */
+
+/*
+  Quando `skeleton` (ou `loading`) está truthy, o Table SUBSTITUI a tabela
+  inteira por N barras `Skeleton.Line` empilhadas verticalmente — sem
+  header, sem container border — espelhando o frame `Subtitle` do Figma
+  (`8733:11508`): cada linha é `neutral/100`, radius `xl` (8 px),
+  altura 43 px, full-width. Gap 8 px entre linhas.
+*/
+
+:global(.ds-table-skeleton) {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+:global(.ds-table-skeleton__row) {
+  width: 100% !important;
+  height: 43px !important;
+  border-radius: var(--radius-xl) !important;
+}
+
+/* ── Bulk action bar ────────────────────────────────────────────────────── */
+
+/*
+  Renderizada ACIMA da tabela quando há `rowSelection.selectedRowKeys.length > 0`
+  e `bulkActions` está definido. 56px de altura, padding-left 12px, label à
+  esquerda + slot de ações à direita (Figma `8124:10663`).
+*/
+
+:global(.ds-table-bulk-bar) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 56px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-xl);
+  background: var(--color-neutral-50);
+  margin-bottom: 8px;
+  box-sizing: border-box;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+:global(.ds-table-bulk-bar__label) {
+  color: var(--color-neutral-800);
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  line-height: 1.2;
+  font-weight: 400;
+}
+
+:global(.ds-table-bulk-bar__actions) {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/*
+  Modo responsivo (cards): empilhamento vertical com label em cima e ações
+  full-width abaixo — evita overflow do "3 item(ns) selecionado(s) +
+  Arquivar/Mover/Exportar/Excluir" em viewport mobile.
+*/
+:global(.ds-table-wrapper--cards) :global(.ds-table-bulk-bar) {
+  flex-direction: column;
+  align-items: stretch;
+  padding: 12px;
+}
+
+:global(.ds-table-wrapper--cards) :global(.ds-table-bulk-bar__label) {
+  text-align: left;
+}
+
+:global(.ds-table-wrapper--cards) :global(.ds-table-bulk-bar__actions) {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+:global(.ds-table-wrapper--cards) :global(.ds-table-bulk-bar__actions) > * {
+  width: 100%;
+}
+
+/* ── Empty state ────────────────────────────────────────────────────────── */
+
+/*
+  Wrapper aplicado pelo TableEmptyStateRenderer dentro do `locale.emptyText`.
+  Garante padding generoso e centraliza o conteúdo no body do antd.
+*/
+
+:global(.ds-table-empty-state) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 48px 16px;
+  color: var(--color-neutral-800);
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
   line-height: 1.2;
 }
 
-:global(.ds-table--blocks) :global(.ant-table-tbody) > tr > td:global(.ant-table-selection-column),
-:global(.ds-table--blocks) :global(.ant-table-tbody) > tr > td[data-label=""] {
-  padding: 0 !important;
+/* ── Footer de paginação (DS Pagination + total + size changer) ─────────── */
+
+/*
+  O Table não usa mais a paginação interna do antd: substituímos por um
+  rodapé custom que compõe o `Pagination` do design system + total à
+  esquerda + Select de itens-por-página opcional à direita.
+
+  Layout (Figma `8124:10861`): total esquerda | pagination centro/dir | select dir.
+*/
+
+:global(.ds-table-pagination-footer) {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  width: 100%;
+  margin-top: 12px;
+  flex-wrap: wrap;
 }
 
-:global(.ds-table--blocks) :global(.ant-table-tbody) > tr > td:global(.ant-table-selection-column)::before,
-:global(.ds-table--blocks) :global(.ant-table-tbody) > tr > td[data-label=""]::before {
-  display: none !important;
+:global(.ds-table-pagination-total) {
+  margin-right: auto;
+  color: var(--color-neutral-800);
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.2;
 }
 
-:global(.ds-table--blocks) :global(.ant-table-container) {
-  overflow: visible !important;
+:global(.ds-table-pagination-size-changer.ant-select) {
+  width: 165px !important;
+  height: 36px !important;
+  border: 1px solid var(--color-neutral-300) !important;
+  border-radius: var(--radius-xl) !important;
+  background: var(--color-neutral-50) !important;
 }
 
-:global(.ds-table--blocks) :global(.ant-table-cell-scrollbar) {
-  display: none !important;
+:global(.ds-table-pagination-size-changer.ant-select) :global(.ant-select-selector) {
+  height: 34px !important;
+  padding: 0 8px 0 12px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
-/* Em viewport < 768px, força automaticamente o modo `auto`. */
-@media (max-width: 767px) {
-  :global(.ds-table--auto) :global(.ant-table-thead) {
-    display: none !important;
-  }
+:global(.ds-table-pagination-size-changer.ant-select) :global(.ant-select-selection-item) {
+  color: var(--color-neutral-800) !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+}
 
-  :global(.ds-table--auto) :global(.ant-table-tbody) > tr {
-    display: flex !important;
-    flex-direction: column !important;
-    width: 100% !important;
-    height: auto !important;
-    padding: 16px !important;
-    border-top: 1px solid var(--color-neutral-300) !important;
-    background: var(--color-neutral-50) !important;
-  }
+/*
+  Layout de paginação em modo cards (Figma Prospecção `5101:54788`):
+  Empilhamento vertical com gap 16 px entre rows, ordem:
+    1. Total ("78 OAB(s)") — alinhado à esquerda, full-width
+    2. Items per page (Select 165 → full-width em mobile)
+    3. Pagination ("Anterior 1 2 Próximo") — centralizada
+  Usamos `order` no flex container pra reordenar sem mexer no JSX (mantém
+  ordem desktop intacta).
+*/
+:global(.ds-table-pagination-footer--cards) {
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 16px !important;
+}
 
-  :global(.ds-table--auto) :global(.ant-table-tbody) > tr:first-child {
-    border-top: none !important;
-  }
+:global(.ds-table-pagination-footer--cards) :global(.ds-table-pagination-total) {
+  margin-right: 0 !important;
+  text-align: left;
+  order: 1;
+}
 
-  :global(.ds-table--auto) :global(.ant-table-tbody) > tr > td {
-    display: grid !important;
-    grid-template-columns: minmax(0, 1fr) !important;
-    width: 100% !important;
-    height: auto !important;
-    min-height: 0 !important;
-    padding: 8px 0 !important;
-    border-top: none !important;
-  }
+:global(.ds-table-pagination-footer--cards) :global(.ds-table-pagination-size-changer.ant-select) {
+  width: 100% !important;
+  order: 2;
+}
 
-  :global(.ds-table--auto) :global(.ant-table-tbody) > tr > td::before {
-    content: attr(data-label);
-    display: block;
-    margin-bottom: 4px;
-    color: var(--color-neutral-500);
-    font-size: 13px;
-    font-weight: 700;
-    line-height: 1.2;
-  }
+:global(.ds-table-pagination-footer--cards) > nav {
+  display: flex !important;
+  justify-content: center !important;
+  width: 100% !important;
+  order: 3;
+}
 
-  :global(.ds-table--auto) :global(.ant-table-tbody) > tr > td[data-label=""]::before {
-    display: none !important;
-  }
+:global(.ds-table-pagination-footer--cards) :global(.ds-pagination) {
+  display: flex !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+/* ── Sort icon active state ─────────────────────────────────────────────── */
+
+/*
+  Quando a coluna está ordenada (asc/desc), o ícone passa a usar `text/dark`
+  em vez do `neutral-400` default — destaca a coluna ativa.
+*/
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-column-sort) :global(.ds-table-sort-icon) {
+  color: var(--color-neutral-800) !important;
 }
