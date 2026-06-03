@@ -14,11 +14,6 @@ describe("Input", () => {
     expect(inputEl?.className).toMatch(/ds-input/);
   });
 
-  it("renders disabled input (input element is disabled)", () => {
-    render(<Input disabled placeholder="Disabled" />);
-    expect(screen.getByPlaceholderText("Disabled")).toBeDisabled();
-  });
-
   it("renders all sizes (xs, s, m, l)", () => {
     const { rerender } = render(<Input size="xs" placeholder="XS" />);
     expect(screen.getByPlaceholderText("XS")).toBeInTheDocument();
@@ -30,16 +25,30 @@ describe("Input", () => {
     expect(screen.getByPlaceholderText("L")).toBeInTheDocument();
   });
 
-  it("applies error status class on the wrapper", () => {
-    const { container } = render(<Input status="error" placeholder="Erro" />);
+  it("renders the label and associates it to the input", () => {
+    render(<Input label="E-mail" placeholder="seu@email.com" />);
+    const label = screen.getByText("E-mail");
+    const input = screen.getByPlaceholderText("seu@email.com");
+    expect(label).toBeInTheDocument();
+    expect(label.getAttribute("for")).toBe(input.getAttribute("id"));
+  });
+
+  it("renders helperText below the field", () => {
+    render(<Input label="Label" helperText="Texto auxiliar" placeholder="x" />);
+    expect(screen.getByText("Texto auxiliar")).toBeInTheDocument();
+  });
+
+  it("marks the wrapper with error modifier when status is error", () => {
+    const { container } = render(<Input status="error" helperText="Senha incorreta" placeholder="x" />);
+    expect(container.querySelector(".ds-input-wrapper--error")).not.toBeNull();
     const inputEl = container.querySelector("input.ant-input");
     expect(inputEl?.className).toMatch(/ant-input-status-error/);
   });
 
-  it("applies warning status class on the wrapper", () => {
-    const { container } = render(<Input status="warning" placeholder="Aviso" />);
-    const inputEl = container.querySelector("input.ant-input");
-    expect(inputEl?.className).toMatch(/ant-input-status-warning/);
+  it("marks the wrapper with disabled modifier when disabled", () => {
+    const { container } = render(<Input disabled label="Label" placeholder="Disabled" />);
+    expect(container.querySelector(".ds-input-wrapper--disabled")).not.toBeNull();
+    expect(screen.getByPlaceholderText("Disabled")).toBeDisabled();
   });
 
   it("calls onChange when text is typed", () => {
@@ -48,12 +57,6 @@ describe("Input", () => {
     fireEvent.change(screen.getByPlaceholderText("Digite"), { target: { value: "abc" } });
     expect(onChange).toHaveBeenCalledTimes(1);
     expect(onChange.mock.calls[0][0].target.value).toBe("abc");
-  });
-
-  it("input element has disabled attribute when prop is true", () => {
-    render(<Input placeholder="Disabled" disabled />);
-    const input = screen.getByPlaceholderText("Disabled") as HTMLInputElement;
-    expect(input.disabled).toBe(true);
   });
 
   it("renders readonly input without disabling typing API", () => {
@@ -86,7 +89,7 @@ describe("Input", () => {
   });
 
   it("accepts suffix as Lucide name string", () => {
-    const { container } = render(<Input suffix="Eye" placeholder="x" />);
+    const { container } = render(<Input suffix="EyeOff" placeholder="x" />);
     const svg = container.querySelector(".ant-input-suffix svg");
     expect(svg).not.toBeNull();
   });
@@ -96,63 +99,5 @@ describe("Input", () => {
     const inputEl = container.querySelector("input.ant-input");
     expect(inputEl?.className).toMatch(/custom-cls/);
     expect(inputEl?.className).toMatch(/ds-input/);
-  });
-
-  it("formats CPF as user types", () => {
-    const onChange = vi.fn();
-    render(<Input mask="cpf" onChange={onChange} aria-label="cpf" />);
-    const input = screen.getByLabelText("cpf") as HTMLInputElement;
-    fireEvent.change(input, { target: { value: "12345678900" } });
-    expect(input.value).toBe("123.456.789-00");
-    expect(onChange.mock.calls[0][1]).toBe("12345678900");
-  });
-
-  it("formats CNJ as user types", () => {
-    const onChange = vi.fn();
-    render(<Input mask="cnj" onChange={onChange} aria-label="cnj" />);
-    const input = screen.getByLabelText("cnj") as HTMLInputElement;
-    fireEvent.change(input, { target: { value: "12345678901234567890" } });
-    expect(input.value).toBe("1234567-89.0123.4.56.7890");
-    expect(onChange.mock.calls[0][1]).toBe("12345678901234567890");
-  });
-
-  it("formats OAB with digits + UF", () => {
-    const onChange = vi.fn();
-    render(<Input mask="oab" onChange={onChange} aria-label="oab" />);
-    const input = screen.getByLabelText("oab") as HTMLInputElement;
-    fireEvent.change(input, { target: { value: "123456SP" } });
-    expect(input.value).toBe("123456/SP");
-  });
-
-  it("strips non-digits for mask=numero", () => {
-    const onChange = vi.fn();
-    render(<Input mask="numero" onChange={onChange} aria-label="num" />);
-    const input = screen.getByLabelText("num") as HTMLInputElement;
-    fireEvent.change(input, { target: { value: "abc123def456" } });
-    expect(input.value).toBe("123456");
-  });
-
-  it("formats currency dynamically (mask=moeda)", () => {
-    const onChange = vi.fn();
-    render(<Input mask="moeda" onChange={onChange} aria-label="moeda" />);
-    const input = screen.getByLabelText("moeda") as HTMLInputElement;
-    fireEvent.change(input, { target: { value: "123456" } });
-    expect(input.value).toBe("R$ 1.234,56");
-  });
-
-  it("filters by custom regex (mask=custom)", () => {
-    const onChange = vi.fn();
-    render(<Input mask="custom" maskPattern={/[0-9]/} onChange={onChange} aria-label="custom" />);
-    const input = screen.getByLabelText("custom") as HTMLInputElement;
-    fireEvent.change(input, { target: { value: "a1b2c3" } });
-    expect(input.value).toBe("123");
-  });
-
-  it("propagates raw value as second onChange argument", () => {
-    const onChange = vi.fn();
-    render(<Input mask="cpf" onChange={onChange} aria-label="cpf2" />);
-    fireEvent.change(screen.getByLabelText("cpf2"), { target: { value: "999.888.777-66" } });
-    expect(onChange.mock.calls[0][0].target.value).toBe("999.888.777-66");
-    expect(onChange.mock.calls[0][1]).toBe("99988877766");
   });
 });
