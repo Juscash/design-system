@@ -1,63 +1,75 @@
 /*
-  Estilos do Navbar. Tokens e dimensões vêm do dump
-  `figma/components/navbar/variables-4146-12875.md` e do JSX espelhado em
-  `design-context-4146-12875.json`:
+  Estilos do Navbar (Figma `4146:12875`).
 
-  - Container: bg `color/neutral/50` (#fafafa), border-bottom 1px
-    `color/border/regular` (#d4d4d4), padding `4 → 16` (web)
-    com `flex / items-center / justify-between`. Em mobile o dump usa
-    `px-[var(--2,8px)] py-[var(--4,16px)]`; reproduzimos via media query
-    no breakpoint `xxs` (320px) conforme tabela de variáveis.
-  - Slots: `logo/button` (left) e `actions` (right) — ambos com
-    `gap-[var(--2,8px)]` e `items-center` no dump.
-  - Sem `font-family` própria — herda do body global (Inter via
-    `theme/global.css`), respeitando a regra "font-family só no global".
+  - Bar: bg `color/neutral/50` (#fafafa), border-bottom 1px
+    `color/border/regular` (#d4d4d4), padding `16` (spacing/4),
+    `flex / items-center / justify-between`, largura 100%. `position: relative`
+    para permitir centralizar o logo no mobile (`.ds-navbar-center-mobile`).
+  - Regiões `left` e `right`: `flex gap-8 (spacing/2) items-center`.
+  - Mobile (< breakpoint `m` 1024): padding horizontal cai para `8` (spacing/2);
+    itens com `.ds-navbar-hide-mobile` somem; `.ds-navbar-hide-desktop` aparece
+    (ex.: hamburger); `.ds-navbar-center-mobile` centraliza o item (logo).
+  - Sem `font-family` própria (herda do global).
 */
 
-/* Container raiz */
 :global(.ds-navbar) {
   display: flex;
   align-items: center;
   justify-content: space-between;
+  position: relative;
   width: 100%;
   padding: var(--spacing-4);
   background-color: var(--color-neutral-50);
   border-bottom: 1px solid var(--color-border-regular);
   box-sizing: border-box;
-  gap: var(--spacing-4);
 }
 
-/* Lado esquerdo (logo + slot extra) */
-:global(.ds-navbar__left) {
-  display: flex;
-  align-items: center;
-  gap: var(--spacing-2);
-  min-width: 0;
-}
-
-/* Brand (logo) — wrapper que mantém o logo alinhado dentro do slot esquerdo */
-:global(.ds-navbar__brand) {
-  display: inline-flex;
-  align-items: center;
-  flex-shrink: 0;
-}
-
-/* Lado direito (actions) */
+:global(.ds-navbar__left),
 :global(.ds-navbar__right) {
   display: flex;
   align-items: center;
   gap: var(--spacing-2);
+}
+
+/* O lado esquerdo pode encolher (logo + texto); o direito mantém as ações. */
+:global(.ds-navbar__left) {
+  min-width: 0;
+}
+
+:global(.ds-navbar__right) {
   flex-shrink: 0;
 }
 
 /*
-  Mobile: o dump descreve `px-[var(--2,8px)] py-[var(--4,16px)]` no
-  breakpoint `xxs` (320px). Aplicamos abaixo de 480px para acompanhar a
-  primeira faixa do design.
+  Mobile (< breakpoint `m` 1024px do DS): padding horizontal 8px; itens
+  marcados com `.ds-navbar-hide-mobile` (ex.: ação primária, navegação) somem
+  para o Drawer; `.ds-navbar-center-mobile` (ex.: logo) é centralizado na barra.
 */
-@media (max-width: 479px) {
+@media (max-width: 1023.98px) {
   :global(.ds-navbar) {
     padding: var(--spacing-4) var(--spacing-2);
-    gap: var(--spacing-2);
+  }
+
+  :global(.ds-navbar-hide-mobile) {
+    display: none !important;
+  }
+
+  /* Centraliza o item na barra (ex.: logo) entre o hamburger (esq.) e as ações (dir.). */
+  :global(.ds-navbar-center-mobile) {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+  }
+}
+
+/*
+  Itens visíveis APENAS no mobile (< 1024px) — ocultos no desktop. Simétrico a
+  `.ds-navbar-hide-mobile`. Ex.: o botão hamburger que abre o menu/Drawer no
+  mobile, enquanto no desktop a navegação fica inline/sidebar.
+*/
+@media (min-width: 1024px) {
+  :global(.ds-navbar-hide-desktop) {
+    display: none !important;
   }
 }

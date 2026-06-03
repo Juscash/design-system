@@ -3,46 +3,38 @@ import type { NavbarProps } from "../../types/components/Navbar";
 import "./index.module.css";
 
 const ROOT_CLASS = "ds-navbar";
-const BRAND_CLASS = "ds-navbar__brand";
 const LEFT_CLASS = "ds-navbar__left";
 const RIGHT_CLASS = "ds-navbar__right";
 const DEFAULT_ARIA_LABEL = "Barra de navegação";
 
 /**
- * Compõe as classes do `<header>` raiz, mantendo a classe base
- * `ds-navbar` e adicionando a classe extra do consumidor (quando houver).
+ * Compõe as classes do `<header>` raiz, mantendo `ds-navbar` e adicionando a
+ * classe extra do consumidor (quando houver).
  */
 function buildRootClassName(className: string | undefined): string {
   return [ROOT_CLASS, className].filter(Boolean).join(" ");
 }
 
 /**
- * Navbar do design system. Barra superior horizontal com fundo
- * `neutral/50` (#fafafa), borda inferior `border/regular` (#d4d4d4) e
- * padding `16` (token `spacing[4]`), conforme dump
- * `figma/components/navbar/variables-4146-12875.md`.
+ * Navbar do design system. Barra superior horizontal (Figma `4146:12875`):
+ * fundo `neutral/50` (#fafafa), borda inferior `border/regular` (#d4d4d4) e
+ * padding `16` (token `spacing[4]`), com `flex / justify-between`.
  *
- * API slot-based: `brand` + `leftSlot` à esquerda, `rightSlot` à direita.
- * O consumidor pode também passar `children` quando quiser montar o
- * layout manualmente.
+ * Duas regiões compostas pelo consumidor: `left` (logo/botão de menu) e
+ * `right` (ações), cada uma em `flex gap-8 items-center`. No mobile (< 1024px)
+ * o padding horizontal cai para `8`.
  *
- * Renderiza um `<header role="banner">` por padrão, com `aria-label`
- * customizável. A altura cresce naturalmente com o conteúdo (~64px com
- * itens de 32px e padding 16, alinhado ao screenshot do dump).
+ * Utilitários de responsividade (classes globais), com corte no breakpoint
+ * `m` (1024px): `ds-navbar-hide-mobile` oculta o item no mobile (< 1024px);
+ * `ds-navbar-hide-desktop` oculta no desktop (≥ 1024px) — ex.: o hamburger que
+ * abre o Drawer só no mobile; `ds-navbar-center-mobile` centraliza o item
+ * (ex.: logo) na barra no mobile.
+ *
+ * Renderiza `<header role="banner">` com `aria-label` customizável (default
+ * `"Barra de navegação"`). Altura ~64px (padding 16 + conteúdo de 32px).
  */
 export function Navbar(props: NavbarProps): React.ReactElement {
-  const {
-    brand,
-    leftSlot,
-    rightSlot,
-    children,
-    className,
-    style,
-    "aria-label": ariaLabel = DEFAULT_ARIA_LABEL,
-    ...rest
-  } = props;
-
-  const hasSlots = Boolean(brand) || Boolean(leftSlot) || Boolean(rightSlot);
+  const { left, right, className, style, "aria-label": ariaLabel = DEFAULT_ARIA_LABEL, ...rest } = props;
 
   return (
     <header
@@ -52,19 +44,8 @@ export function Navbar(props: NavbarProps): React.ReactElement {
       className={buildRootClassName(className)}
       style={style}
     >
-      {hasSlots ?
-        <>
-          <div className={LEFT_CLASS}>
-            {brand ?
-              <div className={BRAND_CLASS}>{brand}</div>
-            : null}
-            {leftSlot}
-          </div>
-          {rightSlot ?
-            <div className={RIGHT_CLASS}>{rightSlot}</div>
-          : null}
-        </>
-      : children}
+      <div className={LEFT_CLASS}>{left}</div>
+      <div className={RIGHT_CLASS}>{right}</div>
     </header>
   );
 }

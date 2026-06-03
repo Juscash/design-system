@@ -1,213 +1,167 @@
-import React from "react";
 import { render, screen, fireEvent } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
-import { Sidebar, SidebarGroupLabel, SidebarItem, SidebarSubItem, SidebarToggleButton } from "./index";
+import { Sidebar, SidebarGroupLabel, SidebarItem, SidebarSubItem } from "./index";
 
 describe("Sidebar", () => {
-  describe("AC-1: render default", () => {
+  describe("render default", () => {
     it("renderiza um <aside role='navigation'>", () => {
       render(<Sidebar />);
       const nav = screen.getByRole("navigation", { name: "Menu lateral" });
       expect(nav.tagName).toBe("ASIDE");
     });
 
-    it("aplica a classe ds-sidebar e variant default juscash", () => {
+    it("aplica a classe ds-sidebar", () => {
       const { container } = render(<Sidebar />);
-      const aside = container.querySelector("aside");
-      expect(aside).toHaveClass("ds-sidebar");
-      expect(aside).toHaveClass("ds-sidebar--juscash");
+      expect(container.querySelector("aside")).toHaveClass("ds-sidebar");
     });
 
     it("preserva className externo", () => {
       const { container } = render(<Sidebar className="custom" />);
-      const aside = container.querySelector("aside");
-      expect(aside).toHaveClass("custom");
+      expect(container.querySelector("aside")).toHaveClass("custom");
     });
   });
 
-  describe("AC-2: estado expandido/colapsado", () => {
+  describe("estado expandido/colapsado", () => {
     it("default expanded=true não adiciona classe collapsed", () => {
       const { container } = render(<Sidebar />);
-      const aside = container.querySelector("aside");
-      expect(aside).not.toHaveClass("ds-sidebar--collapsed");
+      expect(container.querySelector("aside")).not.toHaveClass("ds-sidebar--collapsed");
     });
 
     it("expanded=false adiciona a classe ds-sidebar--collapsed", () => {
       const { container } = render(<Sidebar expanded={false} />);
-      const aside = container.querySelector("aside");
-      expect(aside).toHaveClass("ds-sidebar--collapsed");
+      expect(container.querySelector("aside")).toHaveClass("ds-sidebar--collapsed");
     });
   });
 
-  describe("AC-3: variantes visuais", () => {
-    it.each(["juscash", "sij", "prompt-tester"] as const)(
-      "aplica modificador para variant='%s'",
-      (variant) => {
-        const { container } = render(<Sidebar variant={variant} />);
-        const aside = container.querySelector("aside");
-        expect(aside).toHaveClass(`ds-sidebar--${variant}`);
-      },
-    );
-  });
-
-  describe("AC-4: displayName", () => {
-    it("Sidebar.displayName é 'Sidebar'", () => {
-      expect(Sidebar.displayName).toBe("Sidebar");
-    });
-    it("SidebarItem.displayName é 'SidebarItem'", () => {
-      expect(SidebarItem.displayName).toBe("SidebarItem");
-    });
-    it("SidebarSubItem.displayName é 'SidebarSubItem'", () => {
-      expect(SidebarSubItem.displayName).toBe("SidebarSubItem");
-    });
-    it("SidebarGroupLabel.displayName é 'SidebarGroupLabel'", () => {
-      expect(SidebarGroupLabel.displayName).toBe("SidebarGroupLabel");
-    });
-    it("SidebarToggleButton.displayName é 'SidebarToggleButton'", () => {
-      expect(SidebarToggleButton.displayName).toBe("SidebarToggleButton");
+  describe("displayName", () => {
+    it.each([
+      [Sidebar, "Sidebar"],
+      [SidebarItem, "SidebarItem"],
+      [SidebarSubItem, "SidebarSubItem"],
+      [SidebarGroupLabel, "SidebarGroupLabel"],
+    ])("%o.displayName está definido", (component, name) => {
+      expect(component.displayName).toBe(name);
     });
   });
 });
 
 describe("SidebarItem", () => {
-  describe("AC-1: render básico", () => {
-    it("renderiza label dentro do item expandido", () => {
-      render(
-        <Sidebar>
-          <SidebarItem label="Início" />
-        </Sidebar>,
-      );
-      expect(screen.getByText("Início")).toBeInTheDocument();
-    });
-
-    it("renderiza como button por default", () => {
-      render(
-        <Sidebar>
-          <SidebarItem label="Início" />
-        </Sidebar>,
-      );
-      const button = screen.getByRole("button", { name: /Início/ });
-      expect(button).toHaveAttribute("type", "button");
-    });
-
-    it("renderiza como <a> quando href fornecido", () => {
-      const { container } = render(
-        <Sidebar>
-          <SidebarItem label="Início" href="/inicio" />
-        </Sidebar>,
-      );
-      const anchor = container.querySelector("a.ds-sidebar-item");
-      expect(anchor).not.toBeNull();
-      expect(anchor).toHaveAttribute("href", "/inicio");
-    });
+  it("renderiza label como button por default", () => {
+    render(
+      <Sidebar>
+        <SidebarItem label="Dashboard" />
+      </Sidebar>,
+    );
+    const button = screen.getByRole("button", { name: /Dashboard/ });
+    expect(button).toHaveAttribute("type", "button");
   });
 
-  describe("AC-2: estado active", () => {
-    it("active=true aplica classe e aria-current='page'", () => {
-      render(
-        <Sidebar>
-          <SidebarItem label="Início" active />
-        </Sidebar>,
-      );
-      const button = screen.getByRole("button", { name: /Início/ });
-      expect(button).toHaveClass("ds-sidebar-item--active");
-      expect(button).toHaveAttribute("aria-current", "page");
-    });
+  it("renderiza como <a> quando href fornecido", () => {
+    const { container } = render(
+      <Sidebar>
+        <SidebarItem label="Dashboard" href="/dashboard" />
+      </Sidebar>,
+    );
+    const anchor = container.querySelector("a.ds-sidebar-item");
+    expect(anchor).toHaveAttribute("href", "/dashboard");
   });
 
-  describe("AC-3: badge", () => {
-    it("exibe badge quando expandida", () => {
-      render(
-        <Sidebar>
-          <SidebarItem label="Notificações" badge={5} />
-        </Sidebar>,
-      );
-      expect(screen.getByText("5")).toBeInTheDocument();
-    });
-
-    it("não exibe badge quando sidebar está colapsada", () => {
-      render(
-        <Sidebar expanded={false}>
-          <SidebarItem label="Notificações" badge={5} />
-        </Sidebar>,
-      );
-      expect(screen.queryByText("5")).not.toBeInTheDocument();
-    });
+  it("active=true aplica classe e aria-current='page'", () => {
+    render(
+      <Sidebar>
+        <SidebarItem label="Dashboard" active />
+      </Sidebar>,
+    );
+    const button = screen.getByRole("button", { name: /Dashboard/ });
+    expect(button).toHaveClass("ds-sidebar-item--active");
+    expect(button).toHaveAttribute("aria-current", "page");
   });
 
-  describe("AC-4: submenu", () => {
-    it("hasSubmenu aplica aria-expanded", () => {
-      render(
-        <Sidebar>
-          <SidebarItem label="Projetos" hasSubmenu expanded />
-        </Sidebar>,
-      );
-      const button = screen.getByRole("button", { name: /Projetos/ });
-      expect(button).toHaveAttribute("aria-expanded", "true");
-    });
-
-    it("renderiza children como submenu quando expanded e hasSubmenu", () => {
-      render(
-        <Sidebar>
-          <SidebarItem label="Projetos" hasSubmenu expanded>
-            <SidebarSubItem label="Em andamento" />
-          </SidebarItem>
-        </Sidebar>,
-      );
-      expect(screen.getByText("Em andamento")).toBeInTheDocument();
-    });
-
-    it("não renderiza submenu quando colapsado", () => {
-      render(
-        <Sidebar>
-          <SidebarItem label="Projetos" hasSubmenu expanded={false}>
-            <SidebarSubItem label="Em andamento" />
-          </SidebarItem>
-        </Sidebar>,
-      );
-      expect(screen.queryByText("Em andamento")).not.toBeInTheDocument();
-    });
+  it("exibe badge quando expandida", () => {
+    render(
+      <Sidebar>
+        <SidebarItem label="Notificações" badge={5} />
+      </Sidebar>,
+    );
+    expect(screen.getByText("5")).toBeInTheDocument();
   });
 
-  describe("AC-5: collapsed dentro de Sidebar colapsada", () => {
-    it("aplica classe ds-sidebar-item--collapsed", () => {
-      render(
-        <Sidebar expanded={false}>
-          <SidebarItem label="Início" />
-        </Sidebar>,
-      );
-      const button = screen.getByRole("button");
-      expect(button).toHaveClass("ds-sidebar-item--collapsed");
-    });
-
-    it("oculta label e expõe via title", () => {
-      render(
-        <Sidebar expanded={false}>
-          <SidebarItem label="Início" />
-        </Sidebar>,
-      );
-      expect(screen.queryByText("Início")).not.toBeInTheDocument();
-      const button = screen.getByRole("button");
-      expect(button).toHaveAttribute("title", "Início");
-    });
+  it("não exibe label nem badge quando a sidebar está colapsada", () => {
+    render(
+      <Sidebar expanded={false}>
+        <SidebarItem icon="Bell" label="Notificações" badge={5} />
+      </Sidebar>,
+    );
+    expect(screen.queryByText("5")).not.toBeInTheDocument();
+    expect(screen.queryByText("Notificações")).not.toBeInTheDocument();
+    const button = screen.getByRole("button");
+    expect(button).toHaveClass("ds-sidebar-item--collapsed");
+    expect(button).toHaveAttribute("title", "Notificações");
   });
 
-  describe("AC-6: callback onClick", () => {
-    it("dispara onClick ao clicar no item", () => {
-      const handler = vi.fn();
-      render(
-        <Sidebar>
-          <SidebarItem label="Início" onClick={handler} />
-        </Sidebar>,
-      );
-      fireEvent.click(screen.getByRole("button", { name: /Início/ }));
-      expect(handler).toHaveBeenCalledTimes(1);
-    });
+  it("com children + expanded aplica aria-expanded e renderiza o submenu", () => {
+    render(
+      <Sidebar>
+        <SidebarItem label="Gestão" expanded>
+          <SidebarSubItem label="Usuários" />
+        </SidebarItem>
+      </Sidebar>,
+    );
+    expect(screen.getByRole("button", { name: /Gestão/ })).toHaveAttribute("aria-expanded", "true");
+    expect(screen.getByText("Usuários")).toBeInTheDocument();
+  });
+
+  it("não renderiza o submenu quando expanded=false", () => {
+    render(
+      <Sidebar>
+        <SidebarItem label="Gestão" expanded={false}>
+          <SidebarSubItem label="Usuários" />
+        </SidebarItem>
+      </Sidebar>,
+    );
+    expect(screen.queryByText("Usuários")).not.toBeInTheDocument();
+  });
+
+  it("dispara onClick ao clicar no item", () => {
+    const handler = vi.fn();
+    render(
+      <Sidebar>
+        <SidebarItem label="Dashboard" onClick={handler} />
+      </Sidebar>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: /Dashboard/ }));
+    expect(handler).toHaveBeenCalledTimes(1);
+  });
+});
+
+describe("SidebarSubItem", () => {
+  it("renderiza label e o estado active com aria-current", () => {
+    render(
+      <Sidebar>
+        <SidebarItem label="Gestão" expanded>
+          <SidebarSubItem label="Usuários" active />
+        </SidebarItem>
+      </Sidebar>,
+    );
+    const button = screen.getByRole("button", { name: "Usuários" });
+    expect(button).toHaveClass("ds-sidebar-subitem--active");
+    expect(button).toHaveAttribute("aria-current", "page");
+  });
+
+  it("renderiza como <a> quando href fornecido", () => {
+    const { container } = render(
+      <Sidebar>
+        <SidebarItem label="Gestão" expanded>
+          <SidebarSubItem label="Usuários" href="/usuarios" />
+        </SidebarItem>
+      </Sidebar>,
+    );
+    expect(container.querySelector("a.ds-sidebar-subitem")).toHaveAttribute("href", "/usuarios");
   });
 });
 
 describe("SidebarGroupLabel", () => {
-  it("renderiza texto quando expandido", () => {
+  it("renderiza o texto quando a sidebar está expandida", () => {
     render(
       <Sidebar>
         <SidebarGroupLabel label="Operacional" />
@@ -216,37 +170,24 @@ describe("SidebarGroupLabel", () => {
     expect(screen.getByText("Operacional")).toBeInTheDocument();
   });
 
-  it("renderiza separador quando sidebar colapsada", () => {
+  it("tipo action renderiza um botão e dispara onActionClick", () => {
+    const handler = vi.fn();
+    render(
+      <Sidebar>
+        <SidebarGroupLabel label="Operacional" type="action" onActionClick={handler} />
+      </Sidebar>,
+    );
+    fireEvent.click(screen.getByRole("button", { name: "Operacional" }));
+    expect(handler).toHaveBeenCalledTimes(1);
+  });
+
+  it("é omitido quando a sidebar está colapsada", () => {
     const { container } = render(
       <Sidebar expanded={false}>
         <SidebarGroupLabel label="Operacional" />
       </Sidebar>,
     );
-    expect(container.querySelector(".ds-sidebar-group-label--collapsed")).not.toBeNull();
+    expect(container.querySelector(".ds-sidebar-group-label")).toBeNull();
     expect(screen.queryByText("Operacional")).not.toBeInTheDocument();
-  });
-});
-
-describe("SidebarToggleButton", () => {
-  it("dispara onClick", () => {
-    const handler = vi.fn();
-    render(<SidebarToggleButton onClick={handler} />);
-    fireEvent.click(screen.getByRole("button"));
-    expect(handler).toHaveBeenCalledTimes(1);
-  });
-
-  it("expanded=true usa aria-label 'Recolher menu'", () => {
-    render(<SidebarToggleButton expanded onClick={() => undefined} />);
-    expect(screen.getByRole("button", { name: "Recolher menu" })).toBeInTheDocument();
-  });
-
-  it("expanded=false usa aria-label 'Expandir menu'", () => {
-    render(<SidebarToggleButton expanded={false} onClick={() => undefined} />);
-    expect(screen.getByRole("button", { name: "Expandir menu" })).toBeInTheDocument();
-  });
-
-  it("aceita aria-label customizado", () => {
-    render(<SidebarToggleButton aria-label="Alternar menu" onClick={() => undefined} />);
-    expect(screen.getByRole("button", { name: "Alternar menu" })).toBeInTheDocument();
   });
 });
