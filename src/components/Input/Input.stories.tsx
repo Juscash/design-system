@@ -144,3 +144,21 @@ export const DecorationRight: Story = {
   name: "Decoration (suffix)",
   args: { label: "Senha", placeholder: "Digite sua senha", suffix: "EyeOff" },
 };
+
+export const ClickableSuffix: Story = {
+  name: "Decoration clicável (toggle senha)",
+  render: () => {
+    const [visible, setVisible] = React.useState(false);
+    return (
+      <div style={{ width: 320 }}>
+        <Input
+          label="Senha"
+          type={visible ? "text" : "password"}
+          defaultValue="segredo123"
+          suffix={visible ? "Eye" : "EyeOff"}
+          onSuffixClick={() => setVisible((value) => !value)}
+        />
+      </div>
+    );
+  },
+};

@@ -49,6 +49,29 @@
 }
 
 /* ============================================================
+   DECORAÇÃO CLICÁVEL — prefix/suffix com onPrefixClick/onSuffixClick
+   Botão sem estilo próprio: o ícone herda a cor (currentColor) e o tamanho.
+   ============================================================ */
+:global(.ds-input-affix-button) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+:global(.ds-input-affix-button:focus-visible) {
+  outline: none;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-focus);
+}
+
+/* ============================================================
    HOVER — mantém a borda regular (Figma não define estado de hover)
    ============================================================ */
 :global(.ds-input.ant-input-outlined:hover),

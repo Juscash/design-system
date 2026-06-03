@@ -25,4 +25,14 @@ export type InputProps = CleanAntdProps & {
   prefix?: ReactNode | string;
   /** Decoração à direita do valor. Mesma regra de `prefix`. */
   suffix?: ReactNode | string;
+  /**
+   * Torna o `prefix` clicável: o ícone vira um `<button>` que dispara este
+   * handler (o consumidor troca o ícone via estado, se quiser).
+   */
+  onPrefixClick?: () => void;
+  /**
+   * Torna o `suffix` clicável. Ex.: alternar a visibilidade da senha trocando
+   * o ícone (`EyeOff` ↔ `Eye`) e o `type` (`password` ↔ `text`).
+   */
+  onSuffixClick?: () => void;
 };

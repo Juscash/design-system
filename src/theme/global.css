@@ -354,17 +354,8 @@ body {
   display: none !important;
 }
 
-.ant-select.ant-select-focused:not(.ant-select-disabled):not(.ant-select-status-error),
-.ant-select.ant-select-outlined.ant-select-focused:not(.ant-select-disabled):not(.ant-select-status-error) {
-  box-shadow: var(--shadow-focus) !important;
-  border-color: transparent !important;
-}
-
-.ant-select.ant-select-focused.ant-select-status-error:not(.ant-select-disabled),
-.ant-select.ant-select-outlined.ant-select-focused.ant-select-status-error:not(.ant-select-disabled) {
-  box-shadow: var(--shadow-focus-error) !important;
-  border-color: transparent !important;
-}
+/* Foco/erro do Select são tratados no CSS Module local (.ds-select) — não
+   globalmente — porque incidem na raiz (não-portal) do componente. */
 
 .ant-select-item-group {
   font-size: 10px !important;

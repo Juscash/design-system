@@ -1,26 +1,132 @@
 /*
-  Estilos próprios do Select (chips do MultiSelect, dropdown e tokens de tamanho via CSS variable).
+  Estilos próprios do Select. O componente compõe a pilha vertical do Figma
+  (`4062:7843`): label → caixa → helper/erro, com gap de 8px. A caixa é a raiz
+  `.ds-select`. Classes internas do Antd v6: `.ant-select-content` (selector),
+  `.ant-select-content-value` (valor), `.ant-select-placeholder`,
+  `.ant-select-suffix` (seta). Radius e altura variam por `size` via CSS vars.
 */
 
-:global(.ds-select) {
-  transition: all 0.2s ease-in-out !important;
+/* ============================================================
+   WRAPPER + LABEL + HELPER (mesma anatomia do Input)
+   ============================================================ */
+:global(.ds-select-wrapper) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  width: 100%;
 }
 
-:global(.ds-select) :global(.ant-select-selector) {
-  border-color: transparent !important;
+:global(.ds-select-label) {
+  font-size: var(--font-body-1-size);
+  line-height: var(--font-line-height);
+  font-weight: 400;
+  color: var(--color-text-dark);
+}
+
+:global(.ds-select-wrapper--disabled) :global(.ds-select-label) {
+  color: var(--color-text-disabled);
+}
+
+:global(.ds-select-helper) {
+  font-size: var(--font-body-2-size);
+  line-height: var(--font-line-height);
+  font-weight: 400;
+  color: var(--color-text-soft);
+}
+
+:global(.ds-select-wrapper--error) :global(.ds-select-helper) {
+  color: var(--color-feedback-red-500);
+}
+
+/* ============================================================
+   CAIXA — borda/altura/radius por size; padding pl-12 pr-8 (Figma)
+   ============================================================ */
+:global(.ds-select) {
+  width: 100%;
+  height: var(--ds-select-height, 36px) !important;
+  min-height: var(--ds-select-height, 36px) !important;
+  display: inline-flex !important;
+  align-items: stretch !important;
+  gap: 0 !important;
+  padding: 0 var(--spacing-2) 0 var(--spacing-3) !important;
+  overflow: hidden !important;
+  box-sizing: border-box !important;
+  border: 1px solid var(--color-border-regular) !important;
+  border-radius: var(--ds-select-radius, 8px) !important;
+  background: var(--color-neutral-50) !important;
+}
+
+/* Container interno do Antd: sem borda/anel próprios — a borda e o anel de
+   foco vivem na raiz `.ds-select`. */
+:global(.ds-select) :global(.ant-select-content) {
+  background: var(--color-neutral-50) !important;
+  height: var(--ds-select-height, 36px) !important;
+  min-height: var(--ds-select-height, 36px) !important;
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  box-sizing: border-box !important;
+  border: none !important;
   box-shadow: none !important;
 }
 
-:global(.ds-select:not(.ant-select-disabled):not(.ant-select-status-error):hover),
-:global(.ds-select.ant-select-focused:not(.ant-select-status-error)) {
+:global(.ds-select) :global(.ant-select-placeholder),
+:global(.ds-select) :global(.ant-select-content-value) {
+  font-size: var(--font-body-2-size) !important;
+  line-height: var(--font-line-height) !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+:global(.ds-select) :global(.ant-select-prefix),
+:global(.ds-select) :global(.ant-select-suffix) {
+  display: flex !important;
+  align-items: center !important;
+  color: var(--color-neutral-800) !important;
+}
+
+/* ============================================================
+   FOCO — anel cinza só no foco (Figma não define hover)
+   ============================================================ */
+:global(.ds-select.ant-select-focused:not(.ant-select-status-error)),
+:global(.ds-select.pseudo-focus-visible:not(.ant-select-status-error)) {
   box-shadow: var(--shadow-focus) !important;
 }
 
-:global(.ds-select.ant-select-status-error:hover),
-:global(.ds-select.ant-select-status-error.ant-select-focused) {
-  box-shadow: var(--shadow-focus-error) !important;
+/* Erro — borda vermelha (com ou sem foco); no foco, soma o anel vermelho 0.4
+   (Figma, escopo local — não usa o token compartilhado 0.2). */
+:global(.ds-select.ant-select-status-error) {
+  border-color: var(--color-feedback-red-500) !important;
 }
 
+:global(.ds-select.ant-select-status-error.ant-select-focused),
+:global(.ds-select.ant-select-status-error.pseudo-focus-visible) {
+  box-shadow: 0px 0px 0px 3px rgba(210, 25, 11, 0.4) !important;
+}
+
+/* ============================================================
+   DISABLED — borda border/disabled; texto e ícones mutados
+   ============================================================ */
+:global(.ds-select.ant-select-disabled) {
+  border-color: var(--color-border-disabled) !important;
+  background: var(--color-neutral-50) !important;
+}
+
+:global(.ds-select.ant-select-disabled) :global(.ant-select-content) {
+  background: var(--color-neutral-50) !important;
+}
+
+:global(.ds-select.ant-select-disabled) :global(.ant-select-placeholder),
+:global(.ds-select.ant-select-disabled) :global(.ant-select-content-value),
+:global(.ds-select.ant-select-disabled) :global(.ant-select-prefix),
+:global(.ds-select.ant-select-disabled) :global(.ant-select-suffix) {
+  color: var(--color-neutral-400) !important;
+}
+
+/* ============================================================
+   DROPDOWN — busca, group label (10px) e itens
+   ============================================================ */
 :global(.ds-select-search-container) {
   padding: 4px 8px !important;
   border-bottom: 1px solid var(--color-neutral-300) !important;
@@ -45,100 +151,17 @@
   padding: 4px 0 !important;
 }
 
-:global(.ds-select) {
-  width: 100%;
-  height: var(--ds-select-height, 36px) !important;
-  min-height: var(--ds-select-height, 36px) !important;
-  display: inline-flex !important;
-  align-items: stretch !important;
-  gap: 0 !important;
-  padding: 0 8px 0 12px !important;
-  overflow: hidden !important;
-  box-sizing: border-box !important;
-  border: 1px solid var(--color-neutral-300) !important;
-  border-radius: 8px !important;
-  background: var(--color-neutral-50) !important;
-}
-
-:global(.ds-select) :global(.ant-select-content),
-:global(.ds-select) :global(.ant-select-selector) {
-  background: var(--color-neutral-50) !important;
-  min-height: var(--ds-select-height, 36px) !important;
-  flex: 1 1 auto !important;
-  min-width: 0 !important;
-  width: auto !important;
-  display: flex !important;
-  align-items: center !important;
-  box-sizing: border-box !important;
-}
-
-:global(.ds-select:not(.ant-select-multiple)) :global(.ant-select-content),
-:global(.ds-select:not(.ant-select-multiple)) :global(.ant-select-selector) {
-  height: var(--ds-select-height, 36px) !important;
-}
-
-:global(.ds-select) :global(.ant-select-selector) {
-  border-color: var(--color-neutral-300) !important;
-  border-radius: 8px !important;
-}
-
-:global(.ds-select) :global(.ant-select-selection-wrap) {
-  display: flex !important;
-  align-items: center !important;
-  min-height: 100% !important;
-}
-
-:global(.ds-select) :global(.ant-select-selection-search),
-:global(.ds-select) :global(.ant-select-prefix),
-:global(.ds-select) :global(.ant-select-suffix),
-:global(.ds-select) :global(.ant-select-arrow) {
-  display: flex !important;
-  align-items: center !important;
-  align-self: center !important;
-}
-
-:global(.ds-select) :global(.ant-select-placeholder),
-:global(.ds-select) :global(.ant-select-selection-placeholder),
-:global(.ds-select) :global(.ant-select-selection-item) {
-  color: var(--color-neutral-500) !important;
-  font-size: 13px !important;
+/* Group label = caption/01 (10px) soft (Figma). */
+:global(.ds-select-popup-menu) :global(.ant-select-item-group) {
+  font-size: 10px !important;
   line-height: 1.2 !important;
-  display: flex !important;
-  align-items: center !important;
-  min-height: 100% !important;
-}
-
-:global(.ds-select) :global(.ant-select-selection-item) {
-  color: var(--color-neutral-800) !important;
-}
-
-:global(.ds-select) :global(.ant-select-arrow),
-:global(.ds-select) :global(.ant-select-prefix) {
-  color: var(--color-neutral-800) !important;
-}
-
-:global(.ds-select) :global(.ant-select-prefix) {
+  color: var(--color-text-soft) !important;
+  min-height: 32px !important;
   display: flex !important;
   align-items: center !important;
 }
 
-:global(.ds-select.ant-select-status-error:not(.ant-select-focused):not(.pseudo-focus-visible)) {
-  border-color: var(--color-feedback-red-500) !important;
-}
-
-:global(.ds-select.ant-select-disabled) {
-  border-color: var(--color-neutral-200) !important;
-  background: var(--color-neutral-50) !important;
-}
-
-:global(.ds-select.ant-select-disabled) :global(.ant-select-content),
-:global(.ds-select.ant-select-disabled) :global(.ant-select-selector) {
-  background: var(--color-neutral-50) !important;
-}
-
-:global(.ds-select.ant-select-disabled) :global(.ant-select-placeholder),
-:global(.ds-select.ant-select-disabled) :global(.ant-select-selection-placeholder),
-:global(.ds-select.ant-select-disabled) :global(.ant-select-selection-item),
-:global(.ds-select.ant-select-disabled) :global(.ant-select-arrow) {
-  color: var(--color-neutral-400) !important;
+/* Itens agrupados sem indentação (Figma usa padding 8px, não o indent do Antd). */
+:global(.ds-select-popup-menu) :global(.ant-select-item-option-grouped) {
+  padding-inline-start: 8px !important;
 }

@@ -14,6 +14,7 @@ const WRAPPER_ERROR_CLASS = "ds-input-wrapper--error";
 const WRAPPER_DISABLED_CLASS = "ds-input-wrapper--disabled";
 const LABEL_CLASS = "ds-input-label";
 const HELPER_CLASS = "ds-input-helper";
+const AFFIX_BUTTON_CLASS = "ds-input-affix-button";
 
 const HEIGHT_XS = 24;
 const HEIGHT_S = 32;
@@ -91,10 +92,11 @@ function buildWrapperClassName(isError: boolean, isDisabled: boolean): string {
 }
 
 /**
- * Resolve `prefix`/`suffix`: aceita `ReactNode` (passa direto) ou string com
- * nome de ícone Lucide (instancia em 16px — tamanho fixo das decorações).
+ * Resolve o conteúdo de `prefix`/`suffix`: aceita `ReactNode` (passa direto)
+ * ou string com nome de ícone Lucide (instancia em 16px — tamanho fixo das
+ * decorações).
  */
-function resolveAffix(affix: React.ReactNode | string | undefined): React.ReactNode {
+function resolveAffixNode(affix: React.ReactNode | string | undefined): React.ReactNode {
   if (affix === undefined || affix === null) return undefined;
   if (typeof affix !== "string") return affix;
   const registry = LucideIcons as unknown as Record<string, unknown>;
@@ -102,6 +104,21 @@ function resolveAffix(affix: React.ReactNode | string | undefined): React.ReactN
   if (typeof Candidate !== "function" && typeof Candidate !== "object") return affix;
   const IconComponent = Candidate as React.ComponentType<{ size?: number }>;
   return <IconComponent size={DECORATION_ICON_SIZE} />;
+}
+
+/**
+ * Resolve a decoração e, quando há `onClick`, a torna clicável: envolve em um
+ * `<button>` sem estilo que dispara o handler (ex.: trocar o ícone de senha).
+ * `onMouseDown` previne o roubo de foco do input ao clicar.
+ */
+function resolveAffix(affix: React.ReactNode | string | undefined, onClick?: () => void): React.ReactNode {
+  const node = resolveAffixNode(affix);
+  if (node === undefined || onClick === undefined) return node;
+  return (
+    <button type="button" className={AFFIX_BUTTON_CLASS} onClick={onClick} onMouseDown={(event) => event.preventDefault()}>
+      {node}
+    </button>
+  );
 }
 
 /**
@@ -133,10 +150,25 @@ function buildInputTheme(sizeTokens: SizeTokensResult): ThemeConfig {
  * (13px), com gaps de 8px.
  *
  * Props proprietárias: `size` (xs/s/m/l), `label`, `helperText`,
- * `prefix`/`suffix` (decorações — `ReactNode` ou nome de ícone Lucide).
+ * `prefix`/`suffix` (decorações — `ReactNode` ou nome de ícone Lucide) e
+ * `onPrefixClick`/`onSuffixClick` (tornam a decoração clicável).
  */
 function Input(props: InputProps): React.ReactElement {
-  const { size = "m", style, status, className, prefix, suffix, label, helperText, disabled, id, ...rest } = props;
+  const {
+    size = "m",
+    style,
+    status,
+    className,
+    prefix,
+    suffix,
+    onPrefixClick,
+    onSuffixClick,
+    label,
+    helperText,
+    disabled,
+    id,
+    ...rest
+  } = props;
 
   const generatedId = React.useId();
   const inputId = id ?? generatedId;
@@ -162,8 +194,8 @@ function Input(props: InputProps): React.ReactElement {
           }}
           className={buildClassName(className)}
           style={{ height: `${sizeTokens.height}px`, ...style }}
-          prefix={resolveAffix(prefix)}
-          suffix={resolveAffix(suffix)}
+          prefix={resolveAffix(prefix, onPrefixClick)}
+          suffix={resolveAffix(suffix, onSuffixClick)}
           status={status}
           disabled={disabled}
           {...rest}

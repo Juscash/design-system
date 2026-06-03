@@ -94,6 +94,24 @@ describe("Input", () => {
     expect(svg).not.toBeNull();
   });
 
+  it("makes the suffix clickable via onSuffixClick", () => {
+    const onSuffixClick = vi.fn();
+    const { container } = render(<Input suffix="EyeOff" onSuffixClick={onSuffixClick} placeholder="x" />);
+    const button = container.querySelector(".ant-input-suffix button.ds-input-affix-button") as HTMLButtonElement | null;
+    expect(button).not.toBeNull();
+    fireEvent.click(button as HTMLButtonElement);
+    expect(onSuffixClick).toHaveBeenCalledTimes(1);
+  });
+
+  it("calls onPrefixClick when the prefix button is clicked", () => {
+    const onPrefixClick = vi.fn();
+    const { container } = render(<Input prefix="Search" onPrefixClick={onPrefixClick} placeholder="x" />);
+    const button = container.querySelector(".ant-input-prefix button.ds-input-affix-button") as HTMLButtonElement | null;
+    expect(button).not.toBeNull();
+    fireEvent.click(button as HTMLButtonElement);
+    expect(onPrefixClick).toHaveBeenCalledTimes(1);
+  });
+
   it("forwards custom className alongside ds-input", () => {
     const { container } = render(<Input className="custom-cls" placeholder="x" />);
     const inputEl = container.querySelector("input.ant-input");
