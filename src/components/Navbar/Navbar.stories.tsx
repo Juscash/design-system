@@ -1,11 +1,9 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { Send } from "lucide-react";
+import { Bell, PanelRight, Send } from "lucide-react";
 import { Navbar } from ".";
 import { Button } from "../Button";
-import { Badge } from "../Badge";
 import { AvatarMenu } from "../AvatarMenu";
-import { Drawer } from "../Drawer";
 import { designSystemColors } from "../../theme";
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
@@ -14,13 +12,29 @@ const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-Sy
 
 const LOGO_HEIGHT = 18.653;
 const LOGO_WIDTH = 124;
+const ICON_SIZE = 16;
+const SEND_ICON_SIZE = 12;
 
-/** Placeholder do logotipo (124×18.653, conforme o `Logo` do Figma). */
-function LogoPlaceholder(): React.ReactElement {
-  return <div aria-label="Juscash" style={{ height: LOGO_HEIGHT, width: LOGO_WIDTH, background: "var(--color-text-dark)", borderRadius: 2 }} />;
+/** Botão de menu lateral (`panel-right`) — composto com o `Button` ghost. */
+function MenuButton(): React.ReactElement {
+  return (
+    <Button type="ghost" size="s" icon={<PanelRight size={ICON_SIZE} />} aria-label="Abrir menu lateral" tooltip="Menu lateral" />
+  );
 }
 
-/** Pill "SIJ" do logo na variante sij (bg secondary/900, texto branco). */
+/** Botão de notificação (sino) — `Button` ghost com ícone `Bell`. O badge de contagem fica a cargo do consumidor. */
+function BellButton(): React.ReactElement {
+  return <Button type="ghost" size="s" icon={<Bell size={ICON_SIZE} />} aria-label="Notificações" tooltip="Notificações" />;
+}
+
+/** Placeholder do logotipo JusCash (124×18.653). O logo real é um asset do consumidor. */
+function LogoPlaceholder(): React.ReactElement {
+  return (
+    <div role="img" aria-label="JusCash" style={{ height: LOGO_HEIGHT, width: LOGO_WIDTH, background: "var(--color-text-dark)", borderRadius: 2 }} />
+  );
+}
+
+/** Pill "SIJ" (exemplo de conteúdo do consumidor): bg secondary/900, texto branco bold. */
 function SijPill(): React.ReactElement {
   return (
     <span
@@ -41,80 +55,12 @@ function SijPill(): React.ReactElement {
   );
 }
 
-/** Botão de notificação: Button ghost (Bell) com Badge counter sobreposto. */
-function NotificationButton({ count }: { count?: number }): React.ReactElement {
+/** Ação primária "Enviar processo" — composta com o `Button` primary. */
+function SendButton(): React.ReactElement {
   return (
-    <span style={{ position: "relative", display: "inline-flex" }}>
-      <Button type="ghost" size="s" icon="Bell" tooltip="Notificações" aria-label="Notificações" />
-      {count !== undefined ? (
-        <span style={{ position: "absolute", top: -2, right: -2 }}>
-          <Badge variant="counter" count={count} />
-        </span>
-      ) : null}
-    </span>
-  );
-}
-
-/** Itens que somem do navbar no mobile e ficam acessíveis no Drawer. */
-function DrawerMenu({ withPrimary }: { withPrimary?: boolean }): React.ReactElement {
-  return (
-    <nav style={{ display: "flex", flexDirection: "column", gap: 8 }}>
-      {withPrimary ? (
-        <Button type="primary" icon={<Send size={14} />} block>
-          Enviar processo
-        </Button>
-      ) : null}
-      <Button type="ghost" block style={{ justifyContent: "flex-start" }}>
-        Início
-      </Button>
-      <Button type="ghost" block style={{ justifyContent: "flex-start" }}>
-        Processos
-      </Button>
-      <Button type="ghost" block style={{ justifyContent: "flex-start" }}>
-        Configurações
-      </Button>
-    </nav>
-  );
-}
-
-/**
- * Navbar responsivo (Figma + regra do produto): hamburger só no mobile
- * (`ds-navbar-hide-desktop`) abre um Drawer com os itens ocultados; logo
- * centralizado no mobile (`ds-navbar-center-mobile`); ação primária inline no
- * desktop e dentro do Drawer no mobile. Corte no breakpoint `m` (1024px).
- */
-function ResponsiveNavbar({ brand, withPrimary }: { brand: React.ReactNode; withPrimary?: boolean }): React.ReactElement {
-  const [open, setOpen] = React.useState(false);
-  return (
-    <>
-      <Navbar
-        aria-label="Barra de navegação"
-        left={
-          <>
-            <span className="ds-navbar-hide-desktop">
-              <Button type="ghost" size="s" icon="PanelRight" tooltip="Abrir menu" aria-label="Abrir menu" onClick={() => setOpen(true)} />
-            </span>
-            <span className="ds-navbar-center-mobile">{brand}</span>
-          </>
-        }
-        right={
-          <>
-            {withPrimary ? (
-              <span className="ds-navbar-hide-mobile">
-                <Button type="primary" size="s" icon={<Send size={12} />}>
-                  Enviar processo
-                </Button>
-              </span>
-            ) : null}
-            <NotificationButton count={1} />
-            <AvatarMenu>CN</AvatarMenu>
-          </>
-        }
-      />
-      <Drawer open={open} onClose={() => setOpen(false)} placement="left" title="Menu">
-        <DrawerMenu withPrimary={withPrimary} />
-      </Drawer>
-    </>
+    <Button type="primary" size="s" icon={<Send size={SEND_ICON_SIZE} />}>
+      Enviar processo
+    </Button>
   );
 }
 
@@ -129,13 +75,32 @@ const meta: Meta<typeof Navbar> = {
       codePanel: true,
       description: {
         component: `
-Barra superior do design system (Figma \`4146:12875\`). Renderiza um \`<header role="banner">\` com fundo \`neutral/50\`, borda inferior \`border/regular\` e padding \`16\`, em \`flex / justify-between\`.
+Barra superior do design system (Figma \`4146:12875\`). É um **shell de layout totalmente composável**: a barra (fundo \`neutral/50\`, borda inferior \`border/regular\`, padding \`16\` que cai para \`8\` na horizontal no mobile) é a única coisa fixa. O layout é um grid de 3 colunas (\`1fr auto 1fr\`): \`left\` à esquerda, \`center\` no centro exato da barra e \`right\` à direita. Sem \`center\`, comporta-se como \`justify-between\`.
 
-Duas regiões compostas pelo consumidor:
-- \`left\`: logo + botão de menu (\`flex gap-8 items-center\`).
-- \`right\`: ações — botão primário, notificação, avatar menu (\`flex gap-8 items-center\`).
+Os itens do Figma (botão de menu, logo, pill "SIJ", "Enviar processo", notificação, avatar) são apenas **exemplos** — nenhum é fixo. Componha-os com os primitivos do DS (\`Button\`, \`AvatarMenu\`) ou troque por qualquer outro conteúdo.
 
-No mobile (< 768px) o padding horizontal cai para \`8\` e itens com a classe \`ds-navbar-hide-mobile\` são ocultados (variante mobile do Figma).
+**Props proprietárias:** \`left\`, \`center\`, \`right\`.
+
+\`\`\`tsx
+import { Navbar, Button, AvatarMenu } from "@juscash/design-system";
+import { Bell, PanelRight, Send } from "lucide-react";
+
+<Navbar
+  left={
+    <>
+      <Button type="ghost" size="s" icon={<PanelRight size={16} />} aria-label="Menu" tooltip="Menu" />
+      <img src="/logo.svg" alt="JusCash" height={18.653} />
+    </>
+  }
+  right={
+    <>
+      <Button type="primary" size="s" icon={<Send size={12} />}>Enviar processo</Button>
+      <Button type="ghost" size="s" icon={<Bell size={16} />} aria-label="Notificações" tooltip="Notificações" />
+      <AvatarMenu>CN</AvatarMenu>
+    </>
+  }
+/>
+\`\`\`
 `,
       },
       page: () => (
@@ -163,36 +128,102 @@ export default meta;
 type Story = StoryObj<typeof Navbar>;
 
 /**
- * Juscash (responsivo): no desktop, logo à esquerda + Enviar/notificação/avatar
- * à direita. No mobile (< 1024px): hamburger à esquerda (abre o Drawer com os
- * itens ocultados), logo centralizado, notificação + avatar à direita.
+ * Exemplo "Juscash": menu + logo à esquerda; "Enviar processo", notificação e
+ * avatar à direita. Tudo composto via slots — nenhum item é fixo.
  */
-export const WebJuscash: Story = {
-  name: "Juscash (responsivo)",
-  render: () => <ResponsiveNavbar brand={<LogoPlaceholder />} withPrimary />,
-};
-
-/** SIJ (responsivo): logo + pill "SIJ"; sem botão primário (navegação no Drawer). */
-export const WebSij: Story = {
-  name: "SIJ (responsivo)",
+export const Juscash: Story = {
   render: () => (
-    <ResponsiveNavbar
-      brand={
-        <span style={{ display: "inline-flex", alignItems: "center", gap: 8 }}>
+    <Navbar
+      left={
+        <>
+          <MenuButton />
           <LogoPlaceholder />
-          <SijPill />
-        </span>
+        </>
+      }
+      right={
+        <>
+          <SendButton />
+          <BellButton />
+          <AvatarMenu>CN</AvatarMenu>
+        </>
       }
     />
   ),
 };
 
 /**
- * Mobile (viewport mobile do Storybook < 1024px): hamburger visível, logo
- * centralizado, Enviar oculto. Clique no hamburger para abrir o Drawer.
+ * Exemplo "SIJ": menu + logo + pill "SIJ" à esquerda; notificação e avatar à
+ * direita (sem "Enviar processo").
+ */
+export const Sij: Story = {
+  render: () => (
+    <Navbar
+      left={
+        <>
+          <MenuButton />
+          <LogoPlaceholder />
+          <SijPill />
+        </>
+      }
+      right={
+        <>
+          <BellButton />
+          <AvatarMenu>CN</AvatarMenu>
+        </>
+      }
+    />
+  ),
+};
+
+/**
+ * Exemplo mobile: o consumidor compõe só o essencial (menu + notificação +
+ * avatar). Em viewport < 1024px o padding horizontal da barra cai para 8px.
  */
 export const Mobile: Story = {
-  name: "Mobile (viewport)",
   parameters: { viewport: { defaultViewport: "mobile1" } },
-  render: () => <ResponsiveNavbar brand={<LogoPlaceholder />} withPrimary />,
+  render: () => (
+    <Navbar
+      left={<MenuButton />}
+      right={
+        <>
+          <BellButton />
+          <AvatarMenu>CN</AvatarMenu>
+        </>
+      }
+    />
+  ),
+};
+
+/**
+ * Customização livre: qualquer conteúdo nos slots. Aqui a direita traz só o
+ * avatar (sem notificação nem ação primária) e a esquerda apenas o logo —
+ * demonstrando que nada é fixo.
+ */
+export const Customizado: Story = {
+  render: () => (
+    <Navbar
+      left={<LogoPlaceholder />}
+      right={<AvatarMenu>MR</AvatarMenu>}
+    />
+  ),
+};
+
+/**
+ * Logo centralizado via slot `center` (grid `1fr auto 1fr`): menu à esquerda,
+ * logo no centro exato e ações à direita — independente das larguras dos lados.
+ */
+export const LogoCentralizado: Story = {
+  name: "Logo centralizado (center)",
+  render: () => (
+    <Navbar
+      left={<MenuButton />}
+      center={<LogoPlaceholder />}
+      right={
+        <>
+          <BellButton />
+          <AvatarMenu>CN</AvatarMenu>
+        </>
+      }
+    />
+  ),
 };

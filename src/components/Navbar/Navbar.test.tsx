@@ -32,6 +32,12 @@ describe("Navbar", () => {
     expect(btn.parentElement).toHaveClass("ds-navbar__left");
   });
 
+  it("renderiza o slot center dentro do container ds-navbar__center", () => {
+    render(<Navbar center={<span data-testid="brand">Logo</span>} />);
+    const el = screen.getByTestId("brand");
+    expect(el.parentElement).toHaveClass("ds-navbar__center");
+  });
+
   it("renderiza o slot right dentro do container ds-navbar__right", () => {
     render(<Navbar right={<button data-testid="bell">Notify</button>} />);
     const btn = screen.getByTestId("bell");

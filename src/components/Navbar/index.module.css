@@ -1,22 +1,23 @@
 /*
-  Estilos do Navbar (Figma `4146:12875`).
+  Estilos do Navbar (Figma `4146:12875`). Shell de layout composável — apenas a
+  barra e os slots; nenhum conteúdo fixo (os itens são compostos pelo consumidor
+  via slots `left`/`center`/`right`).
 
-  - Bar: bg `color/neutral/50` (#fafafa), border-bottom 1px
-    `color/border/regular` (#d4d4d4), padding `16` (spacing/4),
-    `flex / items-center / justify-between`, largura 100%. `position: relative`
-    para permitir centralizar o logo no mobile (`.ds-navbar-center-mobile`).
-  - Regiões `left` e `right`: `flex gap-8 (spacing/2) items-center`.
-  - Mobile (< breakpoint `m` 1024): padding horizontal cai para `8` (spacing/2);
-    itens com `.ds-navbar-hide-mobile` somem; `.ds-navbar-hide-desktop` aparece
-    (ex.: hamburger); `.ds-navbar-center-mobile` centraliza o item (logo).
+  - Bar: bg `color/neutral/50` (#fafafa), border-bottom 1px `color/border/regular`
+    (#d4d4d4), padding `16` (spacing/4), largura 100%.
+  - Layout: grid de 3 colunas `1fr auto 1fr` — `left` à esquerda, `center` no
+    centro exato da barra, `right` à direita. Sem `center`, equivale a
+    `justify-between` (a coluna do meio fica com largura 0).
+  - Slots `left`/`center`/`right`: `flex gap-8 (spacing/2) items-center`.
+  - Mobile (< breakpoint `m` 1024px): padding horizontal cai para `8` (spacing/2),
+    conforme a variante mobile do Figma.
   - Sem `font-family` própria (herda do global).
 */
 
 :global(.ds-navbar) {
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
   align-items: center;
-  justify-content: space-between;
-  position: relative;
   width: 100%;
   padding: var(--spacing-4);
   background-color: var(--color-neutral-50);
@@ -25,51 +26,33 @@
 }
 
 :global(.ds-navbar__left),
+:global(.ds-navbar__center),
 :global(.ds-navbar__right) {
   display: flex;
   align-items: center;
   gap: var(--spacing-2);
 }
 
-/* O lado esquerdo pode encolher (logo + texto); o direito mantém as ações. */
+/* Esquerda à esquerda; pode encolher (logo + texto). */
 :global(.ds-navbar__left) {
+  justify-self: start;
   min-width: 0;
 }
 
-:global(.ds-navbar__right) {
-  flex-shrink: 0;
+/* Centro no centro exato da barra (coluna `auto` entre duas `1fr` iguais). */
+:global(.ds-navbar__center) {
+  justify-self: center;
+  min-width: 0;
 }
 
-/*
-  Mobile (< breakpoint `m` 1024px do DS): padding horizontal 8px; itens
-  marcados com `.ds-navbar-hide-mobile` (ex.: ação primária, navegação) somem
-  para o Drawer; `.ds-navbar-center-mobile` (ex.: logo) é centralizado na barra.
-*/
+/* Direita à direita. */
+:global(.ds-navbar__right) {
+  justify-self: end;
+}
+
+/* Mobile (< breakpoint `m` 1024px do DS): padding horizontal cai para 8px. */
 @media (max-width: 1023.98px) {
   :global(.ds-navbar) {
     padding: var(--spacing-4) var(--spacing-2);
-  }
-
-  :global(.ds-navbar-hide-mobile) {
-    display: none !important;
-  }
-
-  /* Centraliza o item na barra (ex.: logo) entre o hamburger (esq.) e as ações (dir.). */
-  :global(.ds-navbar-center-mobile) {
-    position: absolute;
-    left: 50%;
-    top: 50%;
-    transform: translate(-50%, -50%);
-  }
-}
-
-/*
-  Itens visíveis APENAS no mobile (< 1024px) — ocultos no desktop. Simétrico a
-  `.ds-navbar-hide-mobile`. Ex.: o botão hamburger que abre o menu/Drawer no
-  mobile, enquanto no desktop a navegação fica inline/sidebar.
-*/
-@media (min-width: 1024px) {
-  :global(.ds-navbar-hide-desktop) {
-    display: none !important;
   }
 }

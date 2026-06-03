@@ -3,49 +3,54 @@ import type { NavbarProps } from "../../types/components/Navbar";
 import "./index.module.css";
 
 const ROOT_CLASS = "ds-navbar";
-const LEFT_CLASS = "ds-navbar__left";
-const RIGHT_CLASS = "ds-navbar__right";
 const DEFAULT_ARIA_LABEL = "Barra de navegação";
 
-/**
- * Compõe as classes do `<header>` raiz, mantendo `ds-navbar` e adicionando a
- * classe extra do consumidor (quando houver).
- */
+/** Junta a classe base do navbar com a classe extra do consumidor. */
 function buildRootClassName(className: string | undefined): string {
   return [ROOT_CLASS, className].filter(Boolean).join(" ");
 }
 
 /**
- * Navbar do design system. Barra superior horizontal (Figma `4146:12875`):
- * fundo `neutral/50` (#fafafa), borda inferior `border/regular` (#d4d4d4) e
- * padding `16` (token `spacing[4]`), com `flex / justify-between`.
+ * Navbar do design system (Figma `4146:12875`). Shell de layout TOTALMENTE
+ * composável: a barra é a única coisa fixa — `<header role="banner">` com fundo
+ * `neutral/50`, borda inferior `border/regular` e padding `16` (que cai para `8`
+ * na horizontal no mobile < 1024px). Todo o conteúdo é livre, via os slots
+ * `left`, `center` e `right`.
  *
- * Duas regiões compostas pelo consumidor: `left` (logo/botão de menu) e
- * `right` (ações), cada uma em `flex gap-8 items-center`. No mobile (< 1024px)
- * o padding horizontal cai para `8`.
+ * O layout é um grid de 3 colunas (`1fr auto 1fr`): `left` à esquerda, `center`
+ * no centro exato da barra e `right` à direita. Sem `center`, comporta-se como
+ * uma barra `justify-between`. Cada slot é, por dentro, `flex gap-8 items-center`.
  *
- * Utilitários de responsividade (classes globais), com corte no breakpoint
- * `m` (1024px): `ds-navbar-hide-mobile` oculta o item no mobile (< 1024px);
- * `ds-navbar-hide-desktop` oculta no desktop (≥ 1024px) — ex.: o hamburger que
- * abre o Drawer só no mobile; `ds-navbar-center-mobile` centraliza o item
- * (ex.: logo) na barra no mobile.
+ * Os itens do Figma (botão de menu, logo, pill "SIJ", "Enviar processo",
+ * notificação, avatar) são apenas EXEMPLOS — nenhum é fixo no componente.
+ * Componha com os primitivos do DS:
  *
- * Renderiza `<header role="banner">` com `aria-label` customizável (default
- * `"Barra de navegação"`). Altura ~64px (padding 16 + conteúdo de 32px).
+ * ```tsx
+ * <Navbar
+ *   left={
+ *     <>
+ *       <Button type="ghost" size="s" icon={<PanelRight size={16} />} aria-label="Menu" tooltip="Menu" />
+ *       <img src="/logo.svg" alt="JusCash" height={18.653} />
+ *     </>
+ *   }
+ *   right={
+ *     <>
+ *       <Button type="primary" size="s" icon={<Send size={12} />}>Enviar processo</Button>
+ *       <Button type="ghost" size="s" icon={<Bell size={16} />} aria-label="Notificações" tooltip="Notificações" />
+ *       <AvatarMenu>CN</AvatarMenu>
+ *     </>
+ *   }
+ * />
+ * ```
  */
 export function Navbar(props: NavbarProps): React.ReactElement {
-  const { left, right, className, style, "aria-label": ariaLabel = DEFAULT_ARIA_LABEL, ...rest } = props;
+  const { left, center, right, className, "aria-label": ariaLabel = DEFAULT_ARIA_LABEL, ...rest } = props;
 
   return (
-    <header
-      {...rest}
-      role="banner"
-      aria-label={ariaLabel}
-      className={buildRootClassName(className)}
-      style={style}
-    >
-      <div className={LEFT_CLASS}>{left}</div>
-      <div className={RIGHT_CLASS}>{right}</div>
+    <header {...rest} role="banner" aria-label={ariaLabel} className={buildRootClassName(className)}>
+      <div className="ds-navbar__left">{left}</div>
+      <div className="ds-navbar__center">{center}</div>
+      <div className="ds-navbar__right">{right}</div>
     </header>
   );
 }
