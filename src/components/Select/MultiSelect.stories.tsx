@@ -1,7 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
 import { Select } from ".";
-import { Form } from "antd";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
@@ -11,138 +10,7 @@ const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-Sy
 type SelectStoryProps = React.ComponentProps<typeof Select> & {
   focus?: boolean;
   hover?: boolean;
-  active?: boolean;
 };
-
-const meta: Meta<SelectStoryProps> = {
-  title: "Components/MultiSelect",
-  component: Select,
-  tags: ["autodocs"],
-  parameters: {
-    design: {
-      type: "figma",
-      url: FIGMA_URL,
-    },
-    docs: {
-      codePanel: true,
-      description: {
-        component: `
-Componente de seleção múltipla (MultiSelect) baseado no [Ant Design Select](https://ant.design/components/select).
-
-### Props:
-- **Extended (Ant Design)**: Suporta as propriedades padrão do AntD Select com \`mode="multiple"\`.
-- **Custom (Juscash)**:
-  - \`dsSize\`: Define o tamanho específico seguindo o Design System (\`xs\`, \`s\`, \`m\`, \`l\`).
-
-### Como usar:
-
-\`\`\`tsx
-import { Select } from "@juscash/design-system";
-
-function Example() {
-  return (
-    <Select
-      mode="multiple"
-      placeholder="Selecione opcoes"
-      options={[{ value: "a", label: "Opcao A" }]}
-    />
-  );
-}
-\`\`\`
-`,
-      },
-      page: () => (
-        <>
-          <Title />
-          <Subtitle />
-          <Description />
-
-          <Primary />
-
-          <Controls />
-
-          <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
-            <h3
-              style={{
-                marginBottom: "1rem",
-                fontSize: "1.2rem",
-                fontWeight: "bold",
-              }}
-            >
-              🎨 Figma Spec
-            </h3>
-            <Figma showLink url={FIGMA_URL} height="400px" />
-          </div>
-
-          <Stories />
-        </>
-      ),
-    },
-  },
-  args: {
-    mode: "multiple",
-    style: { width: "100%" },
-    hover: false,
-    active: false,
-    focus: false,
-  },
-  argTypes: {
-    dsSize: {
-      control: "select",
-      options: ["xs", "s", "m", "l"],
-      description: "Tamanho do Design System",
-    },
-    disabled: {
-      control: "boolean",
-      description: "Desabilita o componente",
-    },
-    status: {
-      control: "select",
-      options: ["", "error"],
-      description: "Estado de validação",
-    },
-    active: {
-      control: "boolean",
-      description: "Força o estado active",
-      table: { category: "Pseudo States" },
-    },
-    focus: {
-      control: "boolean",
-      description: "Força o estado de focus (Visual)",
-      table: { category: "Pseudo States" },
-    },
-    hover: {
-      control: "boolean",
-      description: "Força o estado de hover (Visual)",
-      table: { category: "Pseudo States" },
-    },
-  },
-  decorators: [
-    (Story) => (
-      <Form layout="vertical">
-        <div style={{ width: 300 }}>
-          <Story />
-        </div>
-      </Form>
-    ),
-  ],
-  render: (args) => {
-    const { focus, hover, active, className, ...props } = args;
-    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
-      .filter(Boolean)
-      .join(" ");
-    const mergedClassName = [className, pseudoClasses].filter(Boolean).join(" ");
-
-    return (
-      <Form.Item label="Label">
-        <Select {...props} className={mergedClassName} />
-      </Form.Item>
-    );
-  },
-};
-
-export default meta;
-type Story = StoryObj<SelectStoryProps>;
 
 const options = [
   { value: "option1", label: "Option 1" },
@@ -153,89 +21,88 @@ const options = [
   { value: "disabled", label: "Disabled Option", disabled: true },
 ];
 
-export const Default: Story = {
-  args: {
-    placeholder: "Select multiple options",
-    options,
+const meta: Meta<SelectStoryProps> = {
+  title: "Components/MultiSelect",
+  component: Select,
+  tags: ["autodocs"],
+  parameters: {
+    design: { type: "figma", url: FIGMA_URL },
+    docs: {
+      codePanel: true,
+      description: {
+        component: `
+Seleção múltipla — o mesmo \`Select\` com \`mode="multiple"\` (chips + checkbox nas opções). Tokens do Figma (\`4122:8572\`).
+
+### Props proprietárias
+- \`size\`: \`xs\` · \`s\` · \`m\` · \`l\` (default \`m\`).
+- \`label\` / \`helperText\`.
+`,
+      },
+      page: () => (
+        <>
+          <Title />
+          <Subtitle />
+          <Description />
+          <Primary />
+          <Controls />
+          <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
+            <h3 style={{ marginBottom: "1rem", fontSize: "1.2rem", fontWeight: "bold" }}>🎨 Figma Spec</h3>
+            <Figma showLink url={FIGMA_URL} height="400px" />
+          </div>
+          <Stories />
+        </>
+      ),
+    },
   },
-  name: "Multiple",
+  args: {
+    mode: "multiple",
+    label: "Label",
+    options,
+    placeholder: "Selecione itens",
+    hover: false,
+    focus: false,
+  },
+  argTypes: {
+    size: { control: "select", options: ["xs", "s", "m", "l"], description: "Tamanho do Design System" },
+    label: { control: "text" },
+    helperText: { control: "text" },
+    disabled: { control: "boolean" },
+    status: { control: "select", options: ["", "error"] },
+    hover: { control: "boolean", description: "Força hover", table: { category: "Pseudo States" } },
+    focus: { control: "boolean", description: "Força focus", table: { category: "Pseudo States" } },
+  },
+  render: (args) => {
+    const { focus, hover, className, ...props } = args;
+    const pseudo = [hover && "pseudo-hover", focus && "pseudo-focus-visible"].filter(Boolean).join(" ");
+    const mergedClassName = [className, pseudo].filter(Boolean).join(" ");
+    return (
+      <div style={{ width: 320 }}>
+        <Select {...props} className={mergedClassName} />
+      </div>
+    );
+  },
 };
 
-export const Searchable: Story = {
-  args: {
-    placeholder: "Search options...",
-    showSearch: true,
-    options,
-  },
-  name: "Multiple with Search",
-};
+export default meta;
+type Story = StoryObj<SelectStoryProps>;
 
-export const WithSelected: Story = {
-  args: {
-    placeholder: "Select multiple options",
-    defaultValue: ["option1", "option2"],
-    options,
-  },
-  name: "With Selected Options",
-};
+export const Default: Story = { name: "Multiple", args: {} };
 
-export const Disabled: Story = {
-  args: {
-    placeholder: "Disabled select",
-    disabled: true,
-    defaultValue: ["option1"],
-    options,
-  },
-};
+export const WithSelected: Story = { name: "With Selected Options", args: { defaultValue: ["option1", "option2"] } };
 
-export const Error: Story = {
-  args: {
-    placeholder: "Select with error",
-    status: "error",
-    options,
-  },
-};
+export const Searchable: Story = { name: "Multiple with Search", args: { showSearch: true } };
 
-export const Focus: Story = {
-  args: {
-    placeholder: "Focused select",
-    focus: true,
-    options,
-  },
-};
+export const Disabled: Story = { args: { disabled: true, defaultValue: ["option1"] } };
 
-export const ErrorFocus: Story = {
-  args: {
-    placeholder: "Error + Focus",
-    status: "error",
-    focus: true,
-    options,
-  },
-};
+export const Error: Story = { args: { status: "error", helperText: "Selecione ao menos uma opção" } };
 
-export const SizeVariants: Story = {
+export const Sizes: Story = {
   render: () => (
-    <div style={{ display: "flex", flexDirection: "column", gap: 16, width: 300 }}>
-      {/* XS Size */}
-      <Form.Item label="Size XS">
-        <Select dsSize="xs" mode="multiple" placeholder="XS Size" options={options} defaultValue={["option1"]} />
-      </Form.Item>
-
-      {/* S Size */}
-      <Form.Item label="Size S">
-        <Select dsSize="s" mode="multiple" placeholder="S Size" options={options} defaultValue={["option1"]} />
-      </Form.Item>
-
-      {/* M Size */}
-      <Form.Item label="Size M (Default)">
-        <Select dsSize="m" mode="multiple" placeholder="M Size" options={options} defaultValue={["option1"]} />
-      </Form.Item>
-
-      {/* L Size */}
-      <Form.Item label="Size L">
-        <Select dsSize="l" mode="multiple" placeholder="L Size" options={options} defaultValue={["option1"]} />
-      </Form.Item>
+    <div style={{ display: "flex", flexDirection: "column", gap: 24, width: 320 }}>
+      <Select size="l" mode="multiple" label="Large" defaultValue={["option1"]} options={options} />
+      <Select size="m" mode="multiple" label="Regular" defaultValue={["option1"]} options={options} />
+      <Select size="s" mode="multiple" label="Small" defaultValue={["option1"]} options={options} />
+      <Select size="xs" mode="multiple" label="Mini" defaultValue={["option1"]} options={options} />
     </div>
   ),
-  decorators: [(Story) => <Story />],
 };

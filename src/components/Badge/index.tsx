@@ -1,9 +1,10 @@
 import React from "react";
-import { Badge as AntdBadge, ConfigProvider, Tooltip as AntdTooltip } from "antd";
+import { Badge as AntdBadge, ConfigProvider } from "antd";
 import type { BadgeProps as AntdBadgeProps } from "antd";
 import type { ComponentToken } from "antd/es/badge/style";
 import * as LucideIcons from "lucide-react";
 import { designSystemColors, radius, spacing } from "../../theme";
+import { Tooltip } from "../Tooltip";
 import type { BadgeProps, BadgeStatusColor, BadgeVariant } from "../../types/components/Badge";
 import "./index.module.css";
 
@@ -61,7 +62,7 @@ function getContentBaseStyles(isCounter: boolean): React.CSSProperties {
     return {
       minWidth: COUNTER_MIN_SIZE,
       height: COUNTER_MIN_SIZE,
-      paddingInline: 0,
+      paddingInline: spacing[1],
       paddingBlock: 0,
       borderRadius: radius.full,
       display: "inline-flex",
@@ -299,9 +300,9 @@ export function Badge(props: BadgeProps): React.ReactElement {
       }}
     >
       {resolvedTooltip !== undefined && resolvedTooltip !== null ?
-        <AntdTooltip title={resolvedTooltip} placement={tooltipPlacement}>
+        <Tooltip title={resolvedTooltip} placement={tooltipPlacement}>
           {badge}
-        </AntdTooltip>
+        </Tooltip>
       : badge}
     </ConfigProvider>
   );

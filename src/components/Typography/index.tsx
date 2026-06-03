@@ -10,6 +10,8 @@ import type {
   CaptionProps,
   CustomTypographyProps,
   HeadingProps,
+  NativeTypographyProps,
+  TypographyComponentTag,
   TypographyVariant,
 } from "../../types/components/Typography";
 
@@ -100,17 +102,69 @@ function renderTypography(
 }
 
 /**
+ * Predicado que identifica props HTML padrão repassáveis para tags nativas.
+ * Aceita `children`, `className`, `id`, `style`, atributos `data-*` e `aria-*`,
+ * e quaisquer handlers `on*` (ex.: `onClick`, `onMouseEnter`). Outras props
+ * (ex.: `mark`, `code`, `strong` do Antd) são descartadas ao renderizar
+ * via prop `component`.
+ */
+function isNativeProp(key: string): boolean {
+  if (key === "children" || key === "className" || key === "id" || key === "style") return true;
+  if (key.startsWith("data-") || key.startsWith("aria-")) return true;
+  if (/^on[A-Z]/.test(key)) return true;
+  return false;
+}
+
+/**
+ * Filtra o bag de props do Antd mantendo apenas o que faz sentido em tags
+ * HTML nativas. Sem `any` — usa `unknown` no record intermediário.
+ */
+function pickNativeProps(rest: AntdTypographyAllProps): NativeTypographyProps {
+  const source = rest as Record<string, unknown>;
+  const out: Record<string, unknown> = {};
+  for (const key of Object.keys(source)) {
+    if (isNativeProp(key)) out[key] = source[key];
+  }
+  return out as NativeTypographyProps;
+}
+
+/**
+ * Renderiza a tag HTML nativa indicada por `component`, aplicando o mesmo
+ * `style` gerado por `buildVariantStyle` e repassando apenas props HTML
+ * padrão (filtradas por `pickNativeProps`). O Antd Typography não é
+ * envolvido nesse caminho.
+ */
+function renderNativeElement(
+  tag: TypographyComponentTag,
+  variant: TypographyVariant,
+  baseStyle: React.CSSProperties,
+  rest: AntdTypographyAllProps,
+): React.ReactElement {
+  const style = buildVariantStyle(variant, baseStyle);
+  const nativeProps = pickNativeProps(rest);
+  return React.createElement(tag, { ...nativeProps, style });
+}
+
+/**
  * Componente raiz de tipografia. Aplica `variant` (`heading1..6`, `body1|2`,
  * `caption`) sobre o `Typography` do Antd usando os tokens do design system
  * (`Inter`, peso `400`, line-height `120%`). Sem prop de cor — o Figma não
  * documenta cor como eixo de Typography.
+ *
+ * Se `component` for informada, o componente bypassa o Antd Typography e
+ * renderiza a tag HTML nativa (`p`, `span`, `h1`..`h6`) com o mesmo style
+ * gerado por `buildVariantStyle`. Apenas props HTML padrão são repassadas;
+ * props específicas do Antd (`mark`, `code`, `strong`, etc.) são ignoradas.
  */
 export function Typography(props: CustomTypographyProps): React.ReactElement {
-  const { variant = "body1", style, ...rest } = props;
+  const { variant = "body1", style, component, ...rest } = props;
   const baseStyle: React.CSSProperties = {
     margin: 0,
     ...style,
   };
+  if (component !== undefined) {
+    return renderNativeElement(component, variant, baseStyle, rest);
+  }
   return renderTypography(variant, baseStyle, rest);
 }
 
@@ -134,10 +188,19 @@ Heading5.displayName = "Heading5";
 export const Heading6: React.FC<HeadingProps> = (props) => <Typography variant="heading6" {...props} />;
 Heading6.displayName = "Heading6";
 
-export const Body1: React.FC<BodyProps> = (props) => <Typography variant="body1" {...props} />;
+// Body1 e Body2 renderizam como `<p>` nativo por padrão. O `Paragraph` do
+// Antd 6 internamente usa `<div>` (ver `node_modules/antd/lib/typography/Paragraph.js`),
+// o que confunde semântica (parágrafo virando bloco). Default `component="p"`
+// alinha o DOM com a expectativa do consumidor. Pode ser sobrescrito passando
+// `component={"span" | "h1" | ...}` explicitamente.
+export const Body1: React.FC<BodyProps> = ({ component = "p", ...props }) => (
+  <Typography variant="body1" component={component} {...props} />
+);
 Body1.displayName = "Body1";
 
-export const Body2: React.FC<BodyProps> = (props) => <Typography variant="body2" {...props} />;
+export const Body2: React.FC<BodyProps> = ({ component = "p", ...props }) => (
+  <Typography variant="body2" component={component} {...props} />
+);
 Body2.displayName = "Body2";
 
 export const Caption: React.FC<CaptionProps> = (props) => <Typography variant="caption" {...props} />;
@@ -160,5 +223,7 @@ export type {
   HeadingProps,
   BodyProps,
   CaptionProps,
+  NativeTypographyProps,
+  TypographyComponentTag,
   TypographyVariant,
 } from "../../types/components/Typography";

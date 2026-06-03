@@ -16,6 +16,13 @@ const TOOLTIP_ARROW_SIZE = 11.5;
 const INTER_FONT_FAMILY = '"Inter", sans-serif';
 
 /**
+ * Delay (ms) aplicado ao liberar o ancestral suprimido. Evita que o tooltip
+ * do pai pisque imediatamente após o filho fechar — dá tempo do usuário sair
+ * da área do filho sem ver o pai reaparecer no meio do gesto.
+ */
+const PARENT_RELEASE_DELAY_MS = 200;
+
+/**
  * Tema local do Tooltip do design system. Mantém os tokens nativos do Antd
  * alinhados com `neutral[800]` (fundo) e `neutral[50]` (texto), conforme o
  * frame `4041:9017` do Figma. `sizePopupArrow` força o Antd a recalcular a
@@ -100,16 +107,41 @@ export function Tooltip(props: TooltipProps): React.ReactElement {
 
   const handleOpenChange = React.useCallback(
     (next: boolean) => {
+      const title = typeof rest.title === "string" ? rest.title.slice(0, 30) : "?";
+      // eslint-disable-next-line no-console
+      console.log(`[DS Tooltip "${title}"] handleOpenChange(${next}), ancestor=${ancestor ? "Y" : "N"}`);
       if (next && ancestor) ancestor.suppress();
       else if (!next && ancestor) ancestor.release();
       if (!isControlled) setInternalOpen(next);
       onOpenChangeProp?.(next);
     },
-    [ancestor, isControlled, onOpenChangeProp],
+    [ancestor, isControlled, onOpenChangeProp, rest.title],
   );
 
-  const suppress = React.useCallback(() => setSuppressed(true), []);
-  const release = React.useCallback(() => setSuppressed(false), []);
+  const releaseTimerRef = React.useRef<number | null>(null);
+
+  const clearReleaseTimer = React.useCallback(() => {
+    if (releaseTimerRef.current !== null) {
+      window.clearTimeout(releaseTimerRef.current);
+      releaseTimerRef.current = null;
+    }
+  }, []);
+
+  const suppress = React.useCallback(() => {
+    clearReleaseTimer();
+    setSuppressed(true);
+  }, [clearReleaseTimer]);
+
+  const release = React.useCallback(() => {
+    clearReleaseTimer();
+    releaseTimerRef.current = window.setTimeout(() => {
+      releaseTimerRef.current = null;
+      setSuppressed(false);
+    }, PARENT_RELEASE_DELAY_MS);
+  }, [clearReleaseTimer]);
+
+  React.useEffect(() => clearReleaseTimer, [clearReleaseTimer]);
+
   const control = React.useMemo<TooltipParentControl>(
     () => ({ suppress, release }),
     [suppress, release],
@@ -119,6 +151,11 @@ export function Tooltip(props: TooltipProps): React.ReactElement {
   const resolvedStyles = resolveSemanticValue<TooltipSemanticStyles>(styles, props) ?? {};
 
   const rootClassName = ["ds-tooltip", overlayClassName, resolvedClassNames.root].filter(Boolean).join(" ");
+
+  // eslint-disable-next-line no-console
+  console.log(
+    `[DS Tooltip RENDER "${typeof rest.title === "string" ? rest.title.slice(0, 30) : "?"}"] effectiveOpen=${effectiveOpen}, suppressed=${suppressed}, internalOpen=${internalOpen}, isControlled=${isControlled}, ancestor=${ancestor ? "Y" : "N"}`,
+  );
 
   return (
     <TooltipParentControlContext.Provider value={control}>

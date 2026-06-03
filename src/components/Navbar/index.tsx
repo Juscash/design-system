@@ -3,68 +3,54 @@ import type { NavbarProps } from "../../types/components/Navbar";
 import "./index.module.css";
 
 const ROOT_CLASS = "ds-navbar";
-const BRAND_CLASS = "ds-navbar__brand";
-const LEFT_CLASS = "ds-navbar__left";
-const RIGHT_CLASS = "ds-navbar__right";
 const DEFAULT_ARIA_LABEL = "Barra de navegação";
 
-/**
- * Compõe as classes do `<header>` raiz, mantendo a classe base
- * `ds-navbar` e adicionando a classe extra do consumidor (quando houver).
- */
+/** Junta a classe base do navbar com a classe extra do consumidor. */
 function buildRootClassName(className: string | undefined): string {
   return [ROOT_CLASS, className].filter(Boolean).join(" ");
 }
 
 /**
- * Navbar do design system. Barra superior horizontal com fundo
- * `neutral/50` (#fafafa), borda inferior `border/regular` (#d4d4d4) e
- * padding `16` (token `spacing[4]`), conforme dump
- * `figma/components/navbar/variables-4146-12875.md`.
+ * Navbar do design system (Figma `4146:12875`). Shell de layout TOTALMENTE
+ * composável: a barra é a única coisa fixa — `<header role="banner">` com fundo
+ * `neutral/50`, borda inferior `border/regular` e padding `16` (que cai para `8`
+ * na horizontal no mobile < 1024px). Todo o conteúdo é livre, via os slots
+ * `left`, `center` e `right`.
  *
- * API slot-based: `brand` + `leftSlot` à esquerda, `rightSlot` à direita.
- * O consumidor pode também passar `children` quando quiser montar o
- * layout manualmente.
+ * O layout é um grid de 3 colunas (`1fr auto 1fr`): `left` à esquerda, `center`
+ * no centro exato da barra e `right` à direita. Sem `center`, comporta-se como
+ * uma barra `justify-between`. Cada slot é, por dentro, `flex gap-8 items-center`.
  *
- * Renderiza um `<header role="banner">` por padrão, com `aria-label`
- * customizável. A altura cresce naturalmente com o conteúdo (~64px com
- * itens de 32px e padding 16, alinhado ao screenshot do dump).
+ * Os itens do Figma (botão de menu, logo, pill "SIJ", "Enviar processo",
+ * notificação, avatar) são apenas EXEMPLOS — nenhum é fixo no componente.
+ * Componha com os primitivos do DS:
+ *
+ * ```tsx
+ * <Navbar
+ *   left={
+ *     <>
+ *       <Button type="ghost" size="s" icon={<PanelRight size={16} />} aria-label="Menu" tooltip="Menu" />
+ *       <img src="/logo.svg" alt="JusCash" height={18.653} />
+ *     </>
+ *   }
+ *   right={
+ *     <>
+ *       <Button type="primary" size="s" icon={<Send size={12} />}>Enviar processo</Button>
+ *       <Button type="ghost" size="s" icon={<Bell size={16} />} aria-label="Notificações" tooltip="Notificações" />
+ *       <AvatarMenu>CN</AvatarMenu>
+ *     </>
+ *   }
+ * />
+ * ```
  */
 export function Navbar(props: NavbarProps): React.ReactElement {
-  const {
-    brand,
-    leftSlot,
-    rightSlot,
-    children,
-    className,
-    style,
-    "aria-label": ariaLabel = DEFAULT_ARIA_LABEL,
-    ...rest
-  } = props;
-
-  const hasSlots = Boolean(brand) || Boolean(leftSlot) || Boolean(rightSlot);
+  const { left, center, right, className, "aria-label": ariaLabel = DEFAULT_ARIA_LABEL, ...rest } = props;
 
   return (
-    <header
-      {...rest}
-      role="banner"
-      aria-label={ariaLabel}
-      className={buildRootClassName(className)}
-      style={style}
-    >
-      {hasSlots ?
-        <>
-          <div className={LEFT_CLASS}>
-            {brand ?
-              <div className={BRAND_CLASS}>{brand}</div>
-            : null}
-            {leftSlot}
-          </div>
-          {rightSlot ?
-            <div className={RIGHT_CLASS}>{rightSlot}</div>
-          : null}
-        </>
-      : children}
+    <header {...rest} role="banner" aria-label={ariaLabel} className={buildRootClassName(className)}>
+      <div className="ds-navbar__left">{left}</div>
+      <div className="ds-navbar__center">{center}</div>
+      <div className="ds-navbar__right">{right}</div>
     </header>
   );
 }

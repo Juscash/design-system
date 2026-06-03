@@ -5,7 +5,7 @@ export const shadow = {
   l: "0px 10px 15px -3px rgba(0, 0, 0, 0.1), 0px 4px 6px -4px rgba(0, 0, 0, 0.1)",
   xl: "0px 20px 25px -5px rgba(0, 0, 0, 0.1), 0px 8px 10px -6px rgba(0, 0, 0, 0.1)",
   focus: "0px 0px 0px 3px #d4d4d4",
-  focusError: "0px 0px 0px 3px rgba(210, 25, 11, 0.4)",
+  focusError: "0px 0px 0px 3px rgba(210, 25, 11, 0.2)",
 } as const;
 
 export type Shadow = typeof shadow;

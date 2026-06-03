@@ -3,6 +3,8 @@ import { Button as AntdButton, ConfigProvider } from "antd";
 import type { ButtonToken } from "antd/es/button/style/token";
 import * as LucideIcons from "lucide-react";
 import { designSystemColors, radius, shadow, spacing } from "../../theme";
+import { Tooltip } from "../Tooltip";
+import type { TooltipProps } from "../../types/components/Tooltip";
 import type { ButtonProps, ButtonSize, ButtonType } from "../../types/components/Button";
 import "./index.module.css";
 
@@ -262,6 +264,16 @@ function resolveIcon(icon: React.ReactNode | string | undefined, size: ButtonSiz
 }
 
 /**
+ * Resolve a prop `tooltip` em `TooltipProps`. Aceita string (atalho para
+ * `{ title: string }`) ou o objeto completo do `Tooltip` do DS.
+ */
+function resolveTooltipProps(tooltip: string | TooltipProps | undefined): TooltipProps | undefined {
+  if (tooltip === undefined) return undefined;
+  if (typeof tooltip === "string") return { title: tooltip };
+  return tooltip;
+}
+
+/**
  * Botão do design system. Aceita as variantes proprietárias `primary`,
  * `secondary`, `outline`, `ghost`, `destructive` e `neutral`, e três tamanhos
  * (`xs|s|m`). Tanto `type` quanto `variant` são aceitos como sinônimos —
@@ -274,9 +286,14 @@ function resolveIcon(icon: React.ReactNode | string | undefined, size: ButtonSiz
  * Quando recebe `icon` sem `children`, o botão é renderizado em modo
  * icon-only (largura quadrada, sem `paddingInline`). Nesse caso o consumidor
  * **deve** passar `aria-label` para cumprir o critério WCAG 4.1.2.
+ *
+ * A prop `tooltip` envolve o botão em `<Tooltip>` com o título passado.
+ * Opcional para botões com label; **obrigatório** para botões icon-only —
+ * quando não passado em icon-only, a regra do Figma cai em `aria-label`
+ * automaticamente; sem nenhum dos dois é emitido um warning em desenvolvimento.
  */
 export function Button(props: ButtonProps): React.ReactElement {
-  const { type, variant, size = "m", style, children, icon, className: externalClassName, ...rest } = props;
+  const { type, variant, size = "m", style, children, icon, tooltip, className: externalClassName, ...rest } = props;
 
   const resolvedType: ButtonType = variant || type || "primary";
   const resolvedIcon = resolveIcon(icon, size);
@@ -292,20 +309,40 @@ export function Button(props: ButtonProps): React.ReactElement {
   const variantTokens: Partial<ButtonToken> =
     resolvedType === "outline" ? getOutlinedTokens() : VARIANT_TOKEN_BUILDERS[resolvedType]();
 
+  const ariaLabel = typeof rest["aria-label"] === "string" ? rest["aria-label"] : undefined;
+  const tooltipFromProp = resolveTooltipProps(tooltip);
+  const tooltipForIconOnly =
+    isIconOnly && tooltipFromProp === undefined && ariaLabel !== undefined ? { title: ariaLabel } : undefined;
+  const effectiveTooltip = tooltipFromProp ?? tooltipForIconOnly;
+
+  if (
+    process.env.NODE_ENV !== "production" &&
+    isIconOnly &&
+    effectiveTooltip === undefined
+  ) {
+    console.warn(
+      "[Button] icon-only sem `tooltip` nem `aria-label` — Figma exige tooltip com o nome da ação. Passe `tooltip=\"...\"` (preferencial) ou `aria-label=\"...\"`.",
+    );
+  }
+
+  const antdButton = (
+    <AntdButton
+      type={antdType}
+      style={buttonStyle}
+      icon={resolvedIcon}
+      className={finalClassName}
+      {...(children !== undefined ? { children } : null)}
+      {...rest}
+    />
+  );
+
   return (
     <ConfigProvider
       theme={{
         components: { Button: { ...variantTokens, ...sizeTokens } },
       }}
     >
-      <AntdButton
-        type={antdType}
-        style={buttonStyle}
-        icon={resolvedIcon}
-        className={finalClassName}
-        {...(children !== undefined ? { children } : null)}
-        {...rest}
-      />
+      {effectiveTooltip !== undefined ? <Tooltip {...effectiveTooltip}>{antdButton}</Tooltip> : antdButton}
     </ConfigProvider>
   );
 }

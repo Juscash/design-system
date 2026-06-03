@@ -36,7 +36,7 @@ proprietários via \`ConfigProvider\` local — o consumidor nunca importa \`ant
 - **\`icon\`** — \`ReactNode\` da Lucide. Sem \`children\`, vira **icon-only** (quadrado).
 
 ## Props herdadas do Antd Button
-\`block\`, \`disabled\`, \`loading\`, \`href\`, \`htmlType\`, \`iconPosition\`, \`shape\`, \`onClick\`, \`aria-label\`, \`className\`, \`style\` etc.
+\`block\`, \`disabled\`, \`loading\`, \`href\`, \`htmlType\`, \`iconPlacement\`, \`shape\`, \`onClick\`, \`aria-label\`, \`className\`, \`style\` etc.
 
 ## Acessibilidade
 - Botões **icon-only obrigatoriamente** recebem \`aria-label\`.
@@ -80,7 +80,7 @@ import { Plus } from "lucide-react";
     disabled: { control: "boolean" },
     loading: { control: "boolean" },
     block: { control: "boolean", description: "Ocupa 100% da largura do container." },
-    iconPosition: {
+    iconPlacement: {
       control: "select",
       options: ["start", "end"],
       description: "Posição do ícone em relação ao texto.",
@@ -135,14 +135,14 @@ export const Tamanhos: Story = {
   ),
 };
 
-/** Botão com ícone à esquerda (default `iconPosition="start"`). */
+/** Botão com ícone à esquerda (default `iconPlacement="start"`). */
 export const ComIcone: Story = {
   args: { variant: "primary", icon: <Search size={16} />, children: "Buscar" },
 };
 
-/** Botão com ícone à direita (`iconPosition="end"`). */
+/** Botão com ícone à direita (`iconPlacement="end"`). */
 export const IconePosicaoDireita: Story = {
-  args: { variant: "neutral", icon: <ChevronRight size={16} />, iconPosition: "end", children: "Próximo" },
+  args: { variant: "neutral", icon: <ChevronRight size={16} />, iconPlacement: "end", children: "Próximo" },
 };
 
 /** Botão **icon-only** — `icon` sem `children`. Exige `aria-label`. */
@@ -339,7 +339,7 @@ export const ExemplosFigma: Story = {
         <Button variant="neutral" icon={<ChevronLeft size={16} />}>
           Anterior
         </Button>
-        <Button variant="neutral" icon={<ChevronRight size={16} />} iconPosition="end">
+        <Button variant="neutral" icon={<ChevronRight size={16} />} iconPlacement="end">
           Próximo
         </Button>
       </div>

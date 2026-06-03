@@ -16,7 +16,12 @@ export type CheckboxProps = AntdCheckboxProps & {
    * ao lado do checkbox. Cliques em qualquer ponto do card togglam o estado.
    */
   rich?: boolean;
-  /** Texto principal exibido ao lado do checkbox no modo `rich`. Quando ausente, usa `children`. */
+  /**
+   * Texto exibido ao lado do checkbox. No modo `rich` é o título principal
+   * (acompanhado de `secondaryText` opcional). No modo padrão, funciona como
+   * alternativa a `children` — útil quando o consumidor prefere passar o
+   * texto via prop em vez de children (API unificada com Switch).
+   */
   label?: string;
   /** Texto secundário (`caption/01 - 10px`) abaixo do `label` no modo `rich`. */
   secondaryText?: string;

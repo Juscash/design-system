@@ -41,16 +41,16 @@ está vendo e para hospedar as ações principais daquela tela.
 | \`title\`       | \`ReactNode\`                         | \`undefined\`    | Título do cabeçalho. Aceita string ou nó com badge/tag.              |
 | \`description\` | \`ReactNode\`                         | \`undefined\`    | Subtítulo opcional renderizado abaixo do título.                     |
 | \`actions\`     | \`ReactNode\`                         | \`undefined\`    | Slot livre — botões, menus, seletores, qualquer JSX.                 |
-| \`variant\`     | \`'default' | 'responsive' | 'stacked'\` | \`'responsive'\` | Controla o layout (horizontal / empilhado / responsivo).          |
 | \`level\`       | \`1 | 2 | 3 | 4 | 5 | 6\`           | \`1\`            | Nível semântico (\`<h1>\`–\`<h6>\`) do título.                            |
 | \`className\`   | \`string\`                            | —              | Classe extra aplicada ao \`Card\` raiz.                                |
 | \`style\`       | \`CSSProperties\`                     | —              | Estilo inline aplicado ao \`Card\` raiz.                               |
 
-## Variantes do Figma
+## Layout responsivo
 
-- **Padrão** — apenas título + descrição (sem ações).
-- **Com ações** — texto à esquerda, slot de ações à direita.
-- **Responsivo** — ações sobem para o topo em telas estreitas.
+O componente é **sempre responsivo** — não há prop de variante. Em telas
+≥ 768 px o layout é horizontal (texto à esquerda, ações à direita); abaixo
+desse breakpoint ele empilha e as ações sobem para o topo. São os dois
+estados (\`default\` e \`responsive\`) do componente no Figma.
 
 ## Como usar
 
@@ -97,7 +97,6 @@ function Page(): JSX.Element {
   args: {
     title: "Análise prospecção",
     description: "Realize a análise de processos ou de carteiras de advogados e acompanhe os resultados.",
-    variant: "responsive",
     // Em produção o componente é renderizado com `level=1` (default). Aqui
     // usamos `level=2` para que as stories convivam com o `<h1>` dos blocos
     // de Docs do Storybook sem quebrar a regra `heading-order` do axe.
@@ -115,12 +114,6 @@ function Page(): JSX.Element {
     actions: {
       control: false,
       description: "Slot livre. No Storybook, controlado via cada story.",
-    },
-    variant: {
-      control: { type: "inline-radio" },
-      options: ["default", "responsive", "stacked"],
-      description:
-        "default = horizontal sempre. responsive = horizontal em ≥768px, empilhado em <768px. stacked = empilhado sempre.",
     },
     level: {
       control: { type: "select" },
@@ -166,9 +159,9 @@ export const Padrao: Story = {
 };
 
 /**
- * Variante `With actions` do Figma — botão primário verde + botão `outline`
- * com `ellipsis` (MoreHorizontal). O slot é qualquer ReactNode; aqui usamos
- * exatamente o mesmo arranjo do Figma.
+ * Estado `default` do Figma (desktop) — botão primário verde + botão
+ * `outline` com `ellipsis` (MoreHorizontal). O slot é qualquer ReactNode;
+ * aqui usamos exatamente o mesmo arranjo do Figma.
  */
 export const ComAcoes: Story = {
   name: "Com ações (Figma)",
@@ -176,15 +169,14 @@ export const ComAcoes: Story = {
     title: "Title",
     description: "Subtitle",
     actions: defaultActions,
-    variant: "default",
     level: 2,
   },
 };
 
 /**
- * Variante `Responsive` do Figma — em telas estreitas, as ações sobem para
- * o topo e o conteúdo fica embaixo. Use o viewport mobile do Storybook para
- * ver o comportamento.
+ * Estado `responsive` do Figma — em telas < 768 px as ações sobem para o
+ * topo e o conteúdo fica embaixo. Renderizado no viewport mobile para
+ * acionar o breakpoint.
  */
 export const Responsivo: Story = {
   name: "Responsivo (Figma)",
@@ -192,26 +184,14 @@ export const Responsivo: Story = {
     title: "Title",
     description: "Subtitle",
     actions: defaultActions,
-    variant: "responsive",
     level: 2,
   },
-};
-
-/**
- * Variante `Stacked` — ações sempre no topo, conteúdo embaixo. Útil em
- * sidebars/colunas estreitas.
- */
-export const Empilhado: Story = {
-  name: "Empilhado",
-  args: {
-    title: "Title",
-    description: "Subtitle",
-    actions: defaultActions,
-    variant: "stacked",
-    level: 2,
+  parameters: {
+    layout: "centered",
+    viewport: { defaultViewport: "mobile1" },
   },
   render: (args) => (
-    <div style={{ maxWidth: 320 }}>
+    <div style={{ width: 268 }}>
       <PageHeader {...args} />
     </div>
   ),
@@ -231,7 +211,6 @@ export const ExemploDesktop: Story = {
     title: "Análise prospecção",
     description: "Realize a análise de processos ou de carteiras de advogados e acompanhe os resultados.",
     actions: defaultActions,
-    variant: "default",
     level: 2,
   },
   parameters: {
@@ -245,8 +224,9 @@ export const ExemploDesktop: Story = {
 };
 
 /**
- * Exemplo real do Figma — mobile/coluna estreita. Layout empilhado, com as
- * ações no topo e o título + descrição embaixo.
+ * Exemplo real do Figma — mobile/coluna estreita. Abaixo de 768 px o layout
+ * empilha automaticamente, com as ações no topo e o título + descrição
+ * embaixo.
  */
 export const ExemploMobile: Story = {
   name: "Exemplo — Mobile (Figma)",
@@ -254,7 +234,6 @@ export const ExemploMobile: Story = {
     title: "Análise prospecção",
     description: "Realize a análise de processos ou de carteiras de advogados e acompanhe os resultados.",
     actions: defaultActions,
-    variant: "stacked",
     level: 2,
   },
   parameters: {
@@ -295,7 +274,6 @@ export const SoAcoes: Story = {
     title: undefined,
     description: undefined,
     actions: defaultActions,
-    variant: "default",
   },
 };
 
@@ -322,7 +300,6 @@ export const SemDescricaoComAcoes: Story = {
     title: "Dashboard",
     description: undefined,
     actions: defaultActions,
-    variant: "default",
     level: 2,
   },
 };
@@ -337,7 +314,6 @@ export const DescricaoLonga: Story = {
     description:
       "Esse cabeçalho contém uma descrição mais longa do que o padrão para validarmos a quebra de linha, o respiro vertical entre título e descrição e o comportamento da área de ações alinhada à direita quando o texto ocupa quase toda a largura do card.",
     actions: defaultActions,
-    variant: "responsive",
     level: 2,
   },
 };
@@ -364,7 +340,6 @@ export const AcoesCustomizadas: Story = {
         <Button type="outline" size="s" icon={<MoreHorizontal size={16} />} aria-label="Mais opções" />
       </>
     ),
-    variant: "default",
     level: 2,
   },
 };
@@ -381,55 +356,7 @@ export const HeadingNivelAjustado: Story = {
     description: "Renderizado como `<h2>` para preservar a hierarquia.",
     actions: defaultActions,
     level: 2,
-    variant: "default",
   },
-};
-
-// ───────────────────────────────────────────────────────────────────────────
-// Comparativo de variantes
-// ───────────────────────────────────────────────────────────────────────────
-
-/**
- * Grid comparativa com as três variantes (`default`, `responsive`, `stacked`)
- * lado a lado para inspeção visual rápida.
- */
-export const ComparativoVariantes: Story = {
-  name: "Comparativo de variantes",
-  parameters: { layout: "fullscreen" },
-  render: () => (
-    <div style={{ padding: 24, display: "flex", flexDirection: "column", gap: 24 }}>
-      <section>
-        <h4 style={{ margin: "0 0 8px", fontSize: 13, color: "#525252" }}>variant = default</h4>
-        <PageHeader
-          title="Análise prospecção"
-          description="Realize a análise de processos ou de carteiras de advogados e acompanhe os resultados."
-          actions={defaultActions}
-          variant="default"
-          level={5}
-        />
-      </section>
-      <section>
-        <h4 style={{ margin: "0 0 8px", fontSize: 13, color: "#525252" }}>variant = responsive</h4>
-        <PageHeader
-          title="Análise prospecção"
-          description="Realize a análise de processos ou de carteiras de advogados e acompanhe os resultados."
-          actions={defaultActions}
-          variant="responsive"
-          level={5}
-        />
-      </section>
-      <section style={{ maxWidth: 320 }}>
-        <h4 style={{ margin: "0 0 8px", fontSize: 13, color: "#525252" }}>variant = stacked</h4>
-        <PageHeader
-          title="Análise prospecção"
-          description="Realize a análise de processos ou de carteiras de advogados e acompanhe os resultados."
-          actions={defaultActions}
-          variant="stacked"
-          level={5}
-        />
-      </section>
-    </div>
-  ),
 };
 
 // ───────────────────────────────────────────────────────────────────────────
@@ -438,15 +365,13 @@ export const ComparativoVariantes: Story = {
 
 /**
  * Playground livre — edite todos os controles pelo painel `Controls` do
- * Storybook para testar combinações de título, descrição, variante e nível
- * semântico.
+ * Storybook para testar combinações de título, descrição e nível semântico.
  */
 export const Playground: Story = {
   args: {
     title: "Análise prospecção",
     description: "Realize a análise de processos ou de carteiras de advogados e acompanhe os resultados.",
     actions: defaultActions,
-    variant: "responsive",
     level: 2,
   },
 };

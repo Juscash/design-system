@@ -8,6 +8,21 @@
     - .ds-avatar-menu--open    : modificador aplicado quando o menu está aberto
 */
 
+/*
+  `.ds-avatar` é renderizado com `tabIndex={-1}` quando standalone (não dentro
+  de avatarMenu) — fora do tab order, mas focável no click. Aplica o mesmo
+  anel cinza dos demais componentes do DS no `:focus`.
+  Box-shadow segue o `border-radius` (50% round, 8px roundrect) automaticamente.
+*/
+:global(.ds-avatar) {
+  transition: box-shadow 120ms ease-out;
+}
+
+:global(.ds-avatar:focus) {
+  outline: none;
+  box-shadow: 0 0 0 3px var(--color-neutral-300, #d4d4d4);
+}
+
 :global(.ds-avatar-menu) {
   display: inline-flex;
   align-items: center;
@@ -24,7 +39,10 @@
     background 120ms ease-out;
 }
 
-:global(.ds-avatar-menu:focus-visible) {
+/* Usa `:focus` (não `:focus-visible`) para que o anel apareça em qualquer
+   foco — teclado e mouse click — conforme o estado "focus" explícito no
+   Figma (4146:14362). `:focus-visible` ficaria invisível no click. */
+:global(.ds-avatar-menu:focus) {
   background: var(--color-neutral-50, #fafafa);
   outline: none;
   box-shadow: 0 0 0 3px var(--color-neutral-300, #d4d4d4);

@@ -1,5 +1,5 @@
 import React from "react";
-import { ChevronDown } from "lucide-react";
+import { ChevronDown, ChevronRight } from "lucide-react";
 import { composeClassName, resolveIcon, SidebarCollapsedContext } from "../../utils";
 import type { SidebarItemProps } from "../../../../types/components/Sidebar";
 
@@ -9,36 +9,29 @@ const ITEM_COLLAPSED_CLASS = "ds-sidebar-item--collapsed";
 const CHEVRON_SIZE = 16;
 
 /**
- * Renderiza o conteúdo interno do item (ícone, label, badge, chevron).
- * Extrai a montagem para manter `SidebarItem` abaixo do limite de 50 linhas.
+ * Monta o conteúdo do item expandido: a área `AL` (ícone + label) e o slot
+ * final do Figma — `badge` (tipo `badge`) ou o chevron de submenu
+ * (`chevron-down` aberto / `chevron-right` fechado).
  */
-function ItemInnerContent(props: {
+function ItemExpandedContent(props: {
   icon: React.ReactNode;
   label: string;
   badge?: number | string;
   hasSubmenu: boolean;
   expanded: boolean;
-  collapsed: boolean;
 }): React.ReactElement {
-  const { icon, label, badge, hasSubmenu, expanded, collapsed } = props;
+  const { icon, label, badge, hasSubmenu, expanded } = props;
+  const chevron = expanded ? <ChevronDown size={CHEVRON_SIZE} /> : <ChevronRight size={CHEVRON_SIZE} />;
   return (
     <>
-      {icon ? <span className="ds-sidebar-item__icon">{icon}</span> : null}
-      {!collapsed ? <span className="ds-sidebar-item__label">{label}</span> : null}
-      {!collapsed && badge !== undefined ? (
-        <span className="ds-sidebar-item__badge" aria-label={`${badge} novos`}>
-          {badge}
-        </span>
-      ) : null}
-      {!collapsed && hasSubmenu ? (
-        <span
-          className={composeClassName(
-            "ds-sidebar-item__chevron",
-            expanded && "ds-sidebar-item__chevron--open",
-          )}
-          aria-hidden
-        >
-          <ChevronDown size={CHEVRON_SIZE} />
+      <span className="ds-sidebar-item__content">
+        {icon ? <span className="ds-sidebar-item__icon">{icon}</span> : null}
+        <span className="ds-sidebar-item__label">{label}</span>
+      </span>
+      {badge !== undefined ? <span className="ds-sidebar-item__badge">{badge}</span> : null}
+      {hasSubmenu ? (
+        <span className="ds-sidebar-item__chevron" aria-hidden>
+          {chevron}
         </span>
       ) : null}
     </>
@@ -46,53 +39,69 @@ function ItemInnerContent(props: {
 }
 
 /**
- * Componente `SidebarItem`. Representa uma entrada de 1º nível do menu lateral.
- * Quando `hasSubmenu` está ativo, alterna a visibilidade dos itens filhos
- * (2º nível). Em estado colapsado da `Sidebar` o item renderiza apenas o
- * ícone (88x144 segundo dump `Sidebar item collapsed` 4080:10111).
+ * Renderiza o conteúdo do item conforme o estado da `Sidebar`: apenas o
+ * ícone quando colapsada, ou a versão completa quando expandida.
+ */
+function ItemInner(props: {
+  collapsed: boolean;
+  icon: React.ReactNode;
+  label: string;
+  badge?: number | string;
+  hasSubmenu: boolean;
+  expanded: boolean;
+}): React.ReactElement | null {
+  const { collapsed, icon, label, badge, hasSubmenu, expanded } = props;
+  if (collapsed) {
+    if (!icon) return null;
+    return <span className="ds-sidebar-item__icon">{icon}</span>;
+  }
+  return <ItemExpandedContent icon={icon} label={label} badge={badge} hasSubmenu={hasSubmenu} expanded={expanded} />;
+}
+
+/**
+ * Componente `SidebarItem`. Entrada de 1º nível do menu lateral. Em uma
+ * `Sidebar` colapsada exibe apenas o ícone (40x36). Quando recebe `children`
+ * vira pai de submenu: exibe o chevron e renderiza os `SidebarSubItem`
+ * filhos quando `expanded`.
  */
 export function SidebarItem(props: SidebarItemProps): React.ReactElement {
-  const { icon, label, active = false, expanded = false, badge, hasSubmenu = false, onClick, children, href } = props;
+  const { icon, label, active = false, badge, expanded = false, onClick, children, href } = props;
   const collapsed = React.useContext(SidebarCollapsedContext);
-  const className = composeClassName(
-    ITEM_CLASS,
-    active && ITEM_ACTIVE_CLASS,
-    collapsed && ITEM_COLLAPSED_CLASS,
-  );
+  const hasSubmenu = Boolean(children);
+  const className = composeClassName(ITEM_CLASS, active && ITEM_ACTIVE_CLASS, collapsed && ITEM_COLLAPSED_CLASS);
+  const ariaCurrent = active ? "page" : undefined;
+  const title = collapsed ? label : undefined;
   const inner = (
-    <ItemInnerContent
+    <ItemInner
+      collapsed={collapsed}
       icon={resolveIcon(icon)}
       label={label}
       badge={badge}
       hasSubmenu={hasSubmenu}
       expanded={expanded}
-      collapsed={collapsed}
     />
   );
-  const ariaCurrent = active ? "page" : undefined;
-  const title = collapsed ? label : undefined;
-  const trigger = href ? (
-    <a className={className} href={href} aria-current={ariaCurrent} title={title} onClick={onClick}>
-      {inner}
-    </a>
-  ) : (
-    <button
-      type="button"
-      className={className}
-      aria-current={ariaCurrent}
-      aria-expanded={hasSubmenu ? expanded : undefined}
-      title={title}
-      onClick={onClick}
-    >
-      {inner}
-    </button>
-  );
+  const trigger =
+    href ?
+      <a className={className} href={href} aria-current={ariaCurrent} title={title} onClick={onClick}>
+        {inner}
+      </a>
+    : <button
+        type="button"
+        className={className}
+        aria-current={ariaCurrent}
+        aria-expanded={hasSubmenu && !collapsed ? expanded : undefined}
+        title={title}
+        onClick={onClick}
+      >
+        {inner}
+      </button>;
   return (
     <li className="ds-sidebar-item__wrapper">
       {trigger}
-      {!collapsed && hasSubmenu && expanded && children ? (
+      {!collapsed && hasSubmenu && expanded ?
         <ul className="ds-sidebar-item__submenu">{children}</ul>
-      ) : null}
+      : null}
     </li>
   );
 }

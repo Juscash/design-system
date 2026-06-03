@@ -14,22 +14,64 @@
 */
 
 /* ============================================================
+   ALINHAMENTO — checkbox sempre no topo da primeira linha do label
+   (vale para padrão e rich; especialmente importante quando o label
+   quebra em múltiplas linhas).
+   ============================================================ */
+
+:global(.ds-checkbox.ant-checkbox-wrapper),
+:global(.ds-checkbox-group .ant-checkbox-wrapper) {
+  align-items: flex-start !important;
+}
+
+/* `.ant-checkbox` é o span que envolve `<input>` + `.ant-checkbox-inner`.
+   Antd força `align-self: baseline` (line-height 1.5715), deslocando o
+   quadrado abaixo da primeira linha do texto. Forçamos `flex-start` para
+   o quadrado ficar grudado no topo, alinhado com o topo da text-line do
+   label. O `margin-top: 1.3px` compensa o leading do label (line-height
+   15.6px - font 13px = 2.6px / 2 = 1.3px) para o quadrado descer até o
+   topo do glifo do texto. */
+:global(.ds-checkbox .ant-checkbox),
+:global(.ds-checkbox-group .ant-checkbox-wrapper .ant-checkbox) {
+  align-self: flex-start !important;
+  margin-top: 1.3px !important;
+  line-height: 0 !important;
+}
+
+/* ============================================================
    FOCO E HOVER do Checkbox (padrão — sem erro)
    ============================================================ */
 
+/* Antd 6 aplica `outline: 3px solid var(--ant-color-primary)` (verde brand)
+   no `.ant-checkbox-inner` quando o `<input>` interno entra em focus-visible.
+   Suprimimos e substituímos pelo anel cinza `var(--shadow-focus)` via
+   `box-shadow` — alinhado com Button/Segmented. */
 :global(.ds-checkbox:has(.ant-checkbox-input:focus-visible)) :global(.ant-checkbox-inner),
 :global(.ds-checkbox-group .ant-checkbox-wrapper:has(.ant-checkbox-input:focus-visible)) :global(.ant-checkbox-inner) {
+  outline: none !important;
   box-shadow: var(--shadow-focus) !important;
 }
 
-:global(.ds-checkbox:hover:not(.ant-checkbox-wrapper-disabled)) :global(.ant-checkbox-inner),
-:global(.ds-checkbox-group .ant-checkbox-wrapper:hover:not(.ant-checkbox-wrapper-disabled)) :global(.ant-checkbox-inner) {
+/* Hover (não selecionado e não-indeterminate) — bg cinza `neutral/200`
+   para qualquer variante. Filtra `:checked`/`indeterminate` para preservar
+   os fills verde/vermelho dos estados ativos. */
+:global(.ds-checkbox:hover:not(.ant-checkbox-wrapper-disabled)) :global(.ant-checkbox:not(.ant-checkbox-checked):not(.ant-checkbox-indeterminate) .ant-checkbox-inner),
+:global(.ds-checkbox-group .ant-checkbox-wrapper:hover:not(.ant-checkbox-wrapper-disabled)) :global(.ant-checkbox:not(.ant-checkbox-checked):not(.ant-checkbox-indeterminate) .ant-checkbox-inner) {
+  background-color: var(--color-neutral-200) !important;
+}
+
+/* Borda no hover — apenas variante padrão (não-erro). Mantém `neutral/300`
+   para não sumir contra o bg de hover `neutral/200`. A variante de erro
+   tem sua própria regra abaixo que define `feedback.red.900` no hover. */
+:global(.ds-checkbox:hover:not(.ant-checkbox-wrapper-disabled):not(.ds-checkbox-error)) :global(.ant-checkbox:not(.ant-checkbox-checked):not(.ant-checkbox-indeterminate) .ant-checkbox-inner),
+:global(.ds-checkbox-group .ant-checkbox-wrapper:hover:not(.ant-checkbox-wrapper-disabled):not(.ds-checkbox-error)) :global(.ant-checkbox:not(.ant-checkbox-checked):not(.ant-checkbox-indeterminate) .ant-checkbox-inner) {
   border-color: var(--color-neutral-300) !important;
 }
 
 /* Pseudo-states do Storybook (addon-pseudo-states). */
 :global(.ds-checkbox.pseudo-focus-visible) :global(.ant-checkbox-inner),
 :global(.ds-checkbox-group .pseudo-focus-visible.ant-checkbox-wrapper) :global(.ant-checkbox-inner) {
+  outline: none !important;
   box-shadow: var(--shadow-focus) !important;
 }
 
@@ -51,6 +93,27 @@
 :global(.ds-checkbox-group .ant-checkbox-indeterminate .ant-checkbox-inner) {
   background-color: var(--color-brand-primary-600) !important;
   border-color: var(--color-neutral-300) !important;
+}
+
+/* Override indeterminate para variante de erro: bg vermelho `feedback.red.500`
+   ao invés do verde brand. Selector mais específico vence a regra padrão. */
+:global(.ds-checkbox-error .ant-checkbox-indeterminate .ant-checkbox-inner) {
+  background-color: var(--color-feedback-red-500) !important;
+  border-color: var(--color-feedback-red-500) !important;
+}
+
+/* Hover em estados marcados/indeterminate — escurece a cor de preenchimento.
+   `colorPrimaryHover` do antd só age no estado `checked` via CSS-in-JS; aqui
+   garantimos o efeito também no `indeterminate` e no override `!important`
+   do bg verde fixo. */
+:global(.ds-checkbox:hover:not(.ant-checkbox-wrapper-disabled):not(.ds-checkbox-error)) :global(.ant-checkbox-indeterminate .ant-checkbox-inner),
+:global(.ds-checkbox-group .ant-checkbox-wrapper:hover:not(.ant-checkbox-wrapper-disabled):not(.ds-checkbox-error)) :global(.ant-checkbox-indeterminate .ant-checkbox-inner) {
+  background-color: var(--color-brand-primary-800) !important;
+}
+
+:global(.ds-checkbox-error:hover:not(.ant-checkbox-wrapper-disabled)) :global(.ant-checkbox-indeterminate .ant-checkbox-inner) {
+  background-color: var(--color-feedback-red-900) !important;
+  border-color: var(--color-feedback-red-900) !important;
 }
 
 :global(.ds-checkbox .ant-checkbox-indeterminate .ant-checkbox-inner::before),
@@ -104,6 +167,9 @@
 :global(.ds-checkbox .ant-checkbox-label),
 :global(.ds-checkbox-group .ant-checkbox-label) {
   font-size: var(--font-body-2-size) !important;
+  /* line-height 1.2 (spec `body/02` do DS) em vez do default 1.5715 do antd.
+     Reduz o leading e mantém o topo do glifo próximo do topo da text-line. */
+  line-height: var(--font-line-height) !important;
   font-weight: 400 !important;
   color: var(--color-neutral-800) !important;
 }
@@ -142,42 +208,66 @@
 
 :global(.ds-checkbox--rich.ant-checkbox-wrapper) {
   display: flex !important;
-  align-items: center !important;
+  /* Sempre `flex-start` — alinhamento vertical fino com a primeira linha do
+     label é feito via `line-height: 15.6px` no `.ant-checkbox` (vide abaixo). */
+  align-items: flex-start !important;
   gap: var(--spacing-2) !important;
   padding: 6px var(--spacing-3) !important;
   border: 1px solid var(--color-border-regular) !important;
   border-radius: var(--radius-xl) !important;
   background-color: var(--color-neutral-50) !important;
-  transition: background-color 0.15s ease-in-out !important;
+  transition: background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
   cursor: pointer !important;
   width: 100% !important;
   min-height: 44px !important;
   box-sizing: border-box !important;
 }
 
-/* Quando há `secondaryText` (duas linhas de texto), alinha pelo topo
-   para que a caixa do checkbox fique paralela à primeira linha. */
-:global(.ds-checkbox--rich.ant-checkbox-wrapper:has(.ds-checkbox-rich__secondary)) {
-  align-items: flex-start !important;
+/* Antd injeta `padding-inline-start: 8px` no `.ant-checkbox-label` (token
+   `paddingXS`). Em modo rich, esse padding duplica o `gap: 8px` do wrapper
+   — daí o "padding sobrando" nos textos. Zeramos aqui. */
+:global(.ds-checkbox--rich .ant-checkbox-label) {
+  padding-inline-start: 0 !important;
+  padding-left: 0 !important;
 }
 
-:global(.ds-checkbox--rich.ant-checkbox-wrapper:hover) {
+/* Hover (não selecionado) — fundo cinza claro `neutral/100`. */
+:global(.ds-checkbox--rich.ant-checkbox-wrapper:hover:not(.ant-checkbox-wrapper-disabled):not(:has(.ant-checkbox-input:checked))) {
   background-color: var(--color-neutral-100) !important;
 }
 
-:global(.ds-checkbox--rich.ant-checkbox-wrapper:has(.ant-checkbox-input:checked)) {
+/* Selecionado (default) — fundo cinza claro `neutral/100`. */
+:global(.ds-checkbox--rich.ant-checkbox-wrapper:has(.ant-checkbox-input:checked):not(.ant-checkbox-wrapper-disabled)) {
   background-color: var(--color-neutral-100) !important;
+}
+
+/* Selecionado + hover — fundo cinza mais escuro `neutral/200`, variante
+   pedida no Figma (`checked/hover` 8175:10124). */
+:global(.ds-checkbox--rich.ant-checkbox-wrapper:hover:has(.ant-checkbox-input:checked):not(.ant-checkbox-wrapper-disabled)) {
+  background-color: var(--color-neutral-200) !important;
+}
+
+/* Focus — anel cinza neutro-300 ao redor do card inteiro (padrão Figma e
+   alinhado com Button/Segmented). Suprime o shadow no quadrado interno
+   (regra geral já aplica `box-shadow` no `.ant-checkbox-inner` em focus). */
+:global(.ds-checkbox--rich.ant-checkbox-wrapper:has(.ant-checkbox-input:focus-visible)) {
+  box-shadow: var(--shadow-focus) !important;
+}
+:global(.ds-checkbox--rich:has(.ant-checkbox-input:focus-visible)) :global(.ant-checkbox-inner) {
+  box-shadow: none !important;
+}
+
+/* Pseudo-state do Storybook — mesmo visual do `:focus-visible` real. */
+:global(.ds-checkbox--rich.pseudo-focus-visible) {
+  box-shadow: var(--shadow-focus) !important;
+}
+:global(.ds-checkbox--rich.pseudo-focus-visible) :global(.ant-checkbox-inner) {
+  box-shadow: none !important;
 }
 
 :global(.ds-checkbox--rich.ant-checkbox-wrapper-disabled) {
   border-color: var(--color-border-disabled) !important;
   cursor: not-allowed !important;
-}
-
-/* Apenas quando há secondary text aplicamos o ajuste fino de margem
-   para alinhar o checkbox com a primeira linha do texto. */
-:global(.ds-checkbox--rich:has(.ds-checkbox-rich__secondary) .ant-checkbox) {
-  margin-top: 2.5px !important;
 }
 
 :global(.ds-checkbox-rich__content) {
@@ -217,7 +307,10 @@
    ERROR — paleta vermelha em foco e hover
    ============================================================ */
 
+/* Mesma estratégia da regra padrão: suprime o `outline` verde brand do antd
+   e aplica o anel vermelho claro `var(--shadow-focus-error)` via box-shadow. */
 :global(.ds-checkbox-error:has(.ant-checkbox-input:focus-visible)) :global(.ant-checkbox-inner) {
+  outline: none !important;
   box-shadow: var(--shadow-focus-error) !important;
 }
 
@@ -226,5 +319,6 @@
 }
 
 :global(.ds-checkbox-error.pseudo-focus-visible) :global(.ant-checkbox-inner) {
+  outline: none !important;
   box-shadow: var(--shadow-focus-error) !important;
 }

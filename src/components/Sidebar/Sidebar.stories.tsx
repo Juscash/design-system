@@ -1,12 +1,11 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { Sidebar, SidebarGroupLabel, SidebarItem, SidebarSubItem, SidebarToggleButton } from ".";
+import { Sidebar, SidebarGroupLabel, SidebarItem, SidebarSubItem } from ".";
 
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
-const FIGMA_URL =
-  "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4080-13321&m=dev";
+const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4080-13321&m=dev";
 
 const meta: Meta<typeof Sidebar> = {
   title: "Components/Sidebar",
@@ -22,35 +21,31 @@ const meta: Meta<typeof Sidebar> = {
       description: {
         component: `
 Componente \`Sidebar\` (menu lateral colapsável) baseado no Figma
-\`4080:13321\`. Contém 6 variantes (3 visuais × 2 estados de expansão):
-
-- **expanded** (240px) ou **collapsed** (72px).
-- **variant**: \`juscash\` (default), \`sij\` ou \`prompt-tester\`.
+\`4080:13321\`. Largura **240px** (expandido) ou **72px** (colapsado). O
+estado é controlado pelo consumidor via \`expanded\` — não há botão de
+recolher embutido (o controle vive fora, tipicamente na navbar).
 
 ### Subcomponentes
 
-- \`SidebarItem\` — entrada de 1º nível (com ícone, badge ou submenu).
-- \`SidebarSubItem\` — entrada de 2º nível, exibida sob um item com submenu.
-- \`SidebarGroupLabel\` — rótulo de seção entre grupos de itens.
-- \`SidebarToggleButton\` — botão 32x32 que alterna entre expanded/collapsed.
+- \`SidebarItem\` — entrada de 1º nível (ícone + label; opcional \`badge\` ou submenu).
+- \`SidebarSubItem\` — entrada de 2º nível, com a guia vertical à esquerda.
+- \`SidebarGroupLabel\` — rótulo de seção (tipos \`base\`/\`action\`/\`expanded\`/\`collapsed\`).
+
+### Estados (Figma)
+
+Os itens têm apenas **default**, **focus** (anel \`0 0 0 3px neutral/300\`) e
+**active** (fundo \`neutral/100\`). Não há estado de hover para itens.
 
 ### Como usar
 
 \`\`\`tsx
-import {
-  Sidebar,
-  SidebarItem,
-  SidebarGroupLabel,
-  SidebarToggleButton,
-} from "@juscash/design-system";
+import { Sidebar, SidebarItem, SidebarGroupLabel } from "@juscash/design-system";
 
 const [expanded, setExpanded] = useState(true);
 
 <Sidebar expanded={expanded}>
-  <SidebarItem icon="Home" label="Início" active />
-  <SidebarGroupLabel label="Geral" />
-  <SidebarItem icon="Users" label="Clientes" badge={3} />
-  <SidebarToggleButton expanded={expanded} onClick={() => setExpanded(!expanded)} />
+  <SidebarItem icon="House" label="Dashboard" active />
+  <SidebarItem icon="Bell" label="Notificações" badge={5} />
 </Sidebar>
 \`\`\`
 `,
@@ -76,11 +71,6 @@ const [expanded, setExpanded] = useState(true);
       control: "boolean",
       description: "Estado expandido (240px) ou colapsado (72px). Default true.",
     },
-    variant: {
-      control: { type: "inline-radio" },
-      options: ["juscash", "sij", "prompt-tester"],
-      description: "Variante visual conforme matriz 4080:14598.",
-    },
     "aria-label": {
       control: "text",
       description: "Rótulo acessível do <aside role='navigation'>.",
@@ -92,196 +82,99 @@ export default meta;
 
 type Story = StoryObj<typeof Sidebar>;
 
-/** Variante default — sidebar expandida `variant="juscash"`. */
+/** Sidebar expandida (240px) com itens de 1º nível. */
 export const Default: Story = {
-  args: {
-    expanded: true,
-    variant: "juscash",
-  },
+  args: { expanded: true },
   render: (args) => (
     <Sidebar {...args}>
-      <SidebarItem icon="Home" label="Início" active />
-      <SidebarItem icon="FileText" label="Documentos" />
-      <SidebarItem icon="Users" label="Clientes" />
-      <SidebarItem icon="Settings" label="Configurações" />
+      <SidebarItem icon="House" label="Dashboard" active />
+      <SidebarItem icon="Send" label="Enviar processo" />
+      <SidebarItem icon="CircleDollarSign" label="Cashback" />
+      <SidebarItem icon="UserRound" label="Meu perfil" />
     </Sidebar>
   ),
 };
 
-/** Sidebar colapsada — 72px, exibe apenas ícones. */
+/** Sidebar colapsada — 72px, exibe apenas ícones (40x36). */
 export const Collapsed: Story = {
   parameters: {
-    docs: {
-      description: {
-        story: "Variante colapsada (`expanded=false`) — largura 72px, sem labels.",
-      },
-    },
+    docs: { description: { story: "Variante colapsada (`expanded=false`) — largura 72px, sem labels." } },
   },
-  args: {
-    expanded: false,
-    variant: "juscash",
-  },
+  args: { expanded: false },
   render: (args) => (
     <Sidebar {...args}>
-      <SidebarItem icon="Home" label="Início" active />
-      <SidebarItem icon="FileText" label="Documentos" />
-      <SidebarItem icon="Users" label="Clientes" />
-      <SidebarItem icon="Settings" label="Configurações" />
+      <SidebarItem icon="House" label="Dashboard" active />
+      <SidebarItem icon="Send" label="Enviar processo" />
+      <SidebarItem icon="CircleDollarSign" label="Cashback" />
+      <SidebarItem icon="UserRound" label="Meu perfil" />
     </Sidebar>
   ),
 };
 
-/** Sidebar com `SidebarGroupLabel` separando seções. */
-export const WithGroups: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: "Demonstra `SidebarGroupLabel` separando seções do menu.",
-      },
-    },
-  },
-  args: {
-    expanded: true,
-    variant: "juscash",
-  },
-  render: (args) => (
-    <Sidebar {...args}>
-      <SidebarItem icon="Home" label="Início" active />
-      <SidebarGroupLabel label="Operacional" />
-      <SidebarItem icon="FileText" label="Documentos" />
-      <SidebarItem icon="Users" label="Clientes" />
-      <SidebarGroupLabel label="Sistema" />
-      <SidebarItem icon="Settings" label="Configurações" />
-      <SidebarItem icon="HelpCircle" label="Ajuda" />
-    </Sidebar>
-  ),
-};
-
-/** Itens com `badge` numérico (variante `badge` do dump). */
+/** Itens com `badge` (pill transparente, texto `text/dark`). */
 export const WithBadge: Story = {
   parameters: {
-    docs: {
-      description: {
-        story: "Item com `badge` exibindo contagem de novidades.",
-      },
-    },
+    docs: { description: { story: "Itens com `badge` exibindo contagem." } },
   },
-  args: {
-    expanded: true,
-    variant: "juscash",
-  },
+  args: { expanded: true },
   render: (args) => (
     <Sidebar {...args}>
-      <SidebarItem icon="Home" label="Início" />
+      <SidebarItem icon="House" label="Dashboard" />
       <SidebarItem icon="Bell" label="Notificações" badge={5} active />
       <SidebarItem icon="Mail" label="Mensagens" badge={12} />
-      <SidebarItem icon="Users" label="Clientes" />
     </Sidebar>
   ),
 };
 
-/** Item com submenu (variante `dropdown` do dump). */
+/** Item com submenu — chevron-right fechado, chevron-down aberto, e `SidebarSubItem` (2º nível). */
 export const WithSubmenu: Story = {
   parameters: {
-    docs: {
-      description: {
-        story:
-          "Demonstra `SidebarItem` com `hasSubmenu` aberto e dois `SidebarSubItem` (2º nível).",
-      },
-    },
+    docs: { description: { story: "Clique em `Gestão` para abrir o submenu de 2º nível." } },
   },
-  args: {
-    expanded: true,
-    variant: "juscash",
-  },
+  args: { expanded: true },
   render: function WithSubmenuRender(args) {
     const [open, setOpen] = React.useState(false);
     return (
       <Sidebar {...args}>
-        <SidebarItem icon="Home" label="Início" />
-        <SidebarItem
-          icon="FolderOpen"
-          label="Projetos"
-          hasSubmenu
-          expanded={open}
-          onClick={() => setOpen(!open)}
-        >
-          <SidebarSubItem label="Em andamento" active />
-          <SidebarSubItem label="Concluídos" />
-          <SidebarSubItem label="Arquivados" />
+        <SidebarItem icon="House" label="Dashboard" />
+        <SidebarItem icon="Settings" label="Gestão" expanded={open} onClick={() => setOpen(!open)}>
+          <SidebarSubItem label="Gerenciar usuários" active />
+          <SidebarSubItem label="Central de notificações" />
         </SidebarItem>
-        <SidebarItem icon="Settings" label="Configurações" />
+        <SidebarItem icon="Headset" label="Suporte" />
       </Sidebar>
     );
   },
 };
 
-/** Variante `sij` — produto SIJ. */
-export const VariantSij: Story = {
+/** Rótulos de seção (`SidebarGroupLabel`) nos quatro tipos do Figma. */
+export const WithGroupLabels: Story = {
   parameters: {
-    docs: {
-      description: {
-        story: "Variante `sij` (nodes 4806:11920 / 4806:12158).",
-      },
-    },
+    docs: { description: { story: "Tipos `base`, `action` (+), `expanded` (chevron-down) e `collapsed` (chevron-right)." } },
   },
-  args: {
-    expanded: true,
-    variant: "sij",
-  },
+  args: { expanded: true },
   render: (args) => (
     <Sidebar {...args}>
-      <SidebarItem icon="Home" label="Início" active />
-      <SidebarItem icon="Scale" label="Processos" />
-      <SidebarItem icon="Calendar" label="Audiências" />
-    </Sidebar>
-  ),
-};
-
-/** Variante `prompt-tester` — ferramenta interna. */
-export const VariantPromptTester: Story = {
-  parameters: {
-    docs: {
-      description: {
-        story: "Variante `prompt-tester` (nodes 5303:9044 / 5303:9033).",
-      },
-    },
-  },
-  args: {
-    expanded: true,
-    variant: "prompt-tester",
-  },
-  render: (args) => (
-    <Sidebar {...args}>
-      <SidebarItem icon="Sparkles" label="Prompts" active />
-      <SidebarItem icon="History" label="Histórico" />
-      <SidebarItem icon="Bot" label="Modelos" />
+      <SidebarGroupLabel label="Base" />
+      <SidebarItem icon="House" label="Dashboard" active />
+      <SidebarGroupLabel label="Action" type="action" onActionClick={() => undefined} />
+      <SidebarItem icon="Send" label="Enviar processo" />
+      <SidebarGroupLabel label="Expanded" type="expanded" onActionClick={() => undefined} />
+      <SidebarItem icon="CircleDollarSign" label="Cashback" />
+      <SidebarGroupLabel label="Collapsed" type="collapsed" onActionClick={() => undefined} />
     </Sidebar>
   ),
 };
 
 /** Playground controlado por args. */
 export const Playground: Story = {
-  args: {
-    expanded: true,
-    variant: "juscash",
-    "aria-label": "Menu lateral",
-  },
-  render: function PlaygroundRender(args) {
-    const [expanded, setExpanded] = React.useState<boolean>(args.expanded ?? true);
-    React.useEffect(() => {
-      setExpanded(args.expanded ?? true);
-    }, [args.expanded]);
-    return (
-      <Sidebar {...args} expanded={expanded}>
-        <SidebarItem icon="Home" label="Início" active />
-        <SidebarGroupLabel label="Geral" />
-        <SidebarItem icon="FileText" label="Documentos" />
-        <SidebarItem icon="Users" label="Clientes" badge={3} />
-        <SidebarItem icon="Settings" label="Configurações" />
-        <SidebarGroupLabel label="" collapsed />
-        <SidebarToggleButton expanded={expanded} onClick={() => setExpanded(!expanded)} />
-      </Sidebar>
-    );
-  },
+  args: { expanded: true, "aria-label": "Menu lateral" },
+  render: (args) => (
+    <Sidebar {...args}>
+      <SidebarItem icon="House" label="Dashboard" active />
+      <SidebarItem icon="Send" label="Enviar processo" />
+      <SidebarItem icon="Bell" label="Notificações" badge={3} />
+      <SidebarItem icon="Settings" label="Configurações" />
+    </Sidebar>
+  ),
 };

@@ -1,6 +1,12 @@
 import type { SwitchProps as AntdSwitchProps } from "antd";
 
-export type SwitchProps = AntdSwitchProps & {
+/**
+ * O prop `loading` do antd é **removido** explicitamente do DS: o produto
+ * decidiu não usar essa variante (estado de "carregando" no switch). Para
+ * indicar carregamento numa ação relacionada, use `Spin`, `Loading` do DS
+ * ou um disabled temporário no próprio switch.
+ */
+export type SwitchProps = Omit<AntdSwitchProps, "loading"> & {
   /** Aplica a paleta vermelha (`feedback.red.500`) para representar erro de validação. */
   error?: boolean;
   /**

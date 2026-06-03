@@ -5,6 +5,7 @@ import type { ComponentToken } from "antd/es/segmented/style/index";
 import * as LucideIcons from "lucide-react";
 import { designSystemColors, radius, shadow, spacing } from "../../theme";
 import { Tooltip } from "../Tooltip";
+import type { TooltipProps } from "../../types/components/Tooltip";
 import type { SegmentedInputOption, SegmentedOption, SegmentedProps, SegmentedSize } from "../../types/components/Segmented";
 import "./index.module.css";
 
@@ -32,6 +33,7 @@ const segmentedTokens: Partial<ComponentToken> = {
   trackBg: designSystemColors.neutral[200],
   itemColor: designSystemColors.neutral[800],
   itemHoverColor: designSystemColors.neutral[800],
+  // Hover alinhado ao Button do DS: `color/neutral/100` (#f5f5f5).
   itemHoverBg: designSystemColors.neutral[100],
   itemActiveBg: designSystemColors.neutral[200],
   itemSelectedBg: designSystemColors.neutral[50],
@@ -128,27 +130,46 @@ function buildEnhancedLabel<T extends string | number>(option: SegmentedOption<T
 }
 
 /**
- * Envolve um label icon-only em Tooltip do DS exibindo o nome acessível
- * da ação. Spec Figma (`Tooltip support`): "Segmented de ícone sempre
- * devem ter tooltip com o nome da ação, sem exceção".
+ * Resolve a prop `tooltip` da opção em `TooltipProps`. Aceita string
+ * (atalho para `{ title: string }`) ou o objeto completo do `Tooltip` do DS.
+ */
+function resolveTooltipProps(tooltip: string | TooltipProps | undefined): TooltipProps | undefined {
+  if (tooltip === undefined) return undefined;
+  if (typeof tooltip === "string") return { title: tooltip };
+  return tooltip;
+}
+
+/**
+ * Envolve o label da opção em Tooltip do DS conforme regra do Figma:
+ * "Segmented com label podem ter tooltip opcionalmente. Segmented de
+ * ícone sempre devem ter tooltip com o nome da ação, sem exceção."
  *
- * O Tooltip só é renderizado quando a opção é icon-only (tem `icon` e
- * **não** tem `text`). Opções com texto não recebem Tooltip por padrão.
+ * - Opções com `text`: tooltip só é renderizado se `option.tooltip` for
+ *   passado explicitamente.
+ * - Opções icon-only (sem `text`): tooltip é sempre renderizado —
+ *   preferência por `option.tooltip`, fallback em `option.ariaLabel` e,
+ *   em último caso, em `String(option.value)`.
  */
 function wrapWithTooltip<T extends string | number>(label: ReactNode, option: SegmentedOption<T>): ReactNode {
   const hasIcon = option.icon !== undefined && option.icon !== null;
   const hasText = option.text !== undefined && option.text !== null;
   const isIconOnly = hasIcon && !hasText;
+  const tooltipFromProp = resolveTooltipProps(option.tooltip);
+
+  if (tooltipFromProp !== undefined) return <Tooltip {...tooltipFromProp}>{label}</Tooltip>;
   if (!isIconOnly) return label;
-  const tooltipTitle = option.ariaLabel ?? String(option.value);
-  return <Tooltip title={tooltipTitle}>{label}</Tooltip>;
+  const fallbackTitle = option.ariaLabel ?? String(option.value);
+  return <Tooltip title={fallbackTitle}>{label}</Tooltip>;
 }
 
 /**
- * Normaliza a lista de opções: as enriquecidas são transformadas em
- * `{ value, label, disabled }` (formato Antd); strings/números e
- * `NativeLabeledOption` passam direto. Opções icon-only têm o label
- * envolvido em Tooltip do DS via `wrapWithTooltip`.
+ * Normaliza a lista de opções para o formato `{ value, label, title }`
+ * aceito pelo Antd. Toda opção recebe `title: ""` para suprimir o
+ * atributo HTML `title` que o `@rc-component/segmented` deriva
+ * automaticamente do label — quem comunica a ação é o `<Tooltip>` do DS,
+ * não o tooltip nativo do navegador. Opções enriquecidas recebem o label
+ * composto (ícone + texto + counter); icon-only ou com `tooltip`
+ * explícito são envoltas em `<Tooltip>` via `wrapWithTooltip`.
  */
 function normalizeOptions<T extends string | number>(
   options: SegmentedInputOption<T>[] | undefined,
@@ -156,13 +177,19 @@ function normalizeOptions<T extends string | number>(
 ): AntdSegmentedProps<T>["options"] | undefined {
   if (!options) return undefined;
   const normalized = options.map((option) => {
-    if (typeof option === "string" || typeof option === "number") return option;
-    if (!isEnhancedOption(option)) return option;
+    if (typeof option === "string" || typeof option === "number") {
+      return { value: option as T, label: option, title: "" };
+    }
+    if (!isEnhancedOption(option)) {
+      const nativeOption = option as { value: T; label: ReactNode; disabled?: boolean };
+      return { ...nativeOption, title: "" };
+    }
     const label = buildEnhancedLabel(option, size);
     return {
       value: option.value,
       disabled: option.disabled,
       label: wrapWithTooltip(label, option),
+      title: "",
     };
   });
   return normalized as AntdSegmentedProps<T>["options"];

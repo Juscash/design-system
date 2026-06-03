@@ -36,6 +36,35 @@
   border-color: var(--color-border-regular);
 }
 
+/*
+  Antd aplica `border-color: var(--ant-color-primary)` no item ativo
+  (`.ant-pagination-item-active`). Como o nosso token `colorPrimary` é
+  `text/dark` (#262626), isso pintava uma borda PRETA dupla por fora do
+  nosso botão `.ds-pagination-page--active` (que já tem a borda regular
+  cinza correta). Suprimimos a borda externa do antd aqui e no hover,
+  deixando só a borda do componente interno visível.
+*/
+:global(.ds-pagination .ant-pagination-item),
+:global(.ds-pagination .ant-pagination-item-active),
+:global(.ds-pagination .ant-pagination-item-active:hover) {
+  border: none !important;
+  background-color: transparent !important;
+}
+
+/*
+  Hover dos botões clicáveis — fundo `neutral/100` discreto, alinhado ao
+  padrão de hover dos demais controles do DS. Não aplica em estado disabled.
+*/
+:global(.ds-pagination .ant-pagination-item:not(.ant-pagination-disabled) .ds-pagination-page:hover),
+:global(.ds-pagination .ant-pagination-item:not(.ant-pagination-disabled) .ds-pagination-arrow:hover),
+:global(.ds-pagination .ant-pagination-item:not(.ant-pagination-disabled) .ds-pagination-ellipsis:hover),
+:global(.ds-pagination .ant-pagination-prev:not(.ant-pagination-disabled) .ds-pagination-arrow:hover),
+:global(.ds-pagination .ant-pagination-next:not(.ant-pagination-disabled) .ds-pagination-arrow:hover),
+:global(.ds-pagination .ant-pagination-jump-prev:not(.ant-pagination-disabled) .ds-pagination-ellipsis:hover),
+:global(.ds-pagination .ant-pagination-jump-next:not(.ant-pagination-disabled) .ds-pagination-ellipsis:hover) {
+  background-color: var(--color-neutral-100);
+}
+
 :global(.ds-pagination-ellipsis) {
   width: 36px;
   height: 36px;
@@ -72,3 +101,4 @@
   opacity: 0.5;
   cursor: not-allowed;
 }
+
