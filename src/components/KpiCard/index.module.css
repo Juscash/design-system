@@ -1,0 +1,252 @@
+/*
+  Estilos do KpiCard. Todas as classes vivem aqui (não em theme/global.css)
+  seguindo a regra do CLAUDE.md. Convenção do projeto: classes empacotadas
+  em `:global(...)` para que sejam visíveis ao JSX sem necessidade de
+  import nomeado de classes.
+
+  Estrutura:
+    - .ds-kpi-card                 : wrapper raiz
+    - .ds-kpi-card--with-icon      : variante com ícone
+    - .ds-kpi-card--no-icon        : variante sem ícone
+    - .ds-kpi-card--size-l/m       : tamanho (quando há ícone)
+    - .ds-kpi-card--align-left/center : alinhamento (quando sem ícone)
+    - .ds-kpi-card--clickable      : ativa hover/focus + cursor pointer
+    - .ds-kpi-card__icon           : container do ícone
+    - .ds-kpi-card__info           : coluna label+valor
+    - .ds-kpi-card__label          : texto do label
+    - .ds-kpi-card__value-row      : linha do valor + badge
+    - .ds-kpi-card__value          : valor principal
+    - .ds-kpi-card__subtitle       : subtítulo opcional
+    - .ds-kpi-card__badge          : badge de tendência
+*/
+
+:global(.ds-kpi-card) {
+  background: var(--color-neutral-50, #fafafa);
+  border: 1px solid var(--color-border-regular, #d4d4d4);
+  border-radius: var(--radius-xl, 8px);
+  box-sizing: border-box;
+  width: 100%;
+  /* Quando o pai aplicar `align-items: stretch` (default do flex e do
+     Ant Design `Row`/`Col`), o card preenche a altura da row — útil para
+     grids onde um card tem subtítulo e outro não. Altura segue o conteúdo
+     do card mais alto; nada é hard-coded. */
+  height: 100%;
+  display: flex;
+  position: relative;
+  transition: box-shadow 150ms ease-out;
+}
+
+:global(.ds-kpi-card--no-icon) {
+  flex-direction: column;
+  justify-content: center;
+  padding: 16px;
+  gap: 8px;
+}
+
+:global(.ds-kpi-card--align-center) {
+  align-items: center;
+  text-align: center;
+}
+
+:global(.ds-kpi-card--align-center) :global(.ds-kpi-card__value-row) {
+  justify-content: center;
+}
+
+:global(.ds-kpi-card--align-left) {
+  align-items: flex-start;
+  text-align: left;
+}
+
+:global(.ds-kpi-card--with-icon) {
+  align-items: center;
+  padding: 24px;
+  gap: 24px;
+}
+
+:global(.ds-kpi-card__icon) {
+  background: var(--color-brand-primary-50, #aaffbe);
+  border-radius: var(--radius-xl, 8px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px;
+  flex-shrink: 0;
+  color: var(--color-brand-primary-700, #007122);
+  box-sizing: border-box;
+}
+
+/* Tonalidade secondary (azul) — usada em "Negócios com a JusCash" no Figma. */
+:global(.ds-kpi-card--tone-secondary) :global(.ds-kpi-card__icon) {
+  background: var(--color-brand-secondary-50, #c7ddfa);
+  color: var(--color-brand-secondary-700, #0d4897);
+}
+
+/* Tonalidade neutral (cinza) — usada em "Processos analisados" no Figma
+   (tablet). Card sem destaque; valor permanece em preto. */
+:global(.ds-kpi-card--tone-neutral) :global(.ds-kpi-card__icon) {
+  background: var(--color-neutral-200, #e5e5e5);
+  color: var(--color-neutral-700, #404040);
+}
+
+:global(.ds-kpi-card__info) {
+  flex: 1 0 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+:global(.ds-kpi-card--with-icon.ds-kpi-card--size-m) :global(.ds-kpi-card__info) {
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+}
+
+/* No size=m, o value+badge ficam alinhados à direita (não ocupam toda a
+   largura como no size=l). `flex: 0 1 auto` permite que o conjunto encolha
+   quando o label for longo — o `.ds-kpi-card__value` interno tem
+   `text-overflow: ellipsis`, então o NÚMERO ganha o `...` (não o label).
+   `min-width: 0` é obrigatório pra o flexbox respeitar o ellipsis interno. */
+:global(.ds-kpi-card--with-icon.ds-kpi-card--size-m) :global(.ds-kpi-card__value-row) {
+  width: auto;
+  flex: 0 1 auto;
+  min-width: 0;
+  justify-content: flex-end;
+}
+
+:global(.ds-kpi-card__label) {
+  margin: 0;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--color-text-soft, #6d6d6e);
+  font-size: 13px;
+  /* O label nunca usa ellipsis ("..."). Quebra apenas em espaços (não no
+     meio de palavras) — não fica "process/os" quando faltar espaço. */
+  word-break: normal;
+  overflow-wrap: normal;
+  min-width: 0;
+  max-width: 100%;
+}
+
+:global(.ds-kpi-card--with-icon) :global(.ds-kpi-card__label) {
+  font-size: 16px;
+}
+
+/* size=m usa flex-row no .info — label compete com value+badge pela linha.
+   O label NUNCA recebe `...` (regra de produto): exibe o texto inteiro,
+   quebrando em espaços quando necessário. Quem encolhe é o valor — daí
+   `flex: 1 1 auto` no label (prioridade pra crescer) e `min-width: 0` pra
+   permitir que o flexbox respeite o `text-wrap`. */
+:global(.ds-kpi-card--with-icon.ds-kpi-card--size-m) :global(.ds-kpi-card__label) {
+  flex: 1 1 auto;
+  min-width: 0;
+}
+
+:global(.ds-kpi-card__value-row) {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  /* Value + badge SEMPRE lado a lado — sem flex-wrap. Se o valor for muito
+     longo, ele trunca com ellipsis (regra no `.ds-kpi-card__value`),
+     liberando espaço para o badge. */
+  flex-wrap: nowrap;
+  width: 100%;
+  min-width: 0;
+}
+
+/* O Badge do DS é renderizado dentro do `.ds-kpi-card__value-row`. Para
+   garantir que o badge NUNCA encolha (o valor é quem trunca), travamos
+   `flex-shrink: 0` no wrapper que o antd injeta (`.ant-badge`). */
+:global(.ds-kpi-card__value-row) > :global(.ant-badge) {
+  flex-shrink: 0;
+}
+
+:global(.ds-kpi-card__value) {
+  font-weight: 700;
+  line-height: 1.2;
+  color: var(--color-neutral-600, #525252);
+  font-size: 20px;
+  /* Não quebra: quando o valor é maior que o espaço disponível, trunca com
+     ellipsis ("R$ 999..."). Com `flex: 0 1 auto` o valor mantém o tamanho
+     natural (badge colado) e encolhe apenas quando precisa liberar espaço
+     para o badge. */
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  min-width: 0;
+  flex: 0 1 auto;
+}
+
+:global(.ds-kpi-card--with-icon) :global(.ds-kpi-card__value) {
+  color: var(--color-brand-primary-600, #008633);
+  font-size: 31px;
+}
+
+/* Tonalidade secondary (azul) — afeta a cor do valor com ícone. */
+:global(.ds-kpi-card--tone-secondary) :global(.ds-kpi-card__value) {
+  color: var(--color-brand-secondary-600, #105abc);
+}
+
+/* Tonalidade neutral (cinza) — valor em preto (neutral/700), igual ao Figma
+   tablet ("Processos analisados" 189). */
+:global(.ds-kpi-card--tone-neutral) :global(.ds-kpi-card__value) {
+  color: var(--color-neutral-700, #404040);
+}
+
+/* Estado empty — valor sem dado ('—', '-', vazio). Font weight regular
+   (não bold) e cor text/soft, conforme cards do tablet do Figma. */
+:global(.ds-kpi-card--empty) :global(.ds-kpi-card__value) {
+  color: var(--color-text-soft, #6d6d6e);
+  font-weight: 400;
+}
+
+:global(.ds-kpi-card__subtitle) {
+  margin: 0;
+  font-weight: 400;
+  font-size: 10px;
+  line-height: 1.2;
+  color: var(--color-text-soft, #6d6d6e);
+}
+
+:global(.ds-kpi-card--with-icon.ds-kpi-card--size-m) :global(.ds-kpi-card__subtitle) {
+  display: block;
+}
+
+/* Visual do badge (background/color, padding, radius, ícone 12 px) é
+   fornecido pelo próprio componente `Badge` do DS — nenhuma regra é
+   necessária aqui. */
+
+/* Estados interativos — só quando .ds-kpi-card--clickable. */
+:global(.ds-kpi-card--clickable) {
+  cursor: pointer;
+}
+
+:global(.ds-kpi-card--clickable:hover) {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+:global(.ds-kpi-card--clickable:focus-visible) {
+  outline: 3px solid var(--color-neutral-300, #d4d4d4);
+  outline-offset: 0;
+}
+
+:global(.ds-kpi-card--clickable:active) {
+  box-shadow: none;
+}
+
+/* Pseudo-states do Storybook addon — espelham hover/focus para demo. */
+:global(.ds-kpi-card--clickable.pseudo-hover) {
+  box-shadow:
+    0 4px 6px -1px rgba(0, 0, 0, 0.1),
+    0 2px 4px -2px rgba(0, 0, 0, 0.1);
+}
+
+:global(.ds-kpi-card--clickable.pseudo-focus-visible) {
+  outline: 3px solid var(--color-neutral-300, #d4d4d4);
+  outline-offset: 0;
+}

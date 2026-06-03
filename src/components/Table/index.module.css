@@ -1,0 +1,807 @@
+/*
+  Estilos próprios do Table (linhas, header, paginação, sort icon, skeleton,
+  bulk bar, empty state, modo cards).
+
+  As medidas são extraídas direto do Figma (`node-id=4069-6603`):
+    - heading row .................. 32px
+    - data row ..................... 44px
+    - cell padding ................. 8px vertical / 12px inline (spacing 2/3)
+    - container border ............. 1px solid neutral-300, radius xl (8px)
+    - background container ......... neutral-50 (#fafafa)
+    - header bg .................... neutral-100 (#f5f5f5)
+    - selected row bg .............. neutral-200 (#e5e5e5)
+    - hover row bg ................. neutral-100 (#f5f5f5)
+    - typography ................... Inter 13/1.2 (700 no header, 400 nas células)
+    - pagination row ............... 36px, gap uniforme de 4px entre itens
+    - mobile card .................. 320px wide, gap 8px entre cards, border + radius xl
+    - bulk bar ..................... 56px alto, padding-left 12, label esq + actions dir
+*/
+
+/* ── Wrapper externo ────────────────────────────────────────────────────── */
+
+:global(.ds-table.ant-table-wrapper),
+:global(.ds-table.ant-table-wrapper) :global(.ant-table) {
+  background: transparent !important;
+}
+
+/*
+  Todas as variações da Table ocupam 100% do container — incluindo as que
+  usam colunas com `width` fixo/% e `ellipsis`. Sem este override, o antd
+  por vezes renderiza a `<table>` interna com `width: max-content`, criando
+  uma tabela mais estreita que o card pai.
+*/
+:global(.ds-table.ant-table-wrapper),
+:global(.ds-table.ant-table-wrapper) :global(.ant-table),
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-container),
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-content) > table {
+  width: 100% !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-container) {
+  border: 1px solid var(--color-neutral-300) !important;
+  border-radius: var(--radius-xl) !important;
+  background: var(--color-neutral-50) !important;
+  overflow: hidden !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-header),
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-body),
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-content) {
+  background: transparent !important;
+}
+
+/*
+  Antd insere uma `.ant-table-measure-row` (linha invisível usada para
+  calcular larguras quando `scroll.x` está ativo). Em alguns layouts ela
+  renderiza com 44px de altura e cria uma "linha vazia" entre o thead e o
+  primeiro tr. Forçamos altura 0 sem remover do DOM, preservando o cálculo
+  de colunas do Antd.
+*/
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-measure-row) {
+  height: 0 !important;
+  visibility: collapse !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-measure-row) > td {
+  height: 0 !important;
+  padding: 0 !important;
+  border: 0 !important;
+  font-size: 0 !important;
+  line-height: 0 !important;
+}
+
+/* ── Heading row (thead) ────────────────────────────────────────────────── */
+
+/*
+  O `<tr>` do thead herda do `<body>` um line-height padrão (~21px na maioria
+  dos browsers) que infla a altura da linha mesmo quando o `<th>` tem
+  line-height controlado. Setamos line-height explícito no `<tr>` para evitar
+  o vazamento desse strut.
+*/
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr {
+  height: 32px !important;
+  line-height: 1 !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr > th,
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr > td {
+  height: 32px !important;
+  padding: 8px 12px !important;
+  border-bottom: 1px solid var(--color-neutral-300) !important;
+  border-inline-end: none !important;
+  background: var(--color-neutral-100) !important;
+  color: var(--color-neutral-800) !important;
+  font-size: 13px !important;
+  font-weight: 700 !important;
+  /*
+    line-height fixo em px (15) garante que a soma:
+      padding-block (8+8) + line-box (15) + border (1) = 32
+    bata com a altura declarada no Figma. Sem isso, o `tr` herda strut
+    de 21px do <body> e a célula salta para 36-38px.
+  */
+  line-height: 15px !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr > th > *,
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr > td > * {
+  line-height: 15px !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr > th::before,
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr > td::before {
+  display: none !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-column-sorters) {
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 8px !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-column-sorter) {
+  margin-inline-start: 0 !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-column-sorter-inner),
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-sorter) {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ds-table-sort-icon) {
+  color: var(--color-neutral-400) !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr > th:global(.ant-table-column-has-sorters:hover),
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr > th:global(.ant-table-column-sort) {
+  background: var(--color-neutral-100) !important;
+}
+
+/* ── Data rows (tbody) ──────────────────────────────────────────────────── */
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr {
+  height: 44px !important;
+  line-height: 1 !important;
+}
+
+/*
+  `height: 44px` em `<td>` (display: table-cell) age como ALTURA MÍNIMA pelo
+  algoritmo de layout de tabela — o conteúdo pode esticar a célula, mas o
+  mínimo é 44 px. `min-height` é ignorado em table-cell por spec.
+*/
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr > td {
+  height: 44px !important;
+  padding: 2px 8px !important;
+  border-top: 1px solid var(--color-neutral-300) !important;
+  border-inline-end: none !important;
+  background: var(--color-neutral-50) !important;
+  color: var(--color-neutral-800) !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+  vertical-align: middle !important;
+  box-sizing: border-box !important;
+}
+
+/*
+  Hover row: aplicamos o bg neutral-100 em TODAS as células do tr, incluindo
+  a classe interna `.ant-table-cell-row-hover` que o antd usa pra pintar o
+  hover via JS (sem ela, a coluna ordenada continuava com bg distinto e
+  parecia haver um "padding" cinza na linha — buraco visual no hover).
+*/
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr:hover > td,
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr > td:global(.ant-table-cell-row-hover) {
+  background: var(--color-neutral-100) !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr:global(.ds-table-row-selected) > td,
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr:global(.ant-table-row-selected) > td,
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr:global(.ds-table-row-selected:hover) > td,
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr:global(.ant-table-row-selected:hover) > td {
+  background: var(--color-neutral-200) !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr:global(.ds-table-row-multiline),
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr:global(.ds-table-row-multiline) > td {
+  height: 71px !important;
+}
+
+:global(.ds-table.ant-table-wrapper.ds-table-selection-preview) :global(.ant-table-thead) > tr,
+:global(.ds-table.ant-table-wrapper.ds-table-selection-preview) :global(.ant-table-thead) > tr > th,
+:global(.ds-table.ant-table-wrapper.ds-table-selection-preview) :global(.ant-table-thead) > tr > td {
+  height: 54px !important;
+}
+
+:global(.ds-table.ant-table-wrapper.ds-table-selection-preview) :global(.ant-table-tbody) > tr,
+:global(.ds-table.ant-table-wrapper.ds-table-selection-preview) :global(.ant-table-tbody) > tr > td {
+  height: 54px !important;
+  min-height: 54px !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-cell) :global(.ant-typography),
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-cell) p {
+  margin: 0 !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-selection-column) {
+  width: 32px !important;
+  min-width: 32px !important;
+  max-width: 32px !important;
+}
+
+/*
+  Selection column tem padding-inline FIXO de 8 px (Figma cell mobile) e
+  padding-block compactado pra 4 px. Sem o padding-inline explícito, o th
+  herdava 12 px e o td 8 px (das regras de row-level), causando
+  desalinhamento horizontal entre o checkbox master no header e os
+  checkboxes nas rows.
+*/
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr > th:global(.ant-table-selection-column),
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-tbody) > tr > td:global(.ant-table-selection-column) {
+  padding-block: 4px !important;
+  padding-inline: 8px !important;
+}
+
+/* ── Checkbox dentro da Table ───────────────────────────────────────────── */
+
+/*
+  O Table herda o visual completo do Checkbox standalone — o `Table` injeta
+  `.ds-checkbox` em todos os checkboxes (`rowSelection.columnTitle` +
+  `rowSelection.renderCell` em `index.tsx`). Aqui mantemos apenas regras
+  específicas de tabela: line-height do wrapper (para que a célula do
+  thead não infle) e alinhamento da `.ant-table-selection`.
+*/
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-checkbox-wrapper) {
+  line-height: 1 !important;
+  align-items: center !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-selection) {
+  display: inline-flex !important;
+  align-items: center !important;
+  line-height: 1 !important;
+}
+
+/* ── Paginação ──────────────────────────────────────────────────────────── */
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-pagination.ant-pagination) {
+  margin: 12px 0 0 !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+  flex-wrap: wrap !important;
+}
+
+/*
+  Override do Antd: `.ant-pagination-options` traz `margin-inline-start: 16px`
+  por padrão, criando um espaçamento maior que o gap uniforme de 4px do
+  Figma entre `Próximo` e o select de itens-por-página.
+*/
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-options) {
+  margin-inline-start: 0 !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-total-text) {
+  margin-right: auto !important;
+  color: var(--color-neutral-800) !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-item) {
+  min-width: 32px !important;
+  height: 32px !important;
+  margin: 0 !important;
+  background: var(--color-neutral-50) !important;
+}
+
+/*
+  Anterior/Próximo: min-width 90px (conforme Figma `8124:10865` /
+  `8124:10868`), altura 32px, com o conteúdo (ícone + label)
+  centralizado horizontalmente. Usa `min-width` para que possa crescer
+  caso o consumidor traduza o label para uma string mais longa.
+*/
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-prev),
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-next) {
+  min-width: 90px !important;
+  height: 32px !important;
+  margin: 0 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-item) {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  border: 1px solid transparent !important;
+  border-radius: var(--radius-xl) !important;
+  background: var(--color-neutral-50) !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-item) a {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 100% !important;
+  height: 100% !important;
+  padding: 0 !important;
+  color: var(--color-neutral-800) !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  line-height: 1.2 !important;
+}
+
+/*
+  Tipografia dos itens da paginação (numerados, ativo, prev/next):
+  Inter 13/1.2/400 conforme o Figma. Antd aplica peso 600 no
+  `-item-active` por default; reescrevemos para manter consistência.
+*/
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-item),
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-item-active),
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-item-active) a,
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-prev),
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-next),
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-prev) :global(.ant-pagination-item-link),
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-next) :global(.ant-pagination-item-link) {
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  line-height: 1.2 !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-item-active),
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-item-active:hover) {
+  border-color: var(--color-neutral-300) !important;
+  background: var(--color-neutral-50) !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-prev) :global(.ant-pagination-item-link),
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-next) :global(.ant-pagination-item-link) {
+  width: 100% !important;
+  height: 32px !important;
+  padding: 0 !important;
+  border: none !important;
+  border-radius: var(--radius-xl) !important;
+  background: transparent !important;
+  color: var(--color-neutral-800) !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-prev) :global(.ant-pagination-item-link:hover),
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-next) :global(.ant-pagination-item-link:hover) {
+  background: var(--color-neutral-100) !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-disabled) :global(.ant-pagination-item-link),
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-disabled) :global(.ant-pagination-item-link:hover) {
+  background: transparent !important;
+  color: var(--color-neutral-400) !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-options-size-changer.ant-select) {
+  width: 165px !important;
+  height: 36px !important;
+  min-height: 36px !important;
+  padding: 0 8px 0 12px !important;
+  border: 1px solid var(--color-neutral-300) !important;
+  border-radius: var(--radius-xl) !important;
+  background: var(--color-neutral-50) !important;
+  box-sizing: border-box !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-options-size-changer.ant-select) :global(.ant-select-selector),
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-options-size-changer.ant-select) :global(.ant-select-content) {
+  height: 34px !important;
+  min-height: 34px !important;
+  display: flex !important;
+  align-items: center !important;
+  width: auto !important;
+  border: none !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-options-size-changer.ant-select) :global(.ant-select-selection-wrap) {
+  display: flex !important;
+  align-items: center !important;
+  min-height: 100% !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-options-size-changer.ant-select) :global(.ant-select-selection-item),
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-options-size-changer.ant-select) :global(.ant-select-content-value) {
+  display: flex !important;
+  align-items: center !important;
+  min-height: 100% !important;
+  color: var(--color-neutral-800) !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-options-size-changer.ant-select) :global(.ant-select-content-value::before) {
+  content: "Itens por página: " !important;
+  font-weight: 400 !important;
+}
+
+:global(.ds-table.ant-table-wrapper) :global(.ant-pagination-options-size-changer.ant-select) :global(.ant-select-arrow) {
+  display: flex !important;
+  align-items: center !important;
+  color: var(--color-neutral-800) !important;
+}
+
+/* ── Modo responsivo "cards" (Figma Prospecção 5101:54788) ──────────────── */
+
+/*
+  A variante `responsive="cards"` (e o alias deprecated `"blocks"`) substitui
+  o antd Table inteiro por uma lista de cards custom renderizados pelo
+  componente `MobileCards`. Cada card tem 3 NÍVEIS:
+
+  - **Header** (`.ds-card__header`): cells de `cardLayout.header` + checkbox
+    de seleção (quando há rowSelection). Border-bottom 1 px tocando as
+    bordas laterais do card.
+  - **Body** (`.ds-card__body`): cells restantes, stacked sem separadores
+    internos. Padding vertical de cada field dá o respiro.
+  - **Footer** (`.ds-card__footer`): cells de `cardLayout.footer` (ações).
+    Border-top 1 px tocando as bordas laterais.
+
+  Card outer não tem padding — cada section tem `padding: 4 px 8 px` interno.
+  Isso garante que os dividers `border-bottom/border-top` cubram toda a
+  largura do card (não ficam insetados).
+
+  Em modo `"auto"`, o `useMediaQuery` no Table troca para `MobileCards`
+  automaticamente em viewports `< responsiveBreakpoint` (default 768 px).
+*/
+
+/* Wrapper externo no modo cards — sem border/radius (o wrapper do antd não
+   é usado nesse modo; renderizamos `MobileCards` diretamente). */
+:global(.ds-table-wrapper--cards) {
+  width: 100%;
+}
+
+/* Container da lista de cards — vertical stack com gap 8 px. */
+:global(.ds-table-cards) {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+/* Header "Selecionar todos" — barra full-width, mesmo radius/border dos cards.
+   Padding interno 8 px (cell mobile Figma) pra alinhar o checkbox master
+   com os checkboxes de cada card (que ficam a 8 px da borda direita do card). */
+:global(.ds-table-cards__select-all) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: 40px;
+  padding: 0 8px;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-xl);
+  background: var(--color-neutral-50);
+  box-sizing: border-box;
+}
+
+:global(.ds-table-cards__select-all-label) {
+  color: var(--color-neutral-800);
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.2;
+  /* Padding-left extra alinha o texto "Selecionar todos" com a primeira
+     coluna do card (cells têm padding 4 px 8 px — total esquerda = 8 px). */
+  padding-left: 0;
+}
+
+:global(.ds-table-cards__select-all-checkbox) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ── Card individual (`.ds-card`) ────────────────────────────────────────── */
+
+/*
+  Card outer: border 1 px regular, radius xl, SEM padding (cada section tem
+  seu próprio `padding`). `overflow: hidden` garante que os border-bottom/
+  border-top das sections respeitem o border-radius do card (sem "escapar"
+  no canto).
+*/
+:global(.ds-card) {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-xl);
+  background: var(--color-neutral-50);
+  overflow: hidden;
+  box-sizing: border-box;
+  transition: background-color 0.12s ease-in-out;
+}
+
+:global(.ds-card:hover) {
+  background: var(--color-neutral-100);
+}
+
+:global(.ds-card--selected),
+:global(.ds-card--selected:hover) {
+  background: var(--color-neutral-200);
+}
+
+/* Header: flex-row (campos à esquerda + checkbox à direita).
+   Border-bottom dá o divider que toca as bordas laterais do card. */
+:global(.ds-card__header) {
+  display: flex;
+  align-items: stretch;
+  width: 100%;
+  border-bottom: 1px solid var(--color-neutral-300);
+}
+
+:global(.ds-card__header-fields) {
+  display: flex;
+  flex: 1 1 auto;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 0;
+  padding: 4px 8px;
+  justify-content: center;
+}
+
+:global(.ds-card__header-checkbox) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 4px 8px;
+  flex: 0 0 auto;
+}
+
+/* Body: stack vertical de fields, SEM separadores internos. Cada field tem
+   padding próprio (4 px 8 px), suficiente pra criar respiro entre eles. */
+:global(.ds-card__body) {
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+}
+
+/* Footer: cells de actions/etc. Border-top dá o divider antes do footer. */
+:global(.ds-card__footer) {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  padding: 4px 8px;
+  border-top: 1px solid var(--color-neutral-300);
+}
+
+/* ── Card field (label / value) ──────────────────────────────────────────── */
+
+:global(.ds-card-field) {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 8px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* No header.fields o padding vive no parent (.ds-card__header-fields), então
+   suprimimos o padding do field interno. */
+:global(.ds-card__header-fields) :global(.ds-card-field),
+/* No footer o padding vive no parent (.ds-card__footer), idem. */
+:global(.ds-card__footer) :global(.ds-card-field) {
+  padding: 0;
+  width: auto;
+}
+
+:global(.ds-card-field__label) {
+  font-family: "Inter", sans-serif;
+  font-size: 10px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--color-neutral-500);
+  word-break: break-word;
+}
+
+:global(.ds-card-field__value) {
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.2;
+  color: var(--color-neutral-800);
+  word-break: break-word;
+}
+
+/* ── Skeleton (loading) ─────────────────────────────────────────────────── */
+
+/*
+  Quando `skeleton` (ou `loading`) está truthy, o Table SUBSTITUI a tabela
+  inteira por N barras `Skeleton.Line` empilhadas verticalmente — sem
+  header, sem container border — espelhando o frame `Subtitle` do Figma
+  (`8733:11508`): cada linha é `neutral/100`, radius `xl` (8 px),
+  altura 43 px, full-width. Gap 8 px entre linhas.
+*/
+
+:global(.ds-table-skeleton) {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  width: 100%;
+}
+
+:global(.ds-table-skeleton__row) {
+  width: 100% !important;
+  height: 43px !important;
+  border-radius: var(--radius-xl) !important;
+}
+
+/* ── Bulk action bar ────────────────────────────────────────────────────── */
+
+/*
+  Renderizada ACIMA da tabela quando há `rowSelection.selectedRowKeys.length > 0`
+  e `bulkActions` está definido. 56px de altura, padding-left 12px, label à
+  esquerda + slot de ações à direita (Figma `8124:10663`).
+*/
+
+:global(.ds-table-bulk-bar) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 56px;
+  padding: 8px 12px;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-xl);
+  background: var(--color-neutral-50);
+  margin-bottom: 8px;
+  box-sizing: border-box;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+:global(.ds-table-bulk-bar__label) {
+  color: var(--color-neutral-800);
+  font-family: "Inter", sans-serif;
+  font-size: 16px;
+  line-height: 1.2;
+  font-weight: 400;
+}
+
+:global(.ds-table-bulk-bar__actions) {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+
+/*
+  Modo responsivo (cards): empilhamento vertical com label em cima e ações
+  full-width abaixo — evita overflow do "3 item(ns) selecionado(s) +
+  Arquivar/Mover/Exportar/Excluir" em viewport mobile.
+*/
+:global(.ds-table-wrapper--cards) :global(.ds-table-bulk-bar) {
+  flex-direction: column;
+  align-items: stretch;
+  padding: 12px;
+}
+
+:global(.ds-table-wrapper--cards) :global(.ds-table-bulk-bar__label) {
+  text-align: left;
+}
+
+:global(.ds-table-wrapper--cards) :global(.ds-table-bulk-bar__actions) {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+  width: 100%;
+}
+
+:global(.ds-table-wrapper--cards) :global(.ds-table-bulk-bar__actions) > * {
+  width: 100%;
+}
+
+/* ── Empty state ────────────────────────────────────────────────────────── */
+
+/*
+  Wrapper aplicado pelo TableEmptyStateRenderer dentro do `locale.emptyText`.
+  Garante padding generoso e centraliza o conteúdo no body do antd.
+*/
+
+:global(.ds-table-empty-state) {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  padding: 48px 16px;
+  color: var(--color-neutral-800);
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+/* ── Footer de paginação (DS Pagination + total + size changer) ─────────── */
+
+/*
+  O Table não usa mais a paginação interna do antd: substituímos por um
+  rodapé custom que compõe o `Pagination` do design system + total à
+  esquerda + Select de itens-por-página opcional à direita.
+
+  Layout (Figma `8124:10861`): total esquerda | pagination centro/dir | select dir.
+*/
+
+:global(.ds-table-pagination-footer) {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 16px;
+  width: 100%;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+:global(.ds-table-pagination-total) {
+  margin-right: auto;
+  color: var(--color-neutral-800);
+  font-family: "Inter", sans-serif;
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.2;
+}
+
+:global(.ds-table-pagination-size-changer.ant-select) {
+  width: 165px !important;
+  height: 36px !important;
+  border: 1px solid var(--color-neutral-300) !important;
+  border-radius: var(--radius-xl) !important;
+  background: var(--color-neutral-50) !important;
+}
+
+:global(.ds-table-pagination-size-changer.ant-select) :global(.ant-select-selector) {
+  height: 34px !important;
+  padding: 0 8px 0 12px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+:global(.ds-table-pagination-size-changer.ant-select) :global(.ant-select-selection-item) {
+  color: var(--color-neutral-800) !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+}
+
+/*
+  Layout de paginação em modo cards (Figma Prospecção `5101:54788`):
+  Empilhamento vertical com gap 16 px entre rows, ordem:
+    1. Total ("78 OAB(s)") — alinhado à esquerda, full-width
+    2. Items per page (Select 165 → full-width em mobile)
+    3. Pagination ("Anterior 1 2 Próximo") — centralizada
+  Usamos `order` no flex container pra reordenar sem mexer no JSX (mantém
+  ordem desktop intacta).
+*/
+:global(.ds-table-pagination-footer--cards) {
+  flex-direction: column !important;
+  align-items: stretch !important;
+  gap: 16px !important;
+}
+
+:global(.ds-table-pagination-footer--cards) :global(.ds-table-pagination-total) {
+  margin-right: 0 !important;
+  text-align: left;
+  order: 1;
+}
+
+:global(.ds-table-pagination-footer--cards) :global(.ds-table-pagination-size-changer.ant-select) {
+  width: 100% !important;
+  order: 2;
+}
+
+:global(.ds-table-pagination-footer--cards) > nav {
+  display: flex !important;
+  justify-content: center !important;
+  width: 100% !important;
+  order: 3;
+}
+
+:global(.ds-table-pagination-footer--cards) :global(.ds-pagination) {
+  display: flex !important;
+  justify-content: center !important;
+  width: 100% !important;
+}
+
+/* ── Sort icon active state ─────────────────────────────────────────────── */
+
+/*
+  Quando a coluna está ordenada (asc/desc), o ícone passa a usar `text/dark`
+  em vez do `neutral-400` default — destaca a coluna ativa.
+*/
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-column-sort) :global(.ds-table-sort-icon) {
+  color: var(--color-neutral-800) !important;
+}

@@ -1,0 +1,100 @@
+/*
+  Estilos próprios do Input. O componente renderiza uma pilha vertical
+  `label → campo → helper/erro` (Figma `4048:10668`), com gap de 8px.
+
+  Escopo:
+  - `.ds-input`         → aplicada ao `<input class="ant-input">` (ou ao
+                            `<span class="ant-input-affix-wrapper">` quando há
+                            prefix/suffix).
+  - `.ds-input-wrapper` → pilha vertical; modificadores `--error`/`--disabled`.
+  - Hover/focus mantêm a borda `border/regular` — o Figma não troca a cor.
+*/
+
+/* ============================================================
+   WRAPPER — pilha vertical (label → campo → helper), gap 8px (Figma)
+   ============================================================ */
+:global(.ds-input-wrapper) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  width: 100%;
+}
+
+/* ============================================================
+   LABEL — body/01 16px, text/dark; disabled → text/disabled (Figma)
+   ============================================================ */
+:global(.ds-input-label) {
+  font-size: var(--font-body-1-size);
+  line-height: var(--font-line-height);
+  font-weight: 400;
+  color: var(--color-text-dark);
+}
+
+:global(.ds-input-wrapper--disabled) :global(.ds-input-label) {
+  color: var(--color-text-disabled);
+}
+
+/* ============================================================
+   HELPER/ERRO — body/02 13px, text/soft; erro → feedback/red/500 (Figma)
+   ============================================================ */
+:global(.ds-input-helper) {
+  font-size: var(--font-body-2-size);
+  line-height: var(--font-line-height);
+  font-weight: 400;
+  color: var(--color-text-soft);
+}
+
+:global(.ds-input-wrapper--error) :global(.ds-input-helper) {
+  color: var(--color-feedback-red-500);
+}
+
+/* ============================================================
+   DECORAÇÃO CLICÁVEL — prefix/suffix com onPrefixClick/onSuffixClick
+   Botão sem estilo próprio: o ícone herda a cor (currentColor) e o tamanho.
+   ============================================================ */
+:global(.ds-input-affix-button) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+:global(.ds-input-affix-button:focus-visible) {
+  outline: none;
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-focus);
+}
+
+/* ============================================================
+   HOVER — mantém a borda regular (Figma não define estado de hover)
+   ============================================================ */
+:global(.ds-input.ant-input-outlined:hover),
+:global(.ds-input-affix-wrapper.ant-input-outlined:hover) {
+  border-color: var(--color-border-regular) !important;
+}
+
+:global(.ds-input.ant-input-outlined.pseudo-hover),
+:global(.ds-input-affix-wrapper.ant-input-outlined.pseudo-hover) {
+  border-color: var(--color-border-regular) !important;
+}
+
+/* Em estado de erro, o hover continua vermelho (não vira cinza). */
+:global(.ds-input.ant-input-outlined.ant-input-status-error:not(.ant-input-disabled):hover),
+:global(.ds-input-affix-wrapper.ant-input-outlined.ant-input-affix-wrapper-status-error:not(.ant-input-affix-wrapper-disabled):hover) {
+  border-color: var(--color-feedback-red-500) !important;
+}
+
+/* ============================================================
+   DISABLED — borda border/disabled (#e5e5e5); Antd usaria neutral/300
+   ============================================================ */
+:global(.ds-input.ant-input-outlined.ant-input-disabled),
+:global(.ds-input.ant-input-outlined[disabled]),
+:global(.ds-input-affix-wrapper.ant-input-outlined.ant-input-affix-wrapper-disabled) {
+  border-color: var(--color-border-disabled) !important;
+}

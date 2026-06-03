@@ -1,0 +1,167 @@
+/*
+  Estilos do NavigationMenu. Tokens e dimensões vêm do dump
+  `figma/components/navigation-menu/design-context-4080-15062.md`:
+
+  - Container: flex items-center (linha 8).
+  - Trigger: min-h-36, px-16 py-8, radius/xl, label Inter Regular 13
+    text/dark + chevron-down 16 (linha 8).
+  - Content: flex flex-wrap gap-8 w-488, 4 items lado a lado (linha 10).
+  - Cada item de content: bg neutral/50, min-h-32, px-8 py-4, radius/xl,
+    w-240, title Geist Medium 14 text/dark + secondary Inter Regular 10
+    text/soft (linha 10).
+  - Container exemplo: bg neutral/50, border regular, radius/xl, shadow/m
+    (linha 12).
+
+  Sem font-family própria — herda do body global (Inter via global.css).
+*/
+
+/* ============================================
+   CONTAINER (<nav>)
+   ============================================ */
+:global(.ds-navigation-menu) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-1);
+  box-sizing: border-box;
+}
+
+:global(.ds-navigation-menu__list) {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: var(--spacing-1);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+:global(.ds-navigation-menu__item) {
+  position: relative;
+}
+
+/* ============================================
+   TRIGGER
+   min-h 36, padding 8 16, radius xl, font body/02 (13), text/dark,
+   gap 4 com chevron-down 16. Sem background default.
+   ============================================ */
+:global(.ds-navigation-menu__trigger) {
+  display: inline-flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1);
+  min-height: 36px;
+  padding: var(--spacing-2) var(--spacing-4);
+  border-radius: var(--radius-xl);
+  background: transparent;
+  border: none;
+  font-size: var(--font-body-2-size);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height);
+  color: var(--color-text-dark);
+  cursor: pointer;
+  user-select: none;
+  outline: none;
+  box-sizing: border-box;
+  transition: background-color 120ms ease-in-out, box-shadow 120ms ease-in-out;
+}
+
+:global(.ds-navigation-menu__trigger):hover {
+  background-color: var(--color-neutral-100);
+}
+
+:global(.ds-navigation-menu__trigger):focus-visible {
+  box-shadow: var(--shadow-focus);
+}
+
+:global(.ds-navigation-menu__trigger--open) {
+  background-color: var(--color-neutral-100);
+}
+
+:global(.ds-navigation-menu__chevron) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: currentColor;
+  transition: transform 120ms ease-in-out;
+}
+
+:global(.ds-navigation-menu__trigger--open .ds-navigation-menu__chevron) {
+  transform: rotate(180deg);
+}
+
+/* ============================================
+   PANEL (.ds-navigation-menu__panel)
+   bg neutral/50, border regular, radius/xl, shadow/m. Padding 8. Posicionado
+   absoluto abaixo do trigger.
+   ============================================ */
+:global(.ds-navigation-menu__panel) {
+  position: absolute;
+  top: calc(100% + var(--spacing-1));
+  left: 0;
+  z-index: 1000;
+  background: var(--color-neutral-50);
+  border: 1px solid var(--color-border-regular);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-m);
+  padding: var(--spacing-2);
+  box-sizing: border-box;
+}
+
+:global(.ds-navigation-menu__content) {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: var(--spacing-2);
+  width: 488px;
+  box-sizing: border-box;
+}
+
+/* ============================================
+   CONTENT ITEM
+   w 240, min-h 32, padding 4 8, radius xl, bg neutral/50, hover bg neutral/100.
+   ============================================ */
+:global(.ds-navigation-menu__content-item) {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2px;
+  width: 240px;
+  min-height: 32px;
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius-xl);
+  background: var(--color-neutral-50);
+  color: var(--color-text-dark);
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  outline: none;
+  box-sizing: border-box;
+  transition: background-color 120ms ease-in-out, box-shadow 120ms ease-in-out;
+}
+
+:global(.ds-navigation-menu__content-item):hover {
+  background-color: var(--color-neutral-100);
+}
+
+:global(.ds-navigation-menu__content-item):focus-visible {
+  background-color: var(--color-neutral-100);
+  box-shadow: var(--shadow-focus);
+}
+
+:global(.ds-navigation-menu__content-item-title) {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: var(--font-line-height);
+  color: var(--color-text-dark);
+}
+
+:global(.ds-navigation-menu__content-item-description) {
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height);
+  color: var(--color-text-soft);
+}

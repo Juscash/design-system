@@ -1,0 +1,168 @@
+/*
+  Estilos próprios do Switch. Scoped via `.ds-switch` aplicada ao componente.
+*/
+
+/* Background do track unchecked — Figma define `neutral.200` (#e5e5e5).
+   Antd default usa `colorTextQuaternary` (#bfbfbf), daí o override. */
+:global(.ds-switch:not(.ant-switch-checked):not(.ant-switch-disabled)) {
+  background-color: var(--color-neutral-200) !important;
+}
+
+/* Hover (não selecionado) — bg cinza mais escuro `neutral/300` para dar
+   feedback visual. Filtra checked/disabled. */
+:global(.ds-switch:hover:not(.ant-switch-checked):not(.ant-switch-disabled)) {
+  background-color: var(--color-neutral-300) !important;
+}
+
+/* Os labels internos (`checkedChildren`/`unCheckedChildren`) não fazem
+   parte da especificação do Figma — são props nativas do Antd herdadas.
+   Quando usados, sofrem contraste insuficiente sobre o track claro:
+   este override força cor escura nos inner labels enquanto unchecked
+   para que, se usados, ainda passem WCAG 4.5:1. */
+:global(.ds-switch:not(.ant-switch-checked) .ant-switch-inner-unchecked),
+:global(.ds-switch:not(.ant-switch-checked) .ant-switch-inner-checked) {
+  color: var(--color-neutral-700) !important;
+}
+
+/* Remove o "stretch" do handle no `:active` (efeito padrão do Antd que
+   estica o `::before` 30% além do handle e cria a impressão de uma
+   sombra que se expande na transição entre checked/unchecked). Mantemos
+   o handle como círculo limpo — só o foco real (`:focus-visible`)
+   gera anel visível. */
+:global(.ds-switch:not(.ant-switch-disabled):active .ant-switch-handle::before),
+:global(.ds-switch:not(.ant-switch-disabled):active.ant-switch-checked .ant-switch-handle::before) {
+  inset-inline: 0 0 !important;
+}
+
+/* Foco visual via pseudo-class do Storybook (addon-pseudo-states). */
+:global(.ds-switch.pseudo-focus-visible) {
+  box-shadow: var(--shadow-focus) !important;
+  outline: none !important;
+}
+
+/* Foco real via teclado — alinha ao mesmo visual da pseudo-class. */
+:global(.ds-switch:not(.ant-switch-disabled):focus-visible) {
+  box-shadow: var(--shadow-focus) !important;
+  outline: none !important;
+}
+
+/* Variante error em focus — anel vermelho suave em vez do cinza. */
+:global(.ds-switch.ds-switch-error.pseudo-focus-visible) {
+  box-shadow: var(--shadow-focus-error) !important;
+}
+:global(.ds-switch.ds-switch-error:not(.ant-switch-disabled):focus-visible) {
+  box-shadow: var(--shadow-focus-error) !important;
+}
+
+/* ============================================================
+   FIELD — switch + label visível na mesma linha (sem rich)
+   `.ds-switch-field` é o `<label>` wrapper gerado pelo componente
+   quando a prop `label` é passada sem `rich`. Toda a estilização do
+   span do label vive aqui (não no consumidor).
+   ============================================================ */
+
+:global(.ds-switch-field) {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--spacing-2);
+  cursor: pointer;
+}
+
+:global(.ds-switch-field__label) {
+  font-size: var(--font-body-2-size);
+  font-weight: 400;
+  line-height: var(--font-line-height);
+  color: var(--color-neutral-800);
+}
+
+/* ============================================================
+   RICH — card 240×44 com label e secondary text (Figma 4062:5434)
+   `.ds-switch-rich` é aplicado a um `<label>` wrapper externo. O
+   click no label propaga para o `<button class="ant-switch">` interno
+   via JS no componente (label nativo só funciona com <input>).
+   ============================================================ */
+
+:global(.ds-switch-rich) {
+  display: flex;
+  /* Sempre `flex-start` — alinhamento vertical fino com a primeira linha do
+     label é feito via `margin-top: 1.3px` (= leading do label com
+     line-height 1.2) no `.ant-switch` (vide abaixo). */
+  align-items: flex-start;
+  gap: var(--spacing-2);
+  padding: 6px var(--spacing-3);
+  border: 1px solid var(--color-border-regular);
+  border-radius: var(--radius-xl);
+  background-color: var(--color-neutral-50);
+  transition: background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+  cursor: pointer;
+  width: 100%;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+
+/* Alinha o track (18px) com o TOPO do glifo da primeira linha do label.
+   `margin-top: 1.3px` = leading do label (line-height 15.6px - font 13px
+   = 2.6px / 2 = 1.3px). Mesmo padrão do checkbox/radio. */
+:global(.ds-switch-rich .ant-switch) {
+  flex: 0 0 auto;
+  margin-top: 1.3px;
+}
+
+/* Hover (não selecionado) → neutral/100. */
+:global(.ds-switch-rich:hover:not(.ds-switch-rich--disabled):not(:has(.ant-switch.ant-switch-checked))) {
+  background-color: var(--color-neutral-100);
+}
+
+/* Selecionado (default) → neutral/100. */
+:global(.ds-switch-rich:has(.ant-switch.ant-switch-checked):not(.ds-switch-rich--disabled)) {
+  background-color: var(--color-neutral-100);
+}
+
+/* Selecionado + hover → neutral/200 (mais escuro). */
+:global(.ds-switch-rich:hover:has(.ant-switch.ant-switch-checked):not(.ds-switch-rich--disabled)) {
+  background-color: var(--color-neutral-200);
+}
+
+/* Focus → anel cinza ao redor do card inteiro (suprime shadow no switch). */
+:global(.ds-switch-rich:has(.ant-switch:focus-visible)) {
+  box-shadow: var(--shadow-focus);
+}
+:global(.ds-switch-rich:has(.ant-switch:focus-visible) .ant-switch) {
+  box-shadow: none !important;
+}
+
+:global(.ds-switch-rich--disabled) {
+  border-color: var(--color-border-disabled);
+  cursor: not-allowed;
+}
+
+:global(.ds-switch-rich__content) {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+:global(.ds-switch-rich__label) {
+  font-size: var(--font-body-2-size);
+  font-weight: 400;
+  line-height: var(--font-line-height);
+  color: var(--color-text-dark);
+}
+
+:global(.ds-switch-rich__secondary) {
+  font-size: var(--font-caption-size);
+  font-weight: 400;
+  line-height: var(--font-line-height);
+  color: var(--color-text-soft);
+}
+
+/* Truncate dinâmico do label e secondary no modo rich + truncate. */
+:global(.ds-switch-rich--truncate .ds-switch-rich__label),
+:global(.ds-switch-rich--truncate .ds-switch-rich__secondary) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

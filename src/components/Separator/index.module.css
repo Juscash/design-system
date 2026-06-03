@@ -1,0 +1,37 @@
+/*
+  Estilos do Separator. Linha sólida 1px usando o token
+  --color-border-regular (#d4d4d4) — fonte: dump
+  figma/components/separator/design-context-4115-8625.md.
+
+  Horizontal (default): h-px ocupando 100% da largura, border-radius 2px
+  (valor explícito do dump; não há token de 2px na foundation — 2 está na
+  lista de magic numbers permitidos pelo .code-review.json).
+
+  Vertical: w-px ocupando 100% da altura, sem border-radius (alinhado ao
+  dump que descreve "h-full w-px" sem rounded).
+
+  Seletores em :global porque o bundle do design system é consumido por
+  apps Next.js (App Router) — manter classes simples e globais evita
+  hashes que mudam entre builds.
+*/
+
+:global(.ds-separator) {
+  background: var(--color-border-regular);
+  flex-shrink: 0;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+
+:global(.ds-separator--horizontal) {
+  width: 100%;
+  height: 1px;
+  min-width: 1px;
+  border-radius: 2px;
+}
+
+:global(.ds-separator--vertical) {
+  height: 100%;
+  width: 1px;
+  min-height: 1px;
+}

@@ -1,0 +1,122 @@
+/*
+  Estilos próprios do Popover do design system. O Antd renderiza o popover
+  em portal, então os seletores precisam ser globais para alcançar a árvore
+  montada fora do componente. As classes `.ds-popover-*` ficam isoladas via
+  prefixo da camada Juscash.
+*/
+
+/*
+  No Antd 6 o painel renderizado pelo Popover é `.ant-popover-container`
+  (no Antd 5 era `.ant-popover-inner`). É nesse elemento que o Antd aplica
+  `padding: innerPadding` (12px), fundo, borda e raio. Zeramos o padding
+  para o conteúdo ocupar exatamente os 280px definidos no Figma e
+  reaplicamos os tokens do design system.
+*/
+:global(.ds-popover-root) :global(.ant-popover-container) {
+  width: 280px !important;
+  background: var(--color-neutral-50) !important;
+  border: 1px solid var(--color-border-regular) !important;
+  border-radius: var(--radius-xl) !important;
+  box-shadow: var(--shadow-l) !important;
+  padding: 0 !important;
+}
+
+:global(.ds-popover-root) :global(.ant-popover-title) {
+  margin-bottom: 0 !important;
+  padding: 0 !important;
+  border-bottom: none !important;
+}
+
+:global(.ds-popover-root) :global(.ant-popover-content) {
+  padding: 0 !important;
+}
+
+/* Painel composto pelas slots. */
+:global(.ds-popover-panel) {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  width: 100%;
+}
+
+:global(.ds-popover-panel--gap) {
+  gap: var(--spacing-2);
+}
+
+/* Slot placeholder (modo desenvolvedor: sem conteúdo passado). */
+:global(.ds-popover-slot) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: 40px;
+  padding: var(--spacing-2);
+  border: 1px dashed var(--color-slot-border);
+  border-radius: var(--radius-xl);
+  box-sizing: border-box;
+}
+
+:global(.ds-popover-slot__label) {
+  margin: 0;
+  font-family: "Geist", sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 1.5;
+  letter-spacing: 0.5px;
+  color: var(--color-slot-label);
+  word-break: break-word;
+}
+
+/*
+  Containers padrão de cada slot. A estilização do conteúdo do popover —
+  tipografia, espaçamento e separadores — vive aqui no design system; os
+  consumidores passam apenas o conteúdo bruto (texto ou subelementos) e o
+  wrapper aplica os defaults.
+*/
+:global(.ds-popover-header) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+  padding: var(--spacing-3) var(--spacing-4);
+  border-bottom: 1px solid var(--color-border-regular);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-text-dark);
+  line-height: 1.5;
+}
+
+:global(.ds-popover-body) {
+  padding: var(--spacing-3) var(--spacing-4);
+  font-size: var(--font-body-2-size);
+  color: var(--color-neutral-700);
+  line-height: 1.5;
+}
+
+:global(.ds-popover-footer) {
+  display: flex;
+  justify-content: flex-end;
+  padding: var(--spacing-2) var(--spacing-4);
+  border-top: 1px solid var(--color-border-regular);
+}
+
+/* Foco visível no painel. */
+:global(.ds-popover-root) :global(.ant-popover-container):focus-visible,
+:global(.ds-popover-panel):focus-visible {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+/*
+  Geometria da seta — bottom: -6px, right: 18.5px, width: 11.5px, height: 5px
+  conforme dump (VAR-09 a VAR-11). O Antd posiciona a seta dinamicamente em
+  função do `placement`; aqui forçamos as dimensões para casar com o Figma.
+*/
+:global(.ds-popover-root) :global(.ant-popover-arrow) {
+  width: 11.5px !important;
+  height: 5px !important;
+}
+
+:global(.ds-popover-root) :global(.ant-popover-arrow::before) {
+  background: var(--color-neutral-50) !important;
+}

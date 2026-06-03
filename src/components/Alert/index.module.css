@@ -1,0 +1,110 @@
+/*
+  Estilos do Alert. Container flex com gap 16px (var --spacing-4),
+  padding 16px, borda 1px var(--color-border-regular), raio var(--radius-xl)
+  (8px) e fundo var(--color-neutral-50). Conforme dump
+  figma/components/alert/design-context-4077-7402.md (frame 4077:7402).
+
+  A variante `error` (classe .ds-alert--error) só altera a cor do texto
+  e dos dois aligners de ícone para var(--color-feedback-red-500).
+
+  Os aligners de ícone usam `padding-top: 3px` (literal do dump
+  "pt-[3px]") para encostar o ícone no topo da primeira linha de texto.
+
+  Seletores em :global porque o bundle do design system é consumido por
+  apps Next.js (App Router) — o post-build do tsup remove o wrapper
+  :global(...) deixando os seletores nativos.
+*/
+
+:global(.ds-alert) {
+  display: flex;
+  gap: var(--spacing-4);
+  align-items: center;
+  padding: var(--spacing-4);
+  border: 1px solid var(--color-border-regular);
+  border-radius: var(--radius-xl);
+  background: var(--color-neutral-50);
+}
+
+:global(.ds-alert-content) {
+  display: flex;
+  flex: 1 0 0;
+  gap: var(--spacing-3);
+  align-items: flex-start;
+  min-width: 0;
+}
+
+:global(.ds-alert-icon) {
+  display: flex;
+  align-items: center;
+  padding-top: 3px;
+  flex-shrink: 0;
+  color: var(--color-text-dark);
+}
+
+:global(.ds-alert--error .ds-alert-icon) {
+  color: var(--color-feedback-red-500);
+}
+
+:global(.ds-alert-text) {
+  display: flex;
+  flex: 1 0 0;
+  flex-direction: column;
+  gap: var(--spacing-1);
+  min-width: 0;
+  word-break: break-word;
+}
+
+:global(.ds-alert-line1) {
+  margin: 0;
+  font-size: var(--font-body-1-size);
+  line-height: var(--font-body-1-line-height);
+  color: var(--color-text-dark);
+}
+
+:global(.ds-alert-line2) {
+  margin: 0;
+  font-size: var(--font-body-2-size);
+  line-height: var(--font-body-2-line-height);
+  color: var(--color-text-soft);
+}
+
+:global(.ds-alert--error .ds-alert-line1),
+:global(.ds-alert--error .ds-alert-line2) {
+  color: var(--color-feedback-red-500);
+}
+
+:global(.ds-alert-button) {
+  border: 1px solid var(--color-border-regular);
+  border-radius: var(--radius-xl);
+  background: transparent;
+  padding: var(--spacing-2) var(--spacing-4);
+  min-height: 36px;
+  font-family: inherit;
+  font-size: var(--font-body-2-size);
+  line-height: var(--font-body-2-line-height);
+  color: var(--color-text-dark);
+  cursor: pointer;
+  flex-shrink: 0;
+  white-space: nowrap;
+}
+
+:global(.ds-alert-button:hover) {
+  background: var(--color-neutral-100);
+}
+
+:global(.ds-alert-button:focus-visible) {
+  outline: none;
+  box-shadow: var(--shadow-focus);
+}
+
+:global(.ds-alert-right-icon) {
+  display: flex;
+  align-items: center;
+  padding-top: 3px;
+  flex-shrink: 0;
+  color: var(--color-text-dark);
+}
+
+:global(.ds-alert--error .ds-alert-right-icon) {
+  color: var(--color-feedback-red-500);
+}

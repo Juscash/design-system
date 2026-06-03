@@ -1,0 +1,59 @@
+/*
+  Estilos próprios do Modal. Como o Modal do Antd é renderizado em portal,
+  os seletores precisam permanecer globais.
+*/
+
+:global(.ds-modal) :global(.ant-modal-container) {
+  border: 1px solid var(--color-neutral-300) !important;
+  box-shadow: var(--shadow-l) !important;
+  border-radius: 16px !important;
+  background: var(--color-neutral-50) !important;
+  overflow: clip !important;
+}
+
+:global(.ds-modal) :global(.ant-modal-header) {
+  padding: 24px 24px 0 24px !important;
+  margin: 0 !important;
+  border-bottom: none !important;
+  background: transparent !important;
+}
+
+:global(.ds-modal) :global(.ant-modal-header) :global(.ant-modal-title) {
+  font-size: 20px !important;
+  font-weight: 700 !important;
+  color: var(--color-neutral-800) !important;
+  line-height: 1.2 !important;
+}
+
+:global(.ds-modal) :global(.ant-modal-body) {
+  padding: 24px !important;
+  margin: 0 !important;
+  color: var(--color-neutral-500) !important;
+}
+
+:global(.ds-modal) :global(.ant-modal-footer) {
+  padding: 0 24px 24px 24px !important;
+  margin: 0 !important;
+  border-top: none !important;
+}
+
+:global(.ds-modal) :global(.ant-modal-close) {
+  top: 24px !important;
+  right: 24px !important;
+  color: var(--color-neutral-800) !important;
+}
+
+:global(.ds-modal) button[class*="outline"] {
+  background-color: transparent !important;
+}
+
+:global(.ds-modal) :global(.ant-modal-body::-webkit-scrollbar) {
+  width: 4px;
+}
+:global(.ds-modal) :global(.ant-modal-body::-webkit-scrollbar-thumb) {
+  background: var(--color-neutral-300);
+  border-radius: 4px;
+}
+:global(.ds-modal) :global(.ant-modal-body::-webkit-scrollbar-track) {
+  background: transparent;
+}

@@ -1,0 +1,300 @@
+/*
+  Estilos do Sidebar. Valores extraídos AO VIVO do Figma
+  `Componentes > Sidebar` (4080:13321) e mapeados aos tokens do DS.
+
+  Onde o Figma usa raios/paddings fora da escala de tokens (5px no item,
+  6px no item colapsado, 2px e 7px no group label) os valores literais são
+  mantidos para fidelidade pixel-a-pixel — não há token equivalente.
+
+  Estados dos itens conforme a matriz do Figma: apenas `default`, `focus`
+  (anel `--shadow-focus`) e `active` (fundo `neutral/100`). Não há `hover`
+  para itens de menu — só o `.sidebar mini button` reage ao hover.
+
+  Sem `font-family` própria — herda do body global (Inter via global.css).
+*/
+
+/* ============================================
+   CONTAINER (<aside>) — sidebar (4080:14598)
+   Expandido 240px / colapsado 72px, py8 px16, bg neutral/50.
+   ============================================ */
+:global(.ds-sidebar) {
+  display: flex;
+  flex-direction: column;
+  width: 240px;
+  padding: var(--spacing-2) var(--spacing-4);
+  background-color: var(--color-neutral-50);
+  border-right: 1px solid var(--color-border-regular);
+  box-sizing: border-box;
+  overflow: hidden;
+  transition: width 200ms ease-in-out;
+}
+
+:global(.ds-sidebar--collapsed) {
+  width: 72px;
+  align-items: center;
+}
+
+:global(.ds-sidebar__list) {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+:global(.ds-sidebar--collapsed) :global(.ds-sidebar__list) {
+  align-items: center;
+  width: auto;
+}
+
+/* ============================================
+   ITEM 1º NÍVEL — sidebar item / expanded / 1st level (4080:10122)
+   h32, py4 px12, radius 5px, font body/02 (13), cor text/dark.
+   ============================================ */
+:global(.ds-sidebar-item__wrapper) {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+:global(.ds-sidebar-item) {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 32px;
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: 5px;
+  background: transparent;
+  border: none;
+  font-size: var(--font-body-2-size);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height);
+  color: var(--color-text-dark);
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  outline: none;
+  box-sizing: border-box;
+  transition: box-shadow 120ms ease-in-out;
+}
+
+:global(.ds-sidebar-item):focus-visible {
+  box-shadow: var(--shadow-focus);
+}
+
+:global(.ds-sidebar-item--active) {
+  background-color: var(--color-neutral-100);
+}
+
+/* Colapsado — sidebar item / collapsed (4080:10111): 40x36, radius 6px. */
+:global(.ds-sidebar-item--collapsed) {
+  width: 40px;
+  height: 36px;
+  justify-content: center;
+  padding: var(--spacing-1) var(--spacing-3);
+  border-radius: 6px;
+}
+
+/* Área de conteúdo (AL): ícone + label, ocupa o espaço restante. */
+:global(.ds-sidebar-item__content) {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  gap: var(--spacing-2);
+  min-width: 0;
+}
+
+:global(.ds-sidebar-item__icon) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: currentColor;
+}
+
+:global(.ds-sidebar-item__label) {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Badge — pill transparente, texto text/dark 13px, min-h 24, py4 px8, radius xl. */
+:global(.ds-sidebar-item__badge) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-1);
+  min-height: 24px;
+  padding: var(--spacing-1) var(--spacing-2);
+  border-radius: var(--radius-xl);
+  background: transparent;
+  color: var(--color-text-dark);
+  font-size: var(--font-body-2-size);
+  line-height: var(--font-line-height);
+  flex-shrink: 0;
+}
+
+/* Chevron de submenu — "Right icon" (bare), cor currentColor. */
+:global(.ds-sidebar-item__chevron) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: currentColor;
+}
+
+/* ============================================
+   SUBMENU 2º NÍVEL — sidebar Item / expanded / 2nd level (4080:10277)
+   h32, py4 px8, guia vertical (leaf) à esquerda.
+   ============================================ */
+:global(.ds-sidebar-item__submenu) {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+:global(.ds-sidebar-subitem__wrapper) {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 100%;
+}
+
+:global(.ds-sidebar-subitem) {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: 32px;
+  padding: var(--spacing-1) var(--spacing-2);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: none;
+  outline: none;
+  box-sizing: border-box;
+}
+
+/* leaf — guia vertical (divider 1px, border/regular) que conecta os subitens. */
+:global(.ds-sidebar-subitem__leaf) {
+  position: relative;
+  flex-shrink: 0;
+  width: 20px;
+  height: 20px;
+}
+
+:global(.ds-sidebar-subitem__leaf)::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: -6px;
+  width: 1px;
+  height: 32px;
+  background-color: var(--color-border-regular);
+  transform: translateX(-50%);
+}
+
+:global(.ds-sidebar-subitem__content) {
+  display: flex;
+  flex: 1 1 0;
+  align-items: center;
+  gap: var(--spacing-2);
+  min-width: 0;
+  padding: var(--spacing-1);
+  border-radius: 5px;
+  box-sizing: border-box;
+}
+
+:global(.ds-sidebar-subitem--active) {
+  padding-right: 0;
+}
+
+:global(.ds-sidebar-subitem--active) :global(.ds-sidebar-subitem__content) {
+  background-color: var(--color-neutral-100);
+}
+
+:global(.ds-sidebar-subitem):focus-visible :global(.ds-sidebar-subitem__content) {
+  box-shadow: var(--shadow-focus);
+}
+
+:global(.ds-sidebar-subitem__icon) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: currentColor;
+}
+
+:global(.ds-sidebar-subitem__label) {
+  flex: 1 1 auto;
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: var(--font-body-2-size);
+  line-height: var(--font-line-height);
+  color: var(--color-text-dark);
+}
+
+/* ============================================
+   GROUP LABEL — sidebar group label (4080:10290)
+   py7 px12, radius 2px, texto caption (10) bold, cor text/soft.
+   ============================================ */
+:global(.ds-sidebar-group-label) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: 7px var(--spacing-3);
+  border-radius: 2px;
+  box-sizing: border-box;
+  list-style: none;
+  margin: 0;
+}
+
+:global(.ds-sidebar-group-label__text) {
+  font-size: var(--font-caption-size);
+  font-weight: 700;
+  line-height: var(--font-line-height);
+  color: var(--color-text-soft);
+  white-space: nowrap;
+}
+
+/* ============================================
+   MINI BUTTON — .sidebar mini button (4080:10304)
+   16x16, ícone 14px; hover & active → fundo neutral/200 circular.
+   ============================================ */
+:global(.ds-sidebar-mini-button) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 16px;
+  height: 16px;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: currentColor;
+  border-radius: var(--radius-full);
+  cursor: pointer;
+  outline: none;
+  flex-shrink: 0;
+  transition: background-color 120ms ease-in-out;
+}
+
+:global(.ds-sidebar-mini-button):hover,
+:global(.ds-sidebar-mini-button):active {
+  background-color: var(--color-neutral-200);
+}
+
+:global(.ds-sidebar-mini-button):focus-visible {
+  box-shadow: var(--shadow-focus);
+}

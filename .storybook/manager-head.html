@@ -1,0 +1,579 @@
+<!--
+  Tradução pt-BR do manager do Storybook 10.
+
+  Storybook 10 não tem i18n oficial. Aplicamos duas técnicas:
+
+  1. CSS — esconde elementos com texto em inglês que abrem MDX/diálogos longos.
+  2. JS (MutationObserver throttled) — traduz textos e atributos visíveis.
+
+  IMPORTANTE: o dicionário não cobre todos os ~1500 strings do Storybook;
+  cobre os mais visíveis. Strings raras (erros técnicos, descrições do
+  axe-core/a11y rules, conteúdo do "Guia"/"Novidades") ficam em inglês ou são
+  escondidas via CSS.
+-->
+<style>
+  /* Onboarding (sidebar + página) */
+  [data-testid="whats-new-button"],
+  [class*="OnboardingBox"],
+  button[aria-label^="Open onboarding guide"],
+  button[aria-label^="Abrir guia de onboarding"],
+  button[aria-label^="Expand onboarding guide"],
+  button[aria-label^="Expandir guia de onboarding"],
+  button[aria-label^="Become an expert"],
+  button[aria-label^="Vire especialista"],
+  button[aria-label^="Set up with AI"],
+  button[aria-label^="Configurar com IA"],
+  button[aria-label$="% completed"],
+  button[aria-label$="% concluído"] {
+    display: none !important;
+  }
+
+  /* Settings cog (top-right) — leva a páginas com MDX em inglês */
+  button[role="switch"][aria-label="Settings"],
+  button[role="switch"][aria-label="Configurações"],
+  button[title="Settings"][role="switch"],
+  button[title="Configurações"][role="switch"] {
+    display: none !important;
+  }
+
+  /* "+" / Create new story — abre dialog com MDX em inglês */
+  button[aria-label="Create a new story"],
+  button[aria-label="Criar nova story"],
+  button[aria-label="Add a new story"],
+  button[aria-label="Adicionar nova story"] {
+    display: none !important;
+  }
+
+  /* Tabs "Guia" e "Novidades" do painel de settings */
+  [role="tab"][data-key="guide"],
+  [role="tab"][data-key="whats-new"],
+  a[href*="/settings/guide"],
+  a[href*="/settings/whats-new"] {
+    display: none !important;
+  }
+
+  /* Botão "Share" / "Publish" do Chromatic */
+  button[aria-label*="Share your Storybook"],
+  button[aria-label*="Publish your Storybook"] {
+    display: none !important;
+  }
+
+  /* Logo do brandImage no cabeçalho da sidebar — sobrescreve o
+     max-width:150px padrão do Storybook pra preservar o aspect-ratio. */
+  .sidebar-header img {
+    display: block;
+    max-height: 36px;
+    max-width: none !important;
+    width: auto !important;
+  }
+  /* Centraliza a logo. O Storybook usa 3 flex containers aninhados na
+     sidebar-header (header > div > a > img), todos precisam justify-content
+     center pra a imagem ficar no meio. */
+  .sidebar-header,
+  .sidebar-header > div,
+  .sidebar-header > div > a {
+    justify-content: center !important;
+  }
+</style>
+<script>
+  (function () {
+    "use strict";
+
+    /*
+     * Dicionários de tradução.
+     * - DICT_TEXT: text nodes (evita palavras únicas que coincidem com nomes
+     *   de componente como Code, Outline, Loading, Tag, Card, Button, etc.).
+     * - DICT_ATTR: title/aria-label/placeholder/alt (pode incluir colidentes).
+     */
+    var DICT_TEXT = {
+      // Filtros / tags / seleção
+      "Select all": "Selecionar tudo",
+      "Deselect all": "Desmarcar tudo",
+      "Exclude": "Excluir",
+      "Include": "Incluir",
+      "Exclude built-in: Documentation": "Excluir nativo: Documentação",
+      "Exclude built-in: Stories": "Excluir nativo: Stories",
+      "Exclude built-in:": "Excluir nativo:",
+      "New": "Novos",
+      "Modified": "Modificados",
+      "Related": "Relacionados",
+      "Learn how to add tags": "Aprenda como adicionar tags",
+      "No stories found": "Nenhuma story encontrada",
+      "Your selected filters did not match any stories.": "Os filtros selecionados não corresponderam a nenhuma story.",
+      "Reset filters": "Resetar filtros",
+      // Estados de teste
+      "Watch mode unavailable while running": "Modo observador indisponível enquanto roda",
+      "Testing in progress": "Testes em andamento",
+      "Running": "Rodando",
+      "Component tests didn’t complete": "Os testes do componente não foram concluídos",
+      "Component tests didn't complete": "Os testes do componente não foram concluídos",
+      "View full error": "Ver erro completo",
+      "Error details": "Detalhes do erro",
+      "Storybook Test Error Details": "Detalhes do erro de teste do Storybook",
+      "This addon has errors": "Este addon tem erros",
+      "Testing widget": "Widget de testes",
+      "Start a test run": "Iniciar uma rodada de testes",
+      // Toolbar (toggles)
+      "Toggle grid visibility": "Alternar visibilidade da grade",
+      "Change background": "Mudar fundo",
+      "Toggle background": "Alternar fundo",
+      "Toggle outline": "Alternar contorno",
+      "Restore viewport": "Restaurar viewport",
+      "Rotate viewport": "Girar viewport",
+      // Navegação
+      "Previous story": "Story anterior",
+      "Next story": "Próxima story",
+      "Previous component": "Componente anterior",
+      "Next component": "Próximo componente",
+      "Storybook menu": "Menu do Storybook",
+      "Open navigation menu": "Abrir menu de navegação",
+      "Onboarding guide": "Guia de onboarding",
+      "Onboarding guide menu": "Menu do guia de onboarding",
+      "Open in new tab": "Abrir em nova aba",
+      "Open addon panel": "Abrir painel de addons",
+      // Zoom
+      "Zoom percentage": "Porcentagem de zoom",
+      "Zoom to 100%": "Zoom para 100%",
+      "Zoom to 200%": "Zoom para 200%",
+      "Zoom to 50%": "Zoom para 50%",
+      // Outros
+      "Extra actions": "Ações extras",
+      "Context menu": "Menu de contexto",
+      "Composed Storybook status": "Status do Storybook composto",
+      "Required": "Obrigatório",
+      "Locked": "Bloqueado",
+      "Version": "Versão",
+      "Menu": "Menu",
+      "Close": "Fechar",
+      "Play": "Tocar",
+      "Arg value details": "Detalhes do valor do arg",
+      "Test all frames": "Testar todos os frames",
+      "Storybook add-ons": "Addons do Storybook",
+      // Sidebar / busca
+      "Find components": "Buscar componentes",
+      "Components": "Componentes",
+      "Docs": "Documentação",
+      "Default": "Padrão",
+      "Tag filters": "Filtros de tag",
+      "Run tests": "Rodar testes",
+      "Run component tests": "Rodar testes do componente",
+      "Run tests to see results": "Rode os testes para ver os resultados",
+      "Run tests to see accessibility results": "Rode os testes para ver os resultados de acessibilidade",
+      "Watch mode": "Modo observador",
+      "Start test run": "Iniciar rodada de testes",
+      "Stop test run": "Parar rodada de testes",
+      "Tag filters": "Filtros de tag",
+      "Create a new story": "Criar nova story",
+      "Add a new story": "Adicionar nova story",
+      "Dismiss notification": "Dispensar notificação",
+      // Onboarding
+      "Become an expert": "Vire especialista",
+      "Set up with AI": "Configurar com IA",
+      "Group your components": "Agrupe seus componentes",
+      "Automatically document your components": "Documente seus componentes automaticamente",
+      "Storybook basics": "Básico do Storybook",
+      "Development": "Desenvolvimento",
+      "Share": "Compartilhar",
+      "Testing": "Testes",
+      "Document": "Documentar",
+      "Render your first component": "Renderize seu primeiro componente",
+      "Test your components": "Teste seus componentes",
+      "Add 5 components": "Adicione 5 componentes",
+      "Add 20 stories": "Adicione 20 stories",
+      "We will create a new story for your component": "Vamos criar uma nova story para o seu componente",
+      "We could not select the new story. Please try again.": "Não foi possível selecionar a nova story. Tente novamente.",
+      "Awesome": "Excelente",
+      "Skip": "Pular",
+      "Skipped": "Pulado",
+      "Undo": "Desfazer",
+      "Don't want to see this in the sidebar?": "Não quer ver isso na barra lateral?",
+      "Remove from sidebar": "Remover da barra lateral",
+      // Tabs do addon panel
+      "Controls": "Controles",
+      "Actions": "Ações",
+      "Interactions": "Interações",
+      "Accessibility": "Acessibilidade",
+      "Visual tests": "Testes visuais",
+      // Toolbar canvas
+      "Reset zoom": "Resetar zoom",
+      "Zoom in": "Ampliar",
+      "Zoom out": "Reduzir",
+      "Reset viewport": "Resetar viewport",
+      "Reset background": "Resetar fundo",
+      "Reset grid": "Resetar grade",
+      "Reset outline": "Resetar contorno",
+      "Mobile": "Celular",
+      "Backgrounds": "Fundos",
+      "Viewport": "Viewport",
+      "Measure": "Medir",
+      // Toggle / show / hide
+      "Show sidebar": "Mostrar barra lateral",
+      "Hide sidebar": "Esconder barra lateral",
+      "Show toolbar": "Mostrar barra de ferramentas",
+      "Hide toolbar": "Esconder barra de ferramentas",
+      "Toggle sidebar": "Alternar barra lateral",
+      "Toggle toolbar": "Alternar barra de ferramentas",
+      "Toggle addons": "Alternar addons",
+      "Toggle addons orientation": "Alternar orientação dos addons",
+      "Show addons panel": "Mostrar painel de addons",
+      "Show addon panel": "Mostrar painel de addons",
+      "Hide addon panel": "Esconder painel de addons",
+      "Close addon panel": "Fechar painel de addons",
+      // Test panel
+      "Not run": "Não executado",
+      "Pass": "Aprovado",
+      "Passes": "Aprovados",
+      "Fail": "Falhou",
+      "Inconclusive": "Inconclusivo",
+      "Violations": "Violações",
+      "Rerun": "Rodar novamente",
+      "Rerun accessibility scan": "Rodar análise de acessibilidade novamente",
+      "Run accessibility scan": "Rodar análise de acessibilidade",
+      "Accessibility scan in progress": "Análise de acessibilidade em andamento",
+      "Preparing accessibility scan": "Preparando análise de acessibilidade",
+      "Component tests": "Testes de componente",
+      "Component test completed successfully.": "Teste do componente concluído com sucesso.",
+      "Component test is rendering.": "Renderizando o teste do componente.",
+      "Component test playback controls": "Controles de reprodução do teste",
+      "No accessibility violations found.": "Nenhuma violação de acessibilidade encontrada.",
+      "No passing accessibility checks found.": "Nenhuma verificação de acessibilidade aprovada encontrada.",
+      "No inconclusive accessibility checks found.": "Nenhuma verificação de acessibilidade inconclusiva encontrada.",
+      "Coverage": "Cobertura",
+      "Coverage unavailable, run tests first": "Cobertura indisponível, rode os testes primeiro",
+      "Expand all results": "Expandir todos os resultados",
+      "Collapse all results": "Recolher todos os resultados",
+      "Highlight elements with accessibility test results": "Destacar elementos com resultados dos testes de acessibilidade",
+      "Hide accessibility test result highlights": "Esconder destaques dos resultados dos testes de acessibilidade",
+      "Vision filter": "Filtro de visão",
+      "Change vision filter": "Mudar filtro de visão",
+      "Reset color filter": "Resetar filtro de cor",
+      "Interaction steps": "Passos de interação",
+      "Reload story": "Recarregar story",
+      "Watching for changes": "Aguardando alterações",
+      "Interactions allow you to verify the functional aspects of UIs. Write a play function for your story and you'll see it run here.":
+        "As interações permitem verificar os aspectos funcionais da UI. Escreva uma função play para a sua story e ela vai aparecer rodando aqui.",
+      "Args table with interactive controls couldn't be auto-generated":
+        "Tabela de args com controles interativos não pôde ser gerada automaticamente",
+      "Args unsupported. See Args documentation for your framework.":
+        "Args não suportado. Veja a documentação de Args para o seu framework.",
+      // Settings
+      "About": "Sobre",
+      "About Storybook": "Sobre o Storybook",
+      "About your Storybook": "Sobre o seu Storybook",
+      "Guide": "Guia",
+      "Keyboard shortcuts": "Atalhos de teclado",
+      "What's new?": "Novidades",
+      "What's new": "Novidades",
+      "Close settings page": "Fechar configurações",
+      "Choose version": "Escolher versão",
+      "Documentation": "Documentação",
+      // Connection
+      "Connection lost": "Conexão perdida",
+      "Server timed out": "Tempo limite do servidor esgotado",
+      "Please restart your Storybook server and reload the page": "Reinicie o seu servidor Storybook e recarregue a página",
+      "Reload the page": "Recarregar a página",
+      "Reload": "Recarregar",
+      // Geral
+      "Copy": "Copiar",
+      "Copied!": "Copiado!",
+      "Copy code": "Copiar código",
+      "Copy prompt": "Copiar prompt",
+      "Copy link": "Copiar link",
+      "Show code": "Mostrar código",
+      "Hide code": "Esconder código",
+      "Clear": "Limpar",
+      "Clear filters": "Limpar filtros",
+      "Clear search": "Limpar busca",
+      "Cancel": "Cancelar",
+      "Confirm": "Confirmar",
+      "Search": "Buscar",
+      "Loading...": "Carregando...",
+      "Pseudo States": "Estados pseudo",
+      "CSS pseudo states": "Estados pseudo CSS",
+      "Hide Pseudo States items": "Esconder itens dos estados pseudo",
+      "Show Pseudo States items": "Mostrar itens dos estados pseudo",
+      "Addon panel": "Painel de addons",
+      "Main preview area": "Área principal do preview",
+      "Available addons": "Addons disponíveis",
+      "Collapse onboarding guide": "Recolher guia de onboarding",
+      "Expand testing module": "Expandir módulo de testes",
+      "Collapse testing module": "Recolher módulo de testes",
+      "Search for components": "Buscar componentes",
+      "Scroll to end": "Rolar até o fim",
+      "Story status: Pass": "Status da story: Aprovado",
+      "Story status: Fail": "Status da story: Falhou",
+      "Story status: Pending": "Status da story: Pendente",
+      "Story status: Skipped": "Status da story: Pulado",
+      "Filter sidebar items by tag": "Filtrar itens da barra lateral por tag",
+      "Pass": "Aprovado",
+      "Fail": "Falhou",
+      "Pending": "Pendente",
+      // Tooltips do react-aria que aparecem em <div role="tooltip">
+      // NÃO incluir "Collapse" e "Expand" sozinhos — colidem com nomes de componente
+      // do design system (Collapse). Eles continuam só em DICT_ATTR.
+      "Expand all": "Expandir tudo",
+      "Collapse all": "Recolher tudo",
+      "Settings": "Configurações",
+      "Open onboarding guide": "Abrir guia de onboarding",
+      "Expand onboarding guide": "Expandir guia de onboarding",
+      "Collapse onboarding guide": "Recolher guia de onboarding",
+      "Open in editor": "Abrir no editor",
+      "Open in isolation mode": "Abrir em modo isolado",
+      "Open in new tab": "Abrir em nova aba",
+      "Open canvas in new tab": "Abrir canvas em nova aba",
+      "Open context menu": "Abrir menu de contexto",
+      "Open addon panel": "Abrir painel de addons",
+      "Close addon panel": "Fechar painel de addons",
+      "Hide addon panel": "Esconder painel de addons",
+      "Move addon panel to right": "Mover painel para a direita",
+      "Move addon panel to bottom": "Mover painel para baixo",
+      "Change zoom level": "Alterar nível de zoom",
+      "Grid visibility": "Visibilidade da grade",
+      "Preview background": "Fundo do preview",
+      "Outline tool": "Ferramenta de contorno",
+      "Measure tool": "Ferramenta de medição",
+      "Viewport size": "Tamanho da viewport",
+      "Reset zoom": "Resetar zoom",
+      "Zoom in": "Ampliar",
+      "Zoom out": "Reduzir",
+      "Enter full screen": "Tela cheia",
+      "Exit full screen": "Sair de tela cheia",
+      "Reload story": "Recarregar story",
+      "Rerun accessibility scan": "Rodar análise de acessibilidade novamente",
+      "Highlight elements with accessibility test results": "Destacar elementos com resultados dos testes de acessibilidade",
+      "Show notifications": "Mostrar notificações",
+      "Hide notifications": "Esconder notificações",
+      "Toggle sidebar": "Alternar barra lateral",
+      "Show sidebar": "Mostrar barra lateral",
+      "Hide sidebar": "Esconder barra lateral",
+      "Show toolbar": "Mostrar barra de ferramentas",
+      "Hide toolbar": "Esconder barra de ferramentas",
+      "Toggle toolbar": "Alternar barra de ferramentas",
+      "Filter": "Filtrar",
+      "Sidebar resize handle": "Alça da barra lateral",
+      "Addon panel resize handle": "Alça do painel de addons",
+      "Changes the location of the addon panel to the bottom or right of the screen, but does not have any effect on its content.":
+        "Muda a posição do painel de addons para a parte de baixo ou direita da tela, sem afetar seu conteúdo.",
+      "Filter the items shown in a sidebar based on the tags applied to them.":
+        "Filtra os itens exibidos na barra lateral com base nas tags aplicadas.",
+      "Filter sidebar items by tag": "Filtrar itens da barra lateral por tag",
+      "completed": "concluído",
+      "Read docs": "Ler documentação",
+      "Read the docs": "Ler a documentação",
+      "Edit string...": "Editar texto...",
+      "Set boolean": "Definir booleano",
+      "Set color": "Definir cor",
+      "Set object": "Definir objeto",
+      "Set array": "Definir array",
+      "Set number": "Definir número",
+      "Set string": "Definir texto",
+      "Set date": "Definir data",
+      "Reset controls": "Resetar controles",
+      "Choose option...": "Escolha uma opção...",
+      "Open in editor": "Abrir no editor",
+      "Open in isolation mode": "Abrir em modo isolado",
+      "Open canvas in new tab": "Abrir canvas em nova aba",
+      "Go full screen": "Tela cheia",
+      "Exit full screen": "Sair de tela cheia",
+      "Enter full screen": "Tela cheia",
+      "Skip to canvas": "Pular para o canvas",
+      "Skip to content": "Pular para o conteúdo",
+      "Skip to sidebar": "Pular para a barra lateral",
+      "Go back": "Voltar",
+      "Go forward": "Avançar",
+      "Go to end": "Ir para o fim",
+      "Go to start": "Ir para o início",
+    };
+
+    var DICT_ATTR = Object.assign({}, DICT_TEXT, {
+      "Settings": "Configurações",
+      "Collapse": "Recolher",
+      "Expand all": "Expandir tudo",
+      "Open onboarding guide": "Abrir guia de onboarding",
+      "Expand onboarding guide": "Expandir guia de onboarding",
+      "Expand testing module": "Expandir módulo de testes",
+      "Collapse testing module": "Recolher módulo de testes",
+      "Name": "Nome",
+      "Control": "Controle",
+      "Description": "Descrição",
+      "Code": "Código",
+      "Filter": "Filtrar",
+      "Show": "Mostrar",
+      "Hide": "Esconder",
+      "Outline": "Contorno",
+      "Loading": "Carregando",
+      "Outline tool": "Ferramenta de contorno",
+      "Measure tool": "Ferramenta de medição",
+      "Grid visibility": "Visibilidade da grade",
+      "Preview background": "Fundo do preview",
+      "Viewport size": "Tamanho da viewport",
+      "Addon panel": "Painel de addons",
+      "Addon panel resize handle": "Alça do painel de addons",
+      "Available addons": "Addons disponíveis",
+      "Change zoom level": "Alterar nível de zoom",
+      "Hide addon panel": "Esconder painel de addons",
+      "Move addon panel to right": "Mover painel de addons para a direita",
+      "Move addon panel to bottom": "Mover painel de addons para baixo",
+      "Open context menu": "Abrir menu de contexto",
+      "Main preview area": "Área principal do preview",
+      "Sidebar resize handle": "Alça da barra lateral",
+      "Search box": "Caixa de busca",
+      "Search for components": "Buscar componentes",
+    });
+
+    /* DICT_TEXT_SCOPED — só dentro de containers seguros (tabs/headers). */
+    var DICT_TEXT_SCOPED = {
+      Code: "Código",
+      Name: "Nome",
+      Control: "Controle",
+      Description: "Descrição",
+    };
+
+    var ATTRS = ["title", "aria-label", "placeholder", "alt"];
+
+    function isInScopedContainer(node) {
+      var el = node.nodeType === Node.ELEMENT_NODE ? node : node.parentElement;
+      var depth = 0;
+      while (el && el !== document.body && depth < 10) {
+        if (
+          el.getAttribute
+          && (el.getAttribute("role") === "tab" || el.getAttribute("role") === "columnheader" || el.tagName === "TH")
+        ) {
+          return true;
+        }
+        el = el.parentElement;
+        depth++;
+      }
+      return false;
+    }
+
+    function translateTextNode(node) {
+      if (node.nodeType !== Node.TEXT_NODE) return;
+      var raw = node.nodeValue || "";
+      var trimmed = raw.trim();
+      if (!trimmed) return;
+
+      var translated = DICT_TEXT[trimmed];
+      if (translated) {
+        node.nodeValue = raw.replace(trimmed, translated);
+        return;
+      }
+
+      var m = trimmed.match(/^(\d+)% completed$/);
+      if (m) {
+        node.nodeValue = raw.replace(trimmed, m[1] + "% concluído");
+        return;
+      }
+      var m2 = trimmed.match(/^Open onboarding guide for (.+)$/);
+      if (m2) {
+        var rest = DICT_TEXT[m2[1]] || m2[1];
+        node.nodeValue = raw.replace(trimmed, "Abrir guia de onboarding para " + rest);
+        return;
+      }
+
+      if (DICT_TEXT_SCOPED[trimmed] && isInScopedContainer(node)) {
+        node.nodeValue = raw.replace(trimmed, DICT_TEXT_SCOPED[trimmed]);
+      }
+    }
+
+    function translateAttrs(el) {
+      if (!el || el.nodeType !== Node.ELEMENT_NODE || !el.getAttribute) return;
+      for (var i = 0; i < ATTRS.length; i++) {
+        var attr = ATTRS[i];
+        var v = el.getAttribute(attr);
+        if (!v) continue;
+        var t = DICT_ATTR[v];
+        if (t) {
+          el.setAttribute(attr, t);
+          continue;
+        }
+        var m = v.match(/^Open onboarding guide for (.+)$/);
+        if (m) {
+          var rest = DICT_ATTR[m[1]] || m[1];
+          el.setAttribute(attr, "Abrir guia de onboarding para " + rest);
+        }
+      }
+    }
+
+    function walkText(root) {
+      var iter = document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+      var n;
+      while ((n = iter.nextNode())) translateTextNode(n);
+    }
+
+    function walkAttrs(root) {
+      if (root.nodeType === Node.ELEMENT_NODE) translateAttrs(root);
+      if (!root.querySelectorAll) return;
+      root.querySelectorAll("[title],[aria-label],[placeholder],[alt]").forEach(translateAttrs);
+    }
+
+    function killOnboardingContainer() {
+      var sel =
+        'button[aria-label^="Abrir guia de onboarding"],'
+        + 'button[aria-label^="Open onboarding guide"],'
+        + 'button[aria-label^="Become an expert"],'
+        + 'button[aria-label^="Vire especialista"]';
+      document.querySelectorAll(sel).forEach(function (btn) {
+        var cur = btn;
+        for (var i = 0; i < 6 && cur && cur.parentElement; i++) cur = cur.parentElement;
+        if (cur && cur !== document.body && cur.style.display !== "none") {
+          cur.style.display = "none";
+        }
+      });
+    }
+
+    /* Throttle: agrupa mutations em rajadas de 50ms. */
+    var pending = new Set();
+    var scheduled = false;
+    function flush() {
+      scheduled = false;
+      pending.forEach(function (node) {
+        if (!node || !node.isConnected) return;
+        if (node.nodeType === Node.TEXT_NODE) translateTextNode(node);
+        else if (node.nodeType === Node.ELEMENT_NODE) {
+          translateAttrs(node);
+          walkText(node);
+          walkAttrs(node);
+        }
+      });
+      pending.clear();
+      killOnboardingContainer();
+    }
+    function schedule(node) {
+      pending.add(node);
+      if (!scheduled) {
+        scheduled = true;
+        setTimeout(flush, 50);
+      }
+    }
+
+    function init() {
+      walkText(document.body);
+      walkAttrs(document.body);
+      killOnboardingContainer();
+
+      var obs = new MutationObserver(function (mutations) {
+        for (var i = 0; i < mutations.length; i++) {
+          var m = mutations[i];
+          for (var j = 0; j < m.addedNodes.length; j++) schedule(m.addedNodes[j]);
+          if (m.type === "attributes" && m.target) schedule(m.target);
+          if (m.type === "characterData" && m.target) schedule(m.target);
+        }
+      });
+
+      obs.observe(document.body, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+        attributes: true,
+        attributeFilter: ATTRS,
+      });
+    }
+
+    if (document.readyState === "loading") {
+      document.addEventListener("DOMContentLoaded", init);
+    } else {
+      init();
+    }
+  })();
+</script>

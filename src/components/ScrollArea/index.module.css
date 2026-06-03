@@ -1,0 +1,58 @@
+/*
+  Estilos do ScrollArea. Container que estiliza a scrollbar nativa para
+  visual consistente entre navegadores (WebKit/Blink + Firefox), mantendo
+  o comportamento padrão de rolagem e a navegação por teclado.
+
+  Fonte: dump figma/components/scroll-area/design-context-4080-20706.md.
+  - Container: bg neutral/50 (#fafafa), border border/regular (#d4d4d4),
+    rounded-5 (5px — valor explícito do dump, não há token de 5px na
+    foundation).
+  - Scrollbar thumb: bg neutral/300 (#d4d4d4), rounded-5, espessura 8px
+    (w-8 no eixo vertical, h-8 no eixo horizontal).
+  - Track: transparent (não há cor declarada no dump).
+
+  Seletores em :global porque o bundle é consumido por apps Next.js (App
+  Router) — manter classes simples e globais evita hashes que mudam entre
+  builds. Pseudo-elementos `::-webkit-scrollbar*` cobrem Chrome/Edge/Safari;
+  `scrollbar-width` + `scrollbar-color` cobrem Firefox.
+*/
+
+:global(.ds-scroll-area) {
+  overflow: auto;
+  background: var(--color-neutral-50);
+  border: 1px solid var(--color-border-regular);
+  border-radius: 5px;
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-neutral-300) transparent;
+}
+
+:global(.ds-scroll-area--vertical) {
+  overflow-x: hidden;
+}
+
+:global(.ds-scroll-area--horizontal) {
+  overflow-y: hidden;
+}
+
+:global(.ds-scroll-area::-webkit-scrollbar) {
+  width: 8px;
+  height: 8px;
+}
+
+:global(.ds-scroll-area::-webkit-scrollbar-track) {
+  background: transparent;
+}
+
+:global(.ds-scroll-area::-webkit-scrollbar-thumb) {
+  background: var(--color-neutral-300);
+  border-radius: 5px;
+}
+
+:global(.ds-scroll-area::-webkit-scrollbar-thumb:hover) {
+  background: var(--color-neutral-500);
+}
+
+:global(.ds-scroll-area:focus-visible) {
+  outline: 2px solid var(--color-neutral-500);
+  outline-offset: 2px;
+}

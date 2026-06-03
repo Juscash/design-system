@@ -1,0 +1,107 @@
+{
+  "$comment": "Arquivo de configuração do agente de revisão de código. Coloque na raiz do repositório.",
+
+  "general": {
+    "naming_convention": "camelCase",
+    "comment_language": "pt-BR",
+    "require_comments_on_public_functions": true,
+    "require_env_sync": true,
+    "env_example_file": ".env.example",
+    "max_file_lines": 300,
+    "max_function_lines": 50
+  },
+
+  "rules": {
+    "naming": {
+      "enabled": true,
+      "severity": "warning",
+      "convention": "camelCase",
+      "exceptions": {
+        "constants": "UPPER_SNAKE_CASE",
+        "types_interfaces": "PascalCase",
+        "components": "PascalCase",
+        "files": {
+          "components": "PascalCase",
+          "hooks": "camelCase",
+          "services": "camelCase",
+          "utils": "camelCase",
+          "types": "camelCase"
+        }
+      }
+    },
+
+    "comments_docstrings": {
+      "enabled": true,
+      "severity": "info",
+      "require_jsdoc_on_exported_functions": true,
+      "require_jsdoc_on_complex_functions": true,
+      "flag_todo_without_ticket": true,
+      "flag_commented_out_code": true
+    },
+
+    "env_variables": {
+      "enabled": true,
+      "severity": "error",
+      "check_env_example_sync": true,
+      "flag_hardcoded_secrets": true,
+      "secret_patterns": ["password", "secret", "api_key", "token", "auth", "private_key"]
+    },
+
+    "typescript": {
+      "enabled": true,
+      "severity": "warning",
+      "disallow_any": true,
+      "require_return_types": true,
+      "types_in_separate_file": true,
+      "types_file_patterns": ["*.types.ts", "*.d.ts", "types/", "interfaces/"]
+    },
+
+    "architecture": {
+      "enabled": true,
+      "severity": "warning",
+      "type": "auto-detect",
+
+      "frontend": {
+        "detect_by": ["components/", "pages/", "next.config", "vite.config"],
+        "rules": {
+          "one_component_per_file": true,
+          "no_business_logic_in_components": true,
+          "hooks_in_separate_files": true,
+          "hooks_prefix": "use",
+          "max_props": 8
+        }
+      }
+    },
+
+    "code_quality": {
+      "enabled": true,
+      "severity": "warning",
+      "no_console_log_in_production": true,
+      "no_debugger": true,
+      "no_magic_numbers": true,
+      "magic_number_exceptions": [-1, 0, 1, 2, 100, 1000],
+      "max_cyclomatic_complexity": 10,
+      "no_nested_ternary": true,
+      "max_params_per_function": 4
+    }
+  },
+
+  "ignore": {
+    "files": [
+      "*.test.ts",
+      "*.spec.ts",
+      "*.test.tsx",
+      "*.spec.tsx",
+      "**/__tests__/**",
+      "**/migrations/**",
+      "**/generated/**",
+      "**/dist/**",
+      "**/build/**",
+      "**/.next/**",
+      "**/node_modules/**",
+      "package-lock.json",
+      "yarn.lock",
+      "*.lock"
+    ]
+  }
+}

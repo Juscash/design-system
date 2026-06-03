@@ -1,0 +1,95 @@
+/*
+  Estilos próprios do Breadcrumb. Tokens alinhados ao Figma:
+  - Container: padding 0 12px (spacing/3), gap 8px, min-height 36px
+  - Texto não-atual: 13px Regular, text/soft (#6d6d6e)
+  - Texto atual (last item): 13px Bold, text/dark (#262626)
+  - Hover (link): underline + cor text/dark
+  - Focus: bg neutral/50 + border-radius 4 + shadow focus 3px neutral/300
+*/
+
+:global(.juscash-breadcrumb.ant-breadcrumb) {
+  padding: 0 var(--spacing-3, 12px);
+  min-height: 36px;
+  display: inline-flex;
+  align-items: center;
+  font-size: 13px;
+  line-height: 1.2;
+}
+
+:global(.juscash-breadcrumb.ant-breadcrumb) ol {
+  display: inline-flex;
+  align-items: center;
+  margin: 0;
+}
+
+:global(.juscash-breadcrumb.ant-breadcrumb) li {
+  display: inline-flex;
+  align-items: center;
+}
+
+/* Cor base dos itens (links e texto não-atual). */
+:global(.juscash-breadcrumb.ant-breadcrumb) :global(.ant-breadcrumb-link),
+:global(.juscash-breadcrumb.ant-breadcrumb) a {
+  color: var(--color-text-soft, #6d6d6e) !important;
+  font-size: 13px;
+  line-height: 1.2;
+  border-radius: var(--radius-md, 4px);
+  padding: 2px 4px;
+  transition: background 120ms ease-out;
+  /* Nunca usar sublinhado — em nenhum estado. */
+  text-decoration: none !important;
+}
+
+/* Hover em link — text/dark + sublinhado. */
+:global(.juscash-breadcrumb.ant-breadcrumb) a:hover {
+  color: var(--color-text-dark, #262626) !important;
+  background: transparent !important;
+  text-decoration: underline !important;
+}
+
+/* Focus visível em link — bg neutral/50 + outline focus 3px neutral/300. */
+:global(.juscash-breadcrumb.ant-breadcrumb) a:focus-visible {
+  background: var(--color-neutral-50, #fafafa);
+  outline: 3px solid var(--color-neutral-300, #d4d4d4);
+  outline-offset: 0;
+  text-decoration: none;
+}
+
+/* Item atual (último) — text/dark + Bold, sem hover ativo. */
+:global(.juscash-breadcrumb__item--current) {
+  font-weight: 700;
+  color: var(--color-text-dark, #262626);
+}
+
+/* Separador — ícone ChevronRight 16px com cor text/soft. */
+:global(.juscash-breadcrumb.ant-breadcrumb) :global(.ant-breadcrumb-separator) {
+  display: inline-flex !important;
+  align-items: center !important;
+  color: var(--color-text-soft, #6d6d6e) !important;
+  margin: 0 var(--spacing-1, 4px);
+}
+
+/* Botão ellipsis — abre dropdown com itens colapsados. */
+:global(.juscash-breadcrumb__ellipsis) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 0;
+  padding: 2px;
+  border-radius: var(--radius-md, 4px);
+  color: var(--color-text-soft, #6d6d6e);
+  cursor: pointer;
+  font: inherit;
+  line-height: 1;
+}
+
+:global(.juscash-breadcrumb__ellipsis:hover) {
+  color: var(--color-text-dark, #262626);
+}
+
+:global(.juscash-breadcrumb__ellipsis:focus-visible) {
+  background: var(--color-neutral-50, #fafafa);
+  outline: 3px solid var(--color-neutral-300, #d4d4d4);
+  outline-offset: 0;
+}

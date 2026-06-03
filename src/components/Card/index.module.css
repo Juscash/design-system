@@ -1,0 +1,37 @@
+/*
+  Estilos próprios do Card. A sombra default (shadow.xs) e a borda
+  (neutral/300) são aplicadas aqui — antes viviam em `theme/global.css`,
+  mas foram migrados para o módulo do componente (regra: estilos próprios
+  de um componente ficam no seu `index.module.css`).
+
+  Os estados interativos (`:hover`, `:focus-visible`) são ativados somente
+  quando o consumer passa `clickable={true}` — regra do design
+  (Figma 4069:6522): "Inclua o hover e focus apenas em cards clicáveis".
+
+  No estado de focus, o card usa `overflow: clip` para conter o ring de
+  3px (`shadow.focus`) dentro do `border-radius` — Figma 4069:6522 linha 36
+  ("overflow-clip shadow-[0px_0px_0px_3px_var(--color\/neutral\/300)]").
+
+  A especificidade combinada `.ds-card-clickable.ant-card` é suficiente
+  para vencer o token interno do antd sem precisar de `!important`.
+*/
+
+:global(.ant-card) {
+  box-shadow: var(--shadow-xs);
+  border: 1px solid var(--color-neutral-300);
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+:global(.ds-card-clickable.ant-card-hoverable:hover) {
+  box-shadow: var(--shadow-m);
+  border-color: var(--color-neutral-300);
+}
+
+:global(.ds-card-clickable.ant-card:focus-visible),
+:global(.ds-card-clickable.ant-card:focus) {
+  box-shadow: var(--shadow-focus);
+  border-color: var(--color-neutral-300);
+  outline: none;
+  overflow: clip;
+  transition: box-shadow 120ms ease-out;
+}

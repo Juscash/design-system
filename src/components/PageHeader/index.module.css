@@ -1,0 +1,93 @@
+/*
+  Estilos próprios do PageHeader. As classes vivem aqui (não em
+  `theme/global.css`) seguindo a regra do `CLAUDE.md`.
+
+  Convenção do projeto: `index.module.css` é processado pelo Vite (no
+  Storybook) e por um plugin esbuild em `tsup.config.ts` que remove o
+  wrapper `:global(...)` quando a lib é publicada. Por isso é seguro
+  declarar os seletores envoltos em `:global(...)` — em ambos os
+  ambientes o seletor interno é mantido global.
+
+  Classes:
+    - `.ds-page-header-card`         : raiz (passada ao Card).
+    - `.ds-page-header`              : wrapper interno do conteúdo.
+    - `.ds-page-header__title-area`  : coluna com título + descrição.
+    - `.ds-page-header__title`       : heading com tokens do DS.
+    - `.ds-page-header__description` : parágrafo de subtítulo.
+    - `.ds-page-header__actions`     : slot de ações.
+
+  Layout sempre responsivo: horizontal em telas ≥ 768 px e empilhado
+  (ações no topo) abaixo desse breakpoint. Não há variantes de layout.
+*/
+
+/*
+  Background do card raiz: usa `--color-neutral-50` (#fafafa) — a foundation
+  mais próxima de #ffffff disponível. Não há token sólido `#ffffff` no
+  design system; quando a UX adicionar um, basta trocar esta variável.
+*/
+:global(.ds-page-header-card.ant-card) {
+  background-color: var(--color-neutral-50);
+}
+
+:global(.ds-page-header-card.ant-card) :global(.ant-card-body) {
+  background-color: var(--color-neutral-50);
+}
+
+:global(.ds-page-header) {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+  width: 100%;
+}
+
+:global(.ds-page-header__title-area) {
+  display: flex;
+  flex-direction: column;
+  gap: var(--spacing-2);
+  min-width: 0;
+  flex: 1 1 auto;
+}
+
+:global(.ds-page-header__title) {
+  margin: 0;
+  font-size: var(--font-heading-6-size);
+  line-height: var(--font-line-height);
+  font-weight: 700;
+  color: var(--color-text-dark);
+  letter-spacing: var(--font-letter-spacing);
+  word-break: break-word;
+}
+
+:global(.ds-page-header__description) {
+  margin: 0;
+  font-size: var(--font-body-1-size);
+  line-height: var(--font-line-height);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-text-dark);
+  letter-spacing: var(--font-letter-spacing);
+  word-break: break-word;
+}
+
+:global(.ds-page-header__actions) {
+  display: inline-flex;
+  align-items: flex-start;
+  gap: var(--spacing-2);
+  flex: 0 0 auto;
+}
+
+/*
+  Abaixo do breakpoint `s` (768px) o cabeçalho empilha: as ações sobem
+  para o topo (`order: -1`) e o conteúdo fica embaixo, ocupando a largura
+  total — espelhando o estado responsivo do Figma.
+*/
+@media (max-width: 767px) {
+  :global(.ds-page-header) {
+    flex-direction: column;
+  }
+
+  :global(.ds-page-header__actions) {
+    order: -1;
+    width: 100%;
+  }
+}

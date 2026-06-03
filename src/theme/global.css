@@ -1,0 +1,543 @@
+/*
+  global.css — zona reservada do design system.
+
+  Este arquivo contém apenas:
+    1. Definição das CSS variables (`:root`) consumidas por componentes via
+       `var(--color-*)`, `var(--spacing-*)`, `var(--radius-*)`, `var(--shadow-*)`,
+       `var(--font-*)`.
+    2. Overrides de seletores nativos do Ant Design (`.ant-*`) que não podem
+       ser escopados via CSS Module local (por exemplo, porque o componente
+       afetado é renderizado em portal ou porque o seletor precisa atingir
+       toda a aplicação sem prefixo).
+
+  Estilos próprios da camada Juscash (`.ds-*`, `.juscash-*`, `.rich-*`) vivem
+  em `index.module.css` dentro da pasta do componente correspondente.
+*/
+
+:root {
+  /* Fallback caso o consumidor não defina a fonte */
+  --font-primary: "Inter", sans-serif;
+
+  /* ============================================
+     COLORS - Design System Juscash
+     ============================================ */
+
+  /* Neutral */
+  --color-neutral-50: #fafafa;
+  --color-neutral-100: #f5f5f5;
+  --color-neutral-200: #e5e5e5;
+  --color-neutral-300: #d4d4d4;
+  --color-neutral-400: #a3a3a3;
+  --color-neutral-500: #6d6d6e;
+  --color-neutral-600: #525252;
+  --color-neutral-700: #404040;
+  --color-neutral-800: #262626;
+  --color-neutral-900: #171717;
+
+  /* Brand - Primary */
+  --color-brand-primary-50: #aaffbe;
+  --color-brand-primary-100: #8af3a3;
+  --color-brand-primary-200: #6add89;
+  --color-brand-primary-300: #4ac771;
+  --color-brand-primary-400: #2cbd62;
+  --color-brand-primary-500: #009c46;
+  --color-brand-primary-600: #008633;
+  --color-brand-primary-700: #007122;
+  --color-brand-primary-800: #005c12;
+  --color-brand-primary-900: #004706;
+
+  /* Brand - Secondary */
+  --color-brand-secondary-50: #c7ddfa;
+  --color-brand-secondary-100: #a1c6f7;
+  --color-brand-secondary-200: #7baff4;
+  --color-brand-secondary-300: #5698f1;
+  --color-brand-secondary-400: #3081ee;
+  --color-brand-secondary-500: #136ce2;
+  --color-brand-secondary-600: #105abc;
+  --color-brand-secondary-700: #0d4897;
+  --color-brand-secondary-800: #093671;
+  --color-brand-secondary-900: #072854;
+
+  /* Feedback - Green */
+  --color-feedback-green-50: #c9ffd6;
+  --color-feedback-green-500: #1e7e34;
+  --color-feedback-green-900: #065f1b;
+
+  /* Feedback - Red */
+  --color-feedback-red-50: #fef2ec;
+  --color-feedback-red-500: #d2190b;
+  --color-feedback-red-900: #9d231c;
+
+  /* Feedback - Yellow */
+  --color-feedback-yellow-50: #fffbe0;
+  --color-feedback-yellow-500: #867400;
+  --color-feedback-yellow-900: #675413;
+
+  /* Feedback - Blue */
+  --color-feedback-blue-50: #ecf5fe;
+  --color-feedback-blue-500: #207ac3;
+  --color-feedback-blue-900: #1d4f79;
+
+  /* Feedback - Orange */
+  --color-feedback-orange-50: #ffe9d2;
+  --color-feedback-orange-500: #b15600;
+  --color-feedback-orange-900: #8b4400;
+
+  /* Opacities */
+  --color-opacities-dark-25: #17171740;
+  --color-opacities-light-0-01: #ffffff00;
+  --color-opacities-light-50: #ffffff80;
+
+  /* Slot placeholder (modo desenvolvedor — Figma) */
+  --color-slot-border: #9747ff;
+  --color-slot-label: #c89dff;
+
+  /* Text - alias semântico */
+  --color-text-dark: var(--color-neutral-800);
+  --color-text-disabled: var(--color-neutral-400);
+  --color-text-light: var(--color-neutral-50);
+  --color-text-soft: var(--color-neutral-500);
+  --color-text-links-default: var(--color-feedback-blue-500);
+  --color-text-links-hover: var(--color-feedback-blue-900);
+
+  /* Border - alias semântico */
+  --color-border-regular: var(--color-neutral-300);
+  --color-border-disabled: var(--color-neutral-200);
+
+  /* Background - alias semântico */
+  --color-background-white: var(--color-neutral-50);
+  --color-background-grey: var(--color-neutral-100);
+  --color-background-opacities: var(--color-opacities-dark-25);
+
+  /* Button - alias semântico (brand) */
+  --color-button-brand-default: var(--color-brand-primary-600);
+  --color-button-brand-hover-active: var(--color-brand-primary-800);
+  --color-button-brand-disabled: var(--color-neutral-300);
+
+  /* Button - alias semântico (secondary) */
+  --color-button-secondary-default: var(--color-brand-secondary-700);
+  --color-button-secondary-hover-active: var(--color-brand-secondary-800);
+  --color-button-secondary-disabled: var(--color-neutral-300);
+
+  /* Button - alias semântico (neutral) */
+  --color-button-neutral-default: var(--color-neutral-200);
+  --color-button-neutral-hover-active: var(--color-neutral-400);
+  --color-button-neutral-disabled: var(--color-neutral-300);
+
+  /* Button - alias semântico (destructive) */
+  --color-button-destructive-default: var(--color-feedback-red-500);
+  --color-button-destructive-hover-active: var(--color-feedback-red-900);
+  --color-button-destructive-disabled: var(--color-neutral-300);
+
+  /* Chart - paleta para o módulo Charts (Figma 4098:12198). */
+  --color-chart-1: #f54a00;
+  --color-chart-2: #009689;
+  --color-chart-3: #104e64;
+  --color-chart-4: #ffb900;
+  --color-chart-5: #fe9a00;
+
+  /* ============================================
+     RADIUS
+     ============================================ */
+  --radius-md: 4px;
+  --radius-xl: 8px;
+  --radius-2xl: 12px;
+  --radius-3xl: 16px;
+  --radius-full: 9999px;
+
+  /* ============================================
+     SHADOW
+     ============================================ */
+  --shadow-xs: 0px 1px 2px 0px rgba(0, 0, 0, 0.05);
+  --shadow-s: 0px 1px 3px 0px rgba(0, 0, 0, 0.1), 0px 1px 2px -1px rgba(0, 0, 0, 0.1);
+  --shadow-m: 0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1);
+  --shadow-l: 0px 10px 15px -3px rgba(0, 0, 0, 0.1), 0px 4px 6px -4px rgba(0, 0, 0, 0.1);
+  --shadow-xl: 0px 20px 25px -5px rgba(0, 0, 0, 0.1), 0px 8px 10px -6px rgba(0, 0, 0, 0.1);
+  --shadow-focus: 0px 0px 0px 3px #d4d4d4;
+  --shadow-focus-error: 0px 0px 0px 3px rgba(210, 25, 11, 0.2);
+
+  /* ============================================
+     SPACING
+     ============================================ */
+  --spacing-1: 4px;
+  --spacing-2: 8px;
+  --spacing-3: 12px;
+  --spacing-4: 16px;
+  --spacing-5: 20px;
+  --spacing-6: 24px;
+  --spacing-7: 28px;
+  --spacing-8: 32px;
+  --spacing-10: 40px;
+  --spacing-12: 48px;
+  --spacing-14: 56px;
+  --spacing-16: 64px;
+  --spacing-20: 80px;
+  --spacing-24: 96px;
+
+  /* ============================================
+     TYPOGRAPHY
+     Fonte: página Fundamentos do Figma. Família Inter,
+     peso 400 (Regular), line-height 1.2 unitless para
+     toda a escala.
+     ============================================ */
+  --font-weight-regular: 400;
+  --font-line-height: 1.2;
+  --font-letter-spacing: 0;
+
+  --font-heading-1-size: 61px;
+  --font-heading-1-weight: var(--font-weight-regular);
+  --font-heading-1-line-height: var(--font-line-height);
+
+  --font-heading-2-size: 49px;
+  --font-heading-2-weight: var(--font-weight-regular);
+  --font-heading-2-line-height: var(--font-line-height);
+
+  --font-heading-3-size: 39px;
+  --font-heading-3-weight: var(--font-weight-regular);
+  --font-heading-3-line-height: var(--font-line-height);
+
+  --font-heading-4-size: 31px;
+  --font-heading-4-weight: var(--font-weight-regular);
+  --font-heading-4-line-height: var(--font-line-height);
+
+  --font-heading-5-size: 25px;
+  --font-heading-5-weight: var(--font-weight-regular);
+  --font-heading-5-line-height: var(--font-line-height);
+
+  --font-heading-6-size: 20px;
+  --font-heading-6-weight: var(--font-weight-regular);
+  --font-heading-6-line-height: var(--font-line-height);
+
+  --font-body-1-size: 16px;
+  --font-body-1-weight: var(--font-weight-regular);
+  --font-body-1-line-height: var(--font-line-height);
+
+  --font-body-2-size: 13px;
+  --font-body-2-weight: var(--font-weight-regular);
+  --font-body-2-line-height: var(--font-line-height);
+
+  --font-caption-size: 10px;
+  --font-caption-weight: var(--font-weight-regular);
+  --font-caption-line-height: var(--font-line-height);
+
+  /* ============================================
+     CONTAINER
+     Define a área útil de conteúdo conforme breakpoint.
+     ============================================ */
+  --container-padding-top: 24px;
+  --container-padding-x: 24px;
+  --container-system-max-width: 1800px;
+  --container-system-fixed-from: 1920px;
+  --container-site-max-width: 1086px;
+  --container-site-fixed-from: 1366px;
+
+  /* ============================================
+     ASPECT RATIO
+     ============================================ */
+  --aspect-ratio-square: 1 / 1;
+  --aspect-ratio-portrait: 3 / 4;
+  --aspect-ratio-landscape: 4 / 3;
+  --aspect-ratio-widescreen: 16 / 9;
+  --aspect-ratio-mobile: 9 / 16;
+}
+
+/* ============================================
+   BODY — família tipográfica global
+   Aplica a fonte primária (Inter) em toda a árvore para que
+   componentes e stories não precisem redeclarar `font-family`
+   localmente.
+   ============================================ */
+body {
+  font-family: var(--font-primary);
+}
+
+/* ============================================
+   SEGMENTED — overrides nativos
+   Específicos do Segmented do design system foram movidos para
+   src/components/Segmented/index.module.css (scoped via classe .ds-segmented).
+   ============================================ */
+
+/* ============================================
+   FORM — overrides nativos
+   ============================================ */
+
+/* Mover asterisco obrigatório para a direita do label */
+.ant-form-item-label > label.ant-form-item-required::before {
+  display: none !important;
+}
+
+.ant-form-item-label > label.ant-form-item-required::after {
+  content: "*";
+  color: var(--color-feedback-red-500) !important;
+  visibility: visible !important;
+}
+
+.ant-form-item-label {
+  padding-bottom: 8px !important;
+}
+
+.ant-form-item-row {
+  align-items: flex-start !important;
+}
+
+.ant-form-item-control-input {
+  min-height: 24px !important;
+}
+
+/* ============================================
+   BUTTON — overrides nativos
+   Os overrides específicos do Button do design system foram movidos para
+   src/components/Button/index.module.css (scoped via classe .button).
+   ============================================ */
+
+/* ============================================
+   SELECT — overrides nativos
+   (classes próprias .ds-select-* vivem em components/Select/index.module.css)
+   ============================================ */
+.ant-select-item-option-content {
+  display: flex !important;
+  align-items: center !important;
+  flex: auto;
+}
+
+.ant-select-single .ant-select-item-option-selected .ant-select-item-option-state {
+  display: flex !important;
+}
+
+.ant-select-dropdown {
+  padding: 0 !important;
+  border: 1px solid var(--color-neutral-300) !important;
+  box-shadow: var(--shadow-m) !important;
+  border-radius: 8px !important;
+}
+
+/* Chips do MultiSelect (Antd nativo, sem classes próprias) */
+.ant-select-multiple .ant-select-selection-item {
+  background: transparent !important;
+  border: 1px solid var(--color-neutral-300) !important;
+  border-radius: 8px !important;
+  height: 24px !important;
+  padding: 2px 8px !important;
+  font-size: 13px !important;
+  color: var(--color-neutral-800) !important;
+  line-height: 1.2 !important;
+  display: inline-flex !important;
+  align-items: center !important;
+  gap: 4px !important;
+}
+
+.ant-select-multiple .ant-select-content-item {
+  background: transparent !important;
+  border: none !important;
+  padding: 0 !important;
+}
+
+.ant-select-multiple .ant-select-content-item-suffix {
+  border: none !important;
+  background: transparent !important;
+}
+
+.ant-select-multiple .ant-select-selection-item-remove {
+  font-size: 12px !important;
+  color: var(--color-neutral-800) !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.ant-select-multiple .ant-select-content-item-rest .ant-select-selection-item {
+  background: transparent !important;
+  border: 1px solid var(--color-neutral-300) !important;
+  color: var(--color-neutral-800) !important;
+}
+
+.ant-select-multiple .ant-select-content-item-rest:has(.ant-select-selection-item-content:empty) {
+  display: none !important;
+}
+
+/* Foco/erro do Select são tratados no CSS Module local (.ds-select) — não
+   globalmente — porque incidem na raiz (não-portal) do componente. */
+
+.ant-select-item-group {
+  font-size: 10px !important;
+  color: var(--color-neutral-500) !important;
+  font-family: "Inter", sans-serif !important;
+  min-height: 32px !important;
+  padding: 4px 8px !important;
+}
+
+/* ============================================
+   TABLE — overrides Antd não específicos do .ds-table
+   ============================================ */
+.ant-table-cell {
+  border: none !important;
+}
+
+.ant-table-container {
+  border: 1px solid var(--color-neutral-300) !important;
+  border-radius: var(--radius-xl) !important;
+}
+
+.ant-table-tbody > .ant-table-row > td {
+  border-top: 1px solid var(--color-neutral-300) !important;
+}
+
+/* ============================================
+   PAGINATION — overrides Antd genéricos
+   ============================================ */
+.ant-pagination {
+  align-items: center !important;
+}
+
+.ant-pagination-total-text {
+  margin-right: auto !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+.ant-pagination-prev,
+.ant-pagination-next {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.ant-pagination-options-size-select .ant-select-selection-item {
+  display: flex !important;
+  align-items: center;
+}
+
+.ant-pagination-options-size-select-dropdown .ant-select-item-option-content {
+  display: flex !important;
+  align-items: center;
+}
+
+.ant-pagination-options .ant-select-content-value::before {
+  content: "Itens por página: " !important;
+  font-weight: 400;
+}
+
+/* ============================================
+   RADIO — overrides nativos
+   Específicos do Radio do design system foram movidos para
+   src/components/Radio/index.module.css (scoped via classes
+   .ds-radio e .ds-radio-group).
+   ============================================ */
+
+/* ============================================
+   BREADCRUMB — overrides nativos
+   ============================================ */
+.ant-breadcrumb-link {
+  display: flex !important;
+  align-items: center !important;
+}
+
+.ant-breadcrumb-item {
+  display: flex !important;
+  align-items: center !important;
+}
+
+/* ============================================
+   DATEPICKER — overrides nativos
+   (classes próprias .ds-datepicker* vivem em components/DatePicker/index.module.css)
+   ============================================ */
+.ant-picker-month-btn,
+.ant-picker-year-btn,
+.ant-picker-quarter-btn {
+  font-family: var(--font-primary) !important;
+  font-size: 13px !important;
+  font-weight: 500 !important;
+  color: var(--color-neutral-800) !important;
+}
+
+.ant-picker-active-bar {
+  display: none !important;
+}
+
+.ant-picker-outlined:focus-within,
+.ant-picker-outlined:focus {
+  box-shadow: var(--shadow-focus) !important;
+  border-color: var(--color-neutral-300) !important;
+}
+
+.ant-picker-outlined:hover {
+  border-color: var(--color-neutral-300) !important;
+}
+
+.ant-picker-content thead th {
+  font-family: var(--font-primary) !important;
+  font-size: 11px !important;
+  font-weight: 500 !important;
+  color: var(--color-neutral-500) !important;
+}
+
+.ant-picker-cell-inner {
+  font-family: var(--font-primary) !important;
+  font-size: 13px !important;
+  font-weight: 400 !important;
+  min-width: 28px !important;
+  height: 28px !important;
+  line-height: 28px !important;
+}
+
+.ant-picker-cell-today .ant-picker-cell-inner::before {
+  border-color: var(--color-brand-primary-600) !important;
+}
+
+.ant-picker-input > input {
+  font-family: var(--font-primary);
+  font-size: 13px !important;
+  font-weight: 400 !important;
+}
+
+/* ============================================
+   CHECKBOX — overrides nativos
+   Específicos do Checkbox do design system foram movidos para
+   src/components/Checkbox/index.module.css (scoped via classe .ds-checkbox).
+   ============================================ */
+
+/* ============================================
+   SWITCH — overrides nativos
+   (classes próprias .rich-switch-* vivem em components/RichSwitch/index.module.css)
+   ============================================ */
+/* Específicos do Switch foram movidos para
+   src/components/Switch/index.module.css (scoped via .ds-switch). */
+
+/* ============================================
+   INPUT — overrides nativos
+   Específicos do Input do design system foram movidos para
+   src/components/Input/index.module.css (scoped via .ds-input).
+   ============================================ */
+
+/* Form labels associados a campos disabled (genérico — não específico Input). */
+.ant-form-item:has([disabled]) .ant-form-item-label label {
+  color: var(--color-neutral-400) !important;
+}
+
+/* ============================================
+   COLLAPSE — overrides nativos
+   ============================================ */
+.ant-collapse-header:hover {
+  background-color: var(--color-neutral-100) !important;
+  border-radius: inherit !important;
+}
+
+.ant-collapse-header:focus-visible {
+  background-color: var(--color-neutral-800) !important;
+  color: var(--color-neutral-50) !important;
+  border-radius: inherit !important;
+  outline: none !important;
+}
+
+.ant-collapse-header:focus-visible .ant-collapse-expand-icon {
+  color: var(--color-neutral-50) !important;
+}
+
+.ant-collapse-header:focus-visible .ant-collapse-header-text {
+  color: var(--color-neutral-50) !important;
+}
+
+/* ============================================
+   POPOVER — overrides nativos
+   ============================================ */
+.ant-popover-container {
+  border: 1px solid var(--color-neutral-300) !important;
+}

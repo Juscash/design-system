@@ -1,0 +1,276 @@
+/*
+  Estilos próprios do Radio. Classes envoltas em `:global(...)` para
+  permanecerem globais após o processamento do Vite e do `tsup`.
+
+  Scoping:
+    - `.ds-radio`            → radio standalone (passou pelo wrapper React).
+    - `.ds-radio-group`      → grupo wrappado; itens internos ficam sob
+                                 `.ds-radio-group .ant-radio-wrapper`.
+    - `.ds-radio-error`      → modificador da variante de erro.
+    - `.ds-radio--truncate`  → modificador do label truncado.
+*/
+
+/* ============================================================
+   ALINHAMENTO — radio sempre no topo da primeira linha do label
+   (vale para padrão e rich; especialmente importante quando o label
+   quebra em múltiplas linhas). Mesmo padrão do Checkbox.
+   ============================================================ */
+
+:global(.ds-radio.ant-radio-wrapper),
+:global(.ds-radio-group .ant-radio-wrapper) {
+  align-items: flex-start !important;
+}
+
+/* `.ant-radio` é o span que envolve `<input>` + `.ant-radio-inner`. Antd força
+   `align-self: baseline`, deslocando o círculo abaixo da primeira linha do
+   texto. Forçamos `flex-start` + `margin-top: 1.3px` (= leading do label
+   com line-height 1.2) para o círculo descer até o topo do glifo do texto. */
+:global(.ds-radio .ant-radio),
+:global(.ds-radio-group .ant-radio-wrapper .ant-radio) {
+  align-self: flex-start !important;
+  margin-top: 1.3px !important;
+  line-height: 0 !important;
+}
+
+/* ============================================================
+   BG do círculo (Antd default usa --ant-color-bg-container, mas
+   queremos neutral.50 explícito independente do tema do consumidor).
+   ============================================================ */
+
+:global(.ds-radio .ant-radio-inner),
+:global(.ds-radio-group .ant-radio-wrapper .ant-radio-inner) {
+  background-color: var(--color-neutral-50) !important;
+}
+
+/* ============================================================
+   FOCO (padrão — sem erro)
+   ============================================================ */
+
+/* Antd 6 aplica `outline: 3px solid var(--ant-color-primary)` (verde brand)
+   no `.ant-radio-inner` quando o `<input>` interno entra em focus-visible.
+   Suprimimos e substituímos pelo anel cinza `var(--shadow-focus)` via
+   box-shadow — alinhado com Button/Segmented/Checkbox. */
+:global(.ds-radio:has(.ant-radio-input:focus-visible) .ant-radio-inner),
+:global(.ds-radio-group .ant-radio-wrapper:has(.ant-radio-input:focus-visible) .ant-radio-inner) {
+  outline: none !important;
+  box-shadow: var(--shadow-focus) !important;
+}
+
+:global(.ds-radio.pseudo-focus-visible .ant-radio-inner),
+:global(.ds-radio-group .pseudo-focus-visible.ant-radio-wrapper .ant-radio-inner) {
+  outline: none !important;
+  box-shadow: var(--shadow-focus) !important;
+}
+
+/* ============================================================
+   HOVER (padrão — sem erro)
+   ============================================================ */
+
+/* Hover (não selecionado) — bg cinza `neutral/200` no círculo. */
+:global(.ds-radio:hover:not(.ant-radio-wrapper-disabled) .ant-radio:not(.ant-radio-checked) .ant-radio-inner),
+:global(.ds-radio-group .ant-radio-wrapper:hover:not(.ant-radio-wrapper-disabled) .ant-radio:not(.ant-radio-checked) .ant-radio-inner) {
+  background-color: var(--color-neutral-200) !important;
+}
+
+/* Borda no hover (apenas variante padrão) — neutral/300. */
+:global(.ds-radio:hover:not(.ant-radio-wrapper-disabled):not(.ds-radio-error) .ant-radio:not(.ant-radio-checked) .ant-radio-inner),
+:global(.ds-radio-group .ant-radio-wrapper:hover:not(.ant-radio-wrapper-disabled):not(.ds-radio-error) .ant-radio:not(.ant-radio-checked) .ant-radio-inner) {
+  border-color: var(--color-neutral-300) !important;
+}
+
+/* Hover em radio SELECIONADO (default) — escurece o dot interno. */
+:global(.ds-radio:hover:not(.ant-radio-wrapper-disabled):not(.ds-radio-error) .ant-radio-checked .ant-radio-inner::after),
+:global(.ds-radio-group .ant-radio-wrapper:hover:not(.ant-radio-wrapper-disabled):not(.ds-radio-error) .ant-radio-checked .ant-radio-inner::after) {
+  background-color: var(--color-brand-primary-800) !important;
+}
+
+/* ============================================================
+   CHECKED — dot interior com cor primary
+   ============================================================ */
+
+:global(.ds-radio .ant-radio-checked .ant-radio-inner::after),
+:global(.ds-radio-group .ant-radio-checked .ant-radio-inner::after) {
+  background-color: var(--color-brand-primary-600) !important;
+}
+
+/* ============================================================
+   DISABLED — border desabilitada, dot cinza
+   ============================================================ */
+
+:global(.ds-radio .ant-radio-disabled .ant-radio-inner),
+:global(.ds-radio-group .ant-radio-disabled .ant-radio-inner) {
+  border-color: var(--color-border-disabled) !important;
+  background-color: var(--color-neutral-50) !important;
+}
+
+:global(.ds-radio .ant-radio-checked.ant-radio-disabled .ant-radio-inner::after),
+:global(.ds-radio-group .ant-radio-checked.ant-radio-disabled .ant-radio-inner::after) {
+  background-color: var(--color-neutral-300) !important;
+}
+
+/* ============================================================
+   LABEL — tipografia conforme foundations
+   ============================================================ */
+
+:global(.ds-radio.ant-radio-wrapper > span:last-child),
+:global(.ds-radio-group .ant-radio-wrapper > span:last-child),
+:global(.ds-radio .ant-radio-label),
+:global(.ds-radio-group .ant-radio-label) {
+  font-size: var(--font-body-2-size) !important;
+  /* line-height 1.2 (spec body/02) em vez do default 1.5714 do antd —
+     mantém o topo do glifo próximo ao topo da text-line. */
+  line-height: var(--font-line-height) !important;
+  font-weight: 400 !important;
+  color: var(--color-neutral-800) !important;
+}
+
+/* ============================================================
+   ERROR — border vermelha, dot vermelho, focus + hover error
+   ============================================================ */
+
+:global(.ds-radio-error .ant-radio-inner) {
+  border-color: var(--color-feedback-red-500) !important;
+}
+
+:global(.ds-radio-error .ant-radio-checked .ant-radio-inner::after) {
+  background-color: var(--color-feedback-red-500) !important;
+}
+
+/* Hover em error não selecionado — bg neutral/200, border red-900 (mais escuro). */
+:global(.ds-radio-error:hover:not(.ant-radio-wrapper-disabled) .ant-radio:not(.ant-radio-checked) .ant-radio-inner) {
+  border-color: var(--color-feedback-red-900) !important;
+}
+
+/* Hover em error SELECIONADO — dot escurece para red-900. */
+:global(.ds-radio-error:hover:not(.ant-radio-wrapper-disabled) .ant-radio-checked .ant-radio-inner::after) {
+  background-color: var(--color-feedback-red-900) !important;
+}
+
+:global(.ds-radio-error:has(.ant-radio-input:focus-visible) .ant-radio-inner) {
+  outline: none !important;
+  box-shadow: var(--shadow-focus-error) !important;
+}
+
+:global(.ds-radio-error.pseudo-focus-visible .ant-radio-inner) {
+  outline: none !important;
+  box-shadow: var(--shadow-focus-error) !important;
+}
+
+:global(.ant-radio-disabled.ds-radio-error .ant-radio-inner) {
+  border-color: transparent !important;
+}
+
+/* ============================================================
+   RICH — card 240×44 com label e secondary text (Figma 8175:10294)
+   `.ds-radio--rich` é aplicado ao `<label class="ant-radio-wrapper">`.
+   ============================================================ */
+
+:global(.ds-radio--rich.ant-radio-wrapper) {
+  display: flex !important;
+  align-items: flex-start !important;
+  gap: var(--spacing-2) !important;
+  padding: 6px var(--spacing-3) !important;
+  border: 1px solid var(--color-border-regular) !important;
+  border-radius: var(--radius-xl) !important;
+  background-color: var(--color-neutral-50) !important;
+  transition: background-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out !important;
+  cursor: pointer !important;
+  width: 100% !important;
+  min-height: 44px !important;
+  box-sizing: border-box !important;
+}
+
+/* Antd injeta `padding-inline-start: 8px` no `.ant-radio-label`. Em modo
+   rich, esse padding duplica o `gap: 8px` do wrapper. Zeramos. */
+:global(.ds-radio--rich .ant-radio-label) {
+  padding-inline-start: 0 !important;
+  padding-left: 0 !important;
+}
+
+/* Hover não-selecionado → neutral/100. */
+:global(.ds-radio--rich.ant-radio-wrapper:hover:not(.ant-radio-wrapper-disabled):not(:has(.ant-radio-input:checked))) {
+  background-color: var(--color-neutral-100) !important;
+}
+
+/* Selecionado (default) → neutral/100. */
+:global(.ds-radio--rich.ant-radio-wrapper:has(.ant-radio-input:checked):not(.ant-radio-wrapper-disabled)) {
+  background-color: var(--color-neutral-100) !important;
+}
+
+/* Selecionado + hover → neutral/200 (mais escuro). */
+:global(.ds-radio--rich.ant-radio-wrapper:hover:has(.ant-radio-input:checked):not(.ant-radio-wrapper-disabled)) {
+  background-color: var(--color-neutral-200) !important;
+}
+
+/* Focus → anel cinza ao redor do card inteiro (suprime shadow no círculo). */
+:global(.ds-radio--rich.ant-radio-wrapper:has(.ant-radio-input:focus-visible)) {
+  box-shadow: var(--shadow-focus) !important;
+}
+:global(.ds-radio--rich:has(.ant-radio-input:focus-visible) .ant-radio-inner) {
+  box-shadow: none !important;
+}
+
+:global(.ds-radio--rich.pseudo-focus-visible) {
+  box-shadow: var(--shadow-focus) !important;
+}
+:global(.ds-radio--rich.pseudo-focus-visible .ant-radio-inner) {
+  box-shadow: none !important;
+}
+
+:global(.ds-radio--rich.ant-radio-wrapper-disabled) {
+  border-color: var(--color-border-disabled) !important;
+  cursor: not-allowed !important;
+}
+
+:global(.ds-radio-rich__content) {
+  display: flex;
+  flex-direction: column;
+  flex: 1 1 auto;
+  gap: 2px;
+  min-width: 0;
+  overflow: hidden;
+}
+
+:global(.ds-radio-rich__label) {
+  font-size: var(--font-body-2-size);
+  font-weight: 400;
+  line-height: var(--font-line-height);
+  color: var(--color-text-dark);
+}
+
+:global(.ds-radio-rich__secondary) {
+  font-size: var(--font-caption-size);
+  font-weight: 400;
+  line-height: var(--font-line-height);
+  color: var(--color-text-soft);
+}
+
+/* Truncate dinâmico do label e secondary no modo rich + truncate. */
+:global(.ds-radio--rich.ds-radio--truncate .ds-radio-rich__label),
+:global(.ds-radio--rich.ds-radio--truncate .ds-radio-rich__secondary) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* ============================================================
+   TRUNCATE — ellipsis no label
+   ============================================================ */
+
+/* Truncate dinâmico: o wrapper preenche 100% do container pai (a menos
+   que o consumidor passe `width` inline). Quando o texto excede a largura
+   disponível, recebe `...` automaticamente — sem precisar de `width` explícito. */
+:global(.ds-radio--truncate.ant-radio-wrapper) {
+  display: inline-flex;
+  width: 100%;
+  min-width: 0;
+}
+
+:global(.ds-radio--truncate.ant-radio-wrapper > span:last-child),
+:global(.ds-radio--truncate .ant-radio-label) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  min-width: 0;
+  flex: 1 1 auto;
+}

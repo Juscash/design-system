@@ -1,0 +1,58 @@
+/*
+  Estilos próprios do Tooltip. Como o Antd renderiza o tooltip em portal, os
+  seletores precisam permanecer globais para alcançar a árvore montada fora
+  do componente.
+*/
+
+:global(.ds-tooltip) {
+  --ds-tooltip-bg: var(--color-neutral-800);
+}
+
+:global(.ds-tooltip) :global(.ant-tooltip-inner),
+:global(.ds-tooltip) :global(.ant-tooltip-container),
+:global(.ds-tooltip.ant-tooltip-container) {
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  gap: 8px !important;
+  max-width: 200px !important;
+  padding: 6px 8px !important;
+  border: none !important;
+  border-radius: 8px !important;
+  background: var(--ds-tooltip-bg) !important;
+  box-shadow: none !important;
+  font-family: "Inter", sans-serif !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+  letter-spacing: 0 !important;
+  color: var(--color-neutral-50) !important;
+  word-break: break-word !important;
+}
+
+:global(.ds-tooltip) :global(.ant-tooltip-inner) > p,
+:global(.ds-tooltip) :global(.ant-tooltip-inner) p,
+:global(.ds-tooltip) :global(.ant-tooltip-inner) :global(.ant-typography),
+:global(.ds-tooltip) :global(.ant-tooltip-inner) :global(.ant-typography) p,
+:global(.ds-tooltip) :global(.ant-tooltip-container) > p,
+:global(.ds-tooltip) :global(.ant-tooltip-container) p,
+:global(.ds-tooltip) :global(.ant-tooltip-container) :global(.ant-typography),
+:global(.ds-tooltip) :global(.ant-tooltip-container) :global(.ant-typography) p {
+  margin: 0 !important;
+  flex: 1 1 0 !important;
+  min-width: 1px !important;
+  word-break: break-word !important;
+}
+
+/*
+  Seta: cor de fundo. Geometria (largura/altura/translação por placement) é
+  delegada ao Antd via `sizePopupArrow: 11.5` no `getTooltipTheme()` — ele
+  recalcula tudo de forma consistente para os 4 placements.
+*/
+:global(.ds-tooltip) :global(.ant-tooltip-arrow::before) {
+  background: var(--ds-tooltip-bg) !important;
+  box-shadow: none !important;
+}
+
+:global(.ds-tooltip) :global(.ant-tooltip-arrow::after) {
+  display: none !important;
+}
