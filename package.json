@@ -1,6 +1,6 @@
 {
   "name": "@juscash/design-system",
-  "version": "0.1.43",
+  "version": "1.0.0",
   "description": "Design system Juscash baseado em Ant Design 6",
   "type": "module",
   "repository": {
