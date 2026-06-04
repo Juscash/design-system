@@ -1,94 +1,152 @@
 # Juscash Design System
 
-Bem-vindo ao repositório do **Juscash Design System**. Este projeto é a biblioteca de componentes proprietária da Juscash junto com seu site de documentação interativa.
+O **Juscash Design System** (`@juscash/design-system`) é a biblioteca de componentes React da Juscash — uma camada de identidade visual sobre o **Ant Design 6**, publicada no **GitHub Packages**. O repositório também contém o site de **documentação interativa** (Storybook), usado como showcase e playground.
 
-## 🔗 Links Úteis
+## 🔗 Links úteis
 
-- **Documentação Interativa**: [https://Juscash.github.io/design-system/](https://Juscash.github.io/design-system/)
-- **Guia de Instalação**: [docs/instalacao/README.md](./docs/instalacao/README.md)
-- **Guia de Criação de Componentes**: [docs/criacao/README.md](./docs/criacao/README.md)
-
----
-
-## 🏗️ Estrutura do Projeto
-
-Pacote único `@juscash/design-system` no escopo Juscash, com Storybook colocado para showcase:
-
-- `src/` — fonte da biblioteca (componentes + tema).
-- `.storybook/` — config do Storybook que consome `src/` em dev e `dist/` em build.
-- `docs/` — guias internos em pt-BR (criação, instalação, confluence).
-- `scripts/` — versão e publicação.
-
-### Principais Dependências da Biblioteca
-
-- **React 18/19**
-- **Ant Design 6** (base técnica)
-- **Lucide React** (biblioteca única de ícones)
+- **Documentação interativa (Storybook)**: [https://Juscash.github.io/design-system/](https://Juscash.github.io/design-system/)
+- **Guia de instalação e uso**: [docs/instalacao/README.md](./docs/instalacao/README.md)
+- **Guia de criação de componentes**: [docs/criacao/README.md](./docs/criacao/README.md)
+- **Documentação técnica** (arquitetura, fundamentos, release): [docs/confluence/](./docs/confluence/)
 
 ---
 
-## 🚀 Como Desenvolver
+## 📦 Usar em outro projeto
 
-### 1. Instalação
+A biblioteca é privada (GitHub Packages), então o projeto consumidor precisa se autenticar.
 
-Na raiz do projeto:
+**1.** Crie um `.npmrc` na raiz do projeto consumidor:
 
-```bash
-npm install
+```text
+@juscash:registry=https://npm.pkg.github.com
+//npm.pkg.github.com/:_authToken=${GITHUB_TOKEN}
 ```
 
-### 2. Rodando o Storybook Localmente
+> `GITHUB_TOKEN` é um Personal Access Token com permissão `read:packages`, lido de uma variável de ambiente — **nunca** commitado.
 
-Para visualizar alterações em tempo real:
+**2.** Instale o pacote:
 
 ```bash
-npm run dev
+npm install @juscash/design-system
 ```
 
-Storybook sobe em `http://localhost:6006`.
+**3.** Envolva a aplicação no `JuscashProvider` e importe o CSS:
 
-### 3. Build Completo
+```tsx
+import { JuscashProvider } from "@juscash/design-system";
+import "@juscash/design-system/dist/index.css";
+```
+
+Passo a passo completo (Next.js, ícones, solução de problemas) no [guia de instalação](./docs/instalacao/README.md).
+
+---
+
+## 🏗️ Estrutura do repositório
+
+- `src/` — código da biblioteca (componentes + tema); é o que vira `dist/` na publicação.
+- `.storybook/` — configuração do Storybook (consome `src/` em dev e `dist/` no build).
+- `docs/` — guias em pt-BR: instalação, criação de componentes e documentação técnica (`confluence/`).
+- `scripts/` — scripts de versionamento e apoio à publicação.
+- `.github/workflows/` — CI: publicação do pacote e deploy da documentação.
+
+---
+
+## 🚀 Desenvolvimento
+
+> **Requisito:** Node.js **20 ou superior**.
 
 ```bash
+npm install              # instala as dependências (lib + Storybook)
+npm run dev              # sobe o Storybook em http://localhost:6006
 npm run build            # builda a biblioteca (tsup -> dist/)
-npm run build:storybook  # builda o showcase estático (storybook-static/)
+npm run build:storybook  # builda o site de docs estático (storybook-static/)
+npm run test:run         # roda os testes (Vitest)
+npm run test:storybook   # roda só os testes de Storybook (navegador headless)
 ```
 
-### 4. Testes
+> Os testes de Storybook rodam num navegador real (Playwright). Na **primeira vez**, instale o browser: `npx playwright install`.
+
+---
+
+## 🚢 Publicação e Deploy
+
+### O que dispara a publicação? (leia primeiro)
+
+Este é o ponto que mais confunde: **mergear na `main` NÃO publica o pacote.** A publicação é disparada **apenas quando você empurra uma tag** `vX.Y.Z`. E quem builda e publica é o **GitHub Actions** (na nuvem) — não o seu PC.
+
+O que cada ação faz:
+
+| O que você faz | Publica o pacote? | Atualiza o site de docs? |
+| --- | --- | --- |
+| `push` numa branch `feature/...` | ❌ não | ❌ não |
+| merge na `develop` | ❌ não | ❌ não |
+| merge na `main` | ❌ não | ✅ sim (deploy automático) |
+| **`push` da tag `vX.Y.Z`** | ✅ **sim** | ❌ não |
+
+Então são **dois passos independentes**:
+
+1. **Levar o código e a nova versão até a `main`** (via PR): isso atualiza o **site de documentação**, mas **não publica** o pacote.
+2. **Criar e empurrar a tag**: é isto que **publica** o pacote no GitHub Packages.
+
+> **Fluxo do projeto:** `feature/...` → `develop` → `main`. As branches `develop` e `main` são **protegidas** — nelas só entra via **Pull Request (PR)**.
+>
+> ⚠️ **Não** use `npm run version:publish`: ele tenta dar `push` direto na branch protegida e é bloqueado.
+
+### Publicar uma nova versão (passo a passo)
+
+**1. Criar uma branch a partir da `develop`:**
 
 ```bash
-npm run test:run                       # unit tests da lib (vitest + jsdom)
-npm run test:storybook                 # testes do Storybook (Playwright headless)
+git checkout develop
+git pull
+git checkout -b feature/bump-1.0.0
 ```
 
+**2. Subir o número da versão** (só edita o `package.json`, não publica):
+
+```bash
+npm run version:patch    # correção:  0.1.43 -> 0.1.44
+npm run version:minor    # feature:    0.1.43 -> 0.2.0
+npm run version:major    # breaking:   0.1.43 -> 1.0.0
+```
+
+**3. Commitar e subir a branch:**
+
+```bash
+git add package.json
+git commit -m "chore: bump para v1.0.0"
+git push -u origin feature/bump-1.0.0
+```
+
+**4. Abrir os PRs e mergear:** primeiro `feature/bump-1.0.0` → `develop`, depois `develop` → `main`.
+
+**5. Criar a tag na `main` (isso publica):**
+
+```bash
+git checkout main
+git pull
+git tag v1.0.0
+git push origin v1.0.0
+```
+
+A tag dispara o workflow **"Publish Package"** (aba **Actions** no GitHub). Quando ficar verde, está publicado. ✅
+
+**Resumo:** a versão entra por **PR** (`feature → develop → main`); a publicação dispara pela **tag** na `main`.
+
+### Deploy da documentação (site)
+
+O site de documentação (Storybook) é hospedado no **GitHub Pages** e faz deploy **automático** a cada `push`/`merge` na branch `main`.
+
 ---
 
-## 🚢 Fluxo de Deploy e Publicação
+## 🛠️ Stack
 
-### Publicação da Biblioteca (@juscash/design-system)
-
-A biblioteca é publicada no **GitHub Packages**. O deploy é acionado via tags:
-
-1. Finalize suas alterações.
-2. Execute um dos scripts de versão:
-   - `npm run version:patch` (correções)
-   - `npm run version:minor` (novas features)
-   - `npm run version:major` (breaking changes)
-3. Execute `npm run version:publish` para subir a tag e disparar o workflow de publicação automática.
-
-### Deploy do Front-end (Documentação)
-
-O site de documentação é hospedado no **GitHub Pages**.
-
-- O deploy é **automático** em todo `push`/`merge` na branch `main`.
-
----
-
-## 🛠️ Tecnologias Utilizadas
-
-- **Build da Lib**: Tsup
-- **Docs/Playground**: Storybook 10 (`@storybook/nextjs-vite`)
+- **Base de UI**: Ant Design 6 (`antd`)
+- **Ícones**: Lucide React (provedor único)
+- **Linguagem**: TypeScript 5
+- **React**: 18/19 (peer dependency)
+- **Build da lib**: tsup (ESM + CJS + types + CSS)
+- **Docs/playground**: Storybook 10 (`@storybook/nextjs-vite`)
 - **Testes**: Vitest + Testing Library + Playwright
 - **CI/CD**: GitHub Actions
-- **Ícones**: Lucide React
-- **Registry**: GitHub Packages (escopo `@juscash`)
+- **Registro**: GitHub Packages (escopo `@juscash`)
