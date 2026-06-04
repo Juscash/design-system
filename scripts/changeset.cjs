@@ -20,7 +20,8 @@ const MS_DIGITS = 3;
 
 /**
  * Calcula a versão que ESTE changeset, sozinho, geraria a partir da versão atual.
- * O número final do release pode ser maior se houver outros changesets pendentes.
+ * Serve só como dica no terminal — o número final do release junta todos os changesets pendentes
+ * (o Changesets aplica o MAIOR bump uma única vez).
  * @param {string} currentVersion versão atual no formato "major.minor.patch"
  * @param {string} bump "patch" | "minor" | "major"
  * @returns {string}
@@ -37,18 +38,17 @@ function computeNextVersion(currentVersion, bump) {
 }
 
 /**
- * Gera um nome de arquivo com a versão prevista + data e hora (ordenável e único):
- * <versao>__AAAA-MM-DD-HHMMSS-mmm.md.
- * @param {string} version
+ * Gera um nome com o TIPO do bump + data e hora (ordenável e único): <tipo>__AAAA-MM-DD-HHMMSS-mmm.md.
+ * @param {string} bump "patch" | "minor" | "major"
  * @returns {string}
  */
-function generateFileName(version) {
+function generateFileName(bump) {
   const now = new Date();
   const pad = (value) => String(value).padStart(2, "0");
   const date = `${now.getFullYear()}-${pad(now.getMonth() + 1)}-${pad(now.getDate())}`;
   const time = `${pad(now.getHours())}${pad(now.getMinutes())}${pad(now.getSeconds())}`;
   const ms = String(now.getMilliseconds()).padStart(MS_DIGITS, "0");
-  return `${version}__${date}-${time}-${ms}.md`;
+  return `${bump}__${date}-${time}-${ms}.md`;
 }
 
 /**
@@ -105,11 +105,10 @@ async function askSummary(nextLine) {
  * @param {string} packageName
  * @param {string} bump
  * @param {string} summary
- * @param {string} version versão prevista usada no nome do arquivo
  * @returns {string} caminho absoluto do arquivo criado
  */
-function writeChangeset(packageName, bump, summary, version) {
-  const filePath = path.join(CHANGESET_DIR, generateFileName(version));
+function writeChangeset(packageName, bump, summary) {
+  const filePath = path.join(CHANGESET_DIR, generateFileName(bump));
   fs.writeFileSync(filePath, `---\n"${packageName}": ${bump}\n---\n\n${summary}\n`);
   return filePath;
 }
@@ -129,9 +128,9 @@ async function main() {
   rl.close();
 
   const version = computeNextVersion(packageJson.version, bump);
-  const filePath = writeChangeset(packageJson.name, bump, summary, version);
+  const filePath = writeChangeset(packageJson.name, bump, summary);
   process.stdout.write(`\n✅ Changeset criado: ${path.relative(process.cwd(), filePath)}\n`);
-  process.stdout.write(`   Este changeset: ${packageJson.version} -> ${version} (o número final junta todos os changesets; confirme no PR "Version Packages")\n`);
+  process.stdout.write(`   Tipo: ${bump} — sozinho daria ${packageJson.version} -> ${version} (o número final junta todos os changesets; confirme no PR "Version Packages")\n`);
   process.stdout.write("   Commite esse arquivo junto com o seu código.\n\n");
 }
 
