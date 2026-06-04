@@ -46,7 +46,8 @@ Passo a passo completo (Next.js, ícones, solução de problemas) no [guia de in
 - `src/` — código da biblioteca (componentes + tema); é o que vira `dist/` na publicação.
 - `.storybook/` — configuração do Storybook (consome `src/` em dev e `dist/` no build).
 - `docs/` — guias em pt-BR: instalação, criação de componentes e documentação técnica (`confluence/`).
-- `scripts/` — scripts de versionamento e apoio à publicação.
+- `scripts/` — utilitários de apoio ao desenvolvimento.
+- `.changeset/` — anotações de versão (Changesets); é o que define a próxima versão da lib.
 - `.github/workflows/` — CI: publicação do pacote e deploy da documentação.
 
 ---
@@ -70,72 +71,93 @@ npm run test:storybook   # roda só os testes de Storybook (navegador headless)
 
 ## 🚢 Publicação e Deploy
 
-### O que dispara a publicação? (leia primeiro)
+A publicação da nova versão é **automática**. Você **nunca** mexe no número da versão à mão, **nunca** cria tag e **nunca** roda `npm publish`. Quem faz tudo isso é o **GitHub Actions** (na nuvem), usando o **Changesets**.
 
-Este é o ponto que mais confunde: **mergear na `main` NÃO publica o pacote.** A publicação é disparada **apenas quando você empurra uma tag** `vX.Y.Z`. E quem builda e publica é o **GitHub Actions** (na nuvem) — não o seu PC.
+A sua única tarefa nova é: **em todo PR que muda a lib, adicionar um "changeset"** dizendo o que mudou. O resto é automático.
+
+### Como funciona (visão geral)
+
+```
+você cria feature/... a partir da main
+        │  coda + roda `npm run changeset`
+        ▼
+   abre o PR  →  outro dev aprova e faz merge na main
+        │
+        ▼
+[CI] abre um PR automático chamado "Version Packages"
+     (ele sobe a versão no package.json + atualiza o CHANGELOG)
+        │  um dev revisa e faz merge desse PR
+        ▼
+[CI] publica no GitHub Packages e cria a tag  ✅
+```
+
+> **Branches:** só existe a `main`, e ela é **protegida** — nada entra direto, só via **Pull Request (PR)**.
 
 O que cada ação faz:
 
 | O que você faz | Publica o pacote? | Atualiza o site de docs? |
 | --- | --- | --- |
 | `push` numa branch `feature/...` | ❌ não | ❌ não |
-| merge na `develop` | ❌ não | ❌ não |
-| merge na `main` | ❌ não | ✅ sim (deploy automático) |
-| **`push` da tag `vX.Y.Z`** | ✅ **sim** | ❌ não |
+| merge do seu PR na `main` | ❌ ainda não — o CI abre o PR **"Version Packages"** | ✅ sim |
+| merge do PR **"Version Packages"** | ✅ **sim** (automático) | ✅ sim |
 
-Então são **dois passos independentes**:
+### Passo a passo (publicar uma nova versão)
 
-1. **Levar o código e a nova versão até a `main`** (via PR): isso atualiza o **site de documentação**, mas **não publica** o pacote.
-2. **Criar e empurrar a tag**: é isto que **publica** o pacote no GitHub Packages.
-
-> **Fluxo do projeto:** `feature/...` → `develop` → `main`. As branches `develop` e `main` são **protegidas** — nelas só entra via **Pull Request (PR)**.
->
-> ⚠️ **Não** use `npm run version:publish`: ele tenta dar `push` direto na branch protegida e é bloqueado.
-
-### Publicar uma nova versão (passo a passo)
-
-**1. Criar uma branch a partir da `develop`:**
-
-```bash
-git checkout develop
-git pull
-git checkout -b feature/bump-1.0.0
-```
-
-**2. Subir o número da versão** (só edita o `package.json`, não publica):
-
-```bash
-npm run version:patch    # correção:  0.1.43 -> 0.1.44
-npm run version:minor    # feature:    0.1.43 -> 0.2.0
-npm run version:major    # breaking:   0.1.43 -> 1.0.0
-```
-
-**3. Commitar e subir a branch:**
-
-```bash
-git add package.json
-git commit -m "chore: bump para v1.0.0"
-git push -u origin feature/bump-1.0.0
-```
-
-**4. Abrir os PRs e mergear:** primeiro `feature/bump-1.0.0` → `develop`, depois `develop` → `main`.
-
-**5. Criar a tag na `main` (isso publica):**
+**1. Criar uma branch a partir da `main`:**
 
 ```bash
 git checkout main
 git pull
-git tag v1.0.0
-git push origin v1.0.0
+git checkout -b feature/minha-mudanca
 ```
 
-A tag dispara o workflow **"Publish Package"** (aba **Actions** no GitHub). Quando ficar verde, está publicado. ✅
+**2. Fazer o seu trabalho** (código, correção, novo componente...) e commitar normalmente.
 
-**Resumo:** a versão entra por **PR** (`feature → develop → main`); a publicação dispara pela **tag** na `main`.
+**3. Registrar o que mudou (o "changeset"):**
+
+```bash
+npm run changeset
+```
+
+O comando vai perguntar:
+
+- **Qual o tipo da mudança?**
+  - `patch` → correção de bug ou ajuste pequeno (ex.: `1.0.0` → `1.0.1`)
+  - `minor` → nova funcionalidade que **não quebra** nada (ex.: `1.0.0` → `1.1.0`)
+  - `major` → mudança que **quebra** compatibilidade (ex.: `1.0.0` → `2.0.0`)
+- **Um resumo** do que mudou (vira uma linha no CHANGELOG).
+
+Isso cria um arquivinho dentro de `.changeset/`. **Adicione e commite esse arquivo junto com o seu código:**
+
+```bash
+git add .
+git commit -m "feat: minha mudança"
+git push -u origin feature/minha-mudanca
+```
+
+> Mudou algo que afeta quem usa a lib? Precisa de changeset. Mexeu só em docs/CI (não afeta o pacote publicado)? Não precisa — pode pular o passo 3.
+
+**4. Abrir o PR e pedir review.** Outro dev aprova e faz **merge na `main`**.
+
+**5. Não faça mais nada.** Ao mergear, o CI abre **sozinho** um PR chamado **"Version Packages"** (na aba **Pull requests**). Ele já sobe a versão no `package.json` e atualiza o `CHANGELOG.md` — junta todos os changesets pendentes.
+
+**6. Revisar e mergear o "Version Packages".** Quando esse PR for mergeado, o CI **publica o pacote no GitHub Packages e cria a tag** automaticamente. Acompanhe na aba **Actions** (workflow **"Release"**); quando ficar verde, está publicado. ✅
+
+**Resumo:** você só **adiciona um changeset** no seu PR. Subir a versão, gerar CHANGELOG, criar a tag e publicar é tudo automático.
 
 ### Deploy da documentação (site)
 
-O site de documentação (Storybook) é hospedado no **GitHub Pages** e faz deploy **automático** a cada `push`/`merge` na branch `main`.
+O site de documentação (Storybook) é hospedado no **GitHub Pages** e faz deploy **automático** a cada `push`/`merge` na branch `main` (independente da publicação do pacote).
+
+### ⚙️ Configuração necessária no repositório (uma vez só)
+
+Para o CI conseguir abrir o PR **"Version Packages"**, um admin precisa habilitar, em
+**Settings → Actions → General → Workflow permissions**:
+
+1. **Read and write permissions**.
+2. **Allow GitHub Actions to create and approve pull requests**.
+
+Não é preciso criar token nem secret — o `GITHUB_TOKEN` padrão do Actions já basta.
 
 ---
 

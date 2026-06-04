@@ -33,12 +33,13 @@ design-system/
 │   └── index.ts              # API pública do pacote
 ├── .storybook/               # Config do Storybook (preview, main, theme)
 ├── docs/                     # Guias internos pt-BR (criacao, instalacao, confluence)
-├── scripts/                  # Versionamento, publicação, utilitários
+├── scripts/                  # Utilitários de apoio ao desenvolvimento
+├── .changeset/               # Versionamento (Changesets): config + changesets pendentes
 ├── tsup.config.ts            # Build (ESM + CJS + d.ts + css)
 ├── vitest.config.ts          # Testes (projects: unit + storybook)
 ├── tsconfig.json
 ├── package.json              # Único — deps da lib + devDeps de build/storybook
-└── .github/workflows/        # publish.yml, deploy-docs.yml
+└── .github/workflows/        # release.yml, deploy-docs.yml, code-review-agent.yml
 ```
 
 Pacote único. Storybook colocado na raiz consome `src/` em dev e `dist/` em build via aliases do Vite. Todo trabalho de componente acontece dentro de `src/`.
@@ -82,7 +83,7 @@ npm run clean            # rimraf dist storybook-static
 ## Variáveis de ambiente
 
 - **`GITHUB_TOKEN`** (ou PAT com `read:packages`) — necessário para `npm install` quando o pacote é consumido por outro projeto, pois `@juscash/design-system` é publicado no **GitHub Packages**. O `.npmrc` do consumidor deve apontar o escopo `@juscash` para `https://npm.pkg.github.com` e ler o token via env var. **Nunca comitar token em texto plano** — use variável de ambiente.
-- **`NODE_AUTH_TOKEN`** — usado pelo workflow `publish.yml` para autenticar na publicação (injetado automaticamente como `${{ secrets.GITHUB_TOKEN }}`).
+- **`NODE_AUTH_TOKEN`** — usado pelo workflow `release.yml` para autenticar na publicação (injetado automaticamente como `${{ secrets.GITHUB_TOKEN }}`).
 - **`GITHUB_PAGES=true`** — flag usada apenas no workflow `deploy-docs.yml` durante o build do Storybook para gerar paths corretos para GitHub Pages.
 
 Não comitar `.env` real (já no `.gitignore`). Se uma nova variável aparecer, espelhe em `.env.example` para o agente de revisão validar.
@@ -387,13 +388,15 @@ O arquivo CSS é exposto pelo `package.json` em `"./dist/index.css": "./dist/ind
 
 ### Publicação da biblioteca
 
-Acionada por **tag git** `v*` via `.github/workflows/publish.yml`. Fluxo:
+Versionamento e publicação são **automáticos**, via **Changesets** (`.github/workflows/release.yml`, disparado em `push` na `main`). Não há bump manual de versão, nem criação de tag, nem `npm publish` manual. Fluxo:
 
-1. `npm run version:patch|minor|major` — atualiza `package.json` (`scripts/version.cjs`).
-2. `npm run version:publish` — `scripts/version-publish.cjs` faz `git add` + commit (`chore: bump @juscash/design-system to vX.Y.Z`) + cria tag local + `git push --tags`.
-3. O workflow `publish.yml` é disparado pela tag: builda com `tsup` e publica em **GitHub Packages** (`https://npm.pkg.github.com`, escopo `@juscash`) usando `NODE_AUTH_TOKEN` injetado pelo Actions.
+1. **No PR**: o dev roda `npm run changeset` e commita o arquivo gerado em `.changeset/` descrevendo o tipo de mudança (`patch`/`minor`/`major`) e um resumo.
+2. **Ao mergear o PR na `main`**: o `changesets/action` abre (ou atualiza) um PR automático **"Version Packages"** que sobe a versão no `package.json` e atualiza o `CHANGELOG.md` (consumindo os changesets pendentes via `npm run version:packages` = `changeset version`).
+3. **Ao mergear o "Version Packages" PR**: a próxima execução do workflow roda `npm run release` (`changeset publish`), que builda (`prepublishOnly` → `tsup`), publica em **GitHub Packages** (`https://npm.pkg.github.com`, escopo `@juscash`, `NODE_AUTH_TOKEN` = `GITHUB_TOKEN` do Actions) e cria a tag git correspondente.
 
-Não publique manualmente — sempre use os scripts. Se precisar reverter, faça nova tag patch acima da última, não despublique.
+A config do Changesets vive em `.changeset/config.json` (`baseBranch: main`, changelog via `@changesets/changelog-github`). O bump entra por **PR**, nunca por push direto — compatível com a `main` protegida sem precisar de PAT. **Pré-requisito de repositório** (uma vez): em _Settings → Actions → General → Workflow permissions_, habilitar **Read and write permissions** e **Allow GitHub Actions to create and approve pull requests**.
+
+Não publique manualmente. Se precisar reverter, libere uma nova versão (patch) acima da última — não despublique.
 
 ### Deploy do Storybook (GitHub Pages)
 
