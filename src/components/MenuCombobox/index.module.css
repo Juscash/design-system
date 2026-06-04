@@ -1,26 +1,10 @@
 /*
-  Estilos do MenuCombobox — conjunto de primitivos para construir popups de
-  menu/dropdown/combobox. Tokens e dimensões vêm do dump
-  `figma/components/menu-combobox/design-context-4115-13286.md`.
-
-  Cobertura:
-  - Container (`.ds-menu-combobox`) com variantes de spacing (linhas 7-11).
-  - Item (`.ds-menu-combobox-item`) com size m/l, type default/destructive e
-    estados hover/active/selected/disabled/loading (linhas 13-28).
-  - Group label (`.ds-menu-combobox-group-label`) com indented true/false
-    (linhas 30-32).
-  - Search (`.ds-menu-combobox-search`) com state default/active (linhas
-    34-36).
-  - Overflow (`.ds-menu-combobox-overflow`) up/down (linhas 38-40).
-
-  Sem font-family própria — herda do body global (Inter via global.css).
+  Estilos do MenuCombobox — primitivos para popups de menu/dropdown/combobox.
+  Fonte de verdade: Figma "Menu/combobox" (node 4115:13286). Tokens via CSS
+  variables de theme/global.css. Sem font-family própria (herda Inter do body).
 */
 
-/* ============================================
-   CONTAINER
-   240x{48,64,80,96} conforme dump. Largura fixa, altura controlada pelo
-   conteúdo. Padding via variante de spacing.
-   ============================================ */
+/* CONTAINER — 240px, fundo neutral/50, borda regular, raio xl, sombra m. Padding por spacing. */
 :global(.ds-menu-combobox) {
   width: 240px;
   background: var(--color-neutral-50);
@@ -31,6 +15,7 @@
   box-sizing: border-box;
   display: flex;
   flex-direction: column;
+  align-items: stretch;
 }
 
 :global(.ds-menu-combobox--spacing-none) {
@@ -49,46 +34,62 @@
   padding: var(--spacing-6);
 }
 
-/* ============================================
-   ITEM
-   Altura m=32 / l=36. Padding horizontal spacing-3, gap entre ícone e texto
-   spacing-2. Font 13 (body/02).
-   ============================================ */
+/* ITEM — raio xl. m: min-h 32 / pad 4px 8px / gap 8. l: min-h 36 / pad 8px 12px / gap 12. Fonte 13px. */
 :global(.ds-menu-combobox-item) {
   display: flex;
   flex-direction: row;
   align-items: center;
-  gap: var(--spacing-2);
-  padding-inline: var(--spacing-3);
-  font-size: var(--font-body-2-size);
-  color: var(--color-text-dark);
-  background: transparent;
-  border: none;
   width: 100%;
+  box-sizing: border-box;
+  border: none;
+  border-radius: var(--radius-xl);
+  background: var(--color-neutral-50);
+  color: var(--color-text-dark);
+  font-size: var(--font-body-2-size);
+  line-height: var(--font-line-height);
+  text-align: left;
   cursor: pointer;
   user-select: none;
-  text-align: left;
-  box-sizing: border-box;
   outline: none;
-  transition: background-color 120ms ease-in-out;
+  transition: background-color 120ms ease-in-out, box-shadow 120ms ease-in-out;
 }
 
 :global(.ds-menu-combobox-item--size-m) {
-  height: 32px;
+  min-height: 32px;
+  gap: var(--spacing-2);
+  padding: var(--spacing-1) var(--spacing-2);
 }
 
 :global(.ds-menu-combobox-item--size-l) {
-  height: 36px;
+  min-height: 36px;
+  gap: var(--spacing-3);
+  padding: var(--spacing-2) var(--spacing-3);
+}
+
+/* Texto: label + descrição opcional empilhados, centralizados na vertical. */
+:global(.ds-menu-combobox-item__text) {
+  flex: 1 1 auto;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
 }
 
 :global(.ds-menu-combobox-item__label) {
-  flex: 1 1 auto;
-  min-width: 0;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 
+:global(.ds-menu-combobox-item__description) {
+  font-size: var(--font-caption-size);
+  color: var(--color-text-soft);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+/* Slots de ícone: glyph 16px centralizado num quadrado por size (m 20 / l 40). */
 :global(.ds-menu-combobox-item__icon),
 :global(.ds-menu-combobox-item__right-icon) {
   display: inline-flex;
@@ -98,37 +99,54 @@
   color: currentColor;
 }
 
-/* Estados interativos reais (hover/active/focus) via CSS — sem simulação. */
-:global(.ds-menu-combobox-item):hover:not(:global(.ds-menu-combobox-item--disabled)):not(:global(.ds-menu-combobox-item--loading)) {
-  background-color: var(--color-neutral-100);
+:global(.ds-menu-combobox-item--size-m) :global(.ds-menu-combobox-item__icon),
+:global(.ds-menu-combobox-item--size-m) :global(.ds-menu-combobox-item__right-icon) {
+  width: 20px;
+  height: 20px;
 }
 
-:global(.ds-menu-combobox-item):active:not(:global(.ds-menu-combobox-item--disabled)):not(:global(.ds-menu-combobox-item--loading)) {
+:global(.ds-menu-combobox-item--size-l) :global(.ds-menu-combobox-item__icon),
+:global(.ds-menu-combobox-item--size-l) :global(.ds-menu-combobox-item__right-icon) {
+  width: 40px;
+  height: 40px;
+}
+
+/* Fundos type-aware de hover/active/selected (default: neutral/200). */
+:global(.ds-menu-combobox-item--type-default):hover:not(:global(.ds-menu-combobox-item--disabled)):not(:global(.ds-menu-combobox-item--loading)),
+:global(.ds-menu-combobox-item--type-default):active:not(:global(.ds-menu-combobox-item--disabled)):not(:global(.ds-menu-combobox-item--loading)),
+:global(.ds-menu-combobox-item--type-default.ds-menu-combobox-item--selected) {
   background-color: var(--color-neutral-200);
 }
 
+/* Destructive: hover/active/selected usam feedback/red/50. */
+:global(.ds-menu-combobox-item--type-destructive):hover:not(:global(.ds-menu-combobox-item--disabled)):not(:global(.ds-menu-combobox-item--loading)),
+:global(.ds-menu-combobox-item--type-destructive):active:not(:global(.ds-menu-combobox-item--disabled)):not(:global(.ds-menu-combobox-item--loading)),
+:global(.ds-menu-combobox-item--type-destructive.ds-menu-combobox-item--selected) {
+  background-color: var(--color-feedback-red-50);
+}
+
+/* Foco real (teclado): anel neutral/300 — token --shadow-focus do Figma. */
 :global(.ds-menu-combobox-item):focus-visible {
-  background-color: var(--color-neutral-100);
-  box-shadow: inset 0 0 0 2px var(--color-brand-primary-600);
+  box-shadow: var(--shadow-focus);
 }
 
-:global(.ds-menu-combobox-item--selected) {
-  background-color: var(--color-neutral-100);
-  position: relative;
+/* Destructive: texto feedback/red/900. */
+:global(.ds-menu-combobox-item--type-destructive) {
+  color: var(--color-feedback-red-900);
 }
 
-:global(.ds-menu-combobox-item--selected)::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0;
-  bottom: 0;
-  width: 2px;
-  background-color: var(--color-brand-primary-600);
+/* Disabled e loading: texto desabilitado (sobrepõe destructive — vem depois). */
+:global(.ds-menu-combobox-item--disabled),
+:global(.ds-menu-combobox-item--loading) {
+  color: var(--color-text-disabled);
+}
+
+:global(.ds-menu-combobox-item--disabled) :global(.ds-menu-combobox-item__description),
+:global(.ds-menu-combobox-item--loading) :global(.ds-menu-combobox-item__description) {
+  color: var(--color-text-disabled);
 }
 
 :global(.ds-menu-combobox-item--disabled) {
-  color: var(--color-text-disabled);
   cursor: not-allowed;
 }
 
@@ -136,96 +154,70 @@
   cursor: progress;
 }
 
-:global(.ds-menu-combobox-item--type-destructive) {
-  color: var(--color-feedback-red-500);
-}
+/* Loading do item: o spinner (anel de gradiente verde) é renderizado pelo
+   componente Loading do DS no slot direito — sem estilos próprios aqui. */
 
-:global(.ds-menu-combobox-item--type-destructive.ds-menu-combobox-item--disabled) {
-  color: var(--color-text-disabled);
-}
-
-/* Spinner do estado loading — 14px, fica no slot direito do item. */
-:global(.ds-menu-combobox-item__spinner) {
-  display: inline-block;
-  width: 14px;
-  height: 14px;
-  border: 2px solid var(--color-neutral-200);
-  border-top-color: var(--color-neutral-800);
-  border-radius: var(--radius-full);
-  box-sizing: border-box;
-  animation: ds-menu-combobox-spin 1s linear infinite;
-  flex-shrink: 0;
-}
-
-@keyframes ds-menu-combobox-spin {
-  to {
-    transform: rotate(360deg);
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  :global(.ds-menu-combobox-item__spinner) {
-    animation: none;
-  }
-}
-
-/* ============================================
-   GROUP LABEL
-   Font caption (10px) por padrão para hierarquia visual; cor `text/soft`.
-   indented=true aplica recuo horizontal de spacing-3.
-   ============================================ */
+/* GROUP LABEL — raio md. m: caption 10px text/soft. l: body 13px text/dark. indented: recuo 40px. */
 :global(.ds-menu-combobox-group-label) {
   display: flex;
   align-items: center;
-  padding-inline: var(--spacing-3);
-  font-size: var(--font-body-2-size);
-  color: var(--color-text-soft);
-  font-weight: 500;
-  user-select: none;
+  width: 100%;
   box-sizing: border-box;
+  border-radius: var(--radius-md);
+  font-weight: var(--font-weight-regular);
+  line-height: var(--font-line-height);
+  user-select: none;
 }
 
 :global(.ds-menu-combobox-group-label--size-m) {
-  height: 32px;
+  min-height: 32px;
+  gap: var(--spacing-2);
+  padding: var(--spacing-1) var(--spacing-2);
+  font-size: var(--font-caption-size);
+  color: var(--color-text-soft);
 }
 
 :global(.ds-menu-combobox-group-label--size-l) {
-  height: 36px;
+  min-height: 36px;
+  gap: var(--spacing-3);
+  padding: var(--spacing-2) var(--spacing-3);
+  font-size: var(--font-body-2-size);
+  color: var(--color-text-dark);
 }
 
 :global(.ds-menu-combobox-group-label--indented) {
-  padding-inline-start: var(--spacing-6);
+  padding-left: var(--spacing-10);
 }
 
-/* ============================================
-   SEARCH
-   Input embarcado. Borda inferior para separar dos itens. Aparência do
-   estado focus replicada via :focus-within real.
-   ============================================ */
+/* SEARCH — borda inferior; sem mudança de fundo no foco. m: 32 / pad-x 8 / 13px. l: 36 / pad-x 12 / 16px. */
 :global(.ds-menu-combobox-search) {
   display: flex;
   align-items: center;
   gap: var(--spacing-2);
-  padding-inline: var(--spacing-3);
-  background: var(--color-neutral-50);
-  border-bottom: 1px solid var(--color-border-regular);
+  width: 100%;
   box-sizing: border-box;
-  transition: background-color 120ms ease-in-out;
+  padding-top: var(--spacing-1);
+  padding-bottom: var(--spacing-1);
+  border-bottom: 1px solid var(--color-border-regular);
 }
 
 :global(.ds-menu-combobox-search--size-m) {
-  height: 32px;
+  min-height: 32px;
+  padding-left: var(--spacing-2);
+  padding-right: var(--spacing-2);
 }
 
 :global(.ds-menu-combobox-search--size-l) {
-  height: 36px;
+  min-height: 36px;
+  padding-left: var(--spacing-3);
+  padding-right: var(--spacing-3);
 }
 
 :global(.ds-menu-combobox-search__icon) {
   display: inline-flex;
   align-items: center;
-  color: var(--color-text-soft);
   flex-shrink: 0;
+  color: var(--color-text-soft);
 }
 
 :global(.ds-menu-combobox-search__input) {
@@ -234,29 +226,32 @@
   border: none;
   outline: none;
   background: transparent;
-  font-size: var(--font-body-2-size);
   color: var(--color-text-dark);
-  line-height: 1.2;
+  line-height: var(--font-line-height);
+}
+
+:global(.ds-menu-combobox-search--size-m) :global(.ds-menu-combobox-search__input) {
+  font-size: var(--font-body-2-size);
+}
+
+:global(.ds-menu-combobox-search--size-l) :global(.ds-menu-combobox-search__input) {
+  font-size: var(--font-body-1-size);
 }
 
 :global(.ds-menu-combobox-search__input::placeholder) {
   color: var(--color-text-soft);
 }
 
-:global(.ds-menu-combobox-search):focus-within {
-  background-color: var(--color-neutral-100);
-}
-
-/* ============================================
-   OVERFLOW
-   Chevron centralizado. Altura 32px (igual à de um item m).
-   ============================================ */
+/* OVERFLOW — indicador de scroll (chevron). Altura 16px, fundo neutral/50, raio md. */
 :global(.ds-menu-combobox-overflow) {
   display: flex;
   align-items: center;
   justify-content: center;
-  height: 32px;
-  color: var(--color-text-soft);
-  user-select: none;
+  width: 100%;
+  height: 16px;
   box-sizing: border-box;
+  border-radius: var(--radius-md);
+  background: var(--color-neutral-50);
+  color: var(--color-text-dark);
+  user-select: none;
 }

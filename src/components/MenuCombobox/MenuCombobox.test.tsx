@@ -118,7 +118,7 @@ describe("MenuCombobox", () => {
         <MenuCombobox.Item state="loading" label="Lorem" onClick={onClick} />
       </MenuCombobox>,
     );
-    expect(container.querySelector(".ds-menu-combobox-item__spinner")).toBeInTheDocument();
+    expect(container.querySelector(".ds-loading-spinner")).toBeInTheDocument();
     await user.click(screen.getByRole("menuitem"));
     expect(onClick).not.toHaveBeenCalled();
   });
@@ -165,6 +165,16 @@ describe("MenuCombobox", () => {
       </MenuCombobox>,
     );
     expect(container.querySelector(".ds-menu-combobox-item__right-icon svg")).toBeInTheDocument();
+  });
+
+  it("Item renderiza a 2a linha (description)", () => {
+    const { container } = render(
+      <MenuCombobox>
+        <MenuCombobox.Item label="Option 1" description="Line 2" />
+      </MenuCombobox>,
+    );
+    expect(screen.getByText("Line 2")).toBeInTheDocument();
+    expect(container.querySelector(".ds-menu-combobox-item__description")).toBeInTheDocument();
   });
 
   it("GroupLabel size m vs l", () => {
@@ -229,6 +239,25 @@ describe("MenuCombobox", () => {
       </MenuCombobox>,
     );
     expect(container.querySelector(".ds-menu-combobox-overflow svg")).toBeInTheDocument();
+  });
+
+  it("nao aplica role menu quando nao ha itens (so search)", () => {
+    render(
+      <MenuCombobox aria-label="Sem itens">
+        <MenuCombobox.Search placeholder="Buscar" />
+      </MenuCombobox>,
+    );
+    expect(screen.queryByRole("menu")).not.toBeInTheDocument();
+  });
+
+  it("aplica role menu com search quando ha itens", () => {
+    render(
+      <MenuCombobox aria-label="Com itens">
+        <MenuCombobox.Search placeholder="Buscar" />
+        <MenuCombobox.Item label="Option 1" />
+      </MenuCombobox>,
+    );
+    expect(screen.getByRole("menu", { name: /com itens/i })).toBeInTheDocument();
   });
 
   it("displayName do componente principal e sub-componentes", () => {

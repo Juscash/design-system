@@ -8,6 +8,9 @@ const DOT_CLASS = "ds-loading-dot";
 const SPINNER_CLASS = "ds-loading-spinner";
 const DEFAULT_ARIA_LABEL = "Carregando...";
 const DEFAULT_VARIANT: LoadingVariant = "spinner";
+const DEFAULT_SPINNER_SIZE = 40;
+const SPINNER_STROKE_RATIO = 0.125;
+const MIN_SPINNER_STROKE = 2;
 
 /**
  * Combina classes próprias do design system com `className` externo. Filtra
@@ -33,10 +36,25 @@ function renderDots(): React.ReactElement {
 }
 
 /**
- * Renderiza o anel circular rotacional da variante `"spinner"`.
+ * Calcula o estilo inline do spinner: define as CSS variables de diâmetro e
+ * espessura do anel a partir do `size` (px). A espessura é ~12,5% do diâmetro
+ * (mínimo 2px), para que o anel de gradiente escale proporcionalmente.
  */
-function renderSpinner(): React.ReactElement {
-  return <span className={SPINNER_CLASS} aria-hidden="true" />;
+function spinnerStyle(size: number): React.CSSProperties {
+  const stroke = Math.max(MIN_SPINNER_STROKE, Math.round(size * SPINNER_STROKE_RATIO));
+  return {
+    "--ds-spinner-size": `${size}px`,
+    "--ds-spinner-stroke": `${stroke}px`,
+  } as React.CSSProperties;
+}
+
+/**
+ * Renderiza o anel rotacional da variante `"spinner"` — anel de gradiente verde
+ * (`brand/primary/100` → `brand/primary/600`) com abertura e ponta arredondada,
+ * conforme Figma (Loading `4163:13165`).
+ */
+function renderSpinner(size: number): React.ReactElement {
+  return <span className={SPINNER_CLASS} aria-hidden="true" style={spinnerStyle(size)} />;
 }
 
 /**
@@ -55,6 +73,7 @@ function renderSpinner(): React.ReactElement {
 export function Loading(props: LoadingProps): React.ReactElement {
   const {
     variant = DEFAULT_VARIANT,
+    size = DEFAULT_SPINNER_SIZE,
     "aria-label": ariaLabel = DEFAULT_ARIA_LABEL,
     className,
     ...rest
@@ -71,7 +90,7 @@ export function Loading(props: LoadingProps): React.ReactElement {
       aria-label={ariaLabel}
       className={composeClassName(ROOT_CLASS, className)}
     >
-      {isDots ? renderDots() : renderSpinner()}
+      {isDots ? renderDots() : renderSpinner(size)}
     </div>
   );
 }

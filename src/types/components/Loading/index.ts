@@ -25,6 +25,11 @@ export interface LoadingProps extends Omit<HTMLAttributes<HTMLDivElement>, "aria
    */
   variant?: LoadingVariant;
   /**
+   * Diâmetro (px) do spinner. Default `40`. A espessura do anel escala junto.
+   * Não afeta a variante `"dots"`.
+   */
+  size?: number;
+  /**
    * Rótulo acessível anunciado por leitores de tela. Default `"Carregando..."`.
    */
   "aria-label"?: string;

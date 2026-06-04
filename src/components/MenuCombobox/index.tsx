@@ -9,75 +9,84 @@ import "./index.module.css";
 const BASE_CLASS = "ds-menu-combobox";
 const DEFAULT_ARIA_LABEL = "Menu";
 const SEARCH_DISPLAY_NAME = "MenuCombobox.Search";
+const ITEM_DISPLAY_NAME = "MenuCombobox.Item";
 
 /**
- * Junta classes filtrando valores falsy. Mantido inline pra evitar utility
- * externa minúscula.
+ * Junta classes filtrando valores falsy.
  */
 function joinClassNames(...tokens: Array<string | false | undefined>): string {
   return tokens.filter(Boolean).join(" ");
 }
 
 /**
- * Separa o(s) filho(s) `MenuCombobox.Search` dos demais. O search precisa
- * renderizar FORA do nó com `role="menu"` (regra ARIA `aria-required-children`:
- * `menu` só aceita `menuitem`/`group`/`separator`, não `searchbox`/`textbox`).
- * Os demais filhos (itens, group labels, overflow) ficam dentro do nó com
- * `role="menu"` para satisfazer também a regra `aria-required-parent`
- * (`menuitem` precisa de ancestral `menu`).
+ * Lê o `displayName` de um filho React (quando é um componente, não tag/string).
  */
-function partitionSearchFromChildren(children: React.ReactNode): {
+function getChildDisplayName(child: React.ReactNode): string | undefined {
+  if (!React.isValidElement(child)) return undefined;
+  const childType = child.type as { displayName?: string } | string;
+  return typeof childType === "string" ? undefined : childType.displayName;
+}
+
+interface PartitionedChildren {
   searchChildren: React.ReactNode[];
-  otherChildren: React.ReactNode[];
-} {
-  const searchChildren: React.ReactNode[] = [];
-  const otherChildren: React.ReactNode[] = [];
-  React.Children.toArray(children).forEach((child) => {
-    if (!React.isValidElement(child)) {
-      otherChildren.push(child);
-      return;
-    }
-    const childType = child.type as React.ComponentType<unknown> | string;
-    if (typeof childType !== "string" && childType.displayName === SEARCH_DISPLAY_NAME) {
-      searchChildren.push(child);
-      return;
-    }
-    otherChildren.push(child);
-  });
-  return { searchChildren, otherChildren };
+  restChildren: React.ReactNode[];
+  hasMenuItem: boolean;
 }
 
 /**
- * Container raiz do menu. Aplica padding via `spacing` e o `aria-label`
- * (fallback `"Menu"`). A estrutura ARIA é condicional:
+ * Separa o `MenuCombobox.Search` (renderiza FORA do `role="menu"`, pela regra
+ * ARIA `aria-required-children`) do restante, e sinaliza se há ao menos um
+ * `MenuCombobox.Item` (único filho que justifica o `role="menu"`).
+ */
+function partitionChildren(children: React.ReactNode): PartitionedChildren {
+  const searchChildren: React.ReactNode[] = [];
+  const restChildren: React.ReactNode[] = [];
+  let hasMenuItem = false;
+  React.Children.toArray(children).forEach((child) => {
+    const displayName = getChildDisplayName(child);
+    if (displayName === SEARCH_DISPLAY_NAME) {
+      searchChildren.push(child);
+      return;
+    }
+    if (displayName === ITEM_DISPLAY_NAME) hasMenuItem = true;
+    restChildren.push(child);
+  });
+  return { searchChildren, restChildren, hasMenuItem };
+}
+
+/**
+ * Container raiz do menu. A estrutura ARIA é condicional para satisfazer
+ * `aria-required-children` (um `role="menu"` só deve conter menuitens/grupos):
  *
- * - Sem `MenuCombobox.Search`: o próprio wrapper recebe `role="menu"` e
- *   `aria-label`, contendo todos os filhos.
- * - Com `MenuCombobox.Search`: o wrapper externo é um `<div>` sem role
- *   específico (apenas a classe visual). O search é renderizado primeiro,
- *   fora do `role="menu"`. Os demais filhos (`Item`, `GroupLabel`,
- *   `Overflow`) ficam dentro de um `<div role="menu" aria-label=…>` interno.
- *   Isso satisfaz simultaneamente `aria-required-children` (menu só com
- *   filhos permitidos) e `aria-required-parent` (menuitens com ancestral
- *   menu).
+ * - O `MenuCombobox.Search` sempre renderiza fora do `role="menu"`.
+ * - O `role="menu"` (+ `aria-label`) só é aplicado quando há ao menos um
+ *   `MenuCombobox.Item`. Composições puramente visuais (empty state, loading)
+ *   ficam num wrapper neutro, sem `role="menu"`.
  */
 const MenuComboboxRoot: React.FC<MenuComboboxProps> = (props) => {
-  const { spacing = "8", children, className, style, "aria-label": ariaLabel = DEFAULT_ARIA_LABEL } = props;
+  const { spacing = "8", children, className, style, tabIndex, "aria-label": ariaLabel = DEFAULT_ARIA_LABEL } = props;
   const wrapperClassName = joinClassNames(BASE_CLASS, `${BASE_CLASS}--spacing-${spacing}`, className);
-  const { searchChildren, otherChildren } = partitionSearchFromChildren(children);
+  const { searchChildren, restChildren, hasMenuItem } = partitionChildren(children);
+
   if (searchChildren.length === 0) {
+    const menuRoleProps = hasMenuItem ? { role: "menu", "aria-label": ariaLabel } : {};
     return (
-      <div className={wrapperClassName} style={style} role="menu" aria-label={ariaLabel}>
-        {children}
+      <div className={wrapperClassName} style={style} tabIndex={tabIndex} {...menuRoleProps}>
+        {restChildren}
       </div>
     );
   }
+
   return (
-    <div className={wrapperClassName} style={style}>
+    <div className={wrapperClassName} style={style} tabIndex={tabIndex}>
       {searchChildren}
-      <div role="menu" aria-label={ariaLabel}>
-        {otherChildren}
-      </div>
+      {hasMenuItem ? (
+        <div role="menu" aria-label={ariaLabel}>
+          {restChildren}
+        </div>
+      ) : (
+        restChildren
+      )}
     </div>
   );
 };
@@ -85,16 +94,19 @@ const MenuComboboxRoot: React.FC<MenuComboboxProps> = (props) => {
 MenuComboboxRoot.displayName = "MenuCombobox";
 
 /**
- * MenuCombobox do design system. Conjunto de primitivos visuais para
- * construir popups de menu/dropdown/combobox — NÃO é um Select completo.
- * Conforme dump `figma/components/menu-combobox/design-context-4115-13286.md`.
+ * MenuCombobox do design system. Conjunto de primitivos visuais para construir
+ * o CONTEÚDO de popups de menu/dropdown/combobox — não inclui trigger nem
+ * positioning. Conforme Figma "Menu/combobox" (node 4115:13286).
  *
  * Composição:
- * - `MenuCombobox` (container).
+ * - `MenuCombobox` (container 240px).
  * - `MenuCombobox.Item` (entrada do menu).
  * - `MenuCombobox.GroupLabel` (rótulo de seção).
  * - `MenuCombobox.Search` (input de busca embarcado).
- * - `MenuCombobox.Overflow` (chevron up/down).
+ * - `MenuCombobox.Overflow` (chevron indicador de scroll).
+ *
+ * Empty state e loading de menu são compostos com os componentes `EmptyState` e
+ * `Loading` do próprio design system (ver stories).
  */
 const MenuCombobox = MenuComboboxRoot as MenuComboboxComponent;
 MenuCombobox.Item = MenuComboboxItem;
