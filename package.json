@@ -37,10 +37,9 @@
     "test": "vitest",
     "test:run": "vitest run",
     "test:storybook": "vitest run --project=storybook",
-    "version:patch": "node scripts/version.cjs patch",
-    "version:minor": "node scripts/version.cjs minor",
-    "version:major": "node scripts/version.cjs major",
-    "version:publish": "node scripts/version-publish.cjs"
+    "changeset": "node scripts/changeset.cjs",
+    "version:packages": "changeset version",
+    "release": "changeset publish"
   },
   "engines": {
     "node": ">=20.0.0"
@@ -60,6 +59,8 @@
     "react-dom": "^18.0.0 || ^19.0.0"
   },
   "devDependencies": {
+    "@changesets/changelog-github": "^0.7.0",
+    "@changesets/cli": "^2.31.0",
     "@fontsource-variable/inter": "^5.2.8",
     "@storybook/addon-a11y": "^10.2.8",
     "@storybook/addon-designs": "^11.1.2",
