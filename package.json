@@ -37,7 +37,7 @@
     "test": "vitest",
     "test:run": "vitest run",
     "test:storybook": "vitest run --project=storybook",
-    "changeset": "changeset",
+    "changeset": "node scripts/changeset.cjs",
     "version:packages": "changeset version",
     "release": "changeset publish"
   },
