@@ -4,12 +4,7 @@ import type { TablePaginationConfig } from "antd/es/table/interface";
 import type { TableProps as AntdTableProps } from "antd/es/table";
 import { designSystemColors, radius, spacing } from "../../theme";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
-import type {
-  TableProps,
-  TableResponsiveMode,
-  TableSkeletonConfig,
-  TableEmptyState,
-} from "../../types/components/Table";
+import type { TableProps, TableResponsiveMode, TableSkeletonConfig, TableEmptyState } from "../../types/components/Table";
 import { buildColumns } from "./utils/buildColumns";
 import { BulkActionBar } from "./parts/BulkActionBar";
 import { TableEmptyStateRenderer } from "./parts/EmptyState";
@@ -208,8 +203,8 @@ function wrapSelectionColumnTitle<T>(
           </span>
         )
       : typeof original === "function"
-        ? (checkboxNode: React.ReactNode): React.ReactNode => original(withDsCheckboxClass(checkboxNode))
-        : (checkboxNode: React.ReactNode): React.ReactNode => withDsCheckboxClass(checkboxNode);
+      ? (checkboxNode: React.ReactNode): React.ReactNode => original(withDsCheckboxClass(checkboxNode))
+      : (checkboxNode: React.ReactNode): React.ReactNode => withDsCheckboxClass(checkboxNode);
 
   const userRenderCell = rowSelection.renderCell;
   const wrappedRenderCell: NonNullable<AntdTableProps<T>["rowSelection"]>["renderCell"] = (
@@ -287,17 +282,14 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
     ...rest
   } = props;
 
-  const paginationConfig = (pagination === false ? undefined : (pagination as TablePaginationConfig | undefined));
+  const paginationConfig = pagination === false ? undefined : (pagination as TablePaginationConfig | undefined);
   const paginationEnabled = pagination !== false;
 
   // Detecção de modo cards: `responsive='cards'` força sempre; `'auto'`
   // depende do viewport (<= breakpoint - 1 px). `'scroll'` jamais ativa
   // cards. `'blocks'` é alias deprecated de `'cards'`.
   const mobileMatches = useMediaQuery(`(max-width: ${responsiveBreakpoint - 1}px)`);
-  const isCardsMode =
-    responsive === "cards" ||
-    responsive === "blocks" ||
-    (responsive === "auto" && mobileMatches);
+  const isCardsMode = responsive === "cards" || responsive === "blocks" || (responsive === "auto" && mobileMatches);
 
   const showSkeleton = Boolean(skeleton) || Boolean(loading);
   const skeletonRowsCount = useMemo(() => resolveSkeletonRows(skeleton), [skeleton]);
@@ -317,10 +309,35 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
   const currentPage = isPageControlled ? (paginationConfig?.current as number) : internalPage;
   const currentPageSize = isPageSizeControlled ? (paginationConfig?.pageSize as number) : internalPageSize;
 
-  const customColumns = useMemo(
-    () => buildColumns<T>({ columns, sortIcons }),
-    [columns, sortIcons],
-  );
+  const customColumns = useMemo(() => buildColumns<T>({ columns, sortIcons }), [columns, sortIcons]);
+
+  // Antd v6 reinjeta `title=<string>` em `<th>`s com ellipsis+sorter mesmo
+  // após `ellipsis.showTitle: false` + `onHeaderCell({title: ''})`. Para
+  // garantir que o tooltip nativo do browser NUNCA dispare, observamos o
+  // wrapper e limpamos qualquer `title` remanescente em cells com ellipsis.
+  // O `Tooltip` do DS continua sendo a única fonte de tooltip quando o
+  // consumidor opta via `render`.
+  //
+  // IMPORTANTE: este `useRef`/`useEffect` PRECISA ficar ANTES de qualquer
+  // early return (ex.: o skeleton de loading abaixo). Caso contrário a
+  // contagem de hooks muda entre renders (full → skeleton) e o React lança
+  // "Rendered fewer hooks than expected". Quando o skeleton é exibido o
+  // `wrapperRef` não é montado e o efeito apenas faz no-op (`if (!wrapper)`).
+  const wrapperRef = useRef<HTMLDivElement>(null);
+  useEffect(() => {
+    const wrapper = wrapperRef.current;
+    if (!wrapper) return;
+    const cleanTitles = (): void => {
+      wrapper.querySelectorAll(".ant-table-cell-ellipsis[title]").forEach((cell) => {
+        const t = cell.getAttribute("title");
+        if (t !== null && t !== "") cell.setAttribute("title", "");
+      });
+    };
+    cleanTitles();
+    const observer = new MutationObserver(cleanTitles);
+    observer.observe(wrapper, { subtree: true, attributes: true, attributeFilter: ["title"] });
+    return () => observer.disconnect();
+  });
 
   // Loading: substitui a tabela INTEIRA pela seção de skeleton (Figma
   // `8733:10563`/`8733:11508`). Sem header, sem container border, sem
@@ -359,69 +376,47 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
     paginationConfig?.onChange?.(nextPage, nextSize);
   };
 
-  // Antd v6 reinjeta `title=<string>` em `<th>`s com ellipsis+sorter mesmo
-  // após `ellipsis.showTitle: false` + `onHeaderCell({title: ''})`. Para
-  // garantir que o tooltip nativo do browser NUNCA dispare, observamos o
-  // wrapper e limpamos qualquer `title` remanescente em cells com ellipsis.
-  // O `Tooltip` do DS continua sendo a única fonte de tooltip quando o
-  // consumidor opta via `render`.
-  const wrapperRef = useRef<HTMLDivElement>(null);
-  useEffect(() => {
-    const wrapper = wrapperRef.current;
-    if (!wrapper) return;
-    const cleanTitles = (): void => {
-      wrapper.querySelectorAll(".ant-table-cell-ellipsis[title]").forEach((cell) => {
-        const t = cell.getAttribute("title");
-        if (t !== null && t !== "") cell.setAttribute("title", "");
-      });
-    };
-    cleanTitles();
-    const observer = new MutationObserver(cleanTitles);
-    observer.observe(wrapper, { subtree: true, attributes: true, attributeFilter: ["title"] });
-    return () => observer.disconnect();
-  });
-
   return (
     <ConfigProvider theme={getTableThemeTokens()}>
       <div ref={wrapperRef} className={isCardsMode ? "ds-table-wrapper--cards" : undefined}>
-      {showBulkBar && <BulkActionBar count={selectionCount} config={bulkActions} />}
-      {isCardsMode ? (
-        <MobileCards
-          data={visibleData}
-          columns={columns}
-          cardLayout={cardLayout}
-          rowSelection={rowSelection}
-          rowKey={rowKey}
-          emptyState={emptyState}
-        />
-      ) : (
-        <AntdTable
-          {...(rest as AntdTableProps<T>)}
-          rowKey={rowKey}
-          rowSelection={finalRowSelection}
-          dataSource={visibleData as AntdTableProps<T>["dataSource"]}
-          pagination={false}
-          tableLayout={tableLayout}
-          scroll={scroll}
-          bordered={bordered}
-          columns={customColumns}
-          className={mergedClassName}
-          locale={mergedLocale}
-          loading={false}
-        />
-      )}
-      {paginationEnabled && hasData && (
-        <TablePagination
-          current={currentPage}
-          pageSize={currentPageSize}
-          total={totalRecords}
-          showSizeChanger={Boolean(paginationConfig?.showSizeChanger)}
-          pageSizeOptions={(paginationConfig?.pageSizeOptions as string[] | undefined) ?? undefined}
-          showTotal={paginationConfig?.showTotal}
-          onChange={handlePaginationChange}
-          cardsMode={isCardsMode}
-        />
-      )}
+        {showBulkBar && <BulkActionBar count={selectionCount} config={bulkActions} />}
+        {isCardsMode ? (
+          <MobileCards
+            data={visibleData}
+            columns={columns}
+            cardLayout={cardLayout}
+            rowSelection={rowSelection}
+            rowKey={rowKey}
+            emptyState={emptyState}
+          />
+        ) : (
+          <AntdTable
+            {...(rest as AntdTableProps<T>)}
+            rowKey={rowKey}
+            rowSelection={finalRowSelection}
+            dataSource={visibleData as AntdTableProps<T>["dataSource"]}
+            pagination={false}
+            tableLayout={tableLayout}
+            scroll={scroll}
+            bordered={bordered}
+            columns={customColumns}
+            className={mergedClassName}
+            locale={mergedLocale}
+            loading={false}
+          />
+        )}
+        {paginationEnabled && hasData && (
+          <TablePagination
+            current={currentPage}
+            pageSize={currentPageSize}
+            total={totalRecords}
+            showSizeChanger={Boolean(paginationConfig?.showSizeChanger)}
+            pageSizeOptions={(paginationConfig?.pageSizeOptions as string[] | undefined) ?? undefined}
+            showTotal={paginationConfig?.showTotal}
+            onChange={handlePaginationChange}
+            cardsMode={isCardsMode}
+          />
+        )}
       </div>
     </ConfigProvider>
   );
