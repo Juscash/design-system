@@ -1,44 +1,180 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
-import React from "react";
+import React, { useState } from "react";
+import type { CSSProperties } from "react";
 import type { ColumnsType } from "antd/es/table";
-import {
-  MoreHorizontal,
-  Trash2,
-} from "lucide-react";
 import { Table } from ".";
 import { Badge } from "../Badge";
-import { Checkbox } from "../Checkbox";
+import { Button } from "../Button";
+import { Tooltip } from "../Tooltip";
 import { Title, Subtitle, Description, Primary, Controls, Stories } from "@storybook/addon-docs/blocks";
 import { Figma } from "@storybook/addon-designs/blocks";
 
 const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4069-6603&m=dev";
-const TRANSACTIONS_FIGMA_URL = "https://www.figma.com/design/W8c4OGU0SYKy2rrGiUSTYL/Transa%C3%A7%C3%B5es?node-id=6003-8239&m=dev";
 
-type Story = StoryObj<typeof Table>;
-
-type DesktopRow = {
+type Row = {
   key: string;
-  selected?: boolean;
-  checked?: boolean;
-  id: string;
-  cliente: string;
+  nome: string;
   processo: string;
   valor: string;
-  status: "Aprovado" | "Em análise" | "Pendente";
+  data: string;
+  status: string;
+  posicao?: number;
 };
 
-type TransactionRow = {
-  key: string;
-  id: string;
-  cliente: string;
-  clienteSecundario: string;
-  processo: string;
-  infosVenda: string;
-  infosSecundarias: string;
-  valores: string;
-  valoresSecundarios: string;
-  status: "Concluído" | "Pendente" | "Cancelado";
+const COLUMNS_DEFAULT: ColumnsType<Row> = [
+  { title: "Nome", dataIndex: "nome", key: "nome", ellipsis: true },
+  { title: "Processo", dataIndex: "processo", key: "processo", ellipsis: true },
+  { title: "Valor", dataIndex: "valor", key: "valor" },
+  { title: "Data", dataIndex: "data", key: "data" },
+  { title: "Status", dataIndex: "status", key: "status" },
+];
+
+const COLUMNS_SORTABLE: ColumnsType<Row> = [
+  {
+    title: "Nome",
+    dataIndex: "nome",
+    key: "nome",
+    ellipsis: true,
+    sorter: (a, b) => a.nome.localeCompare(b.nome),
+    defaultSortOrder: "ascend",
+  },
+  { title: "Processo", dataIndex: "processo", key: "processo", ellipsis: true },
+  {
+    title: "Valor",
+    dataIndex: "valor",
+    key: "valor",
+    sorter: (a, b) => a.valor.localeCompare(b.valor),
+  },
+  { title: "Data", dataIndex: "data", key: "data" },
+  { title: "Status", dataIndex: "status", key: "status" },
+];
+
+/**
+ * O `Table` não injeta tooltip automaticamente — quem quiser tooltip numa
+ * célula precisa envolver o valor via `render` (o tooltip alinha pelo TEXTO da
+ * célula, não pelo `<th>` da coluna). `inline-block` + `max-width: 100%` faz o
+ * span ocupar apenas o tamanho do texto; quando excede o espaço, o ellipsis
+ * kicka pelo `max-width`.
+ */
+const ELLIPSIS_CELL_STYLE: CSSProperties = {
+  display: "inline-block",
+  maxWidth: "100%",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  whiteSpace: "nowrap",
+  verticalAlign: "middle",
 };
+
+function renderWithTooltip(value: string): React.ReactNode {
+  return (
+    <Tooltip title={value}>
+      <span style={ELLIPSIS_CELL_STYLE}>{value}</span>
+    </Tooltip>
+  );
+}
+
+const COLUMNS_TOOLTIP: ColumnsType<Row> = [
+  { title: "Nome", dataIndex: "nome", key: "nome", ellipsis: true, render: (value: string) => renderWithTooltip(value) },
+  { title: "Processo", dataIndex: "processo", key: "processo", ellipsis: true },
+  { title: "Valor", dataIndex: "valor", key: "valor", render: (value: string) => renderWithTooltip(value) },
+  { title: "Data", dataIndex: "data", key: "data", render: (value: string) => renderWithTooltip(value) },
+  { title: "Status", dataIndex: "status", key: "status", render: (value: string) => renderWithTooltip(value) },
+];
+
+const STATUS_BADGE_COLOR: Record<string, "success" | "warning" | "error" | "info"> = {
+  Aprovado: "success",
+  Pendente: "warning",
+  Cancelado: "error",
+  "Em análise": "info",
+};
+
+const COLUMNS_BADGE: ColumnsType<Row> = [
+  { title: "Nome", dataIndex: "nome", key: "nome", ellipsis: true },
+  { title: "Processo", dataIndex: "processo", key: "processo", ellipsis: true },
+  { title: "Valor", dataIndex: "valor", key: "valor" },
+  { title: "Data", dataIndex: "data", key: "data" },
+  {
+    title: "Status",
+    dataIndex: "status",
+    key: "status",
+    width: 140,
+    render: (value: string) => (
+      <Badge variant="outline" statusColor={STATUS_BADGE_COLOR[value] ?? "info"}>
+        {value}
+      </Badge>
+    ),
+  },
+];
+
+const COLUMNS_ACTIONS: ColumnsType<Row> = [
+  { title: "Nome", dataIndex: "nome", key: "nome", ellipsis: true },
+  { title: "Processo", dataIndex: "processo", key: "processo", ellipsis: true },
+  { title: "Valor", dataIndex: "valor", key: "valor" },
+  { title: "Data", dataIndex: "data", key: "data" },
+  { title: "Status", dataIndex: "status", key: "status" },
+  {
+    title: "#",
+    key: "actions",
+    width: 160,
+    align: "right",
+    render: () => (
+      <div style={{ display: "inline-flex", gap: 4, alignItems: "center" }}>
+        <Button variant="primary" size="s" icon="Heart" tooltip="Favoritar" />
+        <Button variant="secondary" size="s" icon="Pencil" tooltip="Editar" />
+        <Button variant="destructive" size="s" icon="Trash2" tooltip="Excluir" />
+      </div>
+    ),
+  },
+];
+
+/**
+ * Colunas da seção Responsive — inclui `posicao` (id) que vai para o header
+ * do card e `actions` (apenas trash, como no Figma Prospecção `5101:54788`)
+ * que vai para o footer.
+ */
+const COLUMNS_RESPONSIVE: ColumnsType<Row> = [
+  { title: "Posição", dataIndex: "posicao", key: "posicao" },
+  { title: "Nº processo", dataIndex: "processo", key: "processo" },
+  { title: "Enviado por", dataIndex: "nome", key: "nome" },
+  { title: "Status", dataIndex: "status", key: "status" },
+  { title: "Horário da busca", dataIndex: "data", key: "data" },
+  {
+    title: "",
+    key: "actions",
+    width: 48,
+    align: "left",
+    render: () => (
+      <div style={{ display: "inline-flex", gap: 4, alignItems: "center" }}>
+        <Button variant="destructive" size="s" icon="Trash2" tooltip="Excluir" />
+      </div>
+    ),
+  },
+];
+
+const DATA: Row[] = [
+  { key: "1", posicao: 1, nome: "Lorem ipsum dolor", processo: "0001234-56.2026.8.26.0100", valor: "R$ 12.350,00", data: "15/03/2026", status: "Aprovado" },
+  { key: "2", posicao: 2, nome: "Consectetur adipiscing", processo: "0001235-78.2026.8.26.0100", valor: "R$ 7.480,00", data: "16/03/2026", status: "Pendente" },
+  { key: "3", posicao: 3, nome: "Sed do eiusmod", processo: "0001236-90.2026.8.26.0100", valor: "R$ 3.190,00", data: "17/03/2026", status: "Cancelado" },
+  { key: "4", posicao: 4, nome: "Tempor incididunt ut", processo: "0001237-12.2026.8.26.0100", valor: "R$ 16.250,00", data: "17/03/2026", status: "Em análise" },
+  { key: "5", posicao: 5, nome: "Labore et dolore", processo: "0001238-34.2026.8.26.0100", valor: "R$ 8.900,00", data: "18/03/2026", status: "Pendente" },
+];
+
+const DATA_PAGINATED: Row[] = [
+  ...DATA,
+  { key: "6", nome: "Magna aliqua enim", processo: "0001239-56.2026.8.26.0100", valor: "R$ 5.100,00", data: "19/03/2026", status: "Aprovado" },
+  { key: "7", nome: "Quis nostrud exercitation", processo: "0001240-78.2026.8.26.0100", valor: "R$ 9.800,00", data: "20/03/2026", status: "Pendente" },
+  { key: "8", nome: "Ullamco laboris nisi", processo: "0001241-90.2026.8.26.0100", valor: "R$ 4.430,00", data: "21/03/2026", status: "Cancelado" },
+  { key: "9", nome: "Aliquip ex ea commodo", processo: "0001242-11.2026.8.26.0100", valor: "R$ 10.300,00", data: "22/03/2026", status: "Aprovado" },
+  { key: "10", nome: "Consequat duis aute", processo: "0001243-22.2026.8.26.0100", valor: "R$ 4.890,00", data: "23/03/2026", status: "Pendente" },
+  { key: "11", nome: "Irure dolor in", processo: "0001244-33.2026.8.26.0100", valor: "R$ 6.750,00", data: "24/03/2026", status: "Em análise" },
+  { key: "12", nome: "Reprehenderit in voluptate", processo: "0001245-44.2026.8.26.0100", valor: "R$ 13.220,00", data: "25/03/2026", status: "Aprovado" },
+];
+
+const DATA_TOOLTIP: Row[] = [
+  { key: "t1", nome: "Lorem ipsum dolor sit amet, consectetur adipiscing elit", processo: "0001234-56.2026.8.26.0100 - Vara Cível Central", valor: "R$ 12.350,00", data: "15/03/2026", status: "Aprovado" },
+  { key: "t2", nome: "Consectetur adipiscing elit sed do eiusmod tempor", processo: "0001235-78.2026.8.26.0100 - Vara da Fazenda", valor: "R$ 7.480,00", data: "16/03/2026", status: "Pendente" },
+  { key: "t3", nome: "Sed do eiusmod tempor incididunt ut labore et dolore magna", processo: "0001236-90.2026.8.26.0100 - Juizado Especial", valor: "R$ 3.190,00", data: "17/03/2026", status: "Cancelado" },
+];
 
 const meta: Meta<typeof Table> = {
   title: "Components/Table",
@@ -53,11 +189,26 @@ const meta: Meta<typeof Table> = {
       codePanel: true,
       description: {
         component: `
-Tabela baseada no Ant Design com acabamento visual do design system da JusCash.
+Tabela de dados do design system — wrapper sobre o [Ant Design Table](https://ant.design/components/table) com tokens, locale pt-BR e props proprietárias.
 
-Links de referência:
-- Design system: ${FIGMA_URL}
-- Exemplo real de uso: ${TRANSACTIONS_FIGMA_URL}
+### Props proprietárias (Juscash)
+- **\`emptyState\`**: estado vazio custom — \`{ title, description, icon }\` (ícone Lucide por nome) ou um \`ReactNode\`.
+- **\`skeleton\`**: estado de carregamento — \`true\` (5 linhas), número (N linhas) ou \`{ rows, animated }\`. Tem precedência sobre \`loading\`.
+- **\`bulkActions\`**: barra de ações em lote acima da tabela, visível quando \`rowSelection.selectedRowKeys\` tem itens.
+- **\`responsive\`**: \`"scroll"\` | \`"cards"\` | \`"auto"\` (default — vira cards em viewport < 768px).
+- **\`cardLayout\`**: distribui colunas entre header/body/footer no modo cards (\`{ header, footer }\`).
+- **\`sortIcons\`**: trio de ícones de ordenação custom.
+
+Tooltip e Badge nas células são **opt-in** via \`columns[].render\` — o consumidor escolhe quais colunas recebem.
+
+### Como usar
+\`\`\`tsx
+import { Table } from "@juscash/design-system";
+
+function Example() {
+  return <Table columns={columns} dataSource={data} pagination={{ pageSize: 5 }} />;
+}
+\`\`\`
 `,
       },
       page: () => (
@@ -67,931 +218,175 @@ Links de referência:
           <Description />
           <Primary />
           <Controls />
-          <div style={{ marginTop: "2rem", display: "grid", gap: "1.5rem" }}>
-            <div>
-              <h2 style={{ margin: "0 0 0.75rem", fontSize: "1rem", fontWeight: 700 }}>Figma Spec</h2>
-              <Figma showLink url={FIGMA_URL} height="420px" />
-            </div>
-            <div>
-              <h2 style={{ margin: "0 0 0.75rem", fontSize: "1rem", fontWeight: 700 }}>Figma Usage Example</h2>
-              <Figma showLink url={TRANSACTIONS_FIGMA_URL} height="320px" />
-            </div>
+          <div style={{ marginTop: "2rem", marginBottom: "2rem" }}>
+            <h3 style={{ marginBottom: "1rem", fontSize: "1.2rem", fontWeight: "bold" }}>Figma Spec</h3>
+            <Figma showLink url={FIGMA_URL} height="420px" />
           </div>
           <Stories />
         </>
       ),
     },
   },
+  argTypes: {
+    responsive: {
+      control: "select",
+      options: ["scroll", "cards", "auto"],
+      description: "Estratégia de responsividade. `auto` vira cards em < 768px.",
+    },
+    size: {
+      control: "select",
+      options: ["large", "middle", "small"],
+      description: "Densidade das linhas/células (prop do antd).",
+    },
+    bordered: { control: "boolean" },
+    sticky: { control: "boolean" },
+    columns: { control: false },
+    dataSource: { control: false },
+    pagination: { control: false },
+    rowSelection: { control: false },
+    emptyState: { control: false },
+    bulkActions: { control: false },
+    cardLayout: { control: false },
+    skeleton: { control: false },
+    sortIcons: { control: false },
+  },
 };
 
 export default meta;
+type Story = StoryObj<typeof Table>;
 
-const surfaceStyle: React.CSSProperties = {
-  border: "1px solid #d4d4d4",
-  borderRadius: 8,
-  background: "#fafafa",
-  padding: 24,
-  overflowX: "auto",
-  maxWidth: "100%",
-  boxSizing: "border-box",
-};
-
-const exampleStackStyle: React.CSSProperties = {
-  display: "grid",
-  gap: 24,
-};
-
-const figmaLabelStyle: React.CSSProperties = {
-  margin: 0,
-  fontFamily: "monospace",
-  fontSize: 14,
-  lineHeight: "18px",
-  color: "#6e33ff",
-};
-
-const tableViewportStyle: React.CSSProperties = {
-  width: "100%",
-  maxWidth: "100%",
-  overflowX: "auto",
-  overflowY: "hidden",
-  paddingBottom: 4,
-  boxSizing: "border-box",
-};
-
-function Section(props: { label: string; children: React.ReactNode; width?: number | string }) {
-  const { label, children, width = "100%" } = props;
-  const resolvedWidth =
-    typeof width === "number" ? { width: "100%", maxWidth: width } : width === "100%" ? { width } : { width };
-
-  return (
-    <div style={resolvedWidth}>
-      <p style={figmaLabelStyle}>{label}</p>
-      <div style={{ marginTop: 12 }}>{children}</div>
-    </div>
-  );
-}
-
-function CellText(props: { primary: string; secondary?: string; strong?: boolean; gapPx?: number }) {
-  const { primary, secondary, strong = false, gapPx = 2 } = props;
-
-  return (
-    <div style={{ minWidth: 0, display: "grid", gap: secondary ? gapPx : 0 }}>
-      <div
-        style={{
-          margin: 0,
-          fontFamily: "Inter, sans-serif",
-          fontSize: 13,
-          lineHeight: "15.6px",
-          fontWeight: strong ? 700 : 400,
-          color: "#262626",
-          overflow: "hidden",
-          textOverflow: "ellipsis",
-          whiteSpace: "nowrap",
-        }}
-      >
-        {primary}
-      </div>
-      {secondary ? (
-        <div
-          style={{
-            margin: 0,
-            fontFamily: "Inter, sans-serif",
-            fontSize: 10,
-            lineHeight: "12px",
-            color: "#737373",
-          }}
-        >
-          {secondary}
-        </div>
-      ) : null}
-    </div>
-  );
-}
-
-function StatusPill(props: { status: "Concluído" | "Pendente" | "Cancelado" | "Aprovado" | "Em análise" | "Pendente"; compact?: boolean }) {
-  const { status, compact = false } = props;
-  const statusColor = status === "Concluído" || status === "Aprovado" ? "success" : status === "Cancelado" ? "error" : "caution";
-
-  return (
-    <Badge
-      variant="secondary"
-      statusColor={statusColor}
-      styles={{
-        indicator: {
-          minHeight: compact ? 20 : 24,
-          height: compact ? 20 : 24,
-          paddingInline: 8,
-          paddingBlock: compact ? 2 : 4,
-          borderRadius: 8,
-          fontSize: 13,
-          lineHeight: "15.6px",
-          fontWeight: 400,
-          whiteSpace: "nowrap",
-        },
-      }}
-    >
-      {status}
-    </Badge>
-  );
-}
-
-function ActionIconButton(props: { icon: React.ReactNode; label: string; destructive?: boolean; size?: number; onClick?: () => void }) {
-  const { icon, label, destructive = false, size = 32, onClick } = props;
-
-  return (
-    <button
-      aria-label={label}
-      type="button"
-      onClick={onClick}
-      style={{
-        width: size,
-        minWidth: size,
-        height: size,
-        display: "inline-flex",
-        alignItems: "center",
-        justifyContent: "center",
-        padding: 0,
-        border: "1px solid transparent",
-        borderRadius: 8,
-        background: "transparent",
-        color: destructive ? "#d2190b" : "#262626",
-        cursor: "pointer",
-      }}
-    >
-      {icon}
-    </button>
-  );
-}
-
-type BaseRow = { key: string; nome: string; email: string; status: string };
-
-const baseColumnsTyped: ColumnsType<BaseRow> = [
-  { title: "Nome", dataIndex: "nome", key: "nome", sorter: (a, b) => a.nome.localeCompare(b.nome) },
-  { title: "Email", dataIndex: "email", key: "email", ellipsis: true },
-  {
-    title: "Status",
-    dataIndex: "status",
-    key: "status",
-    render: (value: string) => <StatusPill status={value === "Ativo" ? "Concluído" : "Pendente"} compact />,
-  },
-];
-
-const baseColumns = baseColumnsTyped as ColumnsType<unknown>;
-
-const baseData = [
-  { key: "1", nome: "Julia Mascarenhas", email: "julia@juscash.com", status: "Ativo" },
-  { key: "2", nome: "Julia Flor", email: "julia.flor@juscash.com", status: "Pendente" },
-  { key: "3", nome: "Iago Silva", email: "iago@juscash.com", status: "Ativo" },
-];
-
-const desktopDataColumns: ColumnsType<DesktopRow> = [
-  {
-    title: "ID",
-    dataIndex: "id",
-    width: 84,
-    sorter: (a, b) => Number(a.id) - Number(b.id),
-  },
-  {
-    title: "Cliente principal",
-    dataIndex: "cliente",
-    width: 229.5,
-    sorter: (a, b) => a.cliente.localeCompare(b.cliente),
-    render: (value: string) => <CellText primary={value} />,
-  },
-  {
-    title: "Processo",
-    dataIndex: "processo",
-    width: 229.5,
-    sorter: (a, b) => a.processo.localeCompare(b.processo),
-    render: (value: string) => <CellText primary={value} />,
-  },
-  {
-    title: "Valor",
-    dataIndex: "valor",
-    width: 229.5,
-    sorter: (a, b) => Number(a.valor.replace(/\D/g, "")) - Number(b.valor.replace(/\D/g, "")),
-    render: (value: string) => <CellText primary={value} />,
-  },
-  {
-    title: "Status",
-    dataIndex: "status",
-    width: 80,
-    render: (value: DesktopRow["status"]) => <StatusPill status={value} compact />,
-  },
-  {
-    title: <span style={{ position: "absolute", width: 1, height: 1, padding: 0, margin: -1, overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap", border: 0 }}>Ações</span>,
-    key: "actions-placeholder",
-    width: 48,
-    render: () => <ActionIconButton icon={<MoreHorizontal size={16} />} label="Ações" size={24} />,
-  },
-];
-
-const desktopRows: DesktopRow[] = [
-  { key: "1", selected: true, checked: true, id: "3401", cliente: "Ana Souza", processo: "0002457-65.2026", valor: "R$ 12.350,00", status: "Aprovado" },
-  { key: "2", id: "3402", cliente: "Bruno Lima", processo: "0002458-22.2026", valor: "R$ 7.480,00", status: "Em análise" },
-  { key: "3", id: "3403", cliente: "Carla Dias", processo: "0002459-11.2026", valor: "R$ 3.190,00", status: "Pendente" },
-  { key: "4", id: "3404", cliente: "Diego Ramos", processo: "0002460-98.2026", valor: "R$ 16.250,00", status: "Aprovado" },
-  { key: "5", id: "3405", cliente: "Elisa Prado", processo: "0002461-74.2026", valor: "R$ 8.900,00", status: "Em análise" },
-];
-
-const desktopStoryRows: DesktopRow[] = Array.from({ length: 30 }, (_, index) => {
-  const seed = desktopRows[index % desktopRows.length];
-  const sequence = 3401 + index;
-
-  return {
-    ...seed,
-    key: `desktop-${sequence}`,
-    id: String(sequence),
-    processo: `0002${457 + index}-${10 + (index % 89)}.2026`,
-    checked: index === 0,
-    selected: index === 0,
-  };
-});
-
-function buildDesktopColumns(props: {
-  rows: DesktopRow[];
-  selectedKeys: string[];
-  setSelectedKeys: React.Dispatch<React.SetStateAction<string[]>>;
-  deleteAction?: boolean;
-  openActionKey: string | null;
-  setOpenActionKey: React.Dispatch<React.SetStateAction<string | null>>;
-  onDeleteRow: (key: string) => void;
-}): ColumnsType<DesktopRow> {
-  const { rows, selectedKeys, setSelectedKeys, deleteAction = false, openActionKey, setOpenActionKey, onDeleteRow } = props;
-  const allSelected = rows.length > 0 && rows.every((row) => selectedKeys.includes(row.key));
-
-  return [
-    {
-      title: (
-        <Checkbox
-          aria-label="Selecionar todas as linhas"
-          checked={allSelected}
-          onChange={(event) => {
-            setSelectedKeys(event.target.checked ? rows.map((row) => row.key) : []);
-          }}
-        />
-      ),
-      dataIndex: "checked",
-      key: "checked",
-      width: 32,
-      render: (_value, record) => (
-        <Checkbox
-          aria-label={`Selecionar linha ${record.id}`}
-          checked={selectedKeys.includes(record.key)}
-          onChange={(event) => {
-            setSelectedKeys((current) =>
-              event.target.checked ? [...new Set([...current, record.key])] : current.filter((key) => key !== record.key),
-            );
-          }}
-        />
-      ),
-    },
-    ...desktopDataColumns.slice(0, -1),
-    {
-      title: <span style={{ position: "absolute", width: 1, height: 1, padding: 0, margin: -1, overflow: "hidden", clip: "rect(0,0,0,0)", whiteSpace: "nowrap", border: 0 }}>{deleteAction ? "Excluir" : "Ações"}</span>,
-      key: deleteAction ? "delete" : "actions",
-      width: 48,
-      render: (_value, record) => (
-        <div style={{ position: "relative", display: "flex", justifyContent: "center" }}>
-          {deleteAction ? (
-            <ActionIconButton
-              icon={<Trash2 size={16} />}
-              label="Excluir"
-              destructive
-              size={24}
-              onClick={() => onDeleteRow(record.key)}
-            />
-          ) : (
-            <>
-              <ActionIconButton
-                icon={<MoreHorizontal size={16} />}
-                label="Ações"
-                size={24}
-                onClick={() => {
-                  setOpenActionKey((current) => (current === record.key ? null : record.key));
-                }}
-              />
-              {openActionKey === record.key ? (
-                <div
-                  style={{
-                    position: "absolute",
-                    top: 28,
-                    right: 0,
-                    width: 168,
-                    border: "1px solid #d4d4d4",
-                    borderRadius: 8,
-                    background: "#fafafa",
-                    boxShadow: "0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1)",
-                    overflow: "hidden",
-                    zIndex: 3,
-                  }}
-                >
-                  {["Ver detalhes", "Editar", "Arquivar"].map((label) => (
-                    <button
-                      key={label}
-                      type="button"
-                      onClick={() => setOpenActionKey(null)}
-                      style={{
-                        width: "100%",
-                        minHeight: 32,
-                        padding: "4px 8px",
-                        display: "flex",
-                        alignItems: "center",
-                        border: "none",
-                        background: "#fafafa",
-                        color: "#262626",
-                        fontFamily: "Inter, sans-serif",
-                        fontSize: 13,
-                        lineHeight: "15.6px",
-                        cursor: "pointer",
-                      }}
-                    >
-                      {label}
-                    </button>
-                  ))}
-                </div>
-              ) : null}
-            </>
-          )}
-        </div>
-      ),
-    },
-  ];
-}
-
-function SelectableDesktopTable(props: {
-  rows: DesktopRow[];
-  deleteAction?: boolean;
-  scroll?: { x?: number; y?: number };
-  pagination?: false | {
-    total: number;
-    pageSize: number;
-    current: number;
-    showSizeChanger: true;
-    pageSizeOptions: string[];
-    showTotal: () => string;
-    onChange?: (page: number, pageSize: number) => void;
-    onShowSizeChange?: (current: number, size: number) => void;
-  };
-}) {
-  const { rows, deleteAction = false, scroll, pagination } = props;
-  const [localRows, setLocalRows] = React.useState<DesktopRow[]>(rows);
-  const [selectedKeys, setSelectedKeys] = React.useState<string[]>(() =>
-    rows.filter((row) => row.checked || row.selected).map((row) => row.key),
-  );
-  const [openActionKey, setOpenActionKey] = React.useState<string | null>(null);
-  const [currentPage, setCurrentPage] = React.useState(pagination ? pagination.current : 1);
-  const [pageSize, setPageSize] = React.useState(pagination ? pagination.pageSize : 15);
-
-  const mergedPagination =
-    pagination === false ?
-      false
-    : {
-        ...pagination,
-        total: localRows.length,
-        current: currentPage,
-        pageSize,
-        showTotal: () => `Quantidade total ${localRows.length}`,
-        onChange: (page: number, nextPageSize: number) => {
-          setCurrentPage(page);
-          setPageSize(nextPageSize);
-          setOpenActionKey(null);
-        },
-        onShowSizeChange: (page: number, size: number) => {
-          setCurrentPage(page);
-          setPageSize(size);
-          setOpenActionKey(null);
-        },
-      };
-
-  return (
-    <div style={tableViewportStyle}>
-      <Table
-        columns={buildDesktopColumns({
-          rows: localRows,
-          selectedKeys,
-          setSelectedKeys,
-          deleteAction,
-          openActionKey,
-          setOpenActionKey,
-          onDeleteRow: (key) => {
-            setLocalRows((current) => current.filter((row) => row.key !== key));
-            setSelectedKeys((current) => current.filter((item) => item !== key));
-            setOpenActionKey((current) => (current === key ? null : current));
-          },
-        })}
-        dataSource={localRows}
-        pagination={mergedPagination}
-        rowClassName={(record) => (selectedKeys.includes(record.key) ? "ds-table-row-selected" : "")}
-        scroll={scroll}
-      />
-    </div>
-  );
-}
-
-function TransactionsTablePreview() {
-  const [rows] = React.useState<TransactionRow[]>(transactionStoryRows);
-  const [openActionKey, setOpenActionKey] = React.useState<string | null>(null);
-  const [currentPage, setCurrentPage] = React.useState(1);
-  const [pageSize, setPageSize] = React.useState(15);
-
-  return (
-    <div style={tableViewportStyle}>
-      <Table
-        columns={[
-          ...transactionsColumns.slice(0, -1),
-          {
-            title: "Ações",
-            key: "acoes",
-            width: 88,
-            render: (_value, record) => (
-              <div style={{ position: "relative", display: "flex", justifyContent: "center" }}>
-                <ActionIconButton
-                  icon={<MoreHorizontal size={16} />}
-                  label="Ações"
-                  onClick={() => {
-                    setOpenActionKey((current) => (current === record.key ? null : record.key));
-                  }}
-                />
-                {openActionKey === record.key ? (
-                  <div
-                    style={{
-                      position: "absolute",
-                      top: 32,
-                      right: 0,
-                      width: 168,
-                      border: "1px solid #d4d4d4",
-                      borderRadius: 8,
-                      background: "#fafafa",
-                      boxShadow: "0px 4px 6px -1px rgba(0, 0, 0, 0.1), 0px 2px 4px -2px rgba(0, 0, 0, 0.1)",
-                      overflow: "hidden",
-                      zIndex: 3,
-                    }}
-                  >
-                    {["Ver detalhes", "Editar", "Baixar comprovante"].map((label) => (
-                      <button
-                        key={label}
-                        type="button"
-                        onClick={() => setOpenActionKey(null)}
-                        style={{
-                          width: "100%",
-                          minHeight: 32,
-                          padding: "4px 8px",
-                          display: "flex",
-                          alignItems: "center",
-                          border: "none",
-                          background: "#fafafa",
-                          color: "#262626",
-                          fontFamily: "Inter, sans-serif",
-                          fontSize: 13,
-                          lineHeight: "15.6px",
-                          cursor: "pointer",
-                        }}
-                      >
-                        {label}
-                      </button>
-                    ))}
-                  </div>
-                ) : null}
-              </div>
-            ),
-          },
-        ]}
-        dataSource={rows}
-        pagination={{
-          total: rows.length,
-          pageSize,
-          current: currentPage,
-          showSizeChanger: true,
-          pageSizeOptions: ["15", "30", "50"],
-          showTotal: () => `Quantidade total ${rows.length}`,
-          onChange: (page, nextPageSize) => {
-            setCurrentPage(page);
-            setPageSize(nextPageSize);
-            setOpenActionKey(null);
-          },
-          onShowSizeChange: (page, size) => {
-            setCurrentPage(page);
-            setPageSize(size);
-            setOpenActionKey(null);
-          },
-        }}
-        rowClassName={() => "ds-table-row-multiline"}
-        scroll={{ x: 1246 }}
-      />
-    </div>
-  );
-}
-
-const transactionsColumns: ColumnsType<TransactionRow> = [
-  {
-    title: "ID",
-    dataIndex: "id",
-    key: "id",
-    width: 68,
-    sorter: (a, b) => Number(a.id) - Number(b.id),
-  },
-  {
-    title: "Cliente principal",
-    dataIndex: "cliente",
-    key: "cliente",
-    width: 220,
-    sorter: (a, b) => a.cliente.localeCompare(b.cliente),
-    render: (_value: string, record) => <CellText primary={record.cliente} secondary={record.clienteSecundario} gapPx={4} />,
-  },
-  {
-    title: "Processo",
-    dataIndex: "processo",
-    key: "processo",
-    width: 220,
-    sorter: (a, b) => a.processo.localeCompare(b.processo),
-    render: (value: string) => <CellText primary={value} secondary="Cível · São Paulo" gapPx={4} />,
-  },
-  {
-    title: "Infos venda",
-    dataIndex: "infosVenda",
-    key: "infosVenda",
-    width: 240,
-    render: (_value: string, record) => <CellText primary={record.infosVenda} secondary={record.infosSecundarias} gapPx={4} />,
-  },
-  {
-    title: "Valores (R$)",
-    dataIndex: "valores",
-    key: "valores",
-    width: 170,
-    align: "left",
-    render: (_value: string, record) => <CellText primary={record.valores} secondary={record.valoresSecundarios} strong gapPx={4} />,
-  },
-  {
-    title: "Status",
-    dataIndex: "status",
-    key: "status",
-    width: 140,
-    render: (value: TransactionRow["status"]) => <StatusPill status={value} />,
-  },
-  {
-    title: "Ações",
-    key: "acoes",
-    width: 88,
-    render: () => <ActionIconButton icon={<MoreHorizontal size={16} />} label="Ações" />,
-  },
-];
-
-const transactionRows: TransactionRow[] = [
-  {
-    key: "1",
-    id: "3241",
-    cliente: "Maria Fernanda",
-    clienteSecundario: "CPF 117.***.***-90",
-    processo: "0002457-65.2026.8.26.0100",
-    infosVenda: "Contrato CJ-2026-001",
-    infosSecundarias: "15/03/2026 · Portabilidade",
-    valores: "12.350,00",
-    valoresSecundarios: "Líquido 11.720,50",
-    status: "Concluído",
-  },
-  {
-    key: "2",
-    id: "3242",
-    cliente: "Marcos Vinícius",
-    clienteSecundario: "CPF 991.***.***-18",
-    processo: "0002458-22.2026.8.26.0100",
-    infosVenda: "Contrato CJ-2026-002",
-    infosSecundarias: "16/03/2026 · Refinanciamento",
-    valores: "7.480,00",
-    valoresSecundarios: "Líquido 6.950,30",
-    status: "Pendente",
-  },
-  {
-    key: "3",
-    id: "3243",
-    cliente: "Patrícia Gomes",
-    clienteSecundario: "CPF 405.***.***-42",
-    processo: "0002459-11.2026.8.26.0100",
-    infosVenda: "Contrato CJ-2026-003",
-    infosSecundarias: "17/03/2026 · Antecipação",
-    valores: "3.190,00",
-    valoresSecundarios: "Líquido 2.988,90",
-    status: "Cancelado",
-  },
-  {
-    key: "4",
-    id: "3244",
-    cliente: "Rafael Moura",
-    clienteSecundario: "CPF 223.***.***-07",
-    processo: "0002460-98.2026.8.26.0100",
-    infosVenda: "Contrato CJ-2026-004",
-    infosSecundarias: "17/03/2026 · Portabilidade",
-    valores: "16.250,00",
-    valoresSecundarios: "Líquido 15.690,00",
-    status: "Concluído",
-  },
-];
-
-const transactionStoryRows: TransactionRow[] = Array.from({ length: 20 }, (_, index) => {
-  const seed = transactionRows[index % transactionRows.length];
-
-  return {
-    ...seed,
-    key: `transaction-${3241 + index}`,
-    id: String(3241 + index),
-    infosVenda: `Contrato CJ-2026-${String(index + 1).padStart(3, "0")}`,
-  };
-});
-
+/** Tabela padrão com 5 colunas e 5 linhas. Sem paginação. */
 export const Default: Story = {
   args: {
-    columns: baseColumns,
-    dataSource: baseData,
-    pagination: { pageSize: 5, showSizeChanger: true },
-  },
-};
-
-export const FigmaExamples: Story = {
-  name: "Figma — Examples",
-  render: () => (
-    <div style={surfaceStyle}>
-      <div style={exampleStackStyle}>
-        <Section label="quantity per page" width={760}>
-          <SelectableDesktopTable
-            rows={desktopStoryRows}
-            pagination={{
-              total: 68,
-              pageSize: 15,
-              current: 1,
-              showSizeChanger: true,
-              pageSizeOptions: ["15", "30", "50"],
-              showTotal: () => "Quantidade total 68",
-            }}
-          />
-        </Section>
-
-        <Section label="desktop example" width={1078}>
-          <SelectableDesktopTable
-            rows={desktopStoryRows}
-            pagination={{
-              total: 68,
-              pageSize: 15,
-              current: 1,
-              showSizeChanger: true,
-              pageSizeOptions: ["15", "30", "50"],
-              showTotal: () => "Quantidade total 68",
-            }}
-          />
-        </Section>
-
-        <Section label="sticky header" width={1078}>
-          <SelectableDesktopTable
-            rows={[...desktopStoryRows, ...desktopStoryRows].map((row, index) => ({
-              ...row,
-              key: `${row.key}-sticky-${index}`,
-              selected: false,
-              checked: false,
-            }))}
-            pagination={false}
-            scroll={{ y: 220 }}
-          />
-        </Section>
-
-        <Section label="delete action" width={1078}>
-          <SelectableDesktopTable
-            rows={desktopStoryRows}
-            deleteAction
-            pagination={{
-              total: 68,
-              pageSize: 15,
-              current: 1,
-              showSizeChanger: true,
-              pageSizeOptions: ["15", "30", "50"],
-              showTotal: () => "Quantidade total 68",
-            }}
-          />
-        </Section>
-
-        <Section label="transactions example" width={1246}>
-          <TransactionsTablePreview />
-        </Section>
-      </div>
-    </div>
-  ),
-};
-
-export const Transactions: Story = {
-  name: "Transactions Example",
-  render: () => (
-    <div style={surfaceStyle}>
-      <div style={{ display: "grid", gap: 12 }}>
-        <p style={figmaLabelStyle}>transactions</p>
-        <TransactionsTablePreview />
-      </div>
-    </div>
-  ),
-};
-
-// ──────────────────────────────────────────────────────────────────────────
-// Estados e cenários explícitos (após a refatoração)
-// ──────────────────────────────────────────────────────────────────────────
-
-/**
- * Tabela com ordenação ativa em duas colunas. Clique no cabeçalho para
- * alternar ascendente/descendente.
- */
-export const WithSorter: Story = {
-  name: "Ordenação por coluna",
-  args: {
-    columns: baseColumns,
-    dataSource: baseData,
+    columns: COLUMNS_DEFAULT as ColumnsType<unknown>,
+    dataSource: DATA,
     pagination: false,
   },
 };
 
-/**
- * Estado de loading — renderiza o skeleton overlay nativo do Antd com tokens
- * do design system.
- */
-export const LoadingState: Story = {
-  name: "Estado — Loading",
+/** Paginação com 5 itens por página, seletor de quantidade e contagem total. */
+export const WithPagination: Story = {
+  name: "Com paginação",
   args: {
-    columns: baseColumns,
-    dataSource: baseData,
-    loading: true,
-    pagination: false,
-  },
-};
-
-/**
- * Estado vazio com mensagem padrão em pt-BR ("Nenhum registro encontrado.").
- * O consumidor pode customizar via `locale.emptyText`.
- */
-export const EmptyState: Story = {
-  name: "Estado — Vazio",
-  args: {
-    columns: baseColumns,
-    dataSource: [],
-    pagination: false,
-  },
-};
-
-/**
- * Estado de erro — composição com um `<div>` de aviso acima da tabela. A
- * `Table` em si não tem prop nativa de "error"; o consumidor renderiza um
- * componente de feedback (Alert, banner, etc.) controlando o fluxo.
- */
-export const ErrorState: Story = {
-  name: "Estado — Erro",
-  render: () => (
-    <div style={{ display: "grid", gap: 12 }}>
-      <div
-        role="alert"
-        style={{
-          padding: 12,
-          border: "1px solid #d2190b",
-          borderRadius: 8,
-          background: "#fef2ec",
-          color: "#9d231c",
-          fontFamily: "Inter, sans-serif",
-          fontSize: 13,
-        }}
-      >
-        Falha ao carregar os registros. Tente novamente em instantes.
-      </div>
-      <Table columns={baseColumns} dataSource={[]} pagination={false} />
-    </div>
-  ),
-};
-
-/**
- * Recriação 1:1 do footer de paginação do Figma (`8124:10863`): contagem
- * total à esquerda, prev/next + páginas no meio, select de itens-por-página
- * à direita. Gaps uniformes de 4px entre todos os itens.
- */
-export const FigmaPaginationFooter: Story = {
-  name: "Figma — Paginação footer",
-  args: {
-    columns: baseColumns,
-    dataSource: Array.from({ length: 78 }, (_, index) => ({
-      key: String(index),
-      nome: `Linha ${index + 1}`,
-      email: `usuario${index + 1}@juscash.com`,
-      status: index % 2 === 0 ? "Ativo" : "Pendente",
-    })),
+    columns: COLUMNS_DEFAULT as ColumnsType<unknown>,
+    dataSource: DATA_PAGINATED,
     pagination: {
-      pageSize: 15,
-      current: 1,
+      pageSize: 5,
       showSizeChanger: true,
-      pageSizeOptions: ["15", "30", "50"],
+      pageSizeOptions: ["5", "10", "25"],
     },
   },
 };
 
-/**
- * Cenário com bulk actions: quando há linhas selecionadas, uma barra de
- * ações aparece **acima** da tabela com a contagem e os botões de ação em
- * massa, conforme o item `Description: Itens selecionados` do Figma
- * (`8124:9475`).
- */
-export const BulkActions: Story = {
-  name: "Seleção múltipla com bulk actions",
-  render: () => {
-    function BulkBar(props: { count: number; onClear: () => void }) {
-      if (props.count === 0) return null;
-      return (
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-            padding: "8px 12px",
-            border: "1px solid #d4d4d4",
-            borderRadius: 8,
-            background: "#fafafa",
-            fontFamily: "Inter, sans-serif",
-            fontSize: 13,
-          }}
-        >
-          <span>
-            <strong>{props.count}</strong> ite{props.count === 1 ? "m" : "ns"} selecionado{props.count === 1 ? "" : "s"}
-          </span>
-          <div style={{ display: "flex", gap: 8 }}>
-            <button
-              type="button"
-              onClick={props.onClear}
-              style={{
-                height: 32,
-                padding: "0 12px",
-                border: "1px solid #d4d4d4",
-                borderRadius: 8,
-                background: "transparent",
-                color: "#262626",
-                cursor: "pointer",
-                fontSize: 13,
-              }}
-            >
-              Limpar
-            </button>
-            <button
-              type="button"
-              style={{
-                height: 32,
-                padding: "0 12px",
-                border: "none",
-                borderRadius: 8,
-                background: "#d2190b",
-                color: "#fafafa",
-                cursor: "pointer",
-                fontSize: 13,
-              }}
-            >
-              Excluir selecionados
-            </button>
-          </div>
-        </div>
-      );
-    }
+/** Coluna `Nome` ordenável (asc por default) e coluna `Valor` ordenável por clique no cabeçalho. */
+export const Sortable: Story = {
+  name: "Ordenação por coluna",
+  args: {
+    columns: COLUMNS_SORTABLE as ColumnsType<unknown>,
+    dataSource: DATA,
+    pagination: false,
+  },
+};
 
-    function Demo() {
-      const [selectedKeys, setSelectedKeys] = React.useState<React.Key[]>([]);
-      return (
-        <div style={{ display: "grid", gap: 12 }}>
-          <BulkBar count={selectedKeys.length} onClear={() => setSelectedKeys([])} />
-          <Table
-            columns={baseColumns}
-            dataSource={baseData}
-            rowKey="key"
-            rowSelection={{
-              type: "checkbox",
-              selectedRowKeys: selectedKeys,
-              onChange: setSelectedKeys,
-            }}
-            pagination={false}
-          />
-        </div>
-      );
-    }
-    return <Demo />;
+/** Estado vazio com `title`, `description` e `icon` custom via prop `emptyState`. */
+export const EmptyState: Story = {
+  name: "Estado vazio",
+  args: {
+    columns: COLUMNS_DEFAULT as ColumnsType<unknown>,
+    dataSource: [],
+    pagination: false,
+    emptyState: {
+      title: "Nenhum processo encontrado",
+      description: "Lorem ipsum dolor sit amet, consectetur adipiscing elit.",
+      icon: "Inbox",
+    },
+  },
+};
+
+/** Prop `size="small"` do antd — linhas e células mais compactas. */
+export const Compact: Story = {
+  name: "Compact / small",
+  args: {
+    columns: COLUMNS_DEFAULT as ColumnsType<unknown>,
+    dataSource: DATA,
+    pagination: false,
+    size: "small",
+  },
+};
+
+/** Container com altura fixa e scroll vertical; header fixo via `sticky` + `scroll.y`. */
+export const StickyHeader: Story = {
+  name: "Sticky header",
+  args: {
+    columns: COLUMNS_DEFAULT as ColumnsType<unknown>,
+    dataSource: DATA_PAGINATED,
+    pagination: false,
+    scroll: { y: 200 },
+    sticky: true,
+  },
+};
+
+/** Prop `skeleton` (boolean ou número) substitui a tabela por N barras placeholder. */
+export const Loading: Story = {
+  name: "Loading / skeleton",
+  args: {
+    columns: COLUMNS_DEFAULT as ColumnsType<unknown>,
+    dataSource: [],
+    pagination: false,
+    skeleton: 6,
   },
 };
 
 /**
- * Cenário com seleção única (radio): apenas uma linha pode ser selecionada
- * por vez.
+ * Tooltip é opt-in via `columns[].render`. Aqui todas as colunas mostram
+ * tooltip no hover, exceto `Processo` — evidenciando o opt-in coluna a coluna.
  */
-export const SingleSelection: Story = {
-  name: "Seleção única (radio)",
+export const WithTooltip: Story = {
+  name: "Tooltip (opt-in via render)",
+  render: () => <Table<Row> columns={COLUMNS_TOOLTIP} dataSource={DATA_TOOLTIP} pagination={false} />,
+};
+
+/** Coluna de status usando o componente `Badge` com `statusColor` dinâmico por valor. */
+export const WithBadge: Story = {
+  name: "Badge",
+  render: () => <Table<Row> columns={COLUMNS_BADGE} dataSource={DATA} pagination={false} />,
+};
+
+/**
+ * `rowSelection.type="checkbox"` com 3 linhas pré-selecionadas. A barra de
+ * bulk action aparece acima da tabela com label e botões customizáveis.
+ */
+export const MultipleSelection: Story = {
+  name: "Seleção múltipla (checkbox)",
   render: () => {
-    function Demo() {
-      const [selectedKeys, setSelectedKeys] = React.useState<React.Key[]>([]);
+    function Demo(): React.ReactElement {
+      const [selected, setSelected] = useState<React.Key[]>(["1", "2", "3"]);
       return (
-        <Table
-          columns={baseColumns}
-          dataSource={baseData}
-          rowKey="key"
-          rowSelection={{
-            type: "radio",
-            selectedRowKeys: selectedKeys,
-            onChange: setSelectedKeys,
-          }}
+        <Table<Row>
+          columns={COLUMNS_DEFAULT}
+          dataSource={DATA}
           pagination={false}
+          rowSelection={{
+            type: "checkbox",
+            selectedRowKeys: selected,
+            onChange: (keys) => setSelected(keys),
+          }}
+          bulkActions={{
+            actions: (
+              <>
+                <Button variant="secondary" size="s">
+                  Arquivar
+                </Button>
+                <Button variant="secondary" size="s">
+                  Mover
+                </Button>
+                <Button variant="outline" size="s" icon="Download" tooltip="Exportar" />
+                <Button variant="primary" size="s">
+                  Excluir selecionados
+                </Button>
+              </>
+            ),
+          }}
         />
       );
     }
@@ -999,23 +394,57 @@ export const SingleSelection: Story = {
   },
 };
 
-/**
- * Cenário responsivo mobile: largura estreita + `scroll.x` para rolagem
- * horizontal da tabela.
- */
-export const MobileScroll: Story = {
-  name: "Responsivo — Mobile (scroll.x)",
-  parameters: {
-    viewport: { defaultViewport: "mobile1" },
-  },
+/** Última coluna com botões de ação (`Heart`, `Pencil`, `Trash2`) alinhados à direita. */
+export const Actions: Story = {
+  name: "Ações",
   render: () => (
-    <div style={{ width: 360, border: "1px dashed #d4d4d4", padding: 8 }}>
-      <Table
-        columns={baseColumns}
-        dataSource={baseData}
-        pagination={false}
-        scroll={{ x: 600 }}
-      />
-    </div>
+    <Table<Row>
+      columns={COLUMNS_ACTIONS}
+      dataSource={DATA}
+      pagination={false}
+      cardLayout={{ header: "nome", footer: "actions" }}
+    />
   ),
+};
+
+/**
+ * Modo `responsive="cards"` (Figma Prospecção `5101:54788`): cada linha vira um
+ * cartão vertical com header (`cardLayout.header`), body e footer
+ * (`cardLayout.footer`), dividers tocando as bordas e checkbox de seleção.
+ */
+export const ResponsiveCards: Story = {
+  name: "Responsive — cards",
+  render: () => {
+    function Demo(): React.ReactElement {
+      const [selected, setSelected] = useState<React.Key[]>([]);
+      return (
+        <Table<Row>
+          columns={COLUMNS_RESPONSIVE}
+          dataSource={DATA}
+          pagination={{ pageSize: 5, showSizeChanger: true }}
+          responsive="cards"
+          cardLayout={{ header: "posicao", footer: "actions" }}
+          rowSelection={{
+            type: "checkbox",
+            columnTitle: "Selecionar todos",
+            selectedRowKeys: selected,
+            onChange: (keys) => setSelected(keys),
+          }}
+        />
+      );
+    }
+    return <Demo />;
+  },
+};
+
+/** Playground controlado pelos Controls — ajuste `responsive`, `size`, `bordered` e `sticky`. */
+export const Playground: Story = {
+  args: {
+    columns: COLUMNS_DEFAULT as ColumnsType<unknown>,
+    dataSource: DATA,
+    pagination: { pageSize: 5, showSizeChanger: true, pageSizeOptions: ["5", "10", "25"] },
+    responsive: "scroll",
+    bordered: false,
+    size: "middle",
+  },
 };
