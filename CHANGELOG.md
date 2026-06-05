@@ -1,5 +1,11 @@
 # @juscash/design-system
 
+## 1.2.0
+
+### Minor Changes
+
+- [#13](https://github.com/Juscash/design-system/pull/13) [`33e38cc`](https://github.com/Juscash/design-system/commit/33e38cce7eadf7a5181f433b49bac5ab8ed9e5c5) Thanks [@pedroveras-juscash](https://github.com/pedroveras-juscash)! - Correções das props + preview dos componentes empty state, button e kpi card
+
 ## 1.1.0
 
 ### Minor Changes
