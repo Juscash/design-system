@@ -256,6 +256,14 @@ src/components/Button/
 
 Toda alteração visual ou nova variante deve estar refletida no Storybook. Padrões esperados:
 
+> **Cobertura TOTAL é obrigatória.** **Todas** as variações possíveis de um componente devem estar demonstradas no Storybook — sem exceção:
+>
+> - **Props:** cada prop proprietária e cada valor relevante (ex.: `size` em `xs/s/m/l`, cada `variant`, cada `picker`, cada `headerVariant`).
+> - **Funcionalidade:** cada modo/comportamento (ex.: editável, navegação, seleção, abrir/selecionar, callbacks) — via interação real.
+> - **Estilização:** cada estado/variação visual (estados de célula, hover/focus reais, popups, tooltips, etc.).
+>
+> Não basta a variação existir no código: ela **tem que** estar visível e exercitável no Storybook. Se uma variação só aparece via interação (ex.: header dentro do popup), adicione **também** uma story de _showcase_ que a renderize de forma visível (sem forçar `open`/pseudo-state persistente — renderizando o subcomponente ou compondo o exemplo).
+
 - **Localização:** `<Componente>/<Nome>.stories.tsx` (o glob do Storybook em `.storybook/main.mts` aponta para `src/**/*.stories.@(js|jsx|mjs|ts|tsx)`).
 - **`title`:** `"Components/<Nome>"` (ou outra categoria — veja `addon-docs/blocks` para subcategorias).
 - **`tags: ["autodocs"]`** para gerar a aba _Docs_ automaticamente.

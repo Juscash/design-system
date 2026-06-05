@@ -1,149 +1,293 @@
 /*
   Estilos próprios do DatePicker e do RangePicker da JusCash.
 
-  Como o popup do DatePicker é renderizado em portal fora da árvore do
-  componente, os seletores precisam permanecer globais (`:global(...)`)
-  para alcançar o nó montado no `document.body`.
+  O popup é renderizado em portal (fora da árvore do componente), então os
+  seletores precisam ser globais (`:global(...)`) para alcançá-lo. Cores,
+  bordas, foco e tipografia base ficam nos tokens do `ConfigProvider`
+  (ver `shared/index.tsx`); aqui ficam layout, células, superfície do popup,
+  header e o botão "Hoje". Tokens lidos das CSS variables de `theme/global.css`.
 
-  Os tokens são lidos diretamente das CSS variables definidas em
-  `src/theme/global.css`, garantindo consistência com os demais componentes.
+  Fonte de verdade: Figma "Date picker" `4066:8379`.
 */
 
-/* ── Popup: borda e sombra ── */
+/* ── Input: largura fluida + padding e decorações ────────── */
+/* Largura 100%: o tamanho é controlado pelo container pai (ou por um
+   `style={{ width }}` do consumidor, que prevalece). Mesmo padrão do `Input`. */
+:global(.ds-datepicker.ant-picker) {
+  width: 100%;
+  padding-inline: var(--spacing-3);
+}
+:global(.ds-datepicker.ant-picker) :global(.ant-picker-active-bar) {
+  display: none;
+}
+:global(.ds-datepicker-prefix) {
+  color: var(--color-neutral-500);
+  margin-right: var(--spacing-2);
+  flex-shrink: 0;
+}
+:global(.ds-datepicker-separator) {
+  color: var(--color-neutral-500);
+  font-size: var(--font-body-2-size);
+}
+
+/* ── Popup: superfície igual à do MenuCombobox ───────────── */
 :global(.ds-datepicker-popup) :global(.ant-picker-panel-container) {
-  border: 1px solid var(--color-neutral-300) !important;
-  box-shadow: var(--shadow-m) !important;
-  border-radius: 8px !important;
+  background: var(--color-neutral-50);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-m);
+  overflow: hidden;
+}
+:global(.ds-datepicker-popup) :global(.ant-picker-panel) {
+  border: none;
 }
 
-/* ── Células: 32x32px ── */
-:global(.ds-datepicker-popup) :global(.ant-picker-content th),
-:global(.ds-datepicker-popup) :global(.ant-picker-content td.ant-picker-cell) {
-  width: 32px !important;
-  height: 32px !important;
-  padding: 0 !important;
-}
-:global(.ds-datepicker-popup) :global(.ant-picker-cell-inner) {
-  min-width: 32px !important;
-  height: 32px !important;
-  line-height: 32px !important;
-  font-size: 13px !important;
-  font-weight: 400 !important;
-  color: var(--color-neutral-800) !important;
-  border-radius: 5px !important;
-  display: flex !important;
-  align-items: center !important;
-  justify-content: center !important;
-  padding: 0 !important;
-}
-
-/* ── Nomes dos dias da semana ── */
-:global(.ds-datepicker-popup) :global(.ant-picker-content th) {
-  font-size: 10px !important;
-  font-weight: 400 !important;
-  color: var(--color-neutral-500) !important;
-  line-height: 32px !important;
-}
-
-/* ── Hoje em negrito, sem borda verde ── */
-:global(.ds-datepicker-popup) :global(.ant-picker-cell-today .ant-picker-cell-inner::before) {
-  display: none !important;
-}
-:global(.ds-datepicker-popup)
-  :global(.ant-picker-cell-today:not(.ant-picker-cell-selected):not(.ant-picker-cell-range-start):not(.ant-picker-cell-range-end) .ant-picker-cell-inner) {
-  font-weight: 600 !important;
-}
-
-/* ── Header: justify-between ── */
+/* ── Header de TEXTO (RangePicker): ‹ Mês Ano › ──────────── */
+/* Variação "2 meses"/"1 mês" do Figma (editable=False): mês/ano como texto,
+   setas em caixa COM borda. Usado pelo header nativo do RangePicker. O
+   DatePicker esconde este header e injeta o customizado (`.ds-datepicker-header`). */
 :global(.ds-datepicker-popup) :global(.ant-picker-header) {
-  display: flex !important;
-  justify-content: space-between !important;
-  align-items: center !important;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--spacing-4) var(--spacing-4) 0;
+  border-bottom: none;
 }
-
-/* ── Header view: mês primeiro, centralizado ── */
+:global(.ds-datepicker-popup) :global(.ant-picker-header) > button {
+  min-width: auto;
+  height: auto;
+  padding: 0;
+  color: inherit;
+  line-height: 0;
+}
+/* Painel de dia/semana não tem o salto de ano (super-arrows) do antd. */
+:global(.ds-datepicker-popup) :global(.ant-picker-date-panel) :global(.ant-picker-header-super-prev-btn),
+:global(.ds-datepicker-popup) :global(.ant-picker-date-panel) :global(.ant-picker-header-super-next-btn),
+:global(.ds-datepicker-popup) :global(.ant-picker-week-panel) :global(.ant-picker-header-super-prev-btn),
+:global(.ds-datepicker-popup) :global(.ant-picker-week-panel) :global(.ant-picker-header-super-next-btn) {
+  display: none;
+}
 :global(.ds-datepicker-popup) :global(.ant-picker-header-view) {
-  display: flex !important;
-  gap: 4px !important;
-  align-items: center !important;
-  justify-content: center !important;
-}
-:global(.ds-datepicker-popup) :global(.ant-picker-year-btn) {
-  order: 2 !important;
+  display: flex;
+  gap: var(--spacing-1);
+  align-items: center;
+  justify-content: center;
 }
 :global(.ds-datepicker-popup) :global(.ant-picker-month-btn) {
-  order: 1 !important;
+  order: 1;
+}
+:global(.ds-datepicker-popup) :global(.ant-picker-year-btn) {
+  order: 2;
 }
 :global(.ds-datepicker-popup) :global(.ant-picker-header-view button) {
-  font-size: 13px !important;
-  font-weight: 400 !important;
-  color: var(--color-neutral-800) !important;
-  line-height: 1.2 !important;
+  font-size: var(--font-body-2-size);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-neutral-800);
+  line-height: var(--font-line-height);
+}
+/* Setas do header de texto: chevron 16px em caixa 32×32 COM borda (Figma). */
+:global(.ds-datepicker-nav) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-xl);
+  color: var(--color-neutral-800);
+  background: transparent;
+  box-sizing: border-box;
 }
 
-/* ── Hover em dias: neutral[100] ── */
-:global(.ds-datepicker-popup)
-  :global(.ant-picker-cell:hover:not(.ant-picker-cell-selected):not(.ant-picker-cell-range-start):not(.ant-picker-cell-range-end):not(.ant-picker-cell-range-hover-start):not(.ant-picker-cell-range-hover-end) .ant-picker-cell-inner) {
-  background: var(--color-neutral-100) !important;
+/* ── Header EDITÁVEL (DatePicker): ‹ [Mês ⇅] [Ano ⇅] › ───── */
+/* Esconde o header nativo e usa o customizado injetado via `panelRender`
+   (Figma `4066:4959`, variações "ano e mês"/"apenas ano"). */
+:global(.ds-datepicker-popup--custom) :global(.ant-picker-header) {
+  display: none;
+}
+:global(.ds-datepicker-header) {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--spacing-2);
+  padding: var(--spacing-4) var(--spacing-4) 0;
+}
+:global(.ds-datepicker-header-fields) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--spacing-2);
+  /* Ocupa o espaço entre as setas e pode encolher (min-width:0) para os selects
+     caberem na largura do popup sem vazar. */
+  flex: 1;
+  min-width: 0;
+}
+/* Setas (editável): chevron 16px em área 32×32 SEM borda (Figma). */
+:global(.ds-datepicker-navbtn) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-xl);
+  background: transparent;
+  color: var(--color-neutral-800);
+  cursor: pointer;
+  /* Mantêm o tamanho fixo; quem encolhe são os selects do meio. */
+  flex-shrink: 0;
+}
+/* Variante não-editável (`static`/"1 mês"): setas COM borda (Figma). */
+:global(.ds-datepicker-navbtn--bordered) {
+  border: 1px solid var(--color-neutral-300);
+}
+/* ── HeaderSelect: usa o `Select` do DS (estilo do próprio componente) ── */
+/* O `width` inline é a largura preferida (flex-basis): mantém-se em containers
+   largos (flex-grow:0) e encolhe (flex-shrink:1 + min-width:0) quando o popup é
+   estreito, para o header nunca vazar. O visual vem do próprio Select. */
+:global(.ds-datepicker-select-wrap) {
+  flex: 0 1 auto;
+  min-width: 0;
+}
+/* Campo mês/ano como TEXTO (variações `static`/`only-month`/`only-year`). */
+:global(.ds-datepicker-headertext) {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  font-size: var(--font-body-2-size);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-neutral-800);
+  line-height: var(--font-line-height);
 }
 
-/* ── Range hover bar: neutral ── */
-:global(.ds-datepicker-popup) :global(.ant-picker-cell-range-hover::before),
-:global(.ds-datepicker-popup) :global(.ant-picker-cell-range-hover-start::before),
-:global(.ds-datepicker-popup) :global(.ant-picker-cell-range-hover-end::before) {
-  background: var(--color-neutral-200) !important;
-}
-
-/* ── Input base ── */
-:global(.ds-datepicker.ant-picker) {
-  height: 32px !important;
-  min-height: 32px !important;
-  border-radius: 8px !important;
-  background: var(--color-neutral-50) !important;
-  border-color: var(--color-neutral-300) !important;
-  padding: 0 12px !important;
-}
-:global(.ds-datepicker.ant-picker) :global(.ant-picker-input) > input {
-  font-size: 13px !important;
-  font-weight: 400 !important;
-  color: var(--color-neutral-800) !important;
-  line-height: 1.2 !important;
-}
-:global(.ds-datepicker.ant-picker) :global(.ant-picker-input) > input::placeholder {
-  color: var(--color-neutral-500) !important;
-}
-
-/* ── Input hover/focus: borda fixa, shadow ring ── */
-:global(.ds-datepicker.ant-picker:hover) {
-  border-color: var(--color-neutral-300) !important;
-}
-:global(.ds-datepicker.ant-picker-focused),
-:global(.ds-datepicker.ant-picker:focus-within) {
-  border-color: var(--color-neutral-300) !important;
-  box-shadow: var(--shadow-focus) !important;
-}
-
-/* ── Esconder link "Hoje" no footer ── */
-:global(.ds-datepicker-popup) :global(.ant-picker-today-btn) {
-  display: none !important;
-}
-
-/* ── Esconder active bar do RangePicker ── */
-:global(.ds-datepicker.ant-picker) :global(.ant-picker-active-bar) {
-  display: none !important;
-}
-
-/* ── Popup: gap 16px entre header e grid ── */
+/* ── Corpo ───────────────────────────────────────────────── */
 :global(.ds-datepicker-popup) :global(.ant-picker-body) {
-  padding: 0 16px 16px !important;
-}
-:global(.ds-datepicker-popup) :global(.ant-picker-header) {
-  padding: 16px 16px 0 !important;
-  border-bottom: none !important;
+  padding: 0 var(--spacing-4) var(--spacing-4);
 }
 
-/* ── Dias desabilitados (mês anterior/próximo) ── */
-:global(.ds-datepicker-popup) :global(.ant-picker-cell-disabled .ant-picker-cell-inner) {
-  color: var(--color-neutral-400) !important;
-  opacity: 1 !important;
+/* ── Nomes dos dias da semana ────────────────────────────── */
+:global(.ds-datepicker-popup) :global(.ant-picker-content th) {
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-neutral-500);
+  line-height: var(--font-line-height);
+}
+
+/* ── Células: 32×32 no painel de dia ─────────────────────── */
+:global(.ds-datepicker-popup) :global(.ant-picker-date-panel) :global(.ant-picker-content th),
+:global(.ds-datepicker-popup) :global(.ant-picker-date-panel) :global(td.ant-picker-cell) {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+}
+/* Dimensão 32×32 só no painel de dia; month/year/decade mantêm o tamanho do antd. */
+:global(.ds-datepicker-popup) :global(.ant-picker-date-panel) :global(.ant-picker-cell-inner) {
+  min-width: 32px;
+  height: 32px;
+  line-height: 32px;
+}
+:global(.ds-datepicker-popup) :global(.ant-picker-cell-inner) {
+  font-size: var(--font-body-2-size);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-neutral-800);
+  /* `!important`: antd deriva o raio da célula de `borderRadiusSM` (6px) com a
+     mesma especificidade — força os 5px do Figma. */
+  border-radius: 5px !important;
+}
+
+/* Dias fora do mês visível e desabilitados → neutral-400. */
+:global(.ds-datepicker-popup) :global(.ant-picker-cell):not(:global(.ant-picker-cell-in-view)) :global(.ant-picker-cell-inner),
+:global(.ds-datepicker-popup) :global(.ant-picker-cell-disabled) :global(.ant-picker-cell-inner) {
+  color: var(--color-neutral-400);
+}
+:global(.ds-datepicker-popup) :global(.ant-picker-cell-disabled)::before {
+  background: transparent;
+}
+
+/* Hover (não selecionado) → neutral-100. */
+:global(.ds-datepicker-popup)
+  :global(.ant-picker-cell):hover:not(:global(.ant-picker-cell-selected)):not(:global(.ant-picker-cell-range-start)):not(:global(.ant-picker-cell-range-end)):not(:global(.ant-picker-cell-disabled))
+  :global(.ant-picker-cell-inner) {
+  background: var(--color-neutral-100);
+}
+
+/* Hoje → cinza (neutral-200), sem anel, peso normal. */
+:global(.ds-datepicker-popup) :global(.ant-picker-cell-today) :global(.ant-picker-cell-inner)::before {
+  display: none;
+}
+:global(.ds-datepicker-popup)
+  :global(.ant-picker-cell-today):not(:global(.ant-picker-cell-selected)):not(:global(.ant-picker-cell-range-start)):not(:global(.ant-picker-cell-range-end))
+  :global(.ant-picker-cell-inner) {
+  background: var(--color-neutral-200);
+  font-weight: var(--font-weight-regular);
+}
+
+/* Selecionado (`selected`): data única escolhida → CINZA (Figma `.day`
+   state=selected). Os extremos do range são tratados como `active` (verde)
+   na regra abaixo, então são excluídos aqui. */
+:global(.ds-datepicker-popup)
+  :global(.ant-picker-cell-selected):not(:global(.ant-picker-cell-range-start)):not(:global(.ant-picker-cell-range-end))
+  :global(.ant-picker-cell-inner) {
+  background: var(--color-neutral-200);
+  color: var(--color-neutral-800);
+}
+/* Ativo (`active`): extremos do range → VERDE, texto branco. */
+:global(.ds-datepicker-popup) :global(.ant-picker-cell-range-start) :global(.ant-picker-cell-inner),
+:global(.ds-datepicker-popup) :global(.ant-picker-cell-range-end) :global(.ant-picker-cell-inner) {
+  background: var(--color-brand-primary-600);
+  color: var(--color-neutral-50);
+}
+/* Cantos arredondados por posição do range (`!important` pelo mesmo motivo). */
+:global(.ds-datepicker-popup) :global(.ant-picker-cell-range-start) :global(.ant-picker-cell-inner) {
+  border-radius: 5px 0 0 5px !important;
+}
+:global(.ds-datepicker-popup) :global(.ant-picker-cell-range-end) :global(.ant-picker-cell-inner) {
+  border-radius: 0 5px 5px 0 !important;
+}
+:global(.ds-datepicker-popup)
+  :global(.ant-picker-cell-range-start.ant-picker-cell-range-end)
+  :global(.ant-picker-cell-inner) {
+  border-radius: 5px !important;
+}
+
+/* Miolo do range e range-hover → cinza (neutral-200). */
+:global(.ds-datepicker-popup) :global(.ant-picker-cell-in-range)::before,
+:global(.ds-datepicker-popup) :global(.ant-picker-cell-range-hover)::before,
+:global(.ds-datepicker-popup) :global(.ant-picker-cell-range-hover-start)::before,
+:global(.ds-datepicker-popup) :global(.ant-picker-cell-range-hover-end)::before {
+  background: var(--color-neutral-200);
+}
+
+/* ── Botão "Hoje" (opcional via prop `showToday`) ────────── */
+/* O footer (antd 6: `.ant-picker-now-btn` em `ul.ant-picker-ranges`) fica
+   oculto por padrão; a classe `--today` o exibe estilizado como botão. */
+:global(.ds-datepicker-popup) :global(.ant-picker-footer) {
+  display: none;
+}
+:global(.ds-datepicker-popup--today) :global(.ant-picker-footer) {
+  display: block;
+  border-top: none;
+  padding: 0 var(--spacing-4) var(--spacing-4);
+}
+:global(.ds-datepicker-popup--today) :global(.ant-picker-ranges),
+:global(.ds-datepicker-popup--today) :global(.ant-picker-now) {
+  /* `!important`/`width`: o `li.ant-picker-now` é `inline-block` no antd —
+     força bloco de largura total para o botão ocupar toda a largura (Figma). */
+  display: block !important;
+  width: 100%;
+  padding: 0;
+}
+:global(.ds-datepicker-popup--today) :global(.ant-picker-now-btn) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 24px;
+  padding: var(--spacing-1) var(--spacing-2);
+  border: 1px solid var(--color-neutral-300);
+  border-radius: var(--radius-md);
+  font-size: var(--font-caption-size);
+  font-weight: var(--font-weight-regular);
+  color: var(--color-neutral-800);
 }
