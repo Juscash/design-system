@@ -88,7 +88,11 @@ export default defineConfig({
   treeshake: true,
   minify: false,
   target: "es2018",
-  external: ["react", "react-dom", "antd", "@ant-design/cssinjs"],
+  // `dayjs` é external (assim como `antd`): precisa ser uma única instância
+  // compartilhada com o `antd` e o consumidor, senão o `JuscashProvider`
+  // ajustaria o locale (`pt-br`) numa cópia bundleada que o calendário não usa —
+  // e o DatePicker renderiza em inglês. `dayjs/*` cobre `dayjs/locale/pt-br`.
+  external: ["react", "react-dom", "antd", "@ant-design/cssinjs", "dayjs", "dayjs/*"],
   platform: "browser",
   injectStyle: true,
   onSuccess: async () => {

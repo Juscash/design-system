@@ -1,101 +1,121 @@
 import React from "react";
+import dayjs from "dayjs";
+import type { Dayjs } from "dayjs";
 import { DatePicker as AntdDatePicker, ConfigProvider } from "antd";
-import type { ThemeConfig } from "antd";
-import ptBR from "antd/locale/pt_BR";
-import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
-import { designSystemColors, radius } from "../../theme";
+import {
+  BASE_CLASS,
+  POPUP_CLASS,
+  buildCellRender,
+  buildDatePickerTheme,
+  datePickerLocale,
+  getInputHeight,
+  getPrefixIcon,
+  resolveCalendarHeader,
+  withTooltip,
+} from "./shared";
+import { CalendarHeader } from "./parts/CalendarHeader";
 import type { DatePickerProps } from "../../types/components/DatePicker";
 import "./index.module.css";
 
-const CELL_SIZE = 32;
-const ICON_SIZE = 16;
-const NAV_BUTTON_SIZE = 32;
-
-export const datePickerTheme: ThemeConfig = {
-  token: {
-    colorPrimary: designSystemColors.brand.primary[600],
-    fontFamily: '"Inter", sans-serif',
-  },
-  components: {
-    DatePicker: {
-      colorTextPlaceholder: designSystemColors.neutral[500],
-      colorIcon: designSystemColors.neutral[500],
-      colorIconHover: designSystemColors.neutral[800],
-      cellActiveWithRangeBg: designSystemColors.neutral[200],
-      cellWidth: CELL_SIZE,
-      cellHeight: CELL_SIZE,
-    },
-  },
-};
-
-export const datePickerLocale =
-  ptBR.DatePicker ?
-    {
-      ...ptBR.DatePicker,
-      lang: {
-        ...ptBR.DatePicker.lang,
-        monthFormat: "MMMM",
-      },
-      timePickerLocale: ptBR.DatePicker.timePickerLocale ?? ptBR.TimePicker ?? ({} as NonNullable<typeof ptBR.TimePicker>),
-    }
-  : undefined;
-
-const navButtonStyle: React.CSSProperties = {
-  borderRadius: radius.xl,
-  border: `1px solid ${designSystemColors.neutral[300]}`,
-  width: NAV_BUTTON_SIZE,
-  height: NAV_BUTTON_SIZE,
-  display: "flex",
-  alignItems: "center",
-  justifyContent: "center",
-  background: "transparent",
-};
+/** Seletor de qualquer dropdown de Select aberto (mês/ano do header, no `body`). */
+const OPEN_SELECT_DROPDOWN = ".ant-select-dropdown:not(.ant-select-dropdown-hidden)";
 
 /**
- * DatePicker do design system. Usa ícones do Lucide e desabilita o link
- * "Hoje" no popup (não previsto no Figma). Estilos próprios em
- * `index.module.css` — popup é alcançado via seletor global no portal.
+ * Trata a abertura/fechamento do calendário. Ignora o fechamento enquanto um
+ * dropdown de select estiver visível (o usuário está escolhendo mês/ano no
+ * header, cujo dropdown é renderizado no `body`): assim a escolha não fecha o
+ * calendário. Nos demais casos, aplica a visibilidade normalmente.
+ */
+function resolveOpenChange(nextOpen: boolean, setOpen: (open: boolean) => void): void {
+  if (!nextOpen && document.querySelector(OPEN_SELECT_DROPDOWN)) return;
+  setOpen(nextOpen);
+}
+
+/**
+ * DatePicker do design system. Embrulha o `DatePicker` do Antd com a
+ * identidade visual JusCash. O input é editável (digitação com parsing do
+ * `format`), o popup reusa a superfície do `MenuCombobox` e o header do
+ * calendário é editável: mês/ano viram selects `[Mês ⇅] [Ano ⇅]` entre as setas
+ * `‹ ›` (Figma `4066:4959`), controlando a navegação via `pickerValue`.
+ *
+ * Props proprietárias: `size` (xs/s/m/l, default `m`), `tooltip` (Tooltip do
+ * DS no hover do input), `dateTooltip` (Tooltip por dia) e `showToday` (botão
+ * "Hoje").
  */
 export const DatePicker: React.FC<DatePickerProps> = ({
+  size = "m",
   allowClear = false,
   placeholder = "__/__/____",
   format = "DD/MM/YYYY",
-  inputReadOnly = true,
+  inputReadOnly = false,
+  showToday = false,
+  picker = "date",
+  headerVariant = "year-and-month",
+  value,
+  defaultValue,
+  onChange,
+  tooltip,
+  dateTooltip,
   className,
+  style,
   ...rest
 }) => {
-  return (
-    <ConfigProvider theme={datePickerTheme}>
-      <AntdDatePicker
-        {...rest}
-        className={`ds-datepicker ${className || ""}`.trim()}
-        classNames={{ popup: { root: "ds-datepicker-popup" } }}
-        locale={datePickerLocale}
-        allowClear={allowClear}
-        placeholder={placeholder}
-        format={format}
-        inputReadOnly={inputReadOnly}
-        suffixIcon={null}
-        prefix={
-          <Calendar size={ICON_SIZE} color={designSystemColors.neutral[500]} style={{ marginRight: 8, marginLeft: 4 }} />
-        }
-        prevIcon={
-          <div style={navButtonStyle}>
-            <ChevronLeft size={ICON_SIZE} color={designSystemColors.neutral[800]} />
-          </div>
-        }
-        nextIcon={
-          <div style={navButtonStyle}>
-            <ChevronRight size={ICON_SIZE} color={designSystemColors.neutral[800]} />
-          </div>
-        }
-        superNextIcon={null}
-        superPrevIcon={null}
-      />
-    </ConfigProvider>
+  const [viewDate, setViewDate] = React.useState<Dayjs>(() => (value ?? defaultValue ?? dayjs()) as Dayjs);
+  const [open, setOpen] = React.useState(false);
+  React.useEffect(() => {
+    if (value) setViewDate(value as Dayjs);
+  }, [value]);
+
+  const header = resolveCalendarHeader(picker, headerVariant);
+  const rootClassName = [BASE_CLASS, className].filter(Boolean).join(" ");
+  const popupRoot = [POPUP_CLASS, `${POPUP_CLASS}--custom`, showToday && `${POPUP_CLASS}--today`]
+    .filter(Boolean)
+    .join(" ");
+
+  const pickerElement = (
+    <AntdDatePicker
+      {...rest}
+      picker={picker}
+      open={open}
+      onOpenChange={(nextOpen: boolean) => resolveOpenChange(nextOpen, setOpen)}
+      value={value}
+      defaultValue={defaultValue}
+      className={rootClassName}
+      style={{ height: getInputHeight(size), ...style }}
+      classNames={{ popup: { root: popupRoot } }}
+      locale={datePickerLocale}
+      allowClear={allowClear}
+      placeholder={placeholder}
+      format={format}
+      inputReadOnly={inputReadOnly}
+      showNow={showToday}
+      cellRender={buildCellRender(dateTooltip)}
+      pickerValue={viewDate}
+      onPickerValueChange={(next: Dayjs) => setViewDate(next)}
+      onChange={(next, formatted) => {
+        if (next) setViewDate(next as Dayjs);
+        onChange?.(next, formatted);
+      }}
+      panelRender={(panelNode) => (
+        <>
+          <CalendarHeader
+            value={viewDate}
+            onChange={setViewDate}
+            stepUnit={header.stepUnit}
+            monthField={header.monthField}
+            yearField={header.yearField}
+          />
+          {panelNode}
+        </>
+      )}
+      suffixIcon={null}
+      prefix={getPrefixIcon()}
+    />
   );
+
+  return <ConfigProvider theme={buildDatePickerTheme(size)}>{withTooltip(pickerElement, tooltip)}</ConfigProvider>;
 };
 
 DatePicker.displayName = "DatePicker";
 
-export type { DatePickerProps } from "../../types/components/DatePicker";
+export type { DatePickerProps, DatePickerSize } from "../../types/components/DatePicker";
