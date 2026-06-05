@@ -4,9 +4,9 @@
   variables de theme/global.css. Sem font-family própria (herda Inter do body).
 */
 
-/* CONTAINER — 240px, fundo neutral/50, borda regular, raio xl, sombra m. Padding por spacing. */
+/* CONTAINER — largura 100% (preenche o trigger), fundo neutral/50, borda regular, raio xl, sombra m. Padding por spacing. */
 :global(.ds-menu-combobox) {
-  width: 240px;
+  width: 100%;
   background: var(--color-neutral-50);
   border: 1px solid var(--color-border-regular);
   border-radius: var(--radius-xl);
@@ -125,8 +125,12 @@
   background-color: var(--color-feedback-red-50);
 }
 
-/* Foco real (teclado): anel neutral/300 — token --shadow-focus do Figma. */
-:global(.ds-menu-combobox-item):focus-visible {
+/* Foco real (teclado): fundo neutral/50 + anel neutral/300 (token --shadow-focus
+   do Figma). Os :not() igualam a especificidade das regras de hover/active para
+   que o foco vença e reproduza o estado "focus" do Figma (neutral/50 + anel),
+   mesmo sobre hover/selected/destructive. */
+:global(.ds-menu-combobox-item):focus-visible:not(:global(.ds-menu-combobox-item--disabled)):not(:global(.ds-menu-combobox-item--loading)) {
+  background-color: var(--color-neutral-50);
   box-shadow: var(--shadow-focus);
 }
 
@@ -254,4 +258,30 @@
   background: var(--color-neutral-50);
   color: var(--color-text-dark);
   user-select: none;
+  flex-shrink: 0;
+}
+
+/* Overflow clicável: afford de mouse para rolar a lista (o teclado usa ↑/↓). */
+:global(.ds-menu-combobox-overflow--interactive) {
+  cursor: pointer;
+}
+
+/* SCROLL — região rolável (viewport) e os brackets de overflow ao redor.
+   O scrollbar nativo é escondido: a navegação se dá pelos chevrons, roda do
+   mouse e teclado, conforme o desenho do Figma (sem barra visível). */
+:global(.ds-menu-combobox-scroll) {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+
+:global(.ds-menu-combobox-viewport) {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  scrollbar-width: none;
+}
+
+:global(.ds-menu-combobox-viewport)::-webkit-scrollbar {
+  display: none;
 }

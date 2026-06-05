@@ -1,17 +1,11 @@
 import React from "react";
 import { resolveLucideIcon } from "../../../../utils/resolveLucideIcon";
+import { joinClassNames } from "../../../../utils/joinClassNames";
 import { Loading } from "../../../Loading";
 import type { MenuComboboxItemProps } from "../../../../types/components/MenuCombobox";
 
 const ITEM_CLASS = "ds-menu-combobox-item";
 const ICON_GLYPH_SIZE = 16;
-
-/**
- * Junta classes filtrando valores falsy.
- */
-function joinClassNames(...tokens: Array<string | false | undefined>): string {
-  return tokens.filter(Boolean).join(" ");
-}
 
 /**
  * Compõe a className do item conforme `size`, `type` e `state`. O `type` é

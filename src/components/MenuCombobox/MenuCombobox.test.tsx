@@ -1,9 +1,15 @@
 import { render, screen } from "@testing-library/react";
 import userEvent from "@testing-library/user-event";
-import { describe, it, expect, vi } from "vitest";
+import { describe, it, expect, vi, beforeAll } from "vitest";
 import { MenuCombobox } from ".";
+import type { MenuComboboxOptionOrGroup } from ".";
 
-describe("MenuCombobox", () => {
+beforeAll(() => {
+  // jsdom não implementa scrollIntoView (usado pela navegação por teclado).
+  Element.prototype.scrollIntoView = vi.fn();
+});
+
+describe("MenuCombobox (composição)", () => {
   it("renderiza container com role menu e aria-label", () => {
     render(
       <MenuCombobox aria-label="Acoes do usuario">
@@ -241,6 +247,20 @@ describe("MenuCombobox", () => {
     expect(container.querySelector(".ds-menu-combobox-overflow svg")).toBeInTheDocument();
   });
 
+  it("Overflow com onClick vira clicável e dispara o handler", async () => {
+    const onClick = vi.fn();
+    const user = userEvent.setup();
+    const { container } = render(
+      <MenuCombobox>
+        <MenuCombobox.Overflow direction="down" onClick={onClick} />
+      </MenuCombobox>,
+    );
+    const overflow = container.querySelector(".ds-menu-combobox-overflow--interactive");
+    expect(overflow).toBeInTheDocument();
+    await user.click(overflow as Element);
+    expect(onClick).toHaveBeenCalledTimes(1);
+  });
+
   it("nao aplica role menu quando nao ha itens (so search)", () => {
     render(
       <MenuCombobox aria-label="Sem itens">
@@ -266,5 +286,116 @@ describe("MenuCombobox", () => {
     expect(MenuCombobox.GroupLabel.displayName).toBe("MenuCombobox.GroupLabel");
     expect(MenuCombobox.Search.displayName).toBe("MenuCombobox.Search");
     expect(MenuCombobox.Overflow.displayName).toBe("MenuCombobox.Overflow");
+  });
+});
+
+const DATA_OPTIONS: MenuComboboxOptionOrGroup[] = [
+  { value: "alpha", label: "Alpha" },
+  { value: "beta", label: "Beta" },
+];
+
+const GROUPED_OPTIONS: MenuComboboxOptionOrGroup[] = [
+  { groupLabel: "Grupo", options: [{ value: "alpha", label: "Alpha" }] },
+  { value: "beta", label: "Beta" },
+];
+
+describe("MenuCombobox (data-driven & funcional)", () => {
+  it("renderiza options como menuitems", () => {
+    render(<MenuCombobox aria-label="Data" options={DATA_OPTIONS} />);
+    expect(screen.getByRole("menuitem", { name: /alpha/i })).toBeInTheDocument();
+    expect(screen.getByRole("menuitem", { name: /beta/i })).toBeInTheDocument();
+  });
+
+  it("renderiza group label de um grupo de options", () => {
+    const { container } = render(<MenuCombobox aria-label="Data" options={GROUPED_OPTIONS} />);
+    expect(container.querySelector(".ds-menu-combobox-group-label")).toBeInTheDocument();
+    expect(screen.getByText("Grupo")).toBeInTheDocument();
+  });
+
+  it("busca filtra as options de verdade", async () => {
+    const user = userEvent.setup();
+    render(<MenuCombobox aria-label="Data" searchable options={DATA_OPTIONS} />);
+    await user.type(screen.getByRole("textbox"), "alp");
+    expect(screen.getByRole("menuitem", { name: /alpha/i })).toBeInTheDocument();
+    expect(screen.queryByRole("menuitem", { name: /beta/i })).not.toBeInTheDocument();
+  });
+
+  it("mostra empty state quando a busca nao encontra nada", async () => {
+    const user = userEvent.setup();
+    render(<MenuCombobox aria-label="Data" searchable options={DATA_OPTIONS} />);
+    await user.type(screen.getByRole("textbox"), "zzz");
+    expect(screen.getByText("Nenhum resultado encontrado.")).toBeInTheDocument();
+    expect(screen.queryByRole("menuitem")).not.toBeInTheDocument();
+  });
+
+  it("aceita um empty state customizado", async () => {
+    const user = userEvent.setup();
+    render(
+      <MenuCombobox aria-label="Data" searchable options={DATA_OPTIONS} emptyState={<div>Nada aqui</div>} />,
+    );
+    await user.type(screen.getByRole("textbox"), "zzz");
+    expect(screen.getByText("Nada aqui")).toBeInTheDocument();
+  });
+
+  it("single select: clicar seleciona e chama onChange com o value", async () => {
+    const onChange = vi.fn();
+    const user = userEvent.setup();
+    render(<MenuCombobox aria-label="Data" onChange={onChange} options={DATA_OPTIONS} />);
+    await user.click(screen.getByRole("menuitem", { name: /beta/i }));
+    expect(onChange).toHaveBeenCalledWith("beta");
+    expect(screen.getByRole("menuitem", { name: /beta/i })).toHaveAttribute("aria-current", "true");
+  });
+
+  it("single select selecionado mostra o check à direita", () => {
+    const { container } = render(<MenuCombobox aria-label="Data" defaultValue="alpha" options={DATA_OPTIONS} />);
+    expect(container.querySelector(".ds-menu-combobox-item__right-icon svg")).toBeInTheDocument();
+  });
+
+  it("multi select: clicar alterna e chama onChange com array", async () => {
+    const onChange = vi.fn();
+    const user = userEvent.setup();
+    render(<MenuCombobox aria-label="Data" multiple onChange={onChange} options={DATA_OPTIONS} />);
+    await user.click(screen.getByRole("menuitem", { name: /alpha/i }));
+    expect(onChange).toHaveBeenCalledWith(["alpha"]);
+  });
+
+  it("multi select renderiza checkbox no slot de ícone", () => {
+    const { container } = render(<MenuCombobox aria-label="Data" multiple options={DATA_OPTIONS} />);
+    expect(container.querySelector(".ds-menu-combobox-item__icon .ds-checkbox")).toBeInTheDocument();
+  });
+
+  it("option disabled nao dispara seleção", async () => {
+    const onChange = vi.fn();
+    const user = userEvent.setup();
+    render(
+      <MenuCombobox aria-label="Data" onChange={onChange} options={[{ value: "alpha", label: "Alpha", disabled: true }]} />,
+    );
+    const item = screen.getByRole("menuitem", { name: /alpha/i });
+    expect(item).toHaveAttribute("aria-disabled", "true");
+    await user.click(item);
+    expect(onChange).not.toHaveBeenCalled();
+  });
+
+  it("teclado: focar o menu foca o primeiro item e ArrowDown avança", async () => {
+    const user = userEvent.setup();
+    render(<MenuCombobox aria-label="Data" options={DATA_OPTIONS} />);
+    const menu = screen.getByRole("menu");
+    const [alpha, beta] = screen.getAllByRole("menuitem");
+    menu.focus();
+    expect(alpha).toHaveFocus();
+    await user.keyboard("{ArrowDown}");
+    expect(beta).toHaveFocus();
+  });
+
+  it("teclado: End foca o último item e Home volta ao primeiro", async () => {
+    const user = userEvent.setup();
+    render(<MenuCombobox aria-label="Data" options={DATA_OPTIONS} />);
+    const menu = screen.getByRole("menu");
+    menu.focus();
+    await user.keyboard("{End}");
+    const [alpha, beta] = screen.getAllByRole("menuitem");
+    expect(beta).toHaveFocus();
+    await user.keyboard("{Home}");
+    expect(alpha).toHaveFocus();
   });
 });

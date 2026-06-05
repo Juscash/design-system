@@ -1,14 +1,8 @@
 import React from "react";
+import { joinClassNames } from "../../../../utils/joinClassNames";
 import type { MenuComboboxGroupLabelProps } from "../../../../types/components/MenuCombobox";
 
 const GROUP_LABEL_CLASS = "ds-menu-combobox-group-label";
-
-/**
- * Junta classes filtrando valores falsy.
- */
-function joinClassNames(...tokens: Array<string | false | undefined>): string {
-  return tokens.filter(Boolean).join(" ");
-}
 
 /**
  * Rótulo de seção dentro do menu. Não é interativo. `indented=true` aplica
