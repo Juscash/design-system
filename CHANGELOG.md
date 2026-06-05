@@ -1,5 +1,11 @@
 # @juscash/design-system
 
+## 1.3.0
+
+### Minor Changes
+
+- [#16](https://github.com/Juscash/design-system/pull/16) [`e6d3fdd`](https://github.com/Juscash/design-system/commit/e6d3fddd67450ada2985bfc1796ae0871f0087d2) Thanks [@pedroveras-juscash](https://github.com/pedroveras-juscash)! - Implementação do componente datepicker
+
 ## 1.2.0
 
 ### Minor Changes
