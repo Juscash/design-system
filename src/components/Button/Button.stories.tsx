@@ -8,16 +8,10 @@ import { Figma } from "@storybook/addon-designs/blocks";
 
 const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4035-4131&m=dev";
 
-type ButtonStoryProps = React.ComponentProps<typeof Button> & {
-  hover?: boolean;
-  active?: boolean;
-  focus?: boolean;
-};
-
 const VARIANTS = ["primary", "secondary", "neutral", "outline", "ghost", "destructive"] as const;
 const SIZES = ["xs", "s", "m"] as const;
 
-const meta: Meta<ButtonStoryProps> = {
+const meta: Meta<typeof Button> = {
   title: "Components/Button",
   component: Button,
   tags: ["autodocs"],
@@ -33,13 +27,14 @@ proprietários via \`ConfigProvider\` local — o consumidor nunca importa \`ant
 ## Props proprietárias
 - **\`type\` ou \`variant\`** — \`primary\` · \`secondary\` · \`neutral\` · \`outline\` · \`ghost\` · \`destructive\` (alias \`variant\` tem prioridade).
 - **\`size\`** — \`xs\` (24px) · \`s\` (32px) · \`m\` (36px). Default \`m\`.
-- **\`icon\`** — \`ReactNode\` da Lucide. Sem \`children\`, vira **icon-only** (quadrado).
+- **\`icon\`** — \`ReactNode\` da Lucide **ou** o nome do ícone como string (ex.: \`icon="Search"\`); o tamanho é derivado do \`size\`. Sem \`children\`, vira **icon-only** (quadrado).
+- **\`tooltip\`** — \`string\` ou \`TooltipProps\`. Envolve o botão em \`<Tooltip>\`. Opcional em botões com label; **obrigatório** em icon-only (quando ausente, cai automaticamente no \`aria-label\`).
 
 ## Props herdadas do Antd Button
 \`block\`, \`disabled\`, \`loading\`, \`href\`, \`htmlType\`, \`iconPlacement\`, \`shape\`, \`onClick\`, \`aria-label\`, \`className\`, \`style\` etc.
 
 ## Acessibilidade
-- Botões **icon-only obrigatoriamente** recebem \`aria-label\`.
+- Botões **icon-only sempre exibem tooltip** (regra do Figma) — prefira \`tooltip="..."\`, com fallback automático no \`aria-label\`.
 - Foco visível garantido via \`outline: 3px solid #d4d4d4\` (token \`shadow.focus\`).
 - Tamanho \`xs\` (24px) abaixo de WCAG 2.5.5 AAA — usar só em contextos densos de desktop.
 
@@ -85,22 +80,20 @@ import { Plus } from "lucide-react";
       options: ["start", "end"],
       description: "Posição do ícone em relação ao texto.",
     },
-    hover: { control: "boolean", description: "Força hover (pseudo-state)", table: { category: "Pseudo States" } },
-    active: { control: "boolean", description: "Força active (pseudo-state)", table: { category: "Pseudo States" } },
-    focus: { control: "boolean", description: "Força focus-visible (pseudo-state)", table: { category: "Pseudo States" } },
-  },
-  args: { hover: false, active: false, focus: false },
-  render: (args) => {
-    const { hover, active, focus, ...props } = args;
-    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
-      .filter(Boolean)
-      .join(" ");
-    return <Button {...props} className={pseudoClasses} />;
+    shape: {
+      control: "select",
+      options: ["default", "circle", "round"],
+      description: "Formato herdado do Antd. `circle`/`round` deixam o botão icon-only redondo.",
+    },
+    tooltip: {
+      control: "text",
+      description: "Envolve o botão em `<Tooltip>` (string ou `TooltipProps`). Obrigatório em icon-only — cai no `aria-label` quando ausente.",
+    },
   },
 };
 
 export default meta;
-type Story = StoryObj<ButtonStoryProps>;
+type Story = StoryObj<typeof Button>;
 
 /** Botão padrão (`variant=primary`, `size=m`). Use os controls para explorar props. */
 export const Playground: Story = {
@@ -148,13 +141,6 @@ export const IconePosicaoDireita: Story = {
 /** Botão **icon-only** — `icon` sem `children`. Exige `aria-label`. */
 export const IconButton: Story = {
   args: { "variant": "primary", "icon": <Plus size={16} />, "aria-label": "Adicionar" },
-  render: (args) => {
-    const { hover, active, focus, ...props } = args;
-    const pseudoClasses = [hover && "pseudo-hover", active && "pseudo-active", focus && "pseudo-focus-visible"]
-      .filter(Boolean)
-      .join(" ");
-    return <Button {...props} className={pseudoClasses} />;
-  },
 };
 
 /** Estado `disabled` lado a lado com o default, para cada variante. */
@@ -189,7 +175,14 @@ export const Disabled: Story = {
 
 /** Estado `loading` para cada variante. Spinner mantém a mesma cor de texto. */
 export const Loading: Story = {
-  parameters: { docs: { description: { story: "Estado `loading` para todas as variantes em tamanho `m`." } } },
+  parameters: {
+    docs: {
+      description: {
+        story:
+          "Estado `loading` para todas as variantes em tamanho `m`. O loading usa `pointer-events: none` — não dispara hover/focus visíveis nem cursor de clique (passe o mouse para confirmar).",
+      },
+    },
+  },
   render: () => (
     <div style={{ display: "flex", gap: 12, flexWrap: "wrap" }}>
       {VARIANTS.map((v) => (
@@ -223,7 +216,8 @@ export const MatrizCompleta: Story = {
   parameters: {
     docs: {
       description: {
-        story: "Espelha a página Componentes do Figma. Cada coluna é uma variante; cada linha é um tamanho com 5 estados.",
+        story:
+          "Espelha a página Componentes do Figma. Cada coluna é uma variante; cada linha mostra os estados persistentes (default, disabled, loading). Hover/focus/active aparecem só na interação real.",
       },
     },
   },
@@ -239,25 +233,11 @@ export const MatrizCompleta: Story = {
                 {v}
               </span>
             ))}
-            {(["default", "hover", "active", "focus", "disabled", "loading"] as const).map((state) => (
+            {(["default", "disabled", "loading"] as const).map((state) => (
               <React.Fragment key={state}>
                 <span style={{ fontSize: 12, color: "#737373" }}>{state}</span>
                 {VARIANTS.map((v) => (
-                  <Button
-                    key={`${v}-${size}-${state}`}
-                    variant={v}
-                    size={size}
-                    disabled={state === "disabled"}
-                    loading={state === "loading"}
-                    className={
-                      state === "hover" ? "pseudo-hover"
-                      : state === "active" ?
-                        "pseudo-active"
-                      : state === "focus" ?
-                        "pseudo-focus-visible"
-                      : undefined
-                    }
-                  >
+                  <Button key={`${v}-${size}-${state}`} variant={v} size={size} disabled={state === "disabled"} loading={state === "loading"}>
                     Label
                   </Button>
                 ))}
@@ -365,6 +345,83 @@ export const Responsivo: Story = {
       <Button variant="outline" block>
         Cancelar
       </Button>
+    </div>
+  ),
+};
+
+/**
+ * Prop proprietária `tooltip` (`string` | `TooltipProps`). Em botões com label é
+ * opcional; em **icon-only** é obrigatória (regra do Figma) — quando ausente, cai
+ * automaticamente no `aria-label`. Os ícones usam a forma string (`icon="Bell"`),
+ * resolvida no Lucide pelo próprio componente.
+ */
+export const ComTooltip: Story = {
+  name: "Com Tooltip",
+  parameters: {
+    docs: {
+      description: {
+        story:
+          'Regra do Figma: botões com label podem ter `tooltip` opcionalmente; botões icon-only **sempre** exibem tooltip — preferência por `tooltip="..."`, com fallback automático no `aria-label`. Passe o mouse para ver.',
+      },
+    },
+  },
+  render: () => (
+    <div style={{ display: "flex", flexDirection: "column", gap: 16 }}>
+      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
+        <Button variant="primary" tooltip="Salva o formulário e fecha o modal">
+          Salvar
+        </Button>
+        <Button variant="destructive" icon="Trash" tooltip="Apaga o registro permanentemente">
+          Excluir
+        </Button>
+        <Button variant="outline">Sem tooltip (label só)</Button>
+      </div>
+      <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center" }}>
+        <Button variant="primary" icon="Plus" tooltip="Adicionar item" aria-label="Adicionar item" />
+        <Button variant="neutral" icon="Bell" tooltip="Notificações" aria-label="Notificações" />
+        <Button variant="ghost" icon="Search" tooltip="Buscar" aria-label="Buscar" />
+        <Button variant="outline" icon="Heart" aria-label="Favoritar (fallback no aria-label)" />
+      </div>
+    </div>
+  ),
+};
+
+/**
+ * `shape` herdado do Antd. Em botões icon-only, `circle` deixa o botão redondo —
+ * mesma combinação (outline + ghost) da seção "Props herdadas" do test page.
+ */
+export const Formato: Story = {
+  name: "Formato (shape)",
+  parameters: {
+    docs: { description: { story: '`shape="circle"` em botões icon-only (outline + ghost).' } },
+  },
+  render: () => (
+    <div style={{ display: "flex", gap: 12, alignItems: "center" }}>
+      <Button variant="outline" shape="circle" icon="Bell" aria-label="Notificações" />
+      <Button variant="ghost" shape="circle" icon="DollarSign" aria-label="Valores" />
+    </div>
+  ),
+};
+
+/**
+ * Casos de borda — texto longo (quebra), `xs` com texto longo, `xs` + ícone e
+ * `xs` icon-only. Espelha a seção "Casos de borda" do test page.
+ */
+export const CasosDeBorda: Story = {
+  name: "Casos de borda",
+  parameters: {
+    docs: { description: { story: "Texto longo, conteúdo misto e ícone em `xs`." } },
+  },
+  render: () => (
+    <div style={{ display: "flex", gap: 12, flexWrap: "wrap", alignItems: "center", maxWidth: 480 }}>
+      <Button variant="primary">Botão com um texto bem mais longo do que o normal para validar quebra</Button>
+      <Button variant="destructive" size="xs">
+        xs texto longo
+      </Button>
+      <Button variant="primary" size="xs" icon="Plus">
+        xs + ícone
+      </Button>
+      <Button variant="outline" size="xs" icon="Plus" aria-label="xs icon only" />
     </div>
   ),
 };
