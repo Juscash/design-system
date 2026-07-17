@@ -193,7 +193,7 @@ Tabela de dados do design system — wrapper sobre o [Ant Design Table](https://
 
 ### Props proprietárias (Juscash)
 - **\`emptyState\`**: estado vazio custom — \`{ title, description, icon }\` (ícone Lucide por nome) ou um \`ReactNode\`.
-- **\`skeleton\`**: estado de carregamento — \`true\` (5 linhas), número (N linhas) ou \`{ rows, animated }\`. Tem precedência sobre \`loading\`.
+- **\`skeleton\`**: estado de carregamento — \`true\` (15 linhas), número (N linhas) ou \`{ rows, animated }\`. Tem precedência sobre \`loading\`.
 - **\`bulkActions\`**: barra de ações em lote acima da tabela, visível quando \`rowSelection.selectedRowKeys\` tem itens.
 - **\`responsive\`**: \`"scroll"\` | \`"cards"\` | \`"auto"\` (default — vira cards em viewport < 768px).
 - **\`cardLayout\`**: distribui colunas entre header/body/footer no modo cards (\`{ header, footer }\`).
@@ -326,14 +326,40 @@ export const StickyHeader: Story = {
   },
 };
 
-/** Prop `skeleton` (boolean ou número) substitui a tabela por N barras placeholder. */
+/**
+ * Prop `skeleton` (boolean ou número) substitui a tabela por N barras
+ * placeholder. `true` usa o default de 15 linhas; um número renderiza N.
+ */
 export const Loading: Story = {
   name: "Loading / skeleton",
   args: {
     columns: COLUMNS_DEFAULT as ColumnsType<unknown>,
     dataSource: [],
     pagination: false,
-    skeleton: 6,
+    skeleton: true,
+  },
+};
+
+/**
+ * Com a paginação integrada configurada, o skeleton NÃO oculta o footer de
+ * paginação: ele permanece visível e navegável durante o carregamento (ex.:
+ * trocar de página dispara um novo fetch e o skeleton cobre só a tabela).
+ */
+export const LoadingWithPagination: Story = {
+  name: "Loading / skeleton com paginação",
+  args: {
+    columns: COLUMNS_DEFAULT as ColumnsType<unknown>,
+    dataSource: [],
+    pagination: {
+      current: 2,
+      total: 12,
+      pageSize: 5,
+      showSizeChanger: true,
+      pageSizeOptions: ["5", "10", "25"],
+      showTotal: (total: number) => `${total} registro(s)`,
+      onChange: () => undefined,
+    },
+    skeleton: 5,
   },
 };
 

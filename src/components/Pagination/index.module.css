@@ -102,3 +102,46 @@
   cursor: not-allowed;
 }
 
+
+/* ── Size changer ("Itens por página: N") ───────────────────────────────────
+  Renderizado ao lado da navegação quando `showSizeChanger` está ativo.
+  Visual do Figma `Data table > pagination > select 165x36`: gatilho 165x36
+  com borda neutral-300, radius xl e fundo neutral-50. As opções do dropdown
+  mostram apenas o número; o prefixo vem do `labelRender` (só no gatilho).
+*/
+:global(.ds-pagination-nav--with-size-changer) {
+  display: inline-flex;
+  align-items: center;
+  gap: 16px;
+}
+
+/*
+  `min-width` (não `width` fixo): 165px é a base do Figma, mas o gatilho
+  precisa crescer para caber "Itens por página: 200" sem ellipsis.
+*/
+:global(.ds-pagination-size-changer.ant-select) {
+  width: auto !important;
+  min-width: 165px !important;
+  height: 36px !important;
+  border: 1px solid var(--color-neutral-300) !important;
+  border-radius: var(--radius-xl) !important;
+  background: var(--color-neutral-50) !important;
+}
+
+:global(.ds-pagination-size-changer.ant-select) :global(.ant-select-selector),
+:global(.ds-pagination-size-changer.ant-select) :global(.ant-select-content) {
+  height: 34px !important;
+  padding: 0 8px 0 12px !important;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+  display: flex !important;
+  align-items: center !important;
+}
+
+:global(.ds-pagination-size-changer.ant-select) :global(.ant-select-selection-item),
+:global(.ds-pagination-size-changer.ant-select) :global(.ant-select-content-value) {
+  color: var(--color-neutral-800) !important;
+  font-size: 13px !important;
+  line-height: 1.2 !important;
+}

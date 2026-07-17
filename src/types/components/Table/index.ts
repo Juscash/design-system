@@ -64,7 +64,7 @@ export interface TableBulkActions {
  * Configuração de skeleton (estado de carregamento). Quando definido,
  * substitui o spinner default do antd por N linhas placeholder.
  *
- * - `true` → 5 linhas com larguras alinhadas às colunas.
+ * - `true` → 15 linhas com larguras alinhadas às colunas.
  * - `number` → N linhas.
  * - objeto → controle fino (quantidade e animação).
  */
@@ -72,7 +72,7 @@ export type TableSkeletonConfig =
   | boolean
   | number
   | {
-      /** Quantidade de linhas placeholder. Default 5. */
+      /** Quantidade de linhas placeholder. Default 15. */
       rows?: number;
       /** Se `true` (default), aplica pulse animation. */
       animated?: boolean;
@@ -160,9 +160,11 @@ export type TableProps<T> = AntdTableProps<T> & {
    */
   bulkActions?: TableBulkActions;
   /**
-   * Skeleton substitui o spinner default. Aceita `true` (5 linhas) ou um
+   * Skeleton substitui o spinner default. Aceita `true` (15 linhas) ou um
    * número (N linhas) ou objeto fino. Tem precedência sobre `loading` quando
-   * truthy.
+   * truthy. Quando a paginação integrada está configurada (objeto
+   * `pagination`), o footer de paginação permanece visível e navegável
+   * durante o skeleton — apenas a tabela é substituída pelas barras.
    */
   skeleton?: TableSkeletonConfig;
   /**

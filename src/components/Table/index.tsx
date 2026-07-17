@@ -18,7 +18,7 @@ const OPTION_HEIGHT = 28;
 const PAGINATION_ITEM_SIZE = 32;
 const CHECKBOX_INTERACTIVE_SIZE = 16;
 const DEFAULT_RESPONSIVE_MODE: TableResponsiveMode = "auto";
-const DEFAULT_SKELETON_ROWS = 5;
+const DEFAULT_SKELETON_ROWS = 15;
 const COLOR_TRANSPARENT_WHITE_HIGHER = "rgba(255, 255, 255, 0.01)";
 const COLOR_TRANSPARENT_WHITE_FULL = "rgba(255, 255, 255, 0)";
 
@@ -120,7 +120,7 @@ function buildResponsiveClassName(responsive: TableResponsiveMode): string | und
 
 /**
  * Resolve a quantidade de rows do skeleton a partir da prop polimórfica.
- * Aceita `true` (default 5), número (N) ou objeto com `rows`.
+ * Aceita `true` (default 15), número (N) ou objeto com `rows`.
  */
 function resolveSkeletonRows(config: TableSkeletonConfig | undefined): number {
   if (typeof config === "number") return config;
@@ -339,19 +339,40 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
     return () => observer.disconnect();
   });
 
-  // Loading: substitui a tabela INTEIRA pela seção de skeleton (Figma
-  // `8733:10563`/`8733:11508`). Sem header, sem container border, sem
-  // pagination — só N barras `neutral/100` empilhadas com gap 8 px.
+  const rawDataSource = dataSource as readonly T[] | undefined;
+  const totalRecords = paginationConfig?.total ?? rawDataSource?.length ?? 0;
+
+  const handlePaginationChange = (nextPage: number, nextSize: number): void => {
+    if (!isPageControlled) setInternalPage(nextPage);
+    if (!isPageSizeControlled) setInternalPageSize(nextSize);
+    paginationConfig?.onChange?.(nextPage, nextSize);
+  };
+
+  // Loading: substitui a tabela pela seção de skeleton (Figma
+  // `8733:10563`/`8733:11508`). Sem header, sem container border — só N
+  // barras `neutral/100` empilhadas com gap 8 px. A paginação NÃO some:
+  // quando o consumidor usa a paginação integrada (objeto `pagination`),
+  // o footer permanece visível e navegável durante o carregamento — assim
+  // trocar de página/tamanho re-dispara o fetch sem "sumiço" do controle.
   if (showSkeleton) {
     return (
       <ConfigProvider theme={getTableThemeTokens()}>
         <SkeletonRows rows={skeletonRowsCount} animated={skeletonAnimated} />
+        {paginationEnabled && paginationConfig !== undefined && (
+          <TablePagination
+            current={currentPage}
+            pageSize={currentPageSize}
+            total={totalRecords}
+            showSizeChanger={Boolean(paginationConfig.showSizeChanger)}
+            pageSizeOptions={(paginationConfig.pageSizeOptions as string[] | undefined) ?? undefined}
+            showTotal={paginationConfig.showTotal}
+            onChange={handlePaginationChange}
+            cardsMode={isCardsMode}
+          />
+        )}
       </ConfigProvider>
     );
   }
-
-  const rawDataSource = dataSource as readonly T[] | undefined;
-  const totalRecords = paginationConfig?.total ?? rawDataSource?.length ?? 0;
   const visibleData = paginationEnabled
     ? applyClientPaging(rawDataSource, currentPage, currentPageSize, paginationConfig?.total)
     : rawDataSource;
@@ -369,12 +390,6 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
   const selectionCount = resolveSelectionCount<T>({ rowSelection });
   const showBulkBar = bulkActions !== undefined && selectionCount > 0;
   const finalRowSelection = wrapSelectionColumnTitle<T>(rowSelection, responsive);
-
-  const handlePaginationChange = (nextPage: number, nextSize: number): void => {
-    if (!isPageControlled) setInternalPage(nextPage);
-    if (!isPageSizeControlled) setInternalPageSize(nextSize);
-    paginationConfig?.onChange?.(nextPage, nextSize);
-  };
 
   return (
     <ConfigProvider theme={getTableThemeTokens()}>
