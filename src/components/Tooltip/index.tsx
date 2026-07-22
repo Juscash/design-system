@@ -50,6 +50,16 @@ function getTooltipTheme(): ThemeConfig {
 }
 
 /**
+ * Tema resolvido uma única vez em escopo de módulo. O objeto é constante
+ * (depende apenas de tokens importados), então NÃO pode ser recriado a cada
+ * render: um novo `theme` muda a identidade do contexto do `ConfigProvider`,
+ * o que faz o Antd remontar/realinhar o popup do tooltip no meio da animação —
+ * essa era a causa do "flash" do tooltip no canto da tabela ao passar o mouse.
+ * Manter uma referência estável elimina o remount e o piscar.
+ */
+const TOOLTIP_THEME: ThemeConfig = getTooltipTheme();
+
+/**
  * Resolve um valor semântico do Antd Tooltip, que pode ser objeto literal ou
  * função `(info) => objeto`. Mantém a mesma interface contratada pelo Antd.
  */
@@ -107,15 +117,12 @@ export function Tooltip(props: TooltipProps): React.ReactElement {
 
   const handleOpenChange = React.useCallback(
     (next: boolean) => {
-      const title = typeof rest.title === "string" ? rest.title.slice(0, 30) : "?";
-      // eslint-disable-next-line no-console
-      console.log(`[DS Tooltip "${title}"] handleOpenChange(${next}), ancestor=${ancestor ? "Y" : "N"}`);
       if (next && ancestor) ancestor.suppress();
       else if (!next && ancestor) ancestor.release();
       if (!isControlled) setInternalOpen(next);
       onOpenChangeProp?.(next);
     },
-    [ancestor, isControlled, onOpenChangeProp, rest.title],
+    [ancestor, isControlled, onOpenChangeProp],
   );
 
   const releaseTimerRef = React.useRef<number | null>(null);
@@ -152,14 +159,9 @@ export function Tooltip(props: TooltipProps): React.ReactElement {
 
   const rootClassName = ["ds-tooltip", overlayClassName, resolvedClassNames.root].filter(Boolean).join(" ");
 
-  // eslint-disable-next-line no-console
-  console.log(
-    `[DS Tooltip RENDER "${typeof rest.title === "string" ? rest.title.slice(0, 30) : "?"}"] effectiveOpen=${effectiveOpen}, suppressed=${suppressed}, internalOpen=${internalOpen}, isControlled=${isControlled}, ancestor=${ancestor ? "Y" : "N"}`,
-  );
-
   return (
     <TooltipParentControlContext.Provider value={control}>
-      <ConfigProvider theme={getTooltipTheme()}>
+      <ConfigProvider theme={TOOLTIP_THEME}>
         <AntdTooltip
           classNames={{ ...resolvedClassNames, root: rootClassName }}
           styles={{
