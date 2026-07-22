@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import { Select as AntdSelect, ConfigProvider, Input as AntdInput } from "antd";
 import type { AliasToken } from "antd/es/theme/interface";
 import type { DefaultOptionType } from "antd/es/select";
-import { ChevronsUpDown, Search } from "lucide-react";
+import { ChevronsUpDown, FolderOpen, Search } from "lucide-react";
 import { Checkbox } from "../Checkbox";
+import { EmptyState } from "../EmptyState";
 import { designSystemColors, radius, spacing } from "../../theme";
 import type { SelectProps, SelectSize } from "../../types/components/Select";
 import "./index.module.css";
@@ -27,6 +28,9 @@ const FONT_WEIGHT_REGULAR = 400;
 // localmente no Select para não depender do token compartilhado.
 const COLOR_ERROR_OUTLINE = "rgba(210, 25, 11, 0.4)";
 const COLOR_TRANSPARENT_WHITE = "rgba(255, 255, 255, 0.01)";
+const EMPTY_STATE_ICON_SIZE = 24;
+const EMPTY_STATE_ICON_STROKE_WIDTH = 1.75;
+const NOT_FOUND_TITLE = "Nenhum resultado encontrado.";
 
 type SelectThemeConfig = NonNullable<React.ComponentProps<typeof ConfigProvider>["theme"]>;
 type SelectValue = string | number | undefined;
@@ -109,6 +113,21 @@ function renderPopup({ menu, showSearch, searchValue, setSearchValue }: PopupRen
       )}
       <div className="ds-select-popup-menu">{menu}</div>
     </>
+  );
+}
+
+/**
+ * Estado vazio padrão do dropdown (sem opções/sem resultado de busca) — ícone
+ * `folder-open` + título, conforme o Figma (`Menu/combobox`, `Property
+ * 1=no results`). Substitui o "No Data" padrão do Antd.
+ */
+function DefaultSelectEmptyState(): React.ReactElement {
+  return (
+    <EmptyState
+      icon={<FolderOpen size={EMPTY_STATE_ICON_SIZE} strokeWidth={EMPTY_STATE_ICON_STROKE_WIDTH} />}
+      title={NOT_FOUND_TITLE}
+      style={{ width: "100%", padding: spacing[4] }}
+    />
   );
 }
 
@@ -230,6 +249,7 @@ function SelectField(props: SelectFieldProps): React.ReactElement {
     disabled,
     defaultValue,
     options,
+    notFoundContent,
     ...rest
   } = props;
 
@@ -246,6 +266,7 @@ function SelectField(props: SelectFieldProps): React.ReactElement {
       status={status}
       disabled={disabled}
       options={visibleOptions}
+      notFoundContent={notFoundContent ?? <DefaultSelectEmptyState />}
       maxTagCount={maxTagCount}
       defaultValue={defaultValue}
       className={buildSelectClassName(size, className)}

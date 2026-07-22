@@ -148,7 +148,7 @@
 }
 
 :global(.ds-select-popup-menu) {
-  padding: 4px 0 !important;
+  padding: 0 !important;
 }
 
 /* Group label = caption/01 (10px) soft (Figma). */
