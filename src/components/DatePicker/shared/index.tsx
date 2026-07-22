@@ -48,6 +48,9 @@ export function buildDatePickerTheme(size: DatePickerSize): ThemeConfig {
       controlHeight: SIZE_HEIGHT[size],
       borderRadius: size === "xs" ? radius.md : radius.xl,
       fontSize: INPUT_FONT_SIZE,
+      // Cor de erro (`status="error"`) — mesmo token do Input/Select, senão o
+      // DatePicker cai no vermelho default do antd em vez do `feedback.red.500`.
+      colorError: designSystemColors.feedback.red[500],
     },
     components: {
       DatePicker: {
@@ -56,6 +59,8 @@ export function buildDatePickerTheme(size: DatePickerSize): ThemeConfig {
         activeBorderColor: designSystemColors.neutral[300],
         hoverBorderColor: designSystemColors.neutral[300],
         activeShadow: shadow.focus,
+        // Anel de foco em erro — mesmo token do Input (`shadow.focusError`).
+        errorActiveShadow: shadow.focusError,
         colorTextPlaceholder: designSystemColors.neutral[500],
         colorIcon: designSystemColors.neutral[500],
         colorIconHover: designSystemColors.neutral[800],
