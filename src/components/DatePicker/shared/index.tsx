@@ -1,7 +1,7 @@
 import React from "react";
 import type { ThemeConfig } from "antd";
 import type { Dayjs } from "dayjs";
-import ptBR from "antd/locale/pt_BR";
+import ptBRModule from "antd/locale/pt_BR";
 import { Calendar, ChevronLeft, ChevronRight } from "lucide-react";
 import { Tooltip } from "../../Tooltip";
 import { designSystemColors, radius, shadow } from "../../../theme";
@@ -76,6 +76,15 @@ export function buildDatePickerTheme(size: DatePickerSize): ThemeConfig {
  * Locale pt-BR do picker com `monthFormat` por extenso (`MMMM`), reaproveitando
  * o `timePickerLocale` do Antd quando disponível.
  */
+/**
+ * `antd/locale/pt_BR` é um módulo CJS exportado como `{ default: {...} }`; a
+ * interop do `import default` nem sempre desembrulha isso (depende do
+ * bundler/target), deixando `ptBR.DatePicker` undefined e o calendário caindo
+ * no locale padrão em inglês. Resolve os dois formatos possíveis.
+ */
+const ptBR =
+  (ptBRModule as unknown as { default?: typeof ptBRModule }).default ?? ptBRModule;
+
 /** Iniciais dos dias da semana em pt-BR (domingo → sábado), como no Figma. */
 const PT_BR_SHORT_WEEKDAYS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"] as const;
 /** Abreviações dos meses em pt-BR (janeiro → dezembro). */
