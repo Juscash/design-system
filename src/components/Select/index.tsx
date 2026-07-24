@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Select as AntdSelect, ConfigProvider, Input as AntdInput } from "antd";
 import type { AliasToken } from "antd/es/theme/interface";
 import type { DefaultOptionType } from "antd/es/select";
-import { ChevronsUpDown, FolderOpen, Search } from "lucide-react";
+import { Check, ChevronsUpDown, FolderOpen, Search } from "lucide-react";
 import { Checkbox } from "../Checkbox";
 import { EmptyState } from "../EmptyState";
 import { designSystemColors, radius, spacing } from "../../theme";
@@ -72,7 +72,10 @@ interface OptionRenderArgs {
 
 /**
  * Conteúdo de cada opção. No modo múltiplo, antepõe um Checkbox refletindo a
- * seleção (padrão do MultiSelect). No single, apenas o label.
+ * seleção (padrão do MultiSelect). No single, marca a opção selecionada com
+ * um ícone de check à direita (o fundo cinza já vem do token
+ * `optionSelectedBg`; o Antd não desenha ícone próprio porque
+ * `menuItemSelectedIcon` é `null` para não duplicar no modo múltiplo).
  */
 function renderOptionContent(option: DefaultOptionType, args: OptionRenderArgs): React.ReactNode {
   const isSelected = args.isOptionSelected(option.value as SelectValue);
@@ -80,6 +83,7 @@ function renderOptionContent(option: DefaultOptionType, args: OptionRenderArgs):
     <div style={{ display: "flex", alignItems: "center", gap: spacing[2] }}>
       {args.isMultiple && <Checkbox checked={isSelected} style={{ pointerEvents: "none" }} />}
       <span style={{ flex: 1 }}>{option.label}</span>
+      {!args.isMultiple && isSelected && <Check aria-hidden size={ICON_SIZE} />}
     </div>
   );
 }
