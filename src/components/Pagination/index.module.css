@@ -10,6 +10,16 @@
   - .ds-pagination-ellipsis: container 36x36 com radius 8 para o ícone Ellipsis 16px.
 */
 
+/*
+  Sem flex-wrap, muitas páginas numeradas (poucas páginas totais, sem
+  ellipsis) estouram a largura do container em telas estreitas — o
+  conteúdo passa a exigir scroll horizontal em vez de quebrar linha.
+*/
+:global(.ds-pagination.ant-pagination) {
+  row-gap: 4px;
+  flex-wrap: wrap;
+}
+
 :global(.ds-pagination-arrow),
 :global(.ds-pagination-page) {
   min-height: 32px;

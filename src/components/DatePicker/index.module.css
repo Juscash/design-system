@@ -30,13 +30,24 @@
   font-size: var(--font-body-2-size);
 }
 
-/* ── Popup: superfície igual à do MenuCombobox ───────────── */
+/*
+  ── Popup: superfície igual à do MenuCombobox ─────────────
+  `overflow-x: auto` (em vez de `hidden`) é proposital: o RangePicker com 2
+  meses lado a lado (~520px) é mais largo que viewports pequenos (ex.: 360-
+  430px). Sem isso, o popup teria que ou encolher os painéis (não é o caso —
+  o tamanho do calendário é fixo) ou vazar/cortar fora da tela. Com scroll
+  horizontal PRÓPRIO do popup (não da página), o usuário arrasta pra ver o
+  2º mês quando não cabe; em telas largas nunca aparece barra (não há
+  overflow a rolar).
+*/
 :global(.ds-datepicker-popup) :global(.ant-picker-panel-container) {
   background: var(--color-neutral-50);
   border: 1px solid var(--color-neutral-300);
   border-radius: var(--radius-xl);
   box-shadow: var(--shadow-m);
-  overflow: hidden;
+  max-width: calc(100vw - 16px);
+  overflow-x: auto;
+  overflow-y: hidden;
 }
 :global(.ds-datepicker-popup) :global(.ant-picker-panel) {
   border: none;
