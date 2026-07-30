@@ -25,6 +25,12 @@ export interface InputChipsProps {
   label?: ReactNode;
   /** Desabilita input e chips. */
   disabled?: boolean;
+  /**
+   * Formata o texto digitado a cada tecla (máscara progressiva). Recebe o valor
+   * cru do input e devolve o valor exibido — o componente não conhece nenhum
+   * formato: a regra vive no consumidor. Sem ela, o texto passa intacto.
+   */
+  formatInputValue?: (raw: string) => string;
   /** className aplicada ao wrapper externo. */
   className?: string;
   /** style aplicado ao wrapper externo. */

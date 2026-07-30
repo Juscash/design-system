@@ -80,7 +80,7 @@ interface OptionRenderArgs {
 function renderOptionContent(option: DefaultOptionType, args: OptionRenderArgs): React.ReactNode {
   const isSelected = args.isOptionSelected(option.value as SelectValue);
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: spacing[2] }}>
+    <div style={{ display: "flex", alignItems: "center", gap: spacing[2], width: "100%" }}>
       {args.isMultiple && <Checkbox checked={isSelected} style={{ pointerEvents: "none" }} />}
       <span style={{ flex: 1 }}>{option.label}</span>
       {!args.isMultiple && isSelected && <Check aria-hidden size={ICON_SIZE} />}

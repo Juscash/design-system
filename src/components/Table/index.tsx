@@ -4,7 +4,7 @@ import type { TablePaginationConfig } from "antd/es/table/interface";
 import type { TableProps as AntdTableProps } from "antd/es/table";
 import { designSystemColors, radius, spacing } from "../../theme";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
-import type { TableProps, TableResponsiveMode, TableSkeletonConfig, TableEmptyState } from "../../types/components/Table";
+import type { TableProps, TableResponsiveMode, TableSkeletonConfig } from "../../types/components/Table";
 import { buildColumns } from "./utils/buildColumns";
 import { BulkActionBar } from "./parts/BulkActionBar";
 import { TableEmptyStateRenderer } from "./parts/EmptyState";
@@ -138,18 +138,6 @@ function resolveSkeletonAnimated(config: TableSkeletonConfig | undefined): boole
     return config.animated;
   }
   return true;
-}
-
-interface ResolveEmptyArgs {
-  emptyState: TableEmptyState | undefined;
-  hasData: boolean;
-}
-
-function resolveEmptyText(args: ResolveEmptyArgs): React.ReactNode | undefined {
-  if (!args.hasData && args.emptyState !== undefined) {
-    return <TableEmptyStateRenderer config={args.emptyState} />;
-  }
-  return undefined;
 }
 
 interface ResolveSelectionCountArgs<T> {
@@ -380,12 +368,29 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
 
   const mergedClassName = ["ds-table", buildResponsiveClassName(responsive), className].filter(Boolean).join(" ");
 
-  const resolvedEmptyText = resolveEmptyText({ emptyState, hasData });
+  // Fallback textual do antd, usado só quando o consumidor NÃO passa
+  // `emptyState` (o caso com `emptyState` sai pelo early return acima).
   const mergedLocale = {
     emptyText: "Nenhum registro encontrado.",
-    ...(resolvedEmptyText !== undefined && { emptyText: resolvedEmptyText }),
     ...locale,
   };
+
+  // Estado vazio: o Figma desenha o empty state SEM cabeçalho de tabela
+  // (variantes `results/empty` e `results/empty filter` — as variantes com
+  // header são justamente as que têm dados). O `emptyText` do antd renderiza
+  // dentro do body e por isso mantém o header visível; quando o consumidor
+  // define `emptyState`, o DS troca a tabela inteira pelo placeholder — mesmo
+  // padrão do early return do skeleton acima. Sem dados não há paginação
+  // (`paginationEnabled && hasData`) nem seleção, então nada mais é perdido.
+  if (!hasData && !isCardsMode && emptyState !== undefined) {
+    return (
+      <ConfigProvider theme={getTableThemeTokens()}>
+        <div ref={wrapperRef}>
+          <TableEmptyStateRenderer config={emptyState} />
+        </div>
+      </ConfigProvider>
+    );
+  }
 
   const selectionCount = resolveSelectionCount<T>({ rowSelection });
   const showBulkBar = bulkActions !== undefined && selectionCount > 0;

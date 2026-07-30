@@ -133,17 +133,17 @@
 
 :global(.ds-input-chips__chip--s) {
   font-size: 12px;
-  height: 24px;
+  height: 32px;
 }
 
 :global(.ds-input-chips__chip--m) {
   font-size: var(--font-body-2-size);
-  height: 28px;
+  height: 36px;
 }
 
 :global(.ds-input-chips__chip--l) {
   font-size: var(--font-body-2-size);
-  height: 32px;
+  height: 40px;
 }
 
 :global(.ds-input-chips__chip--disabled) {
