@@ -147,6 +147,7 @@ export function InputChips(props: InputChipsProps): React.ReactElement {
     placeholder = DEFAULT_PLACEHOLDER,
     label,
     disabled = false,
+    formatInputValue,
     className,
     style,
   } = props;
@@ -178,7 +179,9 @@ export function InputChips(props: InputChipsProps): React.ReactElement {
             placeholder={placeholder}
             value={inputValue}
             disabled={disabled}
-            onChange={(event) => setInputValue(event.target.value)}
+            onChange={(event) =>
+              setInputValue(formatInputValue ? formatInputValue(event.target.value) : event.target.value)
+            }
             onKeyDown={handleKeyDown}
           />
         </div>

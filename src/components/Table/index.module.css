@@ -86,13 +86,21 @@
 :global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr > th,
 :global(.ds-table.ant-table-wrapper) :global(.ant-table-thead) > tr > td {
   height: 32px !important;
-  padding: 8px 12px !important;
+  /*
+    Padding 8px nos 4 lados, como o componente `table header` da biblioteca no
+    Figma (padding [8,8,8,8]). Com os 12px laterais que havia aqui, a coluna
+    "Ações" (57px no Figma) sobrava 33px de área útil para um título de 41px e
+    o texto quebrava no meio da palavra ("Açõe/s"). O nome da coluna não quebra.
+  */
+  padding: 8px !important;
   border-bottom: 1px solid var(--color-neutral-300) !important;
   border-inline-end: none !important;
   background: var(--color-neutral-100) !important;
   color: var(--color-neutral-800) !important;
   font-size: 13px !important;
   font-weight: 700 !important;
+  overflow-wrap: normal !important;
+  word-break: keep-all !important;
   /*
     line-height fixo em px (15) garante que a soma:
       padding-block (8+8) + line-box (15) + border (1) = 32
@@ -118,6 +126,27 @@
   display: inline-flex !important;
   align-items: center !important;
   gap: 8px !important;
+  /*
+    `max-width` + `min-width: 0`: sendo `inline-flex`, o wrapper do sorter tinha
+    a largura do conteúdo e ignorava a largura do `th`, então o título de
+    coluna ordenável era cortado sem "..." (ex.: "Última movimentação").
+    No Figma esse título é `maxLines: 1` + `textTruncation: ENDING`.
+  */
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+
+/*
+  Título da coluna trunca com "..." em 1 linha — vale para as ordenáveis, cujo
+  título vive dentro de `.ant-table-column-sorters`. Nome de coluna nunca quebra
+  nem corta no seco.
+*/
+:global(.ds-table.ant-table-wrapper) :global(.ant-table-column-title) {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  white-space: nowrap !important;
+  text-overflow: ellipsis !important;
 }
 
 :global(.ds-table.ant-table-wrapper) :global(.ant-table-column-sorter) {
