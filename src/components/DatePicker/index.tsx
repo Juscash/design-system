@@ -14,17 +14,25 @@ import {
   withTooltip,
 } from "./shared";
 import { CalendarHeader } from "./parts/CalendarHeader";
+import { HEADER_DROPDOWN_CLASS } from "./parts/HeaderSelect";
 import type { DatePickerProps } from "../../types/components/DatePicker";
 import "./index.module.css";
 
-/** Seletor de qualquer dropdown de Select aberto (mês/ano do header, no `body`). */
-const OPEN_SELECT_DROPDOWN = ".ant-select-dropdown:not(.ant-select-dropdown-hidden)";
+/**
+ * Seletor do dropdown do Select de mês/ano DESTE header (não de qualquer
+ * outro Select da página — `popupClassName` no `HeaderSelect` marca esse
+ * dropdown com `HEADER_DROPDOWN_CLASS`, exclusivo dele).
+ */
+const OPEN_SELECT_DROPDOWN = `.${HEADER_DROPDOWN_CLASS}:not(.ant-select-dropdown-hidden)`;
 
 /**
- * Trata a abertura/fechamento do calendário. Ignora o fechamento enquanto um
- * dropdown de select estiver visível (o usuário está escolhendo mês/ano no
- * header, cujo dropdown é renderizado no `body`): assim a escolha não fecha o
- * calendário. Nos demais casos, aplica a visibilidade normalmente.
+ * Trata a abertura/fechamento do calendário. Ignora o fechamento enquanto o
+ * dropdown de mês/ano do PRÓPRIO header estiver visível (o usuário está
+ * escolhendo mês/ano, cujo dropdown é renderizado no `body`): assim a escolha
+ * não fecha o calendário. Um Select qualquer da página aberto não afeta essa
+ * checagem — sem o escopo por classe, um Select externo (ex.: outro campo do
+ * formulário) travava o fechamento do calendário indevidamente. Nos demais
+ * casos, aplica a visibilidade normalmente.
  */
 function resolveOpenChange(nextOpen: boolean, setOpen: (open: boolean) => void): void {
   if (!nextOpen && document.querySelector(OPEN_SELECT_DROPDOWN)) return;

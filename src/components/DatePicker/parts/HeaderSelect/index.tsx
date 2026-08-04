@@ -4,6 +4,11 @@ import type { HeaderSelectProps } from "../../../../types/components/DatePicker"
 
 const WRAP_CLASS = "ds-datepicker-select-wrap";
 const DROPDOWN_SELECTOR = ".ant-select-dropdown";
+// Classe própria no popup deste Select (mês/ano) — distingue-o de qualquer
+// outro `.ant-select-dropdown` da página para o guard de `resolveOpenChange`
+// do DatePicker (ver `../../index.tsx`), que precisa saber se o dropdown
+// aberto é ESTE (não fechar o calendário) e não outro Select da tela.
+export const HEADER_DROPDOWN_CLASS = "ds-datepicker-header-select-dropdown";
 
 /**
  * Abre/fecha o dropdown ao clicar no gatilho. Roda na fase de **captura**
@@ -52,6 +57,7 @@ export function HeaderSelect({ value, options, onChange, ariaLabel, width }: Hea
         value={value}
         options={options}
         open={open}
+        popupClassName={HEADER_DROPDOWN_CLASS}
         onChange={(next) => onChange(Number(next))}
         onOpenChange={(visible) => setOpen(visible)}
       />
