@@ -46,19 +46,32 @@
   overflow-y: hidden;
 }
 /*
-  ── RangePicker com 2 meses em viewport estreita ──────────
+  ── RangePicker com 1 mês em viewport estreita ────────────
   Os dois painéis somam ~520px lado a lado (260px cada) — mais largos que
-  viewports pequenas (ex.: 360-430px). Abaixo de 540px (520px + margem de
-  segurança) empilha os painéis em coluna, cada um ocupando a largura cheia
-  do popup, em vez de exigir scroll horizontal para ver o 2º mês.
+  viewports pequenas (ex.: 360-430px). Abaixo de 540px, a design pediu para
+  mostrar só 1 mês (não os 2 empilhados) — o componente continua sendo um
+  RangePicker funcional (mesmo popup, mesma seleção de início/fim cruzando
+  meses), só o 2º painel fica oculto.
+
+  Isso é só CSS porque o rc-picker sempre renderiza o botão "próximo" de
+  QUALQUER painel no DOM — no primeiro painel (de um par) ele só fica com
+  `visibility: hidden` (não `display: none`), já que o segundo painel é quem
+  normalmente avança o range. Ocultando o 2º painel e reexibindo esse botão
+  no 1º, a navegação (‹ ›) continua funcionando normalmente sobre o único
+  painel visível, sem precisar reimplementar nada em JS. Testado manualmente:
+  navegação entre meses e seleção de intervalo entre meses diferentes, ambos
+  ok com um único painel.
 */
 @media (max-width: 540px) {
-  :global(.ds-datepicker-popup) :global(.ant-picker-panels) {
-    flex-direction: column;
-    width: 100%;
+  :global(.ds-datepicker-popup) :global(.ant-picker-panels) :global(.ant-picker-panel):nth-child(2) {
+    display: none;
   }
   :global(.ds-datepicker-popup) :global(.ant-picker-panels) :global(.ant-picker-panel) {
     width: 100%;
+  }
+  :global(.ds-datepicker-popup) :global(.ant-picker-header-next-btn),
+  :global(.ds-datepicker-popup) :global(.ant-picker-header-super-next-btn) {
+    visibility: visible !important;
   }
 }
 :global(.ds-datepicker-popup) :global(.ant-picker-panel) {
