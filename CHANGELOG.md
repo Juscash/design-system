@@ -1,5 +1,11 @@
 # @juscash/design-system
 
+## 1.7.0
+
+### Minor Changes
+
+- [#27](https://github.com/Juscash/design-system/pull/27) [`c4fab10`](https://github.com/Juscash/design-system/commit/c4fab10fb9a3b4e6bf3c8c52d0f1ba4a18d8eaa5) Thanks [@pedroveras-juscash](https://github.com/pedroveras-juscash)! - Correções
+
 ## 1.6.0
 
 ### Minor Changes
