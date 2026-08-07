@@ -846,3 +846,34 @@
 :global(.ds-table.ant-table-wrapper) :global(.ant-table-column-sort) :global(.ds-table-sort-icon) {
   color: var(--color-neutral-800) !important;
 }
+
+/* ── Linha expandida (`expandable`) ─────────────────────────────────────── */
+
+/*
+  O antd envolve o `expandedRowRender` numa célula com padding e fundo
+  próprios, o que desenha uma moldura em volta do conteúdo. O conteúdo
+  expandido é responsabilidade do consumidor e deve ocupar a linha inteira —
+  zeramos padding e fundo para ele encostar nas bordas da tabela.
+
+  O seletor precisa incluir `.ant-table-tbody` para superar em especificidade
+  a regra de padding das células de dados (`.ant-table-tbody > tr > td`)
+  definida acima, que também usa `!important`.
+*/
+:global(.ds-table.ant-table-wrapper)
+  :global(.ant-table-tbody)
+  > :global(tr.ant-table-expanded-row)
+  > td {
+  padding: 0 !important;
+  background: transparent !important;
+}
+
+/*
+  Hover na linha expandida não repinta a célula de conteúdo (o realce ficaria
+  em cima do bloco do consumidor).
+*/
+:global(.ds-table.ant-table-wrapper)
+  :global(.ant-table-tbody)
+  > :global(tr.ant-table-expanded-row:hover)
+  > td {
+  background: transparent !important;
+}

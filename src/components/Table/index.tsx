@@ -444,6 +444,24 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
 
 Table.displayName = "Table";
 
+/**
+ * Marcadores estáticos do antd repassados pelo wrapper. São os únicos nós que
+ * o consumidor pode inserir dentro de `columns` para posicionar as colunas
+ * geradas pelo próprio Table:
+ *
+ * - `Table.EXPAND_COLUMN` — onde entra o botão de expandir linha
+ *   (`expandable`). Sem ele, o antd 6 coloca a coluna sempre na primeira
+ *   posição; o `expandIconColumnIndex` do antd 5 não existe mais.
+ * - `Table.SELECTION_COLUMN` — onde entra a coluna de checkbox
+ *   (`rowSelection`).
+ *
+ * ```tsx
+ * <Table columns={[colA, colB, Table.EXPAND_COLUMN]} expandable={...} />
+ * ```
+ */
+Table.EXPAND_COLUMN = AntdTable.EXPAND_COLUMN;
+Table.SELECTION_COLUMN = AntdTable.SELECTION_COLUMN;
+
 export type {
   TableProps,
   TableResponsiveMode,
