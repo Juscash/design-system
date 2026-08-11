@@ -23,6 +23,20 @@ const INTER_FONT_FAMILY = '"Inter", sans-serif';
 const PARENT_RELEASE_DELAY_MS = 200;
 
 /**
+ * Suprime o ancestral só visualmente (CSS), nunca via prop `open`. Forçar
+ * `open={false}` no Antd enquanto o mouse ainda está sobre o trigger do
+ * ancestral (caso do badge aninhado dentro do card) faz o Trigger interno
+ * perder o rastreamento real do hover: o mouseleave que viria depois, quando
+ * o usuário finalmente sai da área, deixa de ser reportado, e o tooltip do
+ * ancestral "gruda" aberto (reaparece quando a supressão é liberada). Manter
+ * `open` sempre fiel ao hover real e esconder só com CSS evita esse dessincronismo.
+ */
+const SUPPRESSED_STYLE: React.CSSProperties = {
+  visibility: "hidden",
+  pointerEvents: "none",
+};
+
+/**
  * Tema local do Tooltip do design system. Mantém os tokens nativos do Antd
  * alinhados com `neutral[800]` (fundo) e `neutral[50]` (texto), conforme o
  * frame `4041:9017` do Figma. `sizePopupArrow` força o Antd a recalcular a
@@ -113,7 +127,6 @@ export function Tooltip(props: TooltipProps): React.ReactElement {
 
   const isControlled = openProp !== undefined;
   const naturalOpen = isControlled ? openProp : internalOpen;
-  const effectiveOpen = suppressed ? false : naturalOpen;
 
   const handleOpenChange = React.useCallback(
     (next: boolean) => {
@@ -166,10 +179,15 @@ export function Tooltip(props: TooltipProps): React.ReactElement {
           classNames={{ ...resolvedClassNames, root: rootClassName }}
           styles={{
             ...resolvedStyles,
-            root: { maxWidth: MAX_TOOLTIP_WIDTH, ...overlayStyle, ...resolvedStyles.root },
+            root: {
+              maxWidth: MAX_TOOLTIP_WIDTH,
+              ...overlayStyle,
+              ...resolvedStyles.root,
+              ...(suppressed ? SUPPRESSED_STYLE : undefined),
+            },
             container: { ...overlayInnerStyle, ...resolvedStyles.container },
           }}
-          open={effectiveOpen}
+          open={naturalOpen}
           onOpenChange={handleOpenChange}
           {...rest}
         >
