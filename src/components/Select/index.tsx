@@ -254,6 +254,7 @@ function SelectField(props: SelectFieldProps): React.ReactElement {
     defaultValue,
     options,
     notFoundContent,
+    onSearch,
     ...rest
   } = props;
 
@@ -261,7 +262,16 @@ function SelectField(props: SelectFieldProps): React.ReactElement {
   const [currentValue, setCurrentValue] = useState<SelectProps["value"]>(rest.value ?? defaultValue);
   const isMultiple = rest.mode === "multiple" || rest.mode === "tags";
   const effectiveValue = rest.value !== undefined ? rest.value : currentValue;
-  const visibleOptions = showSearch ? filterOptions(options as DefaultOptionType[] | undefined, searchValue) : options;
+  // Busca remota: com `filterOption={false}` o consumidor filtra via `onSearch`
+  // (as opções já chegam filtradas) — o campo "Procurar" só repassa o termo.
+  const isRemoteSearch = props.filterOption === false;
+  const visibleOptions =
+    showSearch && !isRemoteSearch ? filterOptions(options as DefaultOptionType[] | undefined, searchValue) : options;
+
+  const handleSearchChange = (value: string): void => {
+    setSearchValue(value);
+    onSearch?.(value);
+  };
 
   return (
     <AntdSelect
@@ -285,7 +295,7 @@ function SelectField(props: SelectFieldProps): React.ReactElement {
         rest.onChange?.(val, opt);
       }}
       optionRender={(option) => renderOptionContent(option, { isMultiple, isOptionSelected: (v) => isValueSelected(effectiveValue, v) })}
-      popupRender={(menu) => renderPopup({ menu, showSearch, searchValue, setSearchValue })}
+      popupRender={(menu) => renderPopup({ menu, showSearch, searchValue, setSearchValue: handleSearchChange })}
     />
   );
 }
