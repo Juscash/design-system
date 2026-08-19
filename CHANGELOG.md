@@ -1,5 +1,11 @@
 # @juscash/design-system
 
+## 1.10.1
+
+### Patch Changes
+
+- [#35](https://github.com/Juscash/design-system/pull/35) [`b768410`](https://github.com/Juscash/design-system/commit/b768410550e6707e99ec7b8b4fd7ec804822d134) Thanks [@diegomunizdev](https://github.com/diegomunizdev)! - correção popover calendário
+
 ## 1.10.0
 
 ### Minor Changes
