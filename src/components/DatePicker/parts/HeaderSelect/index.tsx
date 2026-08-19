@@ -1,17 +1,13 @@
 import React from "react";
 import { Select } from "../../../Select";
 import type { HeaderSelectProps } from "../../../../types/components/DatePicker";
+import { HEADER_DROPDOWN_CLASS, useHeaderSelectGuard } from "./context";
 
 const WRAP_CLASS = "ds-datepicker-select-wrap";
 const DROPDOWN_SELECTOR = ".ant-select-dropdown";
-// Classe própria no popup deste Select (mês/ano) — distingue-o de qualquer
-// outro `.ant-select-dropdown` da página para o guard de `resolveOpenChange`
-// do DatePicker (ver `../../index.tsx`), que precisa saber se o dropdown
-// aberto é ESTE (não fechar o calendário) e não outro Select da tela.
-export const HEADER_DROPDOWN_CLASS = "ds-datepicker-header-select-dropdown";
 
 /**
- * Abre/fecha o dropdown ao clicar no gatilho. Roda na fase de **captura**
+ * Abre o dropdown ao clicar no gatilho. Roda na fase de **captura**
  * (`onClickCapture`) porque o seletor interno do Antd interrompe a propagação do
  * clique — na fase de bolha o handler nunca seria alcançado. Ignora cliques
  * vindos de dentro do dropdown (opções): como o dropdown é um portal, o React
@@ -20,10 +16,11 @@ export const HEADER_DROPDOWN_CLASS = "ds-datepicker-header-select-dropdown";
  */
 function handleWrapClickCapture(
   event: React.MouseEvent<HTMLDivElement>,
+  open: boolean,
   setOpen: React.Dispatch<React.SetStateAction<boolean>>,
 ): void {
   if ((event.target as HTMLElement).closest(DROPDOWN_SELECTOR)) return;
-  setOpen((prev) => !prev);
+  if (!open) setOpen(true);
 }
 
 /**
@@ -41,15 +38,25 @@ function handleWrapClickCapture(
  */
 export function HeaderSelect({ value, options, onChange, ariaLabel, width }: HeaderSelectProps): React.ReactElement {
   const [open, setOpen] = React.useState(false);
+  const { markInteracting, setSelectOpen } = useHeaderSelectGuard();
+
+  function handleOpenChange(visible: boolean): void {
+    setOpen(visible);
+    setSelectOpen(visible);
+  }
+
   return (
     <div
       className={WRAP_CLASS}
       style={{ width }}
-      onClickCapture={(event) => handleWrapClickCapture(event, setOpen)}
+      onClickCapture={(event) => handleWrapClickCapture(event, open, setOpen)}
       // Impede que o `mousedown` chegue ao painel do DatePicker (que faz
       // `preventDefault` para manter o foco no input). Sem isto o Select abriria
       // e o Antd o fecharia no mesmo gesto, por nunca receber foco.
-      onMouseDown={(event) => event.stopPropagation()}
+      onMouseDown={(event) => {
+        event.stopPropagation();
+        markInteracting();
+      }}
     >
       <Select
         size="s"
@@ -59,10 +66,12 @@ export function HeaderSelect({ value, options, onChange, ariaLabel, width }: Hea
         open={open}
         popupClassName={HEADER_DROPDOWN_CLASS}
         onChange={(next) => onChange(Number(next))}
-        onOpenChange={(visible) => setOpen(visible)}
+        onOpenChange={handleOpenChange}
       />
     </div>
   );
 }
 
 HeaderSelect.displayName = "HeaderSelect";
+
+export { HEADER_DROPDOWN_CLASS } from "./context";
