@@ -11,7 +11,7 @@ import type { RefObject } from "react";
  * do dropdown (`popupRef`, ex.: rolando a própria lista de opções) é
  * ignorado, para não fechar enquanto o usuário navega pelas opções.
  */
-export function useCloseSelectOnScroll(open: boolean, popupRef: RefObject<HTMLElement>, onClose: () => void): void {
+export function useCloseSelectOnScroll(open: boolean, popupRef: RefObject<HTMLElement | null>, onClose: () => void): void {
   useEffect(() => {
     if (!open) return;
 
