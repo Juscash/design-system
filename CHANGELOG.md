@@ -1,5 +1,35 @@
 # @juscash/design-system
 
+## 1.10.1
+
+### Patch Changes
+
+- [#35](https://github.com/Juscash/design-system/pull/35) [`b768410`](https://github.com/Juscash/design-system/commit/b768410550e6707e99ec7b8b4fd7ec804822d134) Thanks [@diegomunizdev](https://github.com/diegomunizdev)! - correção popover calendário
+
+## 1.10.0
+
+### Minor Changes
+
+- [#33](https://github.com/Juscash/design-system/pull/33) [`09eb6d6`](https://github.com/Juscash/design-system/commit/09eb6d6807192d044ac93c526aebd9881433ab26) Thanks [@pedroveras-juscash](https://github.com/pedroveras-juscash)! - Correção
+
+## 1.9.0
+
+### Minor Changes
+
+- [#31](https://github.com/Juscash/design-system/pull/31) [`9c5ce12`](https://github.com/Juscash/design-system/commit/9c5ce12b69d0b135534471cc1f041e3993d0c33e) Thanks [@pedroveras-juscash](https://github.com/pedroveras-juscash)! - correção
+
+## 1.8.0
+
+### Minor Changes
+
+- [#29](https://github.com/Juscash/design-system/pull/29) [`444dc9a`](https://github.com/Juscash/design-system/commit/444dc9afff981fda6d85ef9edd23fc912e1fe4d4) Thanks [@pedroveras-juscash](https://github.com/pedroveras-juscash)! - correções
+
+## 1.7.0
+
+### Minor Changes
+
+- [#27](https://github.com/Juscash/design-system/pull/27) [`c4fab10`](https://github.com/Juscash/design-system/commit/c4fab10fb9a3b4e6bf3c8c52d0f1ba4a18d8eaa5) Thanks [@pedroveras-juscash](https://github.com/pedroveras-juscash)! - Correções
+
 ## 1.6.0
 
 ### Minor Changes

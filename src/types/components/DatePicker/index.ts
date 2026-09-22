@@ -23,6 +23,8 @@ export type CalendarFieldMode = "select" | "text" | "none";
 export interface HeaderSelectOption {
   value: number;
   label: string;
+  /** Rótulo abreviado (ex.: "Jan"), exibido no gatilho quando `optionLabelProp="shortLabel"`. */
+  shortLabel?: string;
 }
 
 /**
@@ -39,8 +41,18 @@ export interface HeaderSelectProps {
   onChange: (value: number) => void;
   /** Rótulo acessível do gatilho/menu. */
   ariaLabel: string;
-  /** Largura (px) do gatilho. */
-  width: number;
+  /**
+   * Campo da opção exibido no gatilho fechado (Antd `optionLabelProp`). O menu
+   * aberto sempre mostra `label`; ausente, o gatilho também mostra `label`.
+   */
+  optionLabelProp?: "shortLabel";
+  /**
+   * `false` desacopla a largura do menu aberto da largura do gatilho (Antd
+   * `popupMatchSelectWidth`). Necessário no mês: o gatilho encolhe para caber
+   * só o `shortLabel` ("Set"), mas o menu precisa de espaço para `label` por
+   * extenso ("Setembro"). Ausente, menu e gatilho têm a mesma largura.
+   */
+  popupMatchSelectWidth?: boolean;
 }
 
 /**

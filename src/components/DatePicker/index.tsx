@@ -14,16 +14,13 @@ import {
   withTooltip,
 } from "./shared";
 import { CalendarHeader } from "./parts/CalendarHeader";
-import { HEADER_DROPDOWN_CLASS } from "./parts/HeaderSelect";
+import {
+  HeaderSelectGuardProvider,
+  useHeaderSelectGuardState,
+} from "./parts/HeaderSelect/context";
+import { useCloseCalendarOnScroll } from "./hooks/useCloseCalendarOnScroll";
 import type { DatePickerProps } from "../../types/components/DatePicker";
 import "./index.module.css";
-
-/**
- * Seletor do dropdown do Select de mês/ano DESTE header (não de qualquer
- * outro Select da página — `popupClassName` no `HeaderSelect` marca esse
- * dropdown com `HEADER_DROPDOWN_CLASS`, exclusivo dele).
- */
-const OPEN_SELECT_DROPDOWN = `.${HEADER_DROPDOWN_CLASS}:not(.ant-select-dropdown-hidden)`;
 
 /**
  * Trata a abertura/fechamento do calendário. Ignora o fechamento enquanto o
@@ -31,12 +28,24 @@ const OPEN_SELECT_DROPDOWN = `.${HEADER_DROPDOWN_CLASS}:not(.ant-select-dropdown
  * escolhendo mês/ano, cujo dropdown é renderizado no `body`): assim a escolha
  * não fecha o calendário. Um Select qualquer da página aberto não afeta essa
  * checagem — sem o escopo por classe, um Select externo (ex.: outro campo do
- * formulário) travava o fechamento do calendário indevidamente. Nos demais
- * casos, aplica a visibilidade normalmente.
+ * formulário) travava o fechamento do calendário indevidamente. O fechamento é
+ * adiado um tick para o blur do input (ao clicar no header) não fechar o
+ * calendário antes do dropdown montar.
  */
-function resolveOpenChange(nextOpen: boolean, setOpen: (open: boolean) => void): void {
-  if (!nextOpen && document.querySelector(OPEN_SELECT_DROPDOWN)) return;
-  setOpen(nextOpen);
+function resolveOpenChange(
+  nextOpen: boolean,
+  setOpen: (open: boolean) => void,
+  shouldKeepCalendarOpen: () => boolean,
+): void {
+  if (nextOpen) {
+    setOpen(true);
+    return;
+  }
+
+  queueMicrotask(() => {
+    if (shouldKeepCalendarOpen()) return;
+    setOpen(false);
+  });
 }
 
 /**
@@ -70,6 +79,11 @@ export const DatePicker: React.FC<DatePickerProps> = ({
 }) => {
   const [viewDate, setViewDate] = React.useState<Dayjs>(() => (value ?? defaultValue ?? dayjs()) as Dayjs);
   const [open, setOpen] = React.useState(false);
+  const headerSelectGuard = useHeaderSelectGuardState();
+  // Fecha direto (sem passar por `resolveOpenChange`): o guard de mês/ano serve
+  // ao blur/`mousedown`, e no scroll o próprio hook já ignora o que vem de
+  // dentro dos portais do calendário — rolar a página fecha tudo.
+  useCloseCalendarOnScroll(open, () => setOpen(false));
   React.useEffect(() => {
     if (value) setViewDate(value as Dayjs);
   }, [value]);
@@ -85,7 +99,9 @@ export const DatePicker: React.FC<DatePickerProps> = ({
       {...rest}
       picker={picker}
       open={open}
-      onOpenChange={(nextOpen: boolean) => resolveOpenChange(nextOpen, setOpen)}
+      onOpenChange={(nextOpen: boolean) =>
+        resolveOpenChange(nextOpen, setOpen, headerSelectGuard.shouldKeepCalendarOpen)
+      }
       value={value}
       defaultValue={defaultValue}
       className={rootClassName}
@@ -121,7 +137,13 @@ export const DatePicker: React.FC<DatePickerProps> = ({
     />
   );
 
-  return <ConfigProvider theme={buildDatePickerTheme(size)}>{withTooltip(pickerElement, tooltip)}</ConfigProvider>;
+  return (
+    <ConfigProvider theme={buildDatePickerTheme(size)}>
+      <HeaderSelectGuardProvider value={headerSelectGuard.value}>
+        {withTooltip(pickerElement, tooltip)}
+      </HeaderSelectGuardProvider>
+    </ConfigProvider>
+  );
 };
 
 DatePicker.displayName = "DatePicker";
