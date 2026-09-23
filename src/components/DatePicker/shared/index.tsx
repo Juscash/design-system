@@ -88,7 +88,7 @@ const ptBR =
 /** Iniciais dos dias da semana em pt-BR (domingo → sábado), como no Figma. */
 const PT_BR_SHORT_WEEKDAYS = ["Dom", "Seg", "Ter", "Qua", "Qui", "Sex", "Sáb"] as const;
 /** Abreviações dos meses em pt-BR (janeiro → dezembro). */
-const PT_BR_SHORT_MONTHS = [
+export const PT_BR_SHORT_MONTHS = [
   "Jan", "Fev", "Mar", "Abr", "Mai", "Jun", "Jul", "Ago", "Set", "Out", "Nov", "Dez",
 ] as const;
 

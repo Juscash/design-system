@@ -36,7 +36,14 @@ function handleWrapClickCapture(
  * sobreporia as células. O DatePicker mantém o calendário aberto enquanto este
  * dropdown estiver visível (ver `index.tsx`).
  */
-export function HeaderSelect({ value, options, onChange, ariaLabel, width }: HeaderSelectProps): React.ReactElement {
+export function HeaderSelect({
+  value,
+  options,
+  onChange,
+  ariaLabel,
+  optionLabelProp,
+  popupMatchSelectWidth,
+}: HeaderSelectProps): React.ReactElement {
   const [open, setOpen] = React.useState(false);
   const { markInteracting, setSelectOpen } = useHeaderSelectGuard();
 
@@ -48,7 +55,6 @@ export function HeaderSelect({ value, options, onChange, ariaLabel, width }: Hea
   return (
     <div
       className={WRAP_CLASS}
-      style={{ width }}
       onClickCapture={(event) => handleWrapClickCapture(event, open, setOpen)}
       // Impede que o `mousedown` chegue ao painel do DatePicker (que faz
       // `preventDefault` para manter o foco no input). Sem isto o Select abriria
@@ -63,6 +69,8 @@ export function HeaderSelect({ value, options, onChange, ariaLabel, width }: Hea
         aria-label={ariaLabel}
         value={value}
         options={options}
+        optionLabelProp={optionLabelProp}
+        popupMatchSelectWidth={popupMatchSelectWidth}
         open={open}
         popupClassName={HEADER_DROPDOWN_CLASS}
         onChange={(next) => onChange(Number(next))}

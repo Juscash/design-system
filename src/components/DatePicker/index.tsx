@@ -18,6 +18,7 @@ import {
   HeaderSelectGuardProvider,
   useHeaderSelectGuardState,
 } from "./parts/HeaderSelect/context";
+import { useCloseCalendarOnScroll } from "./hooks/useCloseCalendarOnScroll";
 import type { DatePickerProps } from "../../types/components/DatePicker";
 import "./index.module.css";
 
@@ -79,6 +80,10 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   const [viewDate, setViewDate] = React.useState<Dayjs>(() => (value ?? defaultValue ?? dayjs()) as Dayjs);
   const [open, setOpen] = React.useState(false);
   const headerSelectGuard = useHeaderSelectGuardState();
+  // Fecha direto (sem passar por `resolveOpenChange`): o guard de mês/ano serve
+  // ao blur/`mousedown`, e no scroll o próprio hook já ignora o que vem de
+  // dentro dos portais do calendário — rolar a página fecha tudo.
+  useCloseCalendarOnScroll(open, () => setOpen(false));
   React.useEffect(() => {
     if (value) setViewDate(value as Dayjs);
   }, [value]);

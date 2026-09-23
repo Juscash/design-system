@@ -1,7 +1,8 @@
-import { render, screen, fireEvent } from "@testing-library/react";
+import { render, screen, fireEvent, renderHook } from "@testing-library/react";
 import { describe, it, expect, vi } from "vitest";
 import dayjs from "dayjs";
 import { DatePicker } from ".";
+import { useCloseCalendarOnScroll } from "./hooks/useCloseCalendarOnScroll";
 
 // Mocks necessários para os componentes do Ant Design rodarem no jsdom.
 Object.defineProperty(window, "matchMedia", {
@@ -116,5 +117,48 @@ describe("DatePicker", () => {
   it("encaminha className customizada", () => {
     const { container } = render(<DatePicker className="minha-classe" />);
     expect(container.querySelector(".ds-datepicker.minha-classe")).toBeInTheDocument();
+  });
+});
+
+describe("useCloseCalendarOnScroll", () => {
+  function mountPortal(className: string): HTMLElement {
+    const portal = document.createElement("div");
+    portal.className = className;
+    const inner = document.createElement("div");
+    portal.appendChild(inner);
+    document.body.appendChild(portal);
+    return inner;
+  }
+
+  it("fecha ao rolar a página por trás do calendário", () => {
+    const onClose = vi.fn();
+    renderHook(() => useCloseCalendarOnScroll(true, onClose));
+    fireEvent.scroll(document.body);
+    expect(onClose).toHaveBeenCalledTimes(1);
+  });
+
+  it("não escuta o scroll com o calendário fechado", () => {
+    const onClose = vi.fn();
+    renderHook(() => useCloseCalendarOnScroll(false, onClose));
+    fireEvent.scroll(document.body);
+    expect(onClose).not.toHaveBeenCalled();
+  });
+
+  it("ignora o scroll originado dentro do popup do calendário", () => {
+    const onClose = vi.fn();
+    const inner = mountPortal("ds-datepicker-popup");
+    renderHook(() => useCloseCalendarOnScroll(true, onClose));
+    fireEvent.scroll(inner);
+    expect(onClose).not.toHaveBeenCalled();
+    inner.parentElement?.remove();
+  });
+
+  it("ignora o scroll da lista de meses/anos do header", () => {
+    const onClose = vi.fn();
+    const inner = mountPortal("ds-datepicker-header-select-dropdown");
+    renderHook(() => useCloseCalendarOnScroll(true, onClose));
+    fireEvent.scroll(inner);
+    expect(onClose).not.toHaveBeenCalled();
+    inner.parentElement?.remove();
   });
 });

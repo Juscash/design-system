@@ -179,9 +179,10 @@
   border: 1px solid var(--color-neutral-300);
 }
 /* ── HeaderSelect: usa o `Select` do DS (estilo do próprio componente) ── */
-/* O `width` inline é a largura preferida (flex-basis): mantém-se em containers
-   largos (flex-grow:0) e encolhe (flex-shrink:1 + min-width:0) quando o popup é
-   estreito, para o header nunca vazar. O visual vem do próprio Select. */
+/* Sem `width` fixo: o gatilho encolhe para caber só o conteúdo (Figma
+   `4066:4975`, sizing `HUG`) — texto + gap + seta, sem sobra. `flex-shrink:1`
+   + `min-width:0` deixam encolher ainda mais se o popup for estreito, para o
+   header nunca vazar. O visual vem do próprio Select. */
 :global(.ds-datepicker-select-wrap) {
   flex: 0 1 auto;
   min-width: 0;
@@ -248,15 +249,12 @@
   background: var(--color-neutral-100);
 }
 
-/* Hoje → cinza (neutral-200), sem anel, peso normal. */
+/* Hoje sem marcação própria: sem o anel padrão do Antd (`::before`) nem fundo
+   cinza — o dia atual só se destaca quando também é o valor selecionado
+   (regra `.ant-picker-cell-selected` abaixo). Duas marcações simultâneas
+   (hoje + selecionado) pareciam "2 datas escolhidas". */
 :global(.ds-datepicker-popup) :global(.ant-picker-cell-today) :global(.ant-picker-cell-inner)::before {
   display: none;
-}
-:global(.ds-datepicker-popup)
-  :global(.ant-picker-cell-today):not(:global(.ant-picker-cell-selected)):not(:global(.ant-picker-cell-range-start)):not(:global(.ant-picker-cell-range-end))
-  :global(.ant-picker-cell-inner) {
-  background: var(--color-neutral-200);
-  font-weight: var(--font-weight-regular);
 }
 
 /* Selecionado (`selected`): data única escolhida → CINZA (Figma `.day`
