@@ -1,4 +1,5 @@
 import React from "react";
+import { Table as AntdTable } from "antd";
 import type { ColumnsType, ColumnType } from "antd/es/table/interface";
 import type { TableSortIcons } from "../../../../types/components/Table";
 import { pickSortIcon, type SortOrder } from "../sortIcons";
@@ -19,6 +20,14 @@ function extractColumnLabel<T>(col: ColumnType<T>): string {
 interface BuildColumnsArgs<T> {
   columns: ColumnsType<T> | undefined;
   sortIcons: TableSortIcons | undefined;
+}
+
+/**
+ * `true` para os marcadores `Table.EXPAND_COLUMN` / `Table.SELECTION_COLUMN`,
+ * que o antd identifica por referência e não são colunas de verdade.
+ */
+function isMarkerColumn(col: unknown): boolean {
+  return col === AntdTable.EXPAND_COLUMN || col === AntdTable.SELECTION_COLUMN;
 }
 
 /**
@@ -59,6 +68,11 @@ function normalizeEllipsis<T>(col: ColumnType<T>): ColumnType<T>["ellipsis"] {
  */
 export function buildColumns<T>(args: BuildColumnsArgs<T>): ColumnsType<T> | undefined {
   return args.columns?.map((col) => {
+    // `EXPAND_COLUMN`/`SELECTION_COLUMN` são objetos sentinela que o antd
+    // reconhece por identidade referencial — qualquer spread cria um objeto
+    // novo e a coluna gerada some. Passam intactos.
+    if (isMarkerColumn(col)) return col;
+
     const typedCol = col as ColumnType<T>;
     const label = extractColumnLabel(typedCol);
     const existingOnCell = typedCol.onCell;

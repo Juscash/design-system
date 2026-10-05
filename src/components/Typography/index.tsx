@@ -73,31 +73,32 @@ function renderTypography(
   variant: TypographyVariant,
   baseStyle: React.CSSProperties,
   rest: AntdTypographyAllProps,
+  ref: React.Ref<HTMLElement>,
 ): React.ReactElement {
   const style = buildVariantStyle(variant, baseStyle);
   switch (variant) {
     case "heading1":
-      return <Title level={1} style={style} {...(rest as TitleProps)} />;
+      return <Title ref={ref} level={1} style={style} {...(rest as TitleProps)} />;
     case "heading2":
-      return <Title level={2} style={style} {...(rest as TitleProps)} />;
+      return <Title ref={ref} level={2} style={style} {...(rest as TitleProps)} />;
     case "heading3":
-      return <Title level={3} style={style} {...(rest as TitleProps)} />;
+      return <Title ref={ref} level={3} style={style} {...(rest as TitleProps)} />;
     case "heading4":
-      return <Title level={4} style={style} {...(rest as TitleProps)} />;
+      return <Title ref={ref} level={4} style={style} {...(rest as TitleProps)} />;
     case "heading5":
-      return <Title level={5} style={style} {...(rest as TitleProps)} />;
+      return <Title ref={ref} level={5} style={style} {...(rest as TitleProps)} />;
     // Antd Title aceita level 1–5. Heading6 cai em <h5> com font-size 20px
     // (token heading/06) preservando a hierarquia visual.
     case "heading6":
-      return <Title level={5} style={style} {...(rest as TitleProps)} />;
+      return <Title ref={ref} level={5} style={style} {...(rest as TitleProps)} />;
     case "body1":
-      return <Paragraph style={style} {...(rest as ParagraphProps)} />;
+      return <Paragraph ref={ref} style={style} {...(rest as ParagraphProps)} />;
     case "body2":
-      return <Paragraph style={style} {...(rest as ParagraphProps)} />;
+      return <Paragraph ref={ref} style={style} {...(rest as ParagraphProps)} />;
     case "caption":
-      return <Text style={style} {...(rest as TextProps)} />;
+      return <Text ref={ref as React.Ref<HTMLSpanElement>} style={style} {...(rest as TextProps)} />;
     default:
-      return <Paragraph style={style} {...(rest as ParagraphProps)} />;
+      return <Paragraph ref={ref} style={style} {...(rest as ParagraphProps)} />;
   }
 }
 
@@ -139,10 +140,11 @@ function renderNativeElement(
   variant: TypographyVariant,
   baseStyle: React.CSSProperties,
   rest: AntdTypographyAllProps,
+  ref: React.Ref<HTMLElement>,
 ): React.ReactElement {
   const style = buildVariantStyle(variant, baseStyle);
   const nativeProps = pickNativeProps(rest);
-  return React.createElement(tag, { ...nativeProps, style });
+  return React.createElement(tag, { ...nativeProps, style, ref });
 }
 
 /**
@@ -156,36 +158,50 @@ function renderNativeElement(
  * gerado por `buildVariantStyle`. Apenas props HTML padrão são repassadas;
  * props específicas do Antd (`mark`, `code`, `strong`, etc.) são ignoradas.
  */
-export function Typography(props: CustomTypographyProps): React.ReactElement {
-  const { variant = "body1", style, component, ...rest } = props;
-  const baseStyle: React.CSSProperties = {
-    margin: 0,
-    ...style,
-  };
-  if (component !== undefined) {
-    return renderNativeElement(component, variant, baseStyle, rest);
-  }
-  return renderTypography(variant, baseStyle, rest);
-}
+export const Typography = React.forwardRef<HTMLElement, CustomTypographyProps>(
+  function Typography(props, ref): React.ReactElement {
+    const { variant = "body1", style, component, ...rest } = props;
+    const baseStyle: React.CSSProperties = {
+      margin: 0,
+      ...style,
+    };
+    if (component !== undefined) {
+      return renderNativeElement(component, variant, baseStyle, rest, ref);
+    }
+    return renderTypography(variant, baseStyle, rest, ref);
+  },
+);
 
 Typography.displayName = "Typography";
 
-export const Heading1: React.FC<HeadingProps> = (props) => <Typography variant="heading1" {...props} />;
+export const Heading1 = React.forwardRef<HTMLElement, HeadingProps>(function Heading1(props, ref) {
+  return <Typography ref={ref} variant="heading1" {...props} />;
+});
 Heading1.displayName = "Heading1";
 
-export const Heading2: React.FC<HeadingProps> = (props) => <Typography variant="heading2" {...props} />;
+export const Heading2 = React.forwardRef<HTMLElement, HeadingProps>(function Heading2(props, ref) {
+  return <Typography ref={ref} variant="heading2" {...props} />;
+});
 Heading2.displayName = "Heading2";
 
-export const Heading3: React.FC<HeadingProps> = (props) => <Typography variant="heading3" {...props} />;
+export const Heading3 = React.forwardRef<HTMLElement, HeadingProps>(function Heading3(props, ref) {
+  return <Typography ref={ref} variant="heading3" {...props} />;
+});
 Heading3.displayName = "Heading3";
 
-export const Heading4: React.FC<HeadingProps> = (props) => <Typography variant="heading4" {...props} />;
+export const Heading4 = React.forwardRef<HTMLElement, HeadingProps>(function Heading4(props, ref) {
+  return <Typography ref={ref} variant="heading4" {...props} />;
+});
 Heading4.displayName = "Heading4";
 
-export const Heading5: React.FC<HeadingProps> = (props) => <Typography variant="heading5" {...props} />;
+export const Heading5 = React.forwardRef<HTMLElement, HeadingProps>(function Heading5(props, ref) {
+  return <Typography ref={ref} variant="heading5" {...props} />;
+});
 Heading5.displayName = "Heading5";
 
-export const Heading6: React.FC<HeadingProps> = (props) => <Typography variant="heading6" {...props} />;
+export const Heading6 = React.forwardRef<HTMLElement, HeadingProps>(function Heading6(props, ref) {
+  return <Typography ref={ref} variant="heading6" {...props} />;
+});
 Heading6.displayName = "Heading6";
 
 // Body1 e Body2 renderizam como `<p>` nativo por padrão. O `Paragraph` do
@@ -193,17 +209,24 @@ Heading6.displayName = "Heading6";
 // o que confunde semântica (parágrafo virando bloco). Default `component="p"`
 // alinha o DOM com a expectativa do consumidor. Pode ser sobrescrito passando
 // `component={"span" | "h1" | ...}` explicitamente.
-export const Body1: React.FC<BodyProps> = ({ component = "p", ...props }) => (
-  <Typography variant="body1" component={component} {...props} />
-);
+//
+// O `ref` é encaminhado para o elemento DOM final (forwardRef): sem isso, o
+// Antd Tooltip/Popover não consegue medir o elemento âncora ao envolver um
+// `Body2`/`Heading`, e o popup aparecia no canto da tela (bug do tooltip da
+// tabela de blogs).
+export const Body1 = React.forwardRef<HTMLElement, BodyProps>(function Body1({ component = "p", ...props }, ref) {
+  return <Typography ref={ref} variant="body1" component={component} {...props} />;
+});
 Body1.displayName = "Body1";
 
-export const Body2: React.FC<BodyProps> = ({ component = "p", ...props }) => (
-  <Typography variant="body2" component={component} {...props} />
-);
+export const Body2 = React.forwardRef<HTMLElement, BodyProps>(function Body2({ component = "p", ...props }, ref) {
+  return <Typography ref={ref} variant="body2" component={component} {...props} />;
+});
 Body2.displayName = "Body2";
 
-export const Caption: React.FC<CaptionProps> = (props) => <Typography variant="caption" {...props} />;
+export const Caption = React.forwardRef<HTMLElement, CaptionProps>(function Caption(props, ref) {
+  return <Typography ref={ref} variant="caption" {...props} />;
+});
 Caption.displayName = "Caption";
 
 export const TypographyComponents = {

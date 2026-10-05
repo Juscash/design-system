@@ -1,6 +1,6 @@
 import type { Meta, StoryObj } from "@storybook/react-vite";
 import React from "react";
-import { Input } from "../Input";
+import { TextArea } from "../TextArea";
 import type { TextAreaProps } from "../../types/components/TextArea";
 import { Form } from "antd";
 
@@ -8,10 +8,6 @@ import { Title, Subtitle, Description, Primary, Controls, Stories } from "@story
 import { Figma } from "@storybook/addon-designs/blocks";
 
 const FIGMA_URL = "https://www.figma.com/design/T99YkskqvWdGJbiYI3f7VZ/Design-System-Juscash?node-id=4059-2085&m=dev";
-
-// TextArea é exportado como prop estática de Input, mas para o Storybook
-// criamos uma referência direta para facilitar o uso no meta.
-const { TextArea } = Input;
 
 type TextAreaStoryProps = TextAreaProps & {
   focus?: boolean;

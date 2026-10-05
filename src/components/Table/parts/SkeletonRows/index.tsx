@@ -3,10 +3,10 @@ import { Skeleton } from "../../../Skeleton";
 
 const ROOT_CLASS = "ds-table-skeleton";
 const ROW_CLASS = "ds-table-skeleton__row";
-const DEFAULT_ROW_COUNT = 5;
+const DEFAULT_ROW_COUNT = 15;
 
 interface SkeletonRowsProps {
-  /** Quantidade de linhas a renderizar. Default 5. */
+  /** Quantidade de linhas a renderizar. Default 15. */
   rows?: number;
   /** Se `true` (default), aplica pulse animation do Skeleton. */
   animated?: boolean;

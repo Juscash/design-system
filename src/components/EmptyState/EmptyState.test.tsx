@@ -24,6 +24,11 @@ describe("EmptyState", () => {
     expect(screen.getByRole("button", { name: "Adicionar" })).toBeInTheDocument();
   });
 
+  it("renderiza o slot livre `action` quando fornecido", () => {
+    render(<EmptyState title="Vazio" action={<button type="button">Custom</button>} />);
+    expect(screen.getByRole("button", { name: "Custom" })).toBeInTheDocument();
+  });
+
   it("dispara onClick do botão de ação", async () => {
     const user = userEvent.setup();
     const handleClick = vi.fn();

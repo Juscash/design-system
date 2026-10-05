@@ -437,56 +437,11 @@ body {
 
 /* ============================================
    DATEPICKER — overrides nativos
-   (classes próprias .ds-datepicker* vivem em components/DatePicker/index.module.css)
+   Específicos do DatePicker/RangePicker do design system foram movidos para
+   src/components/DatePicker/index.module.css (scoped via .ds-datepicker e
+   .ds-datepicker-popup) e para os tokens do ConfigProvider. A tipografia
+   herda do `body` (Inter via global).
    ============================================ */
-.ant-picker-month-btn,
-.ant-picker-year-btn,
-.ant-picker-quarter-btn {
-  font-family: var(--font-primary) !important;
-  font-size: 13px !important;
-  font-weight: 500 !important;
-  color: var(--color-neutral-800) !important;
-}
-
-.ant-picker-active-bar {
-  display: none !important;
-}
-
-.ant-picker-outlined:focus-within,
-.ant-picker-outlined:focus {
-  box-shadow: var(--shadow-focus) !important;
-  border-color: var(--color-neutral-300) !important;
-}
-
-.ant-picker-outlined:hover {
-  border-color: var(--color-neutral-300) !important;
-}
-
-.ant-picker-content thead th {
-  font-family: var(--font-primary) !important;
-  font-size: 11px !important;
-  font-weight: 500 !important;
-  color: var(--color-neutral-500) !important;
-}
-
-.ant-picker-cell-inner {
-  font-family: var(--font-primary) !important;
-  font-size: 13px !important;
-  font-weight: 400 !important;
-  min-width: 28px !important;
-  height: 28px !important;
-  line-height: 28px !important;
-}
-
-.ant-picker-cell-today .ant-picker-cell-inner::before {
-  border-color: var(--color-brand-primary-600) !important;
-}
-
-.ant-picker-input > input {
-  font-family: var(--font-primary);
-  font-size: 13px !important;
-  font-weight: 400 !important;
-}
 
 /* ============================================
    CHECKBOX — overrides nativos

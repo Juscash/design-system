@@ -52,7 +52,7 @@ const descriptionStyle: React.CSSProperties = {
  * opcional e um botão de ação opcional, todos centralizados.
  */
 export function EmptyState(props: EmptyStateProps): React.ReactElement {
-  const { title, description, actionLabel, actionButtonProps, icon, className, style } = props;
+  const { title, description, action, actionLabel, actionButtonProps, icon, className, style } = props;
 
   return (
     <div
@@ -82,11 +82,12 @@ export function EmptyState(props: EmptyStateProps): React.ReactElement {
       >
         <p style={titleStyle}>{title}</p>
         {description ? <p style={descriptionStyle}>{description}</p> : null}
-        {actionLabel ? (
-          <Button type="primary" size="s" {...actionButtonProps}>
-            {actionLabel}
-          </Button>
-        ) : null}
+        {action ??
+          (actionLabel ? (
+            <Button type="primary" size="s" {...actionButtonProps}>
+              {actionLabel}
+            </Button>
+          ) : null)}
       </div>
     </div>
   );

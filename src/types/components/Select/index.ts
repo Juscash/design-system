@@ -20,4 +20,10 @@ export type SelectProps = CleanAntdProps & {
    * `status="error"` fica `feedback/red/500`. Figma `4062:8037`.
    */
   helperText?: ReactNode;
+  /**
+   * Mostra um spinner no rodapé do dropdown, abaixo das opções — para
+   * combos com paginação (`onPopupScroll` + scroll infinito) sinalizarem que
+   * a próxima página está carregando.
+   */
+  loadingMore?: boolean;
 };

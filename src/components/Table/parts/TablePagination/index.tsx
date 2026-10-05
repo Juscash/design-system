@@ -1,8 +1,7 @@
 import React from "react";
-import { ConfigProvider, Select as AntdSelect } from "antd";
 import { ChevronsUpDown } from "lucide-react";
 import { Pagination } from "../../../Pagination";
-import { designSystemColors, radius } from "../../../../theme";
+import { PaginationSizeChanger } from "../../../Pagination/parts/SizeChanger";
 
 const FOOTER_CLASS = "ds-table-pagination-footer";
 const FOOTER_CARDS_CLASS = "ds-table-pagination-footer--cards";
@@ -10,8 +9,6 @@ const TOTAL_CLASS = "ds-table-pagination-total";
 const SIZE_CHANGER_CLASS = "ds-table-pagination-size-changer";
 const SINGULAR_COUNT = 1;
 const SIZE_CHANGER_ICON_SIZE = 16;
-const DEFAULT_PAGE_SIZE_OPTIONS = ["5", "10", "25", "50", "100"];
-const SIZE_CHANGER_PREFIX = "Itens por página: ";
 
 interface TablePaginationProps {
   /** Página atual (1-indexed). */
@@ -54,26 +51,6 @@ function defaultRenderTotal(total: number): React.ReactNode {
 }
 
 /**
- * Tokens do `Select` usados pelo size changer da paginação. Mantém o visual
- * do Figma `Data table > pagination > select 165x36`.
- */
-function getSelectTokens() {
-  return {
-    activeBorderColor: designSystemColors.neutral[300],
-    hoverBorderColor: designSystemColors.neutral[300],
-    activeOutlineColor: designSystemColors.neutral[300],
-    optionFontSize: 13,
-    optionHeight: 28,
-    optionPadding: "4px 8px",
-    colorText: designSystemColors.neutral[800],
-    colorBgElevated: designSystemColors.neutral[50],
-    optionSelectedFontWeight: 400,
-    optionSelectedBg: designSystemColors.neutral[200],
-    borderRadiusSM: radius.xl,
-  };
-}
-
-/**
  * Rodapé de paginação do Table. Compõe:
  *
  * - **Total** à esquerda — formato pt-BR "{N} itens" (override via `showTotal`).
@@ -89,7 +66,7 @@ export function TablePagination(props: TablePaginationProps): React.ReactElement
     pageSize,
     total,
     showSizeChanger = false,
-    pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS,
+    pageSizeOptions,
     showTotal,
     onChange,
     cardsMode = false,
@@ -119,18 +96,13 @@ export function TablePagination(props: TablePaginationProps): React.ReactElement
       <div className={TOTAL_CLASS}>{totalNode}</div>
       <Pagination current={current} pageSize={pageSize} total={total} onChange={handlePageChange} />
       {showSizeChanger ? (
-        <ConfigProvider theme={{ components: { Select: getSelectTokens() } }}>
-          <AntdSelect
-            className={SIZE_CHANGER_CLASS}
-            value={pageSize}
-            onChange={handleSizeChange}
-            suffixIcon={cardsMode ? <ChevronsUpDown aria-hidden size={SIZE_CHANGER_ICON_SIZE} /> : undefined}
-            options={pageSizeOptions.map((size) => ({
-              value: Number(size),
-              label: `${SIZE_CHANGER_PREFIX}${size}`,
-            }))}
-          />
-        </ConfigProvider>
+        <PaginationSizeChanger
+          className={SIZE_CHANGER_CLASS}
+          pageSize={pageSize}
+          pageSizeOptions={pageSizeOptions}
+          suffixIcon={cardsMode ? <ChevronsUpDown aria-hidden size={SIZE_CHANGER_ICON_SIZE} /> : undefined}
+          onChange={handleSizeChange}
+        />
       ) : null}
     </div>
   );

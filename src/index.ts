@@ -1,107 +1,82 @@
 import "./theme/global.css";
 
+// Tokens, temas e utilitários de estilo do design system.
 export * from "./theme";
-export { LIST_IGNORE } from "antd/es/upload/Upload";
-export { type RcFile } from "antd/es/upload/interface";
+
+// Camada base do antd: re-exporta TODOS os componentes e utilitários do antd
+// pelo nome original (Tag, Steps, Cascader, Splitter, Masonry, etc.). Assim,
+// qualquer componente do antd sem versão customizada fica disponível
+// automaticamente — sem precisar mantê-los em uma lista manual. Isso evita
+// regressões de "export ausente" quando o antd ganha componentes novos ou
+// quando um componente proprietário é removido (o antd passa a ser o fallback).
+export * from "antd";
+
+// Componentes proprietários do design system.
 export * from "./components";
 
+// Os nomes abaixo existem TANTO no antd quanto em `./components`. Com dois
+// `export *` (antd e ./components), esses nomes ficariam ambíguos e o import
+// quebraria. O re-export explícito a partir de `./components` tem precedência
+// sobre qualquer `export *`, garantindo que a versão proprietária vença e que
+// o antd sirva apenas de fallback para o que não foi customizado.
 export {
-  type UploadFile,
+  Alert,
+  type AlertProps,
+  Avatar,
+  type AvatarProps,
+  Badge,
+  type BadgeProps,
+  Breadcrumb,
+  type BreadcrumbProps,
+  Button,
+  type ButtonProps,
+  Card,
+  type CardProps,
+  Carousel,
+  type CarouselProps,
+  Checkbox,
+  type CheckboxProps,
+  Collapse,
+  type CollapseProps,
+  DatePicker,
+  type DatePickerProps,
+  Drawer,
+  type DrawerProps,
+  Input,
+  type InputProps,
+  Modal,
+  type ModalProps,
+  Pagination,
+  type PaginationProps,
+  Popover,
+  type PopoverProps,
+  Progress,
+  type ProgressProps,
+  Radio,
+  type RadioProps,
+  Segmented,
+  type SegmentedProps,
+  Select,
+  type SelectProps,
+  Skeleton,
+  type SkeletonProps,
+  Slider,
+  Switch,
+  type SwitchProps,
+  Table,
+  type TableProps,
+  Tabs,
+  type TabsProps,
+  Tooltip,
+  type TooltipProps,
+  Typography,
+  Upload,
+  type UploadProps,
+} from "./components";
 
-  // Núcleo
-  ConfigProvider,
-  theme,
-  type ThemeConfig,
-
-  // Layout
-  Layout,
-  Grid,
-  Row,
-  Col,
-  Space,
-  Divider,
-  Flex,
-  Form,
-  type FormProps,
-
-  // Navegação
-  Menu,
-  type MenuProps,
-  Steps,
-  type StepsProps,
-  Anchor,
-  type AnchorProps,
-
-  // Entrada de dados
-  InputNumber,
-  type InputNumberProps,
-  TreeSelect,
-  type TreeSelectProps,
-  Cascader,
-  type CascaderProps,
-  TimePicker,
-  type TimePickerProps,
-  Calendar,
-  type CalendarProps,
-  Transfer,
-  type TransferProps,
-  Rate,
-  type RateProps,
-  Mentions,
-  type MentionsProps,
-  AutoComplete,
-  type AutoCompleteProps,
-  ColorPicker,
-  type ColorPickerProps,
-
-  // Exibição de dados
-  Tree,
-  type TreeProps,
-  Timeline,
-  type TimelineProps,
-  Descriptions,
-  type DescriptionsProps,
-  Empty,
-  type EmptyProps,
-  Image,
-  type ImageProps,
-  List,
-  type ListProps,
-  Statistic,
-  type StatisticProps,
-  QRCode,
-  type QRCodeProps,
-
-  // Feedback
-  message,
-  notification,
-  Popconfirm,
-  type PopconfirmProps,
-  Spin,
-  type SpinProps,
-  Result,
-  type ResultProps,
-
-  // Geral
-  FloatButton,
-  type FloatButtonProps,
-
-  // Outros
-  Affix,
-  type AffixProps,
-  BackTop,
-  type BackTopProps,
-  Dropdown,
-  type DropdownProps,
-  Tour,
-  type TourProps,
-  Watermark,
-  type WatermarkProps,
-} from "antd";
-
-// Pass-through dos componentes do Antd cujo nome colide com componentes
+// Pass-through dos componentes do antd cujo nome colide com componentes
 // proprietários do design system. Renomeados com prefixo `Ant` para que o
-// consumidor possa usar o original do Antd quando precisar de comportamento
+// consumidor possa usar o original do antd quando precisar de comportamento
 // 1:1 sem a camada de identidade visual.
 export {
   Alert as AntAlert,
@@ -131,5 +106,9 @@ export {
   Tooltip as AntTooltip,
   type TooltipProps as AntTooltipProps,
 } from "antd";
+
+// Utilitários do antd que vivem em subpaths (não cobertos por `export *`).
+export { LIST_IGNORE } from "antd/es/upload/Upload";
+export type { RcFile, UploadFile } from "antd/es/upload/interface";
 
 export * as LucideIcons from "lucide-react";

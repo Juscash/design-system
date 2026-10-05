@@ -46,20 +46,21 @@ Componente para estados vazios em páginas, cards e áreas de conteúdo.
 ### Props:
 - \`title\`: título principal do estado vazio
 - \`description\`: texto complementar
-- \`actionLabel\`: label do CTA opcional
+- \`action\`: slot livre do CTA (botão, link, texto…), renderizado sem tamanho forçado
+- \`actionLabel\`: atalho que renderiza um Button primary size="s" (use \`action\` para controle total)
 - \`icon\`: ícone customizado opcional
 
 ### Como usar:
 
 \`\`\`tsx
-import { EmptyState } from "@juscash/design-system";
+import { EmptyState, Button } from "@juscash/design-system";
 
 function Example() {
   return (
     <EmptyState
       title="Title"
       description="Description"
-      actionLabel="Label"
+      action={<Button size="s">Label</Button>}
     />
   );
 }
@@ -87,12 +88,12 @@ function Example() {
   args: {
     title: "Title",
     description: "Description",
-    actionLabel: "Label",
+    action: <Button size="s">Label</Button>,
   },
   argTypes: {
     title: { control: "text" },
     description: { control: "text" },
-    actionLabel: { control: "text" },
+    action: { control: false },
   },
 };
 
@@ -116,7 +117,7 @@ export const WithoutDescription: Story = {
 
 export const WithoutButton: Story = {
   args: {
-    actionLabel: undefined,
+    action: undefined,
   },
 };
 
@@ -159,7 +160,7 @@ export const FigmaExamples: Story = {
       }}
     >
       <div style={{ display: "flex", justifyContent: "flex-start" }}>
-        <EmptyState title="Title" description="Description" actionLabel="Label" />
+        <EmptyState title="Title" description="Description" action={<Button size="s">Label</Button>} />
       </div>
 
       <CardExample />
@@ -275,7 +276,7 @@ function DesktopExample(): React.ReactElement {
                 borderRadius: radius.xl,
               }}
             >
-              <EmptyState title="Title" description="Description" actionLabel="Label" />
+              <EmptyState title="Title" description="Description" action={<Button size="s">Label</Button>} />
             </div>
           </div>
         </div>
@@ -307,7 +308,7 @@ function MobileExample(): React.ReactElement {
             borderRadius: radius.xl,
           }}
         >
-          <EmptyState title="Title" description="Description" actionLabel="Label" />
+          <EmptyState title="Title" description="Description" action={<Button size="s">Label</Button>} />
         </div>
       </div>
     </div>
