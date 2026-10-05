@@ -1,5 +1,11 @@
 # @juscash/design-system
 
+## 1.12.0
+
+### Minor Changes
+
+- Correção Select
+
 ## 1.11.0
 
 ### Minor Changes
