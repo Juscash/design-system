@@ -1,5 +1,6 @@
 import React from "react";
 import { ConfigProvider, Select as AntdSelect } from "antd";
+import { ChevronsUpDown } from "lucide-react";
 import { Pagination } from "../../../Pagination";
 import { designSystemColors, radius } from "../../../../theme";
 
@@ -8,6 +9,7 @@ const FOOTER_CARDS_CLASS = "ds-table-pagination-footer--cards";
 const TOTAL_CLASS = "ds-table-pagination-total";
 const SIZE_CHANGER_CLASS = "ds-table-pagination-size-changer";
 const SINGULAR_COUNT = 1;
+const SIZE_CHANGER_ICON_SIZE = 16;
 const DEFAULT_PAGE_SIZE_OPTIONS = ["5", "10", "25", "50", "100"];
 const SIZE_CHANGER_PREFIX = "Itens por página: ";
 
@@ -122,6 +124,7 @@ export function TablePagination(props: TablePaginationProps): React.ReactElement
             className={SIZE_CHANGER_CLASS}
             value={pageSize}
             onChange={handleSizeChange}
+            suffixIcon={cardsMode ? <ChevronsUpDown aria-hidden size={SIZE_CHANGER_ICON_SIZE} /> : undefined}
             options={pageSizeOptions.map((size) => ({
               value: Number(size),
               label: `${SIZE_CHANGER_PREFIX}${size}`,

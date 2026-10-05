@@ -234,6 +234,11 @@ function SelectField(props: SelectFieldProps): React.ReactElement {
   } = props;
 
   const [searchValue, setSearchValue] = useState("");
+  /** O Antd só dispara `onSearch` no input nativo (desligado aqui); repassa o termo digitado no popup. */
+  const handleSearchChange = (value: string): void => {
+    setSearchValue(value);
+    rest.onSearch?.(value);
+  };
   const [currentValue, setCurrentValue] = useState<SelectProps["value"]>(rest.value ?? defaultValue);
   const isMultiple = rest.mode === "multiple" || rest.mode === "tags";
   const effectiveValue = rest.value !== undefined ? rest.value : currentValue;
@@ -241,6 +246,9 @@ function SelectField(props: SelectFieldProps): React.ReactElement {
 
   return (
     <AntdSelect
+      // A busca já é filtrada aqui por `label` (`filterOptions`). Sem isto, o Antd filtra DE NOVO pelo `value`
+      // quando recebe `searchValue`, e opções cujo `value` é um id (ex.: "15") somem ao digitar o nome.
+      filterOption={false}
       {...rest}
       id={selectId}
       status={status}
@@ -260,7 +268,7 @@ function SelectField(props: SelectFieldProps): React.ReactElement {
         rest.onChange?.(val, opt);
       }}
       optionRender={(option) => renderOptionContent(option, { isMultiple, isOptionSelected: (v) => isValueSelected(effectiveValue, v) })}
-      popupRender={(menu) => renderPopup({ menu, showSearch, searchValue, setSearchValue })}
+      popupRender={(menu) => renderPopup({ menu, showSearch, searchValue, setSearchValue: handleSearchChange })}
     />
   );
 }

@@ -770,6 +770,7 @@
   flex-direction: column !important;
   align-items: stretch !important;
   gap: 16px !important;
+  margin-top: 16px;
 }
 
 :global(.ds-table-pagination-footer--cards) :global(.ds-table-pagination-total) {
@@ -780,6 +781,7 @@
 
 :global(.ds-table-pagination-footer--cards) :global(.ds-table-pagination-size-changer.ant-select) {
   width: 100% !important;
+  height: 32px !important;
   order: 2;
 }
 
