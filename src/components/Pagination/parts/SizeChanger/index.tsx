@@ -15,6 +15,8 @@ export interface PaginationSizeChangerProps {
   onChange: (size: number) => void;
   /** Classe extra aplicada ao Select (ex.: variante do footer do Table). */
   className?: string;
+  /** Ícone de sufixo do Select. Quando ausente, usa o ícone padrão do Antd. */
+  suffixIcon?: React.ReactNode;
 }
 
 /**
@@ -45,7 +47,7 @@ function getSelectTokens() {
  * `Data table > pagination > select 165x36`.
  */
 export function PaginationSizeChanger(props: PaginationSizeChangerProps): React.ReactElement {
-  const { pageSize, pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS, onChange, className } = props;
+  const { pageSize, pageSizeOptions = DEFAULT_PAGE_SIZE_OPTIONS, onChange, className, suffixIcon } = props;
   const rootClassName = [BASE_CLASS, className].filter(Boolean).join(" ");
 
   return (
@@ -53,6 +55,7 @@ export function PaginationSizeChanger(props: PaginationSizeChangerProps): React.
       <AntdSelect
         className={rootClassName}
         value={pageSize}
+        suffixIcon={suffixIcon}
         labelRender={(item) => `${SIZE_CHANGER_PREFIX}${String(item.label ?? "")}`}
         onChange={(value) => onChange(Number(value))}
         options={pageSizeOptions.map((size) => ({

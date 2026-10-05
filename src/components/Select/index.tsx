@@ -302,6 +302,7 @@ function SelectField(props: SelectFieldProps): React.ReactElement {
   const visibleOptions =
     showSearch && !isRemoteSearch ? filterOptions(options as DefaultOptionType[] | undefined, searchValue) : options;
 
+  /** O Antd só dispara `onSearch` no input nativo (desligado aqui); repassa o termo digitado no popup. */
   const handleSearchChange = (value: string): void => {
     setSearchValue(value);
     onSearch?.(value);
@@ -316,6 +317,9 @@ function SelectField(props: SelectFieldProps): React.ReactElement {
 
   return (
     <AntdSelect
+      // A busca já é filtrada aqui por `label` (`filterOptions`). Sem isto, o Antd filtra DE NOVO pelo `value`
+      // quando recebe `searchValue`, e opções cujo `value` é um id (ex.: "15") somem ao digitar o nome.
+      filterOption={false}
       {...rest}
       id={selectId}
       status={status}

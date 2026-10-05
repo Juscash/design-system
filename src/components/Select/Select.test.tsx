@@ -1,5 +1,5 @@
-import { render, screen } from "@testing-library/react";
-import { describe, it, expect } from "vitest";
+import { fireEvent, render, screen } from "@testing-library/react";
+import { describe, it, expect, vi } from "vitest";
 import { Select } from ".";
 
 const options = [
@@ -44,5 +44,23 @@ describe("Select", () => {
   it("marks the wrapper with disabled modifier when disabled", () => {
     const { container } = render(<Select disabled label="Label" options={options} />);
     expect(container.querySelector(".ds-select-wrapper--disabled")).not.toBeNull();
+  });
+
+  it("filters the search by label even when the option value is an id", () => {
+    const idOptions = [
+      { value: "15", label: "Mariana Barbosa" },
+      { value: "16", label: "Pedro Veras" },
+    ];
+    render(<Select showSearch open virtual={false} options={idOptions} />);
+    fireEvent.change(screen.getByPlaceholderText("Procurar"), { target: { value: "mari" } });
+    expect(screen.queryByText("Mariana Barbosa")).not.toBeNull();
+    expect(screen.queryByText("Pedro Veras")).toBeNull();
+  });
+
+  it("forwards the typed search term to the consumer onSearch", () => {
+    const onSearch = vi.fn();
+    render(<Select showSearch open virtual={false} options={options} onSearch={onSearch} />);
+    fireEvent.change(screen.getByPlaceholderText("Procurar"), { target: { value: "abc" } });
+    expect(onSearch).toHaveBeenCalledWith("abc");
   });
 });

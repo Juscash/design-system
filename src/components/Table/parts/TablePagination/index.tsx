@@ -1,4 +1,5 @@
 import React from "react";
+import { ChevronsUpDown } from "lucide-react";
 import { Pagination } from "../../../Pagination";
 import { PaginationSizeChanger } from "../../../Pagination/parts/SizeChanger";
 
@@ -7,6 +8,7 @@ const FOOTER_CARDS_CLASS = "ds-table-pagination-footer--cards";
 const TOTAL_CLASS = "ds-table-pagination-total";
 const SIZE_CHANGER_CLASS = "ds-table-pagination-size-changer";
 const SINGULAR_COUNT = 1;
+const SIZE_CHANGER_ICON_SIZE = 16;
 
 interface TablePaginationProps {
   /** Página atual (1-indexed). */
@@ -98,6 +100,7 @@ export function TablePagination(props: TablePaginationProps): React.ReactElement
           className={SIZE_CHANGER_CLASS}
           pageSize={pageSize}
           pageSizeOptions={pageSizeOptions}
+          suffixIcon={cardsMode ? <ChevronsUpDown aria-hidden size={SIZE_CHANGER_ICON_SIZE} /> : undefined}
           onChange={handleSizeChange}
         />
       ) : null}

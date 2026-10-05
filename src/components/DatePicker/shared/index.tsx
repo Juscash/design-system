@@ -150,7 +150,7 @@ export function buildCellRender(
 ): (current: Dayjs | number | string, info: CellRenderInfo) => React.ReactNode {
   return (current, info) => {
     if (info.type !== "date" || typeof current !== "object") return info.originNode;
-    const node = React.cloneElement(info.originNode, { title: "" });
+    const node = React.cloneElement(info.originNode as React.ReactElement<{ title?: string }>, { title: "" });
     const content = dateTooltip?.(current);
     if (content === undefined || content === null || content === false || content === "") {
       return node;
