@@ -12,6 +12,7 @@ const ROOT_CLASS = "ds-table-cards";
 const SELECT_ALL_CLASS = "ds-table-cards__select-all";
 const SELECT_ALL_LABEL_CLASS = "ds-table-cards__select-all-label";
 const SELECT_ALL_CHECKBOX_CLASS = "ds-table-cards__select-all-checkbox";
+const DEFAULT_SELECT_ALL_LABEL = "Selecionar todos";
 
 interface MobileCardsProps<T> {
   data: readonly T[] | undefined;
@@ -71,6 +72,9 @@ export function MobileCards<T>(props: MobileCardsProps<T>): React.ReactElement {
   const allSelected = allRecordKeys.length > 0 && allRecordKeys.every((key) => selectedKeys.includes(key));
   const someSelected = !allSelected && allRecordKeys.some((key) => selectedKeys.includes(key));
 
+  const columnTitle = rowSelection?.columnTitle;
+  const selectAllLabel = typeof columnTitle === "function" ? DEFAULT_SELECT_ALL_LABEL : (columnTitle ?? DEFAULT_SELECT_ALL_LABEL);
+
   const handleToggleRow = (key: Key, selected: boolean, record: T): void => {
     if (!rowSelection?.onChange) return;
     let nextKeys: Key[];
@@ -95,7 +99,7 @@ export function MobileCards<T>(props: MobileCardsProps<T>): React.ReactElement {
     <div className={ROOT_CLASS}>
       {showSelectAll ? (
         <div className={SELECT_ALL_CLASS}>
-          <span className={SELECT_ALL_LABEL_CLASS}>{rowSelection?.columnTitle ?? "Selecionar todos"}</span>
+          <span className={SELECT_ALL_LABEL_CLASS}>{selectAllLabel}</span>
           <span className={SELECT_ALL_CHECKBOX_CLASS}>
             <Checkbox
               checked={allSelected}
