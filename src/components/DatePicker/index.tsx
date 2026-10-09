@@ -66,6 +66,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
   format = "DD/MM/YYYY",
   inputReadOnly = false,
   showToday = false,
+  showPrefixIcon = true,
   picker = "date",
   headerVariant = "year-and-month",
   value,
@@ -133,7 +134,7 @@ export const DatePicker: React.FC<DatePickerProps> = ({
         </>
       )}
       suffixIcon={null}
-      prefix={getPrefixIcon()}
+      prefix={showPrefixIcon ? getPrefixIcon() : undefined}
     />
   );
 

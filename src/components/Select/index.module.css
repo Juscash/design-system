@@ -206,3 +206,19 @@
     animation: none !important;
   }
 }
+
+/* ============================================================
+   OPÇÃO COM DESCRIÇÃO — rótulo 13px + linha 2 de 10px (Figma `combobox item` 2 linhas)
+   ============================================================ */
+:global(.ds-select-option-text) {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+:global(.ds-select-option-description) {
+  font-size: 10px;
+  line-height: 1.2;
+  color: var(--color-text-soft);
+}

@@ -72,7 +72,8 @@ interface OptionRenderArgs {
 }
 
 /**
- * Conteúdo de cada opção. No modo múltiplo, antepõe um Checkbox refletindo a
+ * Conteúdo de cada opção. Uma `description` (texto de 10px abaixo do rótulo, Figma
+ * `combobox item` de 2 linhas) é opcional e entra na busca. No modo múltiplo, antepõe um Checkbox refletindo a
  * seleção (padrão do MultiSelect). No single, marca a opção selecionada com
  * um ícone de check à direita (o fundo cinza já vem do token
  * `optionSelectedBg`; o Antd não desenha ícone próprio porque
@@ -80,10 +81,15 @@ interface OptionRenderArgs {
  */
 function renderOptionContent(option: DefaultOptionType, args: OptionRenderArgs): React.ReactNode {
   const isSelected = args.isOptionSelected(option.value as SelectValue);
+  // O `optionRender` do Antd recebe o item achatado: os campos customizados (como `description`) ficam em `data`.
+  const { description } = (option as { data?: DefaultOptionType }).data ?? option;
   return (
     <div style={{ display: "flex", alignItems: "center", gap: spacing[2], width: "100%" }}>
       {args.isMultiple && <Checkbox checked={isSelected} style={{ pointerEvents: "none" }} />}
-      <span style={{ flex: 1 }}>{option.label}</span>
+      <span className="ds-select-option-text">
+        <span>{option.label}</span>
+        {description ? <span className="ds-select-option-description">{description as React.ReactNode}</span> : null}
+      </span>
       {!args.isMultiple && isSelected && <Check aria-hidden size={ICON_SIZE} />}
     </div>
   );
@@ -162,7 +168,8 @@ function isValueSelected(currentValue: SelectProps["value"], optionValue: Select
 
 function optionMatches(option: DefaultOptionType, query: string): boolean {
   const label = typeof option.label === "string" ? option.label : "";
-  return label.toLowerCase().includes(query);
+  const description = typeof option.description === "string" ? option.description : "";
+  return `${label} ${description}`.toLowerCase().includes(query);
 }
 
 /**
