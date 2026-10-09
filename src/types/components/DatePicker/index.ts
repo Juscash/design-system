@@ -97,6 +97,12 @@ export type DatePickerProps = CleanAntdProps & {
    */
   showToday?: boolean;
   /**
+   * Exibe o ícone de calendário à esquerda do input (default `true`). `false`
+   * deixa só o texto `__/__/____`, como o campo de data de texto do Figma do
+   * Financeiro do processo.
+   */
+  showPrefixIcon?: boolean;
+  /**
    * Variação do header do calendário (Figma `4066:4959`). Default
    * `year-and-month` (mês e ano como selects). Ver `DatePickerHeaderVariant`.
    */
