@@ -35,12 +35,12 @@
 }
 
 /*
-  Sem padding lateral: o conteúdo do corpo encosta nas bordas do modal e quem
-  precisa de recuo horizontal aplica no próprio conteúdo. Mantém o respiro
-  vertical de 24px entre header/footer.
+  Corpo com 24px em todos os lados (Figma: dialog body com recuo lateral de 24px,
+  alinhado ao título e ao rodapé). O container não tem padding, então o recuo
+  lateral do conteúdo vem daqui — o consumidor não precisa (nem deve) repetir.
 */
 :global(.ds-modal) :global(.ant-modal-body) {
-  padding: 24px 0 !important;
+  padding: 24px !important;
   margin: 0 !important;
   color: var(--color-neutral-500) !important;
 }
