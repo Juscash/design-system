@@ -1,6 +1,9 @@
 import React from "react";
 import type { ColumnType } from "antd/es/table/interface";
 
+/** Retorno de `column.render`: `ReactNode` ou `RenderedCell` (`{ children, props }`) do antd. */
+type ColumnRenderResult<T> = ReturnType<NonNullable<ColumnType<T>["render"]>>;
+
 const FIELD_CLASS = "ds-card-field";
 const FIELD_LABEL_CLASS = "ds-card-field__label";
 const FIELD_VALUE_CLASS = "ds-card-field__value";
@@ -28,11 +31,21 @@ function extractValue<T>(record: T, dataIndex: ColumnType<T>["dataIndex"]): unkn
     let current: unknown = record;
     for (const key of dataIndex) {
       if (current === null || current === undefined) return undefined;
-      current = (current as Record<string | number, unknown>)[key];
+      current = (current as Record<string | number, unknown>)[key as string | number];
     }
     return current;
   }
   return (record as Record<string | number | symbol, unknown>)[dataIndex as string | number];
+}
+
+/**
+ * Normaliza o retorno de `column.render`: o antd permite devolver um
+ * `RenderedCell` (`{ children, props }`), do qual só o `children` é conteúdo.
+ */
+function toRenderedNode<T>(rendered: ColumnRenderResult<T>): React.ReactNode {
+  const isCellObject =
+    typeof rendered === "object" && rendered !== null && !React.isValidElement(rendered) && "children" in rendered;
+  return isCellObject ? (rendered as { children?: React.ReactNode }).children : (rendered as React.ReactNode);
 }
 
 /**
@@ -49,7 +62,7 @@ function extractValue<T>(record: T, dataIndex: ColumnType<T>["dataIndex"]): unkn
 export function CardField<T>(props: CardFieldProps<T>): React.ReactElement {
   const { column, record, index, showLabel = true } = props;
   const value = extractValue(record, column.dataIndex);
-  const rendered = column.render ? column.render(value, record, index) : (value as React.ReactNode);
+  const rendered = column.render ? toRenderedNode(column.render(value, record, index)) : (value as React.ReactNode);
   const labelString = typeof column.title === "string" ? column.title : "";
   const shouldRenderLabel = showLabel && labelString !== "";
 

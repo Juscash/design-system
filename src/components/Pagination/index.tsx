@@ -3,9 +3,12 @@ import { Pagination as AntdPagination, ConfigProvider } from "antd";
 import { ChevronLeft, ChevronRight, Ellipsis } from "lucide-react";
 import { designSystemColors } from "../../theme";
 import type { PaginationProps } from "../../types/components/Pagination";
+import { PaginationSizeChanger } from "./parts/SizeChanger";
 import "./index.module.css";
 
 const NAV_LABEL = "Paginação";
+const NAV_WITH_SIZE_CHANGER_CLASS = "ds-pagination-nav--with-size-changer";
+const DEFAULT_PAGE_SIZE = 10;
 const ARROW_ICON_SIZE = 12;
 const ELLIPSIS_ICON_SIZE = 16;
 const BASE_CLASS = "ds-pagination";
@@ -123,6 +126,16 @@ function resolveCurrentPage(props: PaginationProps): number {
 }
 
 /**
+ * Resolve o tamanho de página exibido no size changer. `pageSize` controlado
+ * tem prioridade; depois `defaultPageSize`; por fim o default do antd (10).
+ */
+function resolvePageSize(props: PaginationProps): number {
+  if (typeof props.pageSize === "number") return props.pageSize;
+  if (typeof props.defaultPageSize === "number") return props.defaultPageSize;
+  return DEFAULT_PAGE_SIZE;
+}
+
+/**
  * Pagination do design system. Wrapper do `Pagination` do Ant Design 6
  * aplicando a identidade visual descrita no dump
  * `figma/components/pagination/design-context-4080-17825.md`.
@@ -130,15 +143,28 @@ function resolveCurrentPage(props: PaginationProps): number {
  * Renderiza prev/next como botões com rótulo `Anterior`/`Próximo`, páginas
  * numeradas com radius `xl` (8px) e indicador via borda regular, e os saltos
  * (`jump-prev`/`jump-next`) como botões 36x36 com ícone `Ellipsis`.
+ *
+ * Com `showSizeChanger`, renderiza ao lado da navegação o seletor
+ * "Itens por página: N" do design system (opções do dropdown só com o
+ * número; prefixo apenas no gatilho) no lugar do select nativo do antd.
  */
 export function Pagination(props: PaginationProps): React.ReactElement {
-  const { className, disabled, ...rest } = props;
+  const { className, disabled, showSizeChanger, pageSizeOptions, onShowSizeChange, ...rest } = props;
   const currentPage = resolveCurrentPage(props);
+  const currentPageSize = resolvePageSize(props);
   const rootClassName = [BASE_CLASS, className].filter(Boolean).join(" ");
+
+  const handleSizeChange = (nextSize: number): void => {
+    if (onShowSizeChange) {
+      onShowSizeChange(currentPage, nextSize);
+      return;
+    }
+    props.onChange?.(1, nextSize);
+  };
 
   return (
     <ConfigProvider theme={{ components: { Pagination: getPaginationTokens() } }}>
-      <nav aria-label={NAV_LABEL}>
+      <nav aria-label={NAV_LABEL} className={showSizeChanger ? NAV_WITH_SIZE_CHANGER_CLASS : undefined}>
         <AntdPagination
           {...rest}
           disabled={disabled}
@@ -156,6 +182,13 @@ export function Pagination(props: PaginationProps): React.ReactElement {
             })
           }
         />
+        {showSizeChanger ? (
+          <PaginationSizeChanger
+            pageSize={currentPageSize}
+            pageSizeOptions={pageSizeOptions}
+            onChange={handleSizeChange}
+          />
+        ) : null}
       </nav>
     </ConfigProvider>
   );

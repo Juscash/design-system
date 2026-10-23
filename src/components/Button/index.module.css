@@ -37,6 +37,12 @@
   outline-offset: -1px !important;
 }
 
+/* Figma: o botão outline não tem preenchimento (fill transparente). O antd aplica
+   `colorBgContainer` (branco) no variant outlined mesmo com `defaultBg` transparente. */
+:global(.ds-button.ant-btn-variant-outlined:not(:hover):not(:active)) {
+  background: transparent;
+}
+
 :global(.ds-button.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):hover),
 :global(.ds-button.ant-btn-variant-outlined:not(:disabled):not(.ant-btn-disabled):active) {
   color: var(--color-neutral-800) !important;

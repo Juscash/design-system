@@ -7,6 +7,17 @@ type CleanAntdProps = {
   [K in keyof AntdSelectProps as K extends "size" ? never : K]: AntdSelectProps[K];
 };
 
+/**
+ * Opção do Select. Além de `value`/`label`, aceita `description`: segunda linha
+ * (10px, `text/soft`) abaixo do rótulo, também considerada na busca.
+ */
+export interface SelectOption {
+  value: string | number;
+  label: ReactNode;
+  description?: ReactNode;
+  disabled?: boolean;
+}
+
 export type SelectProps = CleanAntdProps & {
   /** Altura discreta (`xs` 24 · `s` 32 · `m` 36 · `l` 40). Default `m`. */
   size?: SelectSize;
@@ -20,4 +31,10 @@ export type SelectProps = CleanAntdProps & {
    * `status="error"` fica `feedback/red/500`. Figma `4062:8037`.
    */
   helperText?: ReactNode;
+  /**
+   * Mostra um spinner no rodapé do dropdown, abaixo das opções — para
+   * combos com paginação (`onPopupScroll` + scroll infinito) sinalizarem que
+   * a próxima página está carregando.
+   */
+  loadingMore?: boolean;
 };

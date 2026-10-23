@@ -124,6 +124,17 @@ export const WithHelperText: Story = { name: "With Helper Text", args: { helperT
 
 export const Searchable: Story = { name: "With Search", args: { showSearch: true, options: optionsWithGroups } };
 
+export const WithDescription: Story = {
+  name: "With Description (2 lines)",
+  args: {
+    showSearch: true,
+    options: [
+      { value: "1", label: "1 - Amélia Mascarenhas, João Silva", description: "CRM 00000 - Data base da venda 13/04/2026" },
+      { value: "2", label: "2 - Bernardo Oliveira", description: "CRM 00001 - Data base da venda 20/05/2026" },
+    ],
+  },
+};
+
 export const WithPrefix: Story = {
   name: "With Decoration (prefix)",
   args: { defaultValue: "option1", prefix: <Heart size={16} color={designSystemColors.neutral[800]} /> },

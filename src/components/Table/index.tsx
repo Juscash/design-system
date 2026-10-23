@@ -4,12 +4,7 @@ import type { TablePaginationConfig } from "antd/es/table/interface";
 import type { TableProps as AntdTableProps } from "antd/es/table";
 import { designSystemColors, radius, spacing } from "../../theme";
 import { useMediaQuery } from "../../hooks/useMediaQuery";
-import type {
-  TableProps,
-  TableResponsiveMode,
-  TableSkeletonConfig,
-  TableEmptyState,
-} from "../../types/components/Table";
+import type { TableProps, TableResponsiveMode, TableSkeletonConfig } from "../../types/components/Table";
 import { buildColumns } from "./utils/buildColumns";
 import { BulkActionBar } from "./parts/BulkActionBar";
 import { TableEmptyStateRenderer } from "./parts/EmptyState";
@@ -23,7 +18,7 @@ const OPTION_HEIGHT = 28;
 const PAGINATION_ITEM_SIZE = 32;
 const CHECKBOX_INTERACTIVE_SIZE = 16;
 const DEFAULT_RESPONSIVE_MODE: TableResponsiveMode = "auto";
-const DEFAULT_SKELETON_ROWS = 5;
+const DEFAULT_SKELETON_ROWS = 15;
 const COLOR_TRANSPARENT_WHITE_HIGHER = "rgba(255, 255, 255, 0.01)";
 const COLOR_TRANSPARENT_WHITE_FULL = "rgba(255, 255, 255, 0)";
 
@@ -125,7 +120,7 @@ function buildResponsiveClassName(responsive: TableResponsiveMode): string | und
 
 /**
  * Resolve a quantidade de rows do skeleton a partir da prop polimórfica.
- * Aceita `true` (default 5), número (N) ou objeto com `rows`.
+ * Aceita `true` (default 15), número (N) ou objeto com `rows`.
  */
 function resolveSkeletonRows(config: TableSkeletonConfig | undefined): number {
   if (typeof config === "number") return config;
@@ -143,18 +138,6 @@ function resolveSkeletonAnimated(config: TableSkeletonConfig | undefined): boole
     return config.animated;
   }
   return true;
-}
-
-interface ResolveEmptyArgs {
-  emptyState: TableEmptyState | undefined;
-  hasData: boolean;
-}
-
-function resolveEmptyText(args: ResolveEmptyArgs): React.ReactNode | undefined {
-  if (!args.hasData && args.emptyState !== undefined) {
-    return <TableEmptyStateRenderer config={args.emptyState} />;
-  }
-  return undefined;
 }
 
 interface ResolveSelectionCountArgs<T> {
@@ -208,8 +191,8 @@ function wrapSelectionColumnTitle<T>(
           </span>
         )
       : typeof original === "function"
-        ? (checkboxNode: React.ReactNode): React.ReactNode => original(withDsCheckboxClass(checkboxNode))
-        : (checkboxNode: React.ReactNode): React.ReactNode => withDsCheckboxClass(checkboxNode);
+      ? (checkboxNode: React.ReactNode): React.ReactNode => original(withDsCheckboxClass(checkboxNode))
+      : (checkboxNode: React.ReactNode): React.ReactNode => withDsCheckboxClass(checkboxNode);
 
   const userRenderCell = rowSelection.renderCell;
   const wrappedRenderCell: NonNullable<AntdTableProps<T>["rowSelection"]>["renderCell"] = (
@@ -287,17 +270,14 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
     ...rest
   } = props;
 
-  const paginationConfig = (pagination === false ? undefined : (pagination as TablePaginationConfig | undefined));
+  const paginationConfig = pagination === false ? undefined : (pagination as TablePaginationConfig | undefined);
   const paginationEnabled = pagination !== false;
 
   // Detecção de modo cards: `responsive='cards'` força sempre; `'auto'`
   // depende do viewport (<= breakpoint - 1 px). `'scroll'` jamais ativa
   // cards. `'blocks'` é alias deprecated de `'cards'`.
   const mobileMatches = useMediaQuery(`(max-width: ${responsiveBreakpoint - 1}px)`);
-  const isCardsMode =
-    responsive === "cards" ||
-    responsive === "blocks" ||
-    (responsive === "auto" && mobileMatches);
+  const isCardsMode = responsive === "cards" || responsive === "blocks" || (responsive === "auto" && mobileMatches);
 
   const showSkeleton = Boolean(skeleton) || Boolean(loading);
   const skeletonRowsCount = useMemo(() => resolveSkeletonRows(skeleton), [skeleton]);
@@ -317,47 +297,7 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
   const currentPage = isPageControlled ? (paginationConfig?.current as number) : internalPage;
   const currentPageSize = isPageSizeControlled ? (paginationConfig?.pageSize as number) : internalPageSize;
 
-  const customColumns = useMemo(
-    () => buildColumns<T>({ columns, sortIcons }),
-    [columns, sortIcons],
-  );
-
-  // Loading: substitui a tabela INTEIRA pela seção de skeleton (Figma
-  // `8733:10563`/`8733:11508`). Sem header, sem container border, sem
-  // pagination — só N barras `neutral/100` empilhadas com gap 8 px.
-  if (showSkeleton) {
-    return (
-      <ConfigProvider theme={getTableThemeTokens()}>
-        <SkeletonRows rows={skeletonRowsCount} animated={skeletonAnimated} />
-      </ConfigProvider>
-    );
-  }
-
-  const rawDataSource = dataSource as readonly T[] | undefined;
-  const totalRecords = paginationConfig?.total ?? rawDataSource?.length ?? 0;
-  const visibleData = paginationEnabled
-    ? applyClientPaging(rawDataSource, currentPage, currentPageSize, paginationConfig?.total)
-    : rawDataSource;
-  const hasData = Array.isArray(rawDataSource) && rawDataSource.length > 0;
-
-  const mergedClassName = ["ds-table", buildResponsiveClassName(responsive), className].filter(Boolean).join(" ");
-
-  const resolvedEmptyText = resolveEmptyText({ emptyState, hasData });
-  const mergedLocale = {
-    emptyText: "Nenhum registro encontrado.",
-    ...(resolvedEmptyText !== undefined && { emptyText: resolvedEmptyText }),
-    ...locale,
-  };
-
-  const selectionCount = resolveSelectionCount<T>({ rowSelection });
-  const showBulkBar = bulkActions !== undefined && selectionCount > 0;
-  const finalRowSelection = wrapSelectionColumnTitle<T>(rowSelection, responsive);
-
-  const handlePaginationChange = (nextPage: number, nextSize: number): void => {
-    if (!isPageControlled) setInternalPage(nextPage);
-    if (!isPageSizeControlled) setInternalPageSize(nextSize);
-    paginationConfig?.onChange?.(nextPage, nextSize);
-  };
+  const customColumns = useMemo(() => buildColumns<T>({ columns, sortIcons }), [columns, sortIcons]);
 
   // Antd v6 reinjeta `title=<string>` em `<th>`s com ellipsis+sorter mesmo
   // após `ellipsis.showTitle: false` + `onHeaderCell({title: ''})`. Para
@@ -365,6 +305,12 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
   // wrapper e limpamos qualquer `title` remanescente em cells com ellipsis.
   // O `Tooltip` do DS continua sendo a única fonte de tooltip quando o
   // consumidor opta via `render`.
+  //
+  // IMPORTANTE: este `useRef`/`useEffect` PRECISA ficar ANTES de qualquer
+  // early return (ex.: o skeleton de loading abaixo). Caso contrário a
+  // contagem de hooks muda entre renders (full → skeleton) e o React lança
+  // "Rendered fewer hooks than expected". Quando o skeleton é exibido o
+  // `wrapperRef` não é montado e o efeito apenas faz no-op (`if (!wrapper)`).
   const wrapperRef = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const wrapper = wrapperRef.current;
@@ -381,53 +327,140 @@ export function Table<T>(props: TableProps<T>): React.ReactElement {
     return () => observer.disconnect();
   });
 
+  const rawDataSource = dataSource as readonly T[] | undefined;
+  const totalRecords = paginationConfig?.total ?? rawDataSource?.length ?? 0;
+
+  const handlePaginationChange = (nextPage: number, nextSize: number): void => {
+    if (!isPageControlled) setInternalPage(nextPage);
+    if (!isPageSizeControlled) setInternalPageSize(nextSize);
+    paginationConfig?.onChange?.(nextPage, nextSize);
+  };
+
+  // Loading: substitui a tabela pela seção de skeleton (Figma
+  // `8733:10563`/`8733:11508`). Sem header, sem container border — só N
+  // barras `neutral/100` empilhadas com gap 8 px. A paginação NÃO some:
+  // quando o consumidor usa a paginação integrada (objeto `pagination`),
+  // o footer permanece visível e navegável durante o carregamento — assim
+  // trocar de página/tamanho re-dispara o fetch sem "sumiço" do controle.
+  if (showSkeleton) {
+    return (
+      <ConfigProvider theme={getTableThemeTokens()}>
+        <SkeletonRows rows={skeletonRowsCount} animated={skeletonAnimated} />
+        {paginationEnabled && paginationConfig !== undefined && (
+          <TablePagination
+            current={currentPage}
+            pageSize={currentPageSize}
+            total={totalRecords}
+            showSizeChanger={Boolean(paginationConfig.showSizeChanger)}
+            pageSizeOptions={(paginationConfig.pageSizeOptions as string[] | undefined) ?? undefined}
+            showTotal={paginationConfig.showTotal}
+            onChange={handlePaginationChange}
+            cardsMode={isCardsMode}
+          />
+        )}
+      </ConfigProvider>
+    );
+  }
+  const visibleData = paginationEnabled
+    ? applyClientPaging(rawDataSource, currentPage, currentPageSize, paginationConfig?.total)
+    : rawDataSource;
+  const hasData = Array.isArray(rawDataSource) && rawDataSource.length > 0;
+
+  const mergedClassName = ["ds-table", buildResponsiveClassName(responsive), className].filter(Boolean).join(" ");
+
+  // Fallback textual do antd, usado só quando o consumidor NÃO passa
+  // `emptyState` (o caso com `emptyState` sai pelo early return acima).
+  const mergedLocale = {
+    emptyText: "Nenhum registro encontrado.",
+    ...locale,
+  };
+
+  // Estado vazio: o Figma desenha o empty state SEM cabeçalho de tabela
+  // (variantes `results/empty` e `results/empty filter` — as variantes com
+  // header são justamente as que têm dados). O `emptyText` do antd renderiza
+  // dentro do body e por isso mantém o header visível; quando o consumidor
+  // define `emptyState`, o DS troca a tabela inteira pelo placeholder — mesmo
+  // padrão do early return do skeleton acima. Sem dados não há paginação
+  // (`paginationEnabled && hasData`) nem seleção, então nada mais é perdido.
+  if (!hasData && !isCardsMode && emptyState !== undefined) {
+    return (
+      <ConfigProvider theme={getTableThemeTokens()}>
+        <div ref={wrapperRef}>
+          <TableEmptyStateRenderer config={emptyState} />
+        </div>
+      </ConfigProvider>
+    );
+  }
+
+  const selectionCount = resolveSelectionCount<T>({ rowSelection });
+  const showBulkBar = bulkActions !== undefined && selectionCount > 0;
+  const finalRowSelection = wrapSelectionColumnTitle<T>(rowSelection, responsive);
+
   return (
     <ConfigProvider theme={getTableThemeTokens()}>
       <div ref={wrapperRef} className={isCardsMode ? "ds-table-wrapper--cards" : undefined}>
-      {showBulkBar && <BulkActionBar count={selectionCount} config={bulkActions} />}
-      {isCardsMode ? (
-        <MobileCards
-          data={visibleData}
-          columns={columns}
-          cardLayout={cardLayout}
-          rowSelection={rowSelection}
-          rowKey={rowKey}
-          emptyState={emptyState}
-        />
-      ) : (
-        <AntdTable
-          {...(rest as AntdTableProps<T>)}
-          rowKey={rowKey}
-          rowSelection={finalRowSelection}
-          dataSource={visibleData as AntdTableProps<T>["dataSource"]}
-          pagination={false}
-          tableLayout={tableLayout}
-          scroll={scroll}
-          bordered={bordered}
-          columns={customColumns}
-          className={mergedClassName}
-          locale={mergedLocale}
-          loading={false}
-        />
-      )}
-      {paginationEnabled && hasData && (
-        <TablePagination
-          current={currentPage}
-          pageSize={currentPageSize}
-          total={totalRecords}
-          showSizeChanger={Boolean(paginationConfig?.showSizeChanger)}
-          pageSizeOptions={(paginationConfig?.pageSizeOptions as string[] | undefined) ?? undefined}
-          showTotal={paginationConfig?.showTotal}
-          onChange={handlePaginationChange}
-          cardsMode={isCardsMode}
-        />
-      )}
+        {showBulkBar && <BulkActionBar count={selectionCount} config={bulkActions} />}
+        {isCardsMode ? (
+          <MobileCards
+            data={visibleData}
+            columns={columns}
+            cardLayout={cardLayout}
+            rowSelection={rowSelection}
+            rowKey={rowKey}
+            emptyState={emptyState}
+          />
+        ) : (
+          <AntdTable
+            {...(rest as AntdTableProps<T>)}
+            rowKey={rowKey}
+            rowSelection={finalRowSelection}
+            dataSource={visibleData as AntdTableProps<T>["dataSource"]}
+            pagination={false}
+            tableLayout={tableLayout}
+            scroll={scroll}
+            bordered={bordered}
+            columns={customColumns}
+            className={mergedClassName}
+            locale={mergedLocale}
+            loading={false}
+          />
+        )}
+        {paginationEnabled && hasData && (
+          <TablePagination
+            current={currentPage}
+            pageSize={currentPageSize}
+            total={totalRecords}
+            showSizeChanger={Boolean(paginationConfig?.showSizeChanger)}
+            pageSizeOptions={(paginationConfig?.pageSizeOptions as string[] | undefined) ?? undefined}
+            showTotal={paginationConfig?.showTotal}
+            onChange={handlePaginationChange}
+            cardsMode={isCardsMode}
+          />
+        )}
       </div>
     </ConfigProvider>
   );
 }
 
 Table.displayName = "Table";
+
+/**
+ * Marcadores estáticos do antd repassados pelo wrapper. São os únicos nós que
+ * o consumidor pode inserir dentro de `columns` para posicionar as colunas
+ * geradas pelo próprio Table:
+ *
+ * - `Table.EXPAND_COLUMN` — onde entra o botão de expandir linha
+ *   (`expandable`). Sem ele, o antd 6 coloca a coluna sempre na primeira
+ *   posição; o `expandIconColumnIndex` do antd 5 não existe mais.
+ * - `Table.SELECTION_COLUMN` — onde entra a coluna de checkbox
+ *   (`rowSelection`).
+ *
+ * ```tsx
+ * <Table columns={[colA, colB, Table.EXPAND_COLUMN]} expandable={...} />
+ * ```
+ */
+Table.EXPAND_COLUMN = AntdTable.EXPAND_COLUMN;
+Table.SELECTION_COLUMN = AntdTable.SELECTION_COLUMN;
 
 export type {
   TableProps,

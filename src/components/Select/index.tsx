@@ -1,9 +1,11 @@
-import React, { useState } from "react";
+import React, { useRef, useState } from "react";
 import { Select as AntdSelect, ConfigProvider, Input as AntdInput } from "antd";
 import type { AliasToken } from "antd/es/theme/interface";
 import type { DefaultOptionType } from "antd/es/select";
-import { ChevronsUpDown, Search } from "lucide-react";
+import { Check, ChevronsUpDown, FolderOpen, Search } from "lucide-react";
 import { Checkbox } from "../Checkbox";
+import { EmptyState } from "../EmptyState";
+import { useCloseSelectOnScroll } from "./hooks/useCloseSelectOnScroll";
 import { designSystemColors, radius, spacing } from "../../theme";
 import type { SelectProps, SelectSize } from "../../types/components/Select";
 import "./index.module.css";
@@ -27,6 +29,9 @@ const FONT_WEIGHT_REGULAR = 400;
 // localmente no Select para não depender do token compartilhado.
 const COLOR_ERROR_OUTLINE = "rgba(210, 25, 11, 0.4)";
 const COLOR_TRANSPARENT_WHITE = "rgba(255, 255, 255, 0.01)";
+const EMPTY_STATE_ICON_SIZE = 24;
+const EMPTY_STATE_ICON_STROKE_WIDTH = 1.75;
+const NOT_FOUND_TITLE = "Nenhum resultado encontrado.";
 
 type SelectThemeConfig = NonNullable<React.ComponentProps<typeof ConfigProvider>["theme"]>;
 type SelectValue = string | number | undefined;
@@ -67,15 +72,25 @@ interface OptionRenderArgs {
 }
 
 /**
- * Conteúdo de cada opção. No modo múltiplo, antepõe um Checkbox refletindo a
- * seleção (padrão do MultiSelect). No single, apenas o label.
+ * Conteúdo de cada opção. Uma `description` (texto de 10px abaixo do rótulo, Figma
+ * `combobox item` de 2 linhas) é opcional e entra na busca. No modo múltiplo, antepõe um Checkbox refletindo a
+ * seleção (padrão do MultiSelect). No single, marca a opção selecionada com
+ * um ícone de check à direita (o fundo cinza já vem do token
+ * `optionSelectedBg`; o Antd não desenha ícone próprio porque
+ * `menuItemSelectedIcon` é `null` para não duplicar no modo múltiplo).
  */
 function renderOptionContent(option: DefaultOptionType, args: OptionRenderArgs): React.ReactNode {
   const isSelected = args.isOptionSelected(option.value as SelectValue);
+  // O `optionRender` do Antd recebe o item achatado: os campos customizados (como `description`) ficam em `data`.
+  const { description } = (option as { data?: DefaultOptionType }).data ?? option;
   return (
-    <div style={{ display: "flex", alignItems: "center", gap: spacing[2] }}>
+    <div style={{ display: "flex", alignItems: "center", gap: spacing[2], width: "100%" }}>
       {args.isMultiple && <Checkbox checked={isSelected} style={{ pointerEvents: "none" }} />}
-      <span style={{ flex: 1 }}>{option.label}</span>
+      <span className="ds-select-option-text">
+        <span>{option.label}</span>
+        {description ? <span className="ds-select-option-description">{description as React.ReactNode}</span> : null}
+      </span>
+      {!args.isMultiple && isSelected && <Check aria-hidden size={ICON_SIZE} />}
     </div>
   );
 }
@@ -85,13 +100,28 @@ interface PopupRenderArgs {
   showSearch: SelectProps["showSearch"];
   searchValue: string;
   setSearchValue: (value: string) => void;
+  loadingMore: boolean;
+}
+
+/**
+ * Rodapé de carregamento do popup: spinner (anel com gradiente `brand.primary`,
+ * mesma técnica do indicador de exportação do app) exibido abaixo das opções
+ * enquanto a próxima página do scroll infinito carrega.
+ */
+function renderLoadingMore(): React.ReactElement {
+  return (
+    <div className="ds-select-loading-more">
+      <span aria-hidden className="ds-select-loading-more-spinner" role="presentation" />
+    </div>
+  );
 }
 
 /**
  * Popup do dropdown. Quando `showSearch`, exibe a linha de busca do Figma
- * (ícone 16px + "Procurar", borda inferior) acima da lista de opções.
+ * (ícone 16px + "Procurar", borda inferior) acima da lista de opções. Quando
+ * `loadingMore`, acrescenta o spinner de paginação abaixo da lista.
  */
-function renderPopup({ menu, showSearch, searchValue, setSearchValue }: PopupRenderArgs): React.ReactElement {
+function renderPopup({ menu, showSearch, searchValue, setSearchValue, loadingMore }: PopupRenderArgs): React.ReactElement {
   return (
     <>
       {showSearch && (
@@ -108,7 +138,23 @@ function renderPopup({ menu, showSearch, searchValue, setSearchValue }: PopupRen
         </div>
       )}
       <div className="ds-select-popup-menu">{menu}</div>
+      {loadingMore ? renderLoadingMore() : null}
     </>
+  );
+}
+
+/**
+ * Estado vazio padrão do dropdown (sem opções/sem resultado de busca) — ícone
+ * `folder-open` + título, conforme o Figma (`Menu/combobox`, `Property
+ * 1=no results`). Substitui o "No Data" padrão do Antd.
+ */
+function DefaultSelectEmptyState(): React.ReactElement {
+  return (
+    <EmptyState
+      icon={<FolderOpen size={EMPTY_STATE_ICON_SIZE} strokeWidth={EMPTY_STATE_ICON_STROKE_WIDTH} />}
+      title={NOT_FOUND_TITLE}
+      style={{ width: "100%", padding: spacing[4] }}
+    />
   );
 }
 
@@ -126,7 +172,8 @@ function isValueSelected(currentValue: SelectProps["value"], optionValue: Select
  */
 function optionMatches(option: DefaultOptionType, query: string): boolean {
   const text = [option.label, option.title].find((value) => typeof value === "string") as string | undefined;
-  return (text ?? "").toLowerCase().includes(query);
+  const description = typeof option.description === "string" ? option.description : "";
+  return `${text ?? ""} ${description}`.toLowerCase().includes(query);
 }
 
 /**
@@ -219,6 +266,15 @@ type SelectFieldProps = Omit<SelectProps, "label" | "helperText" | "id"> & {
 /**
  * Campo interno (Antd Select + estado de busca/valor). Separado do wrapper de
  * `label`/`helperText` para manter cada função dentro do limite de linhas.
+ *
+ * `virtual` sai `false` por padrão (o Antd usa `true`): com o popup
+ * customizado (`popupRender`/`ds-select-popup-menu`), a lista virtualizada do
+ * `rc-virtual-list` fica com `overflow-y: hidden` e nenhum container rolável
+ * de verdade — o wheel do usuário nunca é capturado, cai pra página (que
+ * rola por trás e fecha o dropdown via `useCloseSelectOnScroll`). Lista
+ * plana (`virtual={false}`) usa `overflow-y: auto` nativo do Antd: scroll de
+ * mouse/trackpad funciona direto e `onPopupScroll` recebe eventos nativos de
+ * verdade (necessário pros combos com paginação/scroll infinito).
  */
 function SelectField(props: SelectFieldProps): React.ReactElement {
   const {
@@ -234,17 +290,47 @@ function SelectField(props: SelectFieldProps): React.ReactElement {
     disabled,
     defaultValue,
     options,
+    notFoundContent,
+    onSearch,
+    open: controlledOpen,
+    onOpenChange: onOpenChangeProp,
+    loadingMore = false,
+    virtual = false,
     ...rest
   } = props;
 
   const [searchValue, setSearchValue] = useState("");
   const [currentValue, setCurrentValue] = useState<SelectProps["value"]>(rest.value ?? defaultValue);
+  const [internalOpen, setInternalOpen] = useState(false);
+  const isOpenControlled = controlledOpen !== undefined;
+  const open = isOpenControlled ? controlledOpen : internalOpen;
+  const popupRef = useRef<HTMLDivElement>(null);
   const isMultiple = rest.mode === "multiple" || rest.mode === "tags";
   const effectiveValue = rest.value !== undefined ? rest.value : currentValue;
-  const visibleOptions = showSearch ? filterOptions(options as DefaultOptionType[] | undefined, searchValue) : options;
+  // Busca remota: com `filterOption={false}` o consumidor filtra via `onSearch`
+  // (as opções já chegam filtradas) — o campo "Procurar" só repassa o termo.
+  const isRemoteSearch = props.filterOption === false;
+  const visibleOptions =
+    showSearch && !isRemoteSearch ? filterOptions(options as DefaultOptionType[] | undefined, searchValue) : options;
+
+  /** O Antd só dispara `onSearch` no input nativo (desligado aqui); repassa o termo digitado no popup. */
+  const handleSearchChange = (value: string): void => {
+    setSearchValue(value);
+    onSearch?.(value);
+  };
+
+  function handleOpenChange(nextOpen: boolean): void {
+    if (!isOpenControlled) setInternalOpen(nextOpen);
+    onOpenChangeProp?.(nextOpen);
+  }
+
+  useCloseSelectOnScroll(open, popupRef, () => handleOpenChange(false));
 
   return (
     <AntdSelect
+      // A busca já é filtrada aqui por `label` (`filterOptions`). Sem isto, o Antd filtra DE NOVO pelo `value`
+      // quando recebe `searchValue`, e opções cujo `value` é um id (ex.: "15") somem ao digitar o nome.
+      filterOption={false}
       {...rest}
       // A busca já é filtrada acima por `label`/`title`; sem isto o Antd filtra de novo pelo `value` (ex.: o id) e zera a lista.
       filterOption={rest.filterOption ?? false}
@@ -252,6 +338,7 @@ function SelectField(props: SelectFieldProps): React.ReactElement {
       status={status}
       disabled={disabled}
       options={visibleOptions}
+      notFoundContent={notFoundContent ?? <DefaultSelectEmptyState />}
       maxTagCount={maxTagCount}
       defaultValue={defaultValue}
       className={buildSelectClassName(size, className)}
@@ -261,12 +348,17 @@ function SelectField(props: SelectFieldProps): React.ReactElement {
       searchValue={searchValue}
       styles={selectPrefixSuffixStyles}
       style={buildBoxStyle(tokens.height, tokens.boxRadius, style)}
+      virtual={virtual}
+      open={open}
+      onOpenChange={handleOpenChange}
       onChange={(val, opt) => {
         setCurrentValue(val);
         rest.onChange?.(val, opt);
       }}
       optionRender={(option) => renderOptionContent(option, { isMultiple, isOptionSelected: (v) => isValueSelected(effectiveValue, v) })}
-      popupRender={(menu) => renderPopup({ menu, showSearch, searchValue, setSearchValue })}
+      popupRender={(menu) => (
+        <div ref={popupRef}>{renderPopup({ menu, showSearch, searchValue, setSearchValue: handleSearchChange, loadingMore })}</div>
+      )}
     />
   );
 }

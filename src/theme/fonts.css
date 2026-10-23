@@ -1,0 +1,35 @@
+/* ============================================
+   FONTE PRIMÁRIA — Inter (variable, self-hosted inline)
+
+   Self-host da família Inter para que TODO consumidor da lib receba a
+   tipografia automaticamente, sem depender de CDN nem de a fonte estar
+   instalada no SO (ex.: Windows não traz Inter).
+
+   O `src` abaixo é um placeholder substituído no build
+   (`tsup.config.ts > onSuccess`) pelo woff2 embutido como **data URI base64**.
+
+   Por que inline (data URI) e não `url()` para um arquivo?
+   - Em dev, quando a lib é linkada por caminho (`LOCAL_DS_PATH`), o woff2
+     ficaria FORA do root do servidor (Vite) e a requisição do arquivo seria
+     bloqueada por `server.fs.allow` → HTTP 403. Inline elimina a requisição
+     separada: a fonte viaja dentro do próprio `dist/index.css`.
+   - Funciona em qualquer consumidor (dev cross-root, npm publicado, qualquer
+     bundler) sem precisar de nenhuma configuração extra no app.
+
+   IMPORTANTE: este arquivo NÃO é importado pelo `src/index.ts`. O entry é
+   embutido no bundle JS pelo esbuild (`injectStyle: true`); o build concatena
+   este conteúdo (com o data URI já injetado) no topo de `dist/index.css`.
+
+   Fonte do woff2: @fontsource-variable/inter (subset latin, eixo de peso).
+   O subset latin (U+0000–00FF) cobre todos os acentos do pt-BR.
+   ============================================ */
+@font-face {
+  font-family: "Inter";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("__INTER_WOFF2_DATA_URI__") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}

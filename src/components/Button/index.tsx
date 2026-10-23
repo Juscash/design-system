@@ -33,6 +33,7 @@ function getPrimaryTokens(): Partial<ButtonToken> {
     colorBgContainerDisabled: designSystemColors.neutral[300],
     colorTextDisabled: designSystemColors.neutral[400],
     primaryShadow: "none",
+    colorBorderDisabled: "transparent",
   };
 }
 
@@ -49,6 +50,7 @@ function getSecondaryTokens(): Partial<ButtonToken> {
     colorBgContainerDisabled: designSystemColors.neutral[300],
     colorTextDisabled: designSystemColors.neutral[400],
     primaryShadow: "none",
+    colorBorderDisabled: "transparent",
   };
 }
 
@@ -116,6 +118,7 @@ function getDestructiveTokens(): Partial<ButtonToken> {
     colorPrimaryActive: designSystemColors.feedback.red[900],
     colorBgContainerDisabled: designSystemColors.neutral[300],
     colorTextDisabled: designSystemColors.neutral[400],
+    colorBorderDisabled: "transparent",
   };
 }
 
@@ -132,6 +135,7 @@ function getNeutralTokens(): Partial<ButtonToken> {
     colorTextLightSolid: designSystemColors.neutral[800],
     colorTextDisabled: designSystemColors.neutral[400],
     colorBgContainerDisabled: designSystemColors.neutral[300],
+    colorBorderDisabled: "transparent",
   };
 }
 
