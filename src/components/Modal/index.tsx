@@ -117,7 +117,8 @@ function buildCustomStyles(safeStyles: ModalCustomStyles | undefined): ModalCust
 /**
  * Modal do design system. Aceita `dsSize` (`s|m|l`) que define larguras
  * padrão; quando `width` é informado, sobrescreve o `dsSize`. Quando `footer`
- * não é passado, gera um rodapé com `<Button>` próprios da lib.
+ * não é passado, gera um rodapé com `<Button>` próprios da lib. Centralizado na
+ * vertical por padrão (Figma: constraint CENTER), com `centered={false}` para desligar.
  */
 export function Modal(props: ModalProps): React.ReactElement {
   const { dsSize = "m", width, styles, footer, okText, cancelText, onOk, confirmLoading, ...rest } = props;
@@ -140,6 +141,7 @@ export function Modal(props: ModalProps): React.ReactElement {
       }}
     >
       <AntdModal
+        centered
         {...rest}
         width={resolvedWidth}
         styles={customStyles as AntdModalProps["styles"]}

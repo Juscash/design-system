@@ -105,6 +105,24 @@
   padding: 0 !important;
 }
 
+/* ── Sem ícone e com ação (ex.: "Desfazer"): título, ação e botão fechar na mesma linha (Figma: 356x56, gap 12) ── */
+:global(.ds-notification) :global(.ant-notification-notice-content) > [role="alert"]:has(> :global(.ant-notification-notice-actions)):not(:has(:global(.ant-notification-notice-description))) {
+  display: flex !important;
+  align-items: center !important;
+  gap: 12px !important;
+  padding-inline-end: 24px !important;
+}
+:global(.ds-notification) :global(.ant-notification-notice-content) > [role="alert"]:has(> :global(.ant-notification-notice-actions)):not(:has(:global(.ant-notification-notice-description))) > :global(.ant-notification-notice-title) {
+  flex: 1 1 auto !important;
+  min-width: 0 !important;
+}
+:global(.ds-notification) :global(.ant-notification-notice-content) > [role="alert"]:has(> :global(.ant-notification-notice-actions)):not(:has(:global(.ant-notification-notice-description))) > :global(.ant-notification-notice-actions) {
+  flex: none !important;
+  float: none !important;
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
 /* ── Botão fechar ── */
 :global(.ds-notification) :global(.ant-notification-notice-close) {
   top: 50% !important;

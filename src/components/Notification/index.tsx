@@ -9,11 +9,9 @@ const NOTIFICATION_WIDTH = 356;
 const NOTIFICATION_MAX_COUNT = 3;
 const NOTIFICATION_DURATION = 4;
 const NOTIFICATION_TOP_OFFSET = 16;
-const NOTIFICATION_Z_INDEX = 1050;
 
 function getNotificationTokens(): Record<string, unknown> {
   return {
-    zIndexPopup: NOTIFICATION_Z_INDEX,
     width: NOTIFICATION_WIDTH,
     paddingContentHorizontalLG: spacing[4],
     colorBgElevated: designSystemColors.neutral[50],
