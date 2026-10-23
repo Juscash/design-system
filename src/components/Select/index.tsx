@@ -328,11 +328,9 @@ function SelectField(props: SelectFieldProps): React.ReactElement {
 
   return (
     <AntdSelect
-      // A busca já é filtrada aqui por `label` (`filterOptions`). Sem isto, o Antd filtra DE NOVO pelo `value`
-      // quando recebe `searchValue`, e opções cujo `value` é um id (ex.: "15") somem ao digitar o nome.
-      filterOption={false}
       {...rest}
-      // A busca já é filtrada acima por `label`/`title`; sem isto o Antd filtra de novo pelo `value` (ex.: o id) e zera a lista.
+      // A busca já é filtrada acima por `label`/`title`/`description`; sem isto o Antd filtra de novo pelo `value`
+      // (ex.: o id) e zera a lista. Busca remota (`filterOption={false}` do consumidor) segue valendo.
       filterOption={rest.filterOption ?? false}
       id={selectId}
       status={status}
