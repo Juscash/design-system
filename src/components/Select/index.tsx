@@ -120,9 +120,13 @@ function isValueSelected(currentValue: SelectProps["value"], optionValue: Select
   return unwrap(currentValue) === optionValue;
 }
 
+/**
+ * Texto pesquisável da opção: o `label` quando é texto; quando o `label` é um
+ * nó React (opção com mais de uma linha), usa o `title` da opção.
+ */
 function optionMatches(option: DefaultOptionType, query: string): boolean {
-  const label = typeof option.label === "string" ? option.label : "";
-  return label.toLowerCase().includes(query);
+  const text = [option.label, option.title].find((value) => typeof value === "string") as string | undefined;
+  return (text ?? "").toLowerCase().includes(query);
 }
 
 /**
@@ -242,6 +246,8 @@ function SelectField(props: SelectFieldProps): React.ReactElement {
   return (
     <AntdSelect
       {...rest}
+      // A busca já é filtrada acima por `label`/`title`; sem isto o Antd filtra de novo pelo `value` (ex.: o id) e zera a lista.
+      filterOption={rest.filterOption ?? false}
       id={selectId}
       status={status}
       disabled={disabled}

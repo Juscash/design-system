@@ -37,6 +37,13 @@
   padding: 0 !important;
 }
 
+/* ── Dia selecionado: texto claro sobre o fundo primário (Figma: state=active, #fafafa) ── */
+:global(.ds-datepicker-popup) :global(.ant-picker-cell-selected .ant-picker-cell-inner),
+:global(.ds-datepicker-popup) :global(.ant-picker-cell-range-start .ant-picker-cell-inner),
+:global(.ds-datepicker-popup) :global(.ant-picker-cell-range-end .ant-picker-cell-inner) {
+  color: var(--color-neutral-50) !important;
+}
+
 /* ── Nomes dos dias da semana ── */
 :global(.ds-datepicker-popup) :global(.ant-picker-content th) {
   font-size: 10px !important;
